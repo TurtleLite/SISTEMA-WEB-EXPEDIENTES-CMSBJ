@@ -114,7 +114,7 @@ def unlock_user(db: Session, user_id: int) -> User:
     return user
 
 
-def reset_default_users(db: Session):
+def reset_default_users(db: Session, only_if_empty: bool = False):
     defaults = [
         User(username="admin", telefono="2201-1100", full_name="Administrador",
              hashed_password=hash_password("admin123"), role="admin", is_active=True),
@@ -125,6 +125,8 @@ def reset_default_users(db: Session):
         User(username="medico", telefono="2201-1103", full_name="Dr. Médico",
              hashed_password=hash_password("medico123"), role="medico", is_active=True),
     ]
+    if only_if_empty and db.query(User).count() > 0:
+        return
     for u in defaults:
         existing = db.query(User).filter(User.username == u.username).first()
         if not existing:

@@ -36,6 +36,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false)
   }, [])
 
+  useEffect(() => {
+    const sync = async () => {
+      if (!sessionStorage.getItem('token')) return
+      try {
+        const res = await usersApi.me()
+        updateUser(res.data)
+      } catch {
+        // un 401 ya limpia la sesión en el interceptor; errores de red no desloguean
+      }
+    }
+    sync()
+    const onFocus = () => sync()
+    window.addEventListener('focus', onFocus)
+    return () => window.removeEventListener('focus', onFocus)
+  }, [])
+
   const login = async (username: string, password: string) => {
     const res = await authApi.login(username, password)
     const data = res.data
