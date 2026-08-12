@@ -1,0 +1,9 @@
+[Unit]
+Description=Respaldo diario de la base de datos del Sistema de Expedientes
+
+[Service]
+Type=oneshot
+User=expedientes
+WorkingDirectory=/home/expedientes/app/backend
+EnvironmentFile=/home/expedientes/app/backend/.env
+ExecStart=/home/expedientes/app/backend/venv/bin/python backup_db.py --keep 14

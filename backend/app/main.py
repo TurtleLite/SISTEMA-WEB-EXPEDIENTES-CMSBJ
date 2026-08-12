@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from app.api import auth, users, lists, reports, day_lists, specialties, localities, audit
 from app.core.database import engine, Base, SessionLocal
 from sqlalchemy import inspect, text
@@ -9,6 +11,9 @@ import app.models  # noqa: F401  (registra los modelos en Base.metadata, incluid
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+_FRONTEND_DIST = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+_HAS_FRONTEND = _FRONTEND_DIST.is_dir()
 
 import fnmatch
 import os
@@ -183,11 +188,32 @@ app.include_router(localities.router)
 app.include_router(audit.router)
 
 
+@app.middleware("http")
+async def api_prefix_shim(request: Request, call_next):
+    # El frontend compilado (dist) llama a la API bajo /api; aquí se quita ese prefijo.
+    if request.url.path.startswith("/api"):
+        stripped = request.url.path[len("/api"):]
+        if not stripped.startswith("/"):
+            stripped = "/" + stripped
+        request.scope["path"] = stripped
+        request.scope["raw_path"] = stripped.encode("utf-8")
+    return await call_next(request)
+
+
 @app.get("/")
 def root():
+    if _HAS_FRONTEND:
+        index = _FRONTEND_DIST / "index.html"
+        if index.is_file():
+            return FileResponse(str(index), media_type="text/html")
+        return {"message": "Frontend no compilado (falta frontend/dist/index.html)"}
     return {"message": "Sistema de Gestión API", "version": "1.0.0"}
 
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+if _HAS_FRONTEND:
+    app.mount("/", StaticFiles(directory=str(_FRONTEND_DIST), html=True), name="frontend")
