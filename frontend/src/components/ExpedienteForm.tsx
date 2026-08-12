@@ -110,7 +110,6 @@ const FIELD_UNITS: Record<string, string> = {
   fr: 'rpm',
   pulso: 'lpm',
   temperatura: '°C',
-  bmi: 'kg/mts²',
 }
 
 const MIN_TEXT_LENGTH = 5
@@ -122,6 +121,21 @@ const capitalizeFirst = (val: string): string =>
 
 const todayHonduras = (): string =>
   new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Tegucigalpa' }).format(new Date())
+
+const parseNumber = (val: any): number | null => {
+  if (val === undefined || val === null) return null
+  const cleaned = String(val).replace(/,/g, '.').replace(/[^0-9.]/g, '').trim()
+  if (!cleaned) return null
+  const n = parseFloat(cleaned)
+  return Number.isFinite(n) ? n : null
+}
+
+const calcularBMI = (peso: any, talla: any): string => {
+  const kg = parseNumber(peso)
+  const m = parseNumber(talla)
+  if (!kg || !m || kg <= 0 || m <= 0) return ''
+  return (kg / (m * m)).toFixed(2)
+}
 
 const criticidadEnabled = (data: Record<string, any>): boolean =>
   String(data.diagnostico || '').trim().length >= MIN_TEXT_LENGTH
@@ -203,6 +217,14 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       if (Array.isArray(res.data)) setLocalidades(res.data)
     }).catch(() => {})
   }, [listId])
+
+  useEffect(() => {
+    if (editingRecord && (data.peso || data.talla)) {
+      const imc = calcularBMI(data.peso, data.talla)
+      if (imc) setValue('bmi', imc)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingRecord])
 
   const allComplete = sections.every((s) => isSectionComplete(s, data))
 
@@ -570,7 +592,12 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             <input
                               type="text"
                               value={(data[field.key] || '').replace(/\s*kg$/, '')}
-                              onChange={(e) => setValue(field.key, e.target.value ? `${e.target.value} kg` : '')}
+                              onChange={(e) => {
+                                const cleaned = e.target.value.replace(/[^0-9.,]/g, '')
+                                const v = cleaned ? `${cleaned} kg` : ''
+                                setValue('peso', v)
+                                setValue('bmi', calcularBMI(v, data.talla))
+                              }}
                               placeholder="0 kg"
                               className="w-full px-3 py-2 pr-10 border border-[#E3E6EB] rounded-lg text-sm focus:ring-2 focus:ring-slate-300 focus:border-slate-400"
                             />
@@ -581,11 +608,31 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             <input
                               type="text"
                               value={(data[field.key] || '').replace(/\s*mts$/, '')}
-                              onChange={(e) => setValue(field.key, e.target.value ? `${e.target.value} mts` : '')}
+                              onChange={(e) => {
+                                const cleaned = e.target.value.replace(/[^0-9.,]/g, '')
+                                const v = cleaned ? `${cleaned} mts` : ''
+                                setValue('talla', v)
+                                setValue('bmi', calcularBMI(data.peso, v))
+                              }}
                               placeholder="0.00 mts"
                               className="w-full px-3 py-2 pr-10 border border-[#E3E6EB] rounded-lg text-sm focus:ring-2 focus:ring-slate-300 focus:border-slate-400"
                             />
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none">mts</span>
+                          </div>
+                        ) : field.key === 'bmi' ? (
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={data[field.key] || ''}
+                              readOnly
+                              disabled
+                              title="Se calcula automáticamente con peso y talla"
+                              placeholder="Se calcula al llenar Peso y Talla"
+                              className="w-full px-3 py-2 pr-14 border border-[#E3E6EB] rounded-lg text-sm bg-slate-50 text-slate-500 focus:ring-2 focus:ring-slate-300 focus:border-slate-400 disabled:cursor-not-allowed"
+                            />
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none whitespace-nowrap">
+                              kg/mts²
+                            </span>
                           </div>
                         ) : field.key === 'nombre' || field.key === 'apellido' || field.key === 'persona_responsable' || field.key === 'diagnostico' ? (
                           <textarea
