@@ -137,6 +137,13 @@ const calcularBMI = (peso: any, talla: any): string => {
   return (kg / (m * m)).toFixed(2)
 }
 
+const formatearTalla = (raw: string): string => {
+  const digits = raw.replace(/[^0-9]/g, '').slice(0, 4)
+  if (!digits) return ''
+  if (digits.length === 1) return digits
+  return digits.slice(0, 1) + '.' + digits.slice(1)
+}
+
 const criticidadEnabled = (data: Record<string, any>): boolean =>
   String(data.diagnostico || '').trim().length >= MIN_TEXT_LENGTH
 
@@ -609,15 +616,18 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               type="text"
                               value={(data[field.key] || '').replace(/\s*mts$/, '')}
                               onChange={(e) => {
-                                const cleaned = e.target.value.replace(/[^0-9.,]/g, '')
-                                const v = cleaned ? `${cleaned} mts` : ''
-                                setValue('talla', v)
-                                setValue('bmi', calcularBMI(data.peso, v))
+                                const v = formatearTalla(e.target.value)
+                                const withUnit = v ? `${v} mts` : ''
+                                setValue('talla', withUnit)
+                                setValue('bmi', calcularBMI(data.peso, withUnit))
                               }}
                               placeholder="0.00 mts"
                               className="w-full px-3 py-2 pr-10 border border-[#E3E6EB] rounded-lg text-sm focus:ring-2 focus:ring-slate-300 focus:border-slate-400"
                             />
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none">mts</span>
+                            <p className="mt-1 text-[11px] text-slate-400">
+                              El punto decimal se coloca automáticamente (ej. escribir 184 → 1.84)
+                            </p>
                           </div>
                         ) : field.key === 'bmi' ? (
                           <div className="relative">
