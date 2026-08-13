@@ -39,7 +39,7 @@ const fmt = (value: string | null) => {
   })
 }
 
-export function Devices() {
+export function Devices({ embedded = false }: { embedded?: boolean }) {
   const [items, setItems] = useState<DeviceItem[]>([])
   const [counts, setCounts] = useState<{ pending: number; approved: number; blocked: number }>({ pending: 0, approved: 0, blocked: 0 })
   const [saving, setSaving] = useState<string | null>(null)
@@ -106,6 +106,7 @@ export function Devices() {
 
   return (
     <div className="h-full flex flex-col gap-4">
+      {!embedded && (
       <div className="flex items-center justify-between shrink-0 flex-wrap gap-3">
         <div>
           <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Equipos</h1>
@@ -121,6 +122,7 @@ export function Devices() {
           Actualizar
         </button>
       </div>
+      )}
 
       <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center gap-3">

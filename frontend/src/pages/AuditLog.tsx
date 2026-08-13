@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { auditApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { Search, ChevronLeft, ChevronRight, ScrollText } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, ScrollText, Monitor } from 'lucide-react'
+import { Devices } from './Devices'
 
 interface AuditEntry {
   id: string
@@ -82,6 +83,7 @@ const fmt = (value: string) => {
 const PAGE_SIZE = 50
 
 export function AuditLog() {
+  const [tab, setTab] = useState<'eventos' | 'equipos'>('eventos')
   const [entries, setEntries] = useState<AuditEntry[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
@@ -119,11 +121,36 @@ export function AuditLog() {
   return (
     <div className="h-full flex flex-col gap-4">
       <div className="shrink-0">
-        <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Registro de Auditoría</h1>
+        <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Auditoría</h1>
         <p className="text-sm text-[#6F7682] mt-0.5">
-          Historial de quién creó, modificó, exportó o descargó información ({total} evento(s)).
+          Historial de quién creó, modificó, exportó o descargó información ({total} evento(s)) y administración de los equipos autorizados.
         </p>
       </div>
+
+      <div className="shrink-0 flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-fit">
+        <button
+          onClick={() => setTab('eventos')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+            tab === 'eventos' ? 'bg-white text-[#3F4650] shadow-sm' : 'text-slate-500 hover:text-[#3F4650]'
+          }`}
+        >
+          <ScrollText size={15} />
+          Eventos
+        </button>
+        <button
+          onClick={() => setTab('equipos')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+            tab === 'equipos' ? 'bg-white text-[#3F4650] shadow-sm' : 'text-slate-500 hover:text-[#3F4650]'
+          }`}
+        >
+          <Monitor size={15} />
+          Equipos
+        </button>
+      </div>
+
+      {tab === 'equipos' && <Devices embedded />}
+
+      {tab === 'eventos' && (<>
 
       <div className="shrink-0 bg-white rounded-xl border border-[#E3E6EB] p-3 flex items-end gap-3 flex-wrap">
         <div className="flex-1 min-w-40">
@@ -258,6 +285,7 @@ export function AuditLog() {
           </div>
         </div>
       </div>
+      </>)}
     </div>
   )
 }

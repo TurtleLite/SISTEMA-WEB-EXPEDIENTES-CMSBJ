@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { listsApi } from '../services/api'
 import {
   LayoutDashboard, Users, FileText, Table2, LogOut, Activity, UserCircle2, Lock, ClipboardList,
-  ShieldCheck, ScrollText, Monitor, AlertTriangle,
+  ShieldCheck, ScrollText, AlertTriangle,
 } from 'lucide-react'
 import { ROLE_META } from '../constants'
 import { RoleAvatar } from './RoleAvatar'
@@ -50,7 +50,6 @@ const navSections: NavSection[] = [
     items: [
       { label: 'Usuarios', path: '/users', icon: <Users size={18} />, roles: ['admin'] },
       { label: 'Sesiones', path: '/seguridad', icon: <ShieldCheck size={18} />, roles: ['admin'] },
-      { label: 'Equipos', path: '/equipos', icon: <Monitor size={18} />, roles: ['admin'] },
       { label: 'Auditoría', path: '/auditoria', icon: <ScrollText size={18} />, roles: ['admin'] },
     ],
   },

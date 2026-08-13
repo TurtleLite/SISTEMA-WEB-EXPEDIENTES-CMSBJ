@@ -13,7 +13,6 @@ import { EstadoCirugia } from './pages/EstadoCirugia'
 import { Profile } from './pages/Profile'
 import { Sessions } from './pages/Sessions'
 import { AuditLog } from './pages/AuditLog'
-import { Devices } from './pages/Devices'
 import { Lock } from 'lucide-react'
 import { ReactNode } from 'react'
 
@@ -59,7 +58,6 @@ function App() {
           <Route path="/listado-diario" element={<RoleRoute roles={['direccion', 'direccion_medica']} section="Listados Diarios"><DayList /></RoleRoute>} />
           <Route path="/estado-cirugia" element={<RoleRoute roles={['direccion', 'direccion_medica']} section="Estatus Cirugia"><EstadoCirugia /></RoleRoute>} />
           <Route path="/seguridad" element={<RoleRoute roles={['admin']} section="Sesiones"><Sessions /></RoleRoute>} />
-          <Route path="/equipos" element={<RoleRoute roles={['admin']} section="Equipos"><Devices /></RoleRoute>} />
           <Route path="/auditoria" element={<RoleRoute roles={['admin']} section="Auditoria"><AuditLog /></RoleRoute>} />
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />
