@@ -63,7 +63,7 @@ export function Sessions() {
   const { toast, confirm } = useNotification()
 
   const loadSessions = useCallback(async (userId?: string) => {
-    const params: any = {}
+    const params: any = { all_users: true }
     if (userId) params.user_id = userId
     try {
       const res = await authApi.sessions(params)
