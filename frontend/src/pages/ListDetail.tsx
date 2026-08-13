@@ -4,7 +4,7 @@ import { listsApi, default as api } from '../services/api'
 import { ListDefinition, ListRecord } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
-import { Plus, Upload, Search, Pencil, Trash2, Download, Stethoscope, CheckSquare, Square, Settings2, Eye, MapPin, X } from 'lucide-react'
+import { Plus, Upload, Search, Pencil, Trash2, Download, Stethoscope, CheckSquare, Square, Settings2, Eye, MapPin, X, Info } from 'lucide-react'
 import { ExpedienteForm, SECTIONS } from '../components/ExpedienteForm'
 import { specialtiesApi, localitiesApi } from '../services/api'
 import { areSimilarNames, normalizeText, shortName } from '../utils/format'
@@ -470,6 +470,15 @@ export function ListDetail() {
           )}
         </div>
       </div>
+
+      {user?.role === 'medico' && list?.is_system && (
+        <div className="shrink-0 flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-xl px-4 py-2.5 text-sky-800">
+          <Info size={15} className="shrink-0" />
+          <p className="text-xs font-medium">
+            <b>Novedad:</b> mientras escribe un expediente, el sistema guarda un <b>borrador automático</b> en su navegador. Si se va la luz o cierra la ventana por accidente, al volver a abrir el expediente se restauran sus datos.
+          </p>
+        </div>
+      )}
 
       <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1 transition-shadow duration-200 hover:shadow-md">
         <div className="p-3 border-b border-[#E3E6EB] space-y-2.5 shrink-0 bg-slate-100/30">
