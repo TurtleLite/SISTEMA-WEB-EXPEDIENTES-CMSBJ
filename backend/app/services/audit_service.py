@@ -14,7 +14,7 @@ def _is_public_ip(ip: str) -> bool:
     )
 
 
-def client_ip(request) -> str:
+def client_real_ip(request) -> str:
     if request is None:
         return ""
     peer = request.client.host if request.client else None
@@ -26,6 +26,22 @@ def client_ip(request) -> str:
     if peer:
         return peer[:45]
     return ""
+
+
+def client_device_id(request) -> str:
+    """Identificador permanente del equipo (generado por el navegador y enviado en X-Device-ID)."""
+    if request is None:
+        return ""
+    return (request.headers.get("x-device-id") or "").strip()[:50]
+
+
+def client_ip(request) -> str:
+    """Identidad usada en la auditoría: identifica el equipo por su ID permanente
+    cuando está disponible; si no, usa la dirección IP real."""
+    device = client_device_id(request)
+    if device:
+        return device
+    return client_real_ip(request)
 
 
 def log_audit(

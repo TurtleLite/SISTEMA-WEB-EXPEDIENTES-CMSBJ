@@ -167,7 +167,7 @@ export function AuditLog() {
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Acción</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Detalle</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">IP</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
               </tr>
             </thead>
             <tbody>

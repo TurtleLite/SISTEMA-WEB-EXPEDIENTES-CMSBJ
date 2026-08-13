@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.user import User
 from app.models.user_session import UserSession
 from app.core.security import hash_password, verify_password, create_access_token, decode_access_token
-from app.services.audit_service import log_audit, client_ip
+from app.services.audit_service import log_audit, client_ip, client_real_ip
 from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.core.database import get_db
@@ -129,7 +129,8 @@ def _create_session(db: Session, user: User, jti: str, expires_at: datetime, ip_
 
 
 def login(db: Session, username: str, password: str, request=None) -> dict:
-    ip = client_ip(request)
+    # Las sesiones guardan la IP real; la auditoría usa el identificador del equipo.
+    ip = client_real_ip(request)
     if _ip_limited(ip):
         raise HTTPException(status_code=429, detail="Demasiados intentos desde esta conexión. Espere unos minutos e intente de nuevo.")
     try:

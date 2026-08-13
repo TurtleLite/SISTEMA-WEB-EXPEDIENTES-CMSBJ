@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getDeviceId } from '../utils/deviceId'
 
 const API_URL = import.meta.env.VITE_API_URL || '/api'
 
@@ -12,6 +13,10 @@ api.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
+  }
+  const deviceId = getDeviceId()
+  if (deviceId) {
+    config.headers['X-Device-ID'] = deviceId
   }
   return config
 })

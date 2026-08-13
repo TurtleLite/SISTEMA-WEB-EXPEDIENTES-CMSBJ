@@ -140,7 +140,7 @@ const calcularBMI = (peso: any, talla: any): string => {
 const formatearTalla = (raw: string): string => {
   const digits = raw.replace(/[^0-9]/g, '').slice(0, 4)
   if (!digits) return ''
-  if (digits.length === 1) return '0.' + digits
+  if (digits.length === 1) return digits
   return digits.slice(0, 1) + '.' + digits.slice(1)
 }
 
