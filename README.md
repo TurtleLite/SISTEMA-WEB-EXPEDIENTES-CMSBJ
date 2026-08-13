@@ -30,6 +30,7 @@ Aplicación web para el registro y administración de expedientes de pacientes d
 ## Funcionalidades principales
 
 - **Expedientes médicos:** registro con número de expediente **numérico escrito manualmente**; si el número ya existe, se guarda como copia identificada (ej.: `23455 (1)`) previa confirmación de que es una nueva intervención del paciente.
+- **IMC automático:** en la sección Signos Vitales, al escribir el peso (kg) y la talla (mts), el sistema calcula el **B.M.I.** en tiempo real (`peso / talla²`) en un campo de solo lectura. El punto decimal de la talla se inserta automáticamente (ej.: escribir `184` se muestra como `1.84 mts`).
 - **Criticidad clínica** (Baja, Media o Alta) y **domicilio desglosado** por departamento, municipio y localidad (Aldea, Barrio, Colonia o Caserío).
 - **Búsqueda automática sin distinción de mayúsculas ni tildes** en nombre, apellido, identidad, número de expediente, diagnóstico, especialidad y perfil; lista paginada de 50 en 50.
 - **Reportes** en Excel (`REPORTE_<nombre>.xlsx`) con filtros por especialidad, perfil, criticidad y estatus, vista previa con reordenamiento de filas por arrastre (la columna No se renumera según el orden) y la columna "Observación" solo en reportes.
@@ -64,7 +65,7 @@ El Administrador **no crea, edita, elimina ni exporta expedientes**; únicamente
 
 ## Usuarios por defecto
 
-Creados por `python run_seed.py`:
+Creados por `python run_seed.py` (solo si la tabla de usuarios está vacía):
 
 | Usuario | Contraseña | Rol |
 |---------|-----------|-----|
@@ -72,6 +73,8 @@ Creados por `python run_seed.py`:
 | direccion | direccion123 | Dirección |
 | direccionmedica | direccionmedica123 | Dirección Médica |
 | medico | medico123 | Médico |
+
+> **Importante:** en producción estas contraseñas por defecto deben cambiarse desde **Mi Perfil** (o por el administrador desde **Usuarios → Restablecer**). Si el administrador pierde su acceso, se recupera con `python reset_users.py` (restablece los usuarios por defecto) o modificando el hash en la base de datos. El usuario administrador de la instalación actual es `administrador`.
 
 ## Estructura del Proyecto
 
