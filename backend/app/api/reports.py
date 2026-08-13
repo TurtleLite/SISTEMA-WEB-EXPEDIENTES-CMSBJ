@@ -50,7 +50,7 @@ def _records_for_report(db: Session, report: Report):
         params["estat"] = estatus
 
     if not conds:
-        records = db.query(ListRecord).filter(ListRecord.list_definition_id == report.list_definition_id).all()
+        records = db.query(ListRecord).filter(ListRecord.list_definition_id == ld.id).all()
     else:
         from sqlalchemy import text
         sql = text(f"SELECT id FROM list_records WHERE list_definition_id = :lid AND {' AND '.join(conds)}")

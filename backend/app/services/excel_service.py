@@ -158,7 +158,8 @@ def import_records_from_excel(db: Session, list_id: int, filepath: str) -> int:
             if is_expediente:
                 numero = str(data.get("expediente", "") or "")
                 import re as _re
-                numero = _re.sub(r"\D", "", numero)
+                base = numero.split("(", 1)[0]
+                numero = _re.sub(r"\D", "", base)
                 if not numero:
                     rollback_msg = f"Falta el número de expediente en la fila {row_idx} del archivo Excel"
                     raise ValueError(rollback_msg)
