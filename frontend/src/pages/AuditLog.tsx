@@ -69,6 +69,18 @@ const ENTITY_LABELS: Record<string, string> = {
   device: 'Equipo',
 }
 
+const GENERIC_DETAIL: Record<string, string> = {
+  report_delete: 'eliminó reporte',
+  user_delete: 'eliminó usuario',
+  record_delete: 'eliminó expediente',
+  record_delete_bulk: 'eliminó expedientes',
+  list_delete: 'eliminó lista',
+  daylist_delete: 'eliminó listado del día',
+  session_revoked: 'cerró sesión',
+  device_blocked: 'bloqueó equipo',
+  device_approved: 'aprobó equipo',
+}
+
 const ACTION_OPTIONS = Object.entries(ACTION_LABELS).sort((a, b) => a[1].localeCompare(b[1]))
 
 const fmt = (value: string) => {
@@ -327,7 +339,9 @@ export function AuditLog() {
                     </span>
                   </td>
                   <td className="px-6 py-3.5 text-sm text-slate-600">{ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '—'}</td>
-                  <td className="px-6 py-3.5 text-sm text-slate-600 max-w-0">{e.detail || '—'}</td>
+                  <td className="px-6 py-3.5 text-sm text-slate-600 max-w-0">
+                    {GENERIC_DETAIL[e.action] || e.detail || '—'}
+                  </td>
                   <td className="px-6 py-3.5 text-sm text-slate-500">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-mono">{e.ip_address || '—'}</span>
