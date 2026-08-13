@@ -65,6 +65,14 @@ export function ListDetail() {
   const [creatingEsp, setCreatingEsp] = useState(false)
   const [creatingLoc, setCreatingLoc] = useState(false)
   const [newLocTipo, setNewLocTipo] = useState('')
+  const [draftNoticeClosed, setDraftNoticeClosed] = useState(() => {
+    try { return localStorage.getItem('sbj_draft_notice_closed') === '1' } catch { return false }
+  })
+
+  const closeDraftNotice = () => {
+    setDraftNoticeClosed(true)
+    try { localStorage.setItem('sbj_draft_notice_closed', '1') } catch { /* ignore */ }
+  }
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'esp' | 'loc'; name: string; count: number } | null>(null)
   const [replaceValue, setReplaceValue] = useState('')
   const [deleting, setDeleting] = useState(false)
@@ -471,12 +479,19 @@ export function ListDetail() {
         </div>
       </div>
 
-      {user?.role === 'medico' && list?.is_system && (
+      {user?.role === 'medico' && list?.is_system && !draftNoticeClosed && (
         <div className="shrink-0 flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-xl px-4 py-2.5 text-sky-800">
           <Info size={15} className="shrink-0" />
-          <p className="text-xs font-medium">
+          <p className="text-xs font-medium flex-1">
             <b>Novedad:</b> mientras escribe un expediente, el sistema guarda un <b>borrador automático</b> en su navegador. Si se va la luz o cierra la ventana por accidente, al volver a abrir el expediente se restauran sus datos.
           </p>
+          <button
+            onClick={closeDraftNotice}
+            className="p-1 text-sky-500 hover:text-sky-700 hover:bg-sky-100 rounded-lg transition-colors duration-200 shrink-0"
+            title="Cerrar aviso"
+          >
+            <X size={15} />
+          </button>
         </div>
       )}
 
