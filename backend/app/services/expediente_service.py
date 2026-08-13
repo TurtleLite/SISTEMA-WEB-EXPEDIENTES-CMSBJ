@@ -211,7 +211,7 @@ def export_expediente_excel(records: list[ListRecord], filepath: str, logo_path:
         ws.merge_cells(start_row=r, start_column=7, end_row=r, end_column=8)
         c = ws.cell(r, 7, d.get("especialidad", ""))
         c.font = Font(name=arial, bold=True, size=16, color="FF0000")
-        c.alignment = center_wrap
+        c.alignment = Alignment(horizontal="center", vertical="center", shrink_to_fit=True)
         cellb(r, 7, thin)
         cellb(r, 8, Border(right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin')))
         r += 1
