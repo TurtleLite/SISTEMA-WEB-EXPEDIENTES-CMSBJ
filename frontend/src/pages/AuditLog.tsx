@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { auditApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { Search, ChevronLeft, ChevronRight, ScrollText, Monitor } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, ScrollText, Monitor, Download, X as XIcon, ShieldQuestion, ShieldAlert, Users as UsersIcon, FileText } from 'lucide-react'
 import { Devices } from './Devices'
 
 interface AuditEntry {
@@ -80,7 +80,43 @@ const fmt = (value: string) => {
   })
 }
 
+const timeAgo = (value: string): string => {
+  const d = new Date(value)
+  if (isNaN(d.getTime())) return value
+  const diff = Date.now() - d.getTime()
+  const m = Math.floor(diff / 60000)
+  if (m < 1) return 'ahora'
+  if (m < 60) return `hace ${m} min`
+  const h = Math.floor(m / 60)
+  if (h < 24) return `hace ${h} h`
+  const days = Math.floor(h / 24)
+  if (days === 1) return 'ayer'
+  return `hace ${days} días`
+}
+
 const PAGE_SIZE = 50
+
+const exportCsv = (entries: AuditEntry[]) => {
+  const header = ['Fecha y hora', 'Usuario', 'Acción', 'Tipo', 'Entidad', 'Detalle', 'IP', 'Equipo']
+  const rows = entries.map((e) => [
+    fmt(e.created_at),
+    e.username || '',
+    ACTION_LABELS[e.action] || e.action,
+    ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '',
+    e.entity_id || '',
+    (e.detail || '').replace(/[\n\r]/g, ' '),
+    e.ip_address || '',
+    e.device_status || '',
+  ])
+  const csv = [header, ...rows].map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n')
+  const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `auditoria_${new Date().toISOString().slice(0, 10)}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
 
 export function AuditLog() {
   const [tab, setTab] = useState<'eventos' | 'equipos'>('eventos')
@@ -91,6 +127,8 @@ export function AuditLog() {
   const [entityType, setEntityType] = useState('')
   const [username, setUsername] = useState('')
   const [applied, setApplied] = useState(false)
+  const [selected, setSelected] = useState<AuditEntry | null>(null)
+  const [quick, setQuick] = useState<{ pending: boolean; blocked: boolean; shared: boolean }>({ pending: false, blocked: false, shared: false })
   const { toast } = useNotification()
 
   const load = useCallback(async (p: number) => {
@@ -117,6 +155,18 @@ export function AuditLog() {
   }
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+
+  const filtered = entries.filter((e) => {
+    if (quick.pending && e.device_status !== 'pending') return false
+    if (quick.blocked && e.device_status !== 'blocked') return false
+    if (quick.shared && !e.device_shared) return false
+    return true
+  })
+
+  const toggleQuick = (key: 'pending' | 'blocked' | 'shared') => {
+    setQuick((p) => ({ ...p, [key]: !p[key] }))
+    setSelected(null)
+  }
 
   return (
     <div className="h-full flex flex-col gap-4">
@@ -153,6 +203,41 @@ export function AuditLog() {
       {tab === 'eventos' && (<>
 
       <div className="shrink-0 bg-white rounded-xl border border-[#E3E6EB] p-3 flex items-end gap-3 flex-wrap">
+        <div className="flex items-center gap-2 self-center flex-wrap">
+          <button
+            onClick={() => toggleQuick('pending')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${quick.pending ? 'bg-amber-50 border-amber-300 text-amber-700' : 'border-[#E3E6EB] text-slate-500 hover:border-amber-300'}`}
+            title="Solo eventos de equipos pendientes de aprobación"
+          >
+            <ShieldQuestion size={13} />
+            Pendiente
+          </button>
+          <button
+            onClick={() => toggleQuick('blocked')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${quick.blocked ? 'bg-rose-50 border-rose-300 text-rose-700' : 'border-[#E3E6EB] text-slate-500 hover:border-rose-300'}`}
+            title="Solo eventos de equipos bloqueados"
+          >
+            <ShieldAlert size={13} />
+            Bloqueado
+          </button>
+          <button
+            onClick={() => toggleQuick('shared')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${quick.shared ? 'bg-violet-50 border-violet-300 text-violet-700' : 'border-[#E3E6EB] text-slate-500 hover:border-violet-300'}`}
+            title="Solo eventos de equipos compartidos entre usuarios"
+          >
+            <UsersIcon size={13} />
+            Compartido
+          </button>
+          <button
+            onClick={() => exportCsv(filtered)}
+            disabled={filtered.length === 0}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border border-[#E3E6EB] text-slate-500 hover:border-slate-400 flex items-center gap-1.5 disabled:opacity-40"
+            title="Descargar los eventos visibles en Excel/CSV"
+          >
+            <Download size={13} />
+            Exportar
+          </button>
+        </div>
         <div className="flex-1 min-w-40">
           <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Acción</label>
           <select
@@ -198,7 +283,8 @@ export function AuditLog() {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1">
+      <div className="flex-1 min-h-0 flex gap-4">
+        <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1">
         <div className="flex-1 min-h-0 overflow-auto">
           <table className="w-full">
             <thead className="sticky top-0 z-10">
@@ -212,19 +298,19 @@ export function AuditLog() {
               </tr>
             </thead>
             <tbody>
-              {entries.length === 0 && (
+              {filtered.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-6 py-10 text-center text-sm text-slate-400">
                     <ScrollText size={28} className="mx-auto mb-2 text-slate-200" />
-                    No hay eventos que coincidan
+                    {quick.pending || quick.blocked || quick.shared ? 'No hay eventos que coincidan con el filtro rápido' : 'No hay eventos que coincidan'}
                   </td>
                 </tr>
               )}
-              {entries.map((e) => {
+              {filtered.map((e) => {
                 const deviceMeta = e.device_status ? DEVICE_META[e.device_status] : null
                 return (
-                <tr key={e.id} className={`border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50 ${e.device_status === 'pending' ? 'bg-amber-50/40' : e.device_status === 'blocked' ? 'bg-rose-50/40' : ''}`}>
-                  <td className="px-6 py-3.5 text-sm text-slate-600 whitespace-nowrap">{fmt(e.created_at)}</td>
+                <tr key={e.id} onClick={() => setSelected(e)} className={`border-b border-l-4 border-l-transparent border-slate-100 transition-all duration-150 hover:bg-slate-100/50 cursor-pointer ${e.device_status === 'pending' ? 'bg-amber-50/40 border-l-amber-400' : e.device_status === 'blocked' ? 'bg-rose-50/40 border-l-rose-500' : ''} ${selected?.id === e.id ? 'bg-[#6E7B91]/10 border-l-[#6E7B91]' : ''}`}>
+                  <td className="px-6 py-3.5 text-sm text-slate-600 whitespace-nowrap" title={fmt(e.created_at)}>{timeAgo(e.created_at)}</td>
                   <td className="px-6 py-3.5 text-sm font-medium text-slate-900">
                     {e.username || '—'}
                     {e.action === 'login_failed' && !e.username && <span className="ml-1 text-xs text-amber-600">(intento anónimo)</span>}
@@ -241,7 +327,7 @@ export function AuditLog() {
                     </span>
                   </td>
                   <td className="px-6 py-3.5 text-sm text-slate-600">{ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '—'}</td>
-                  <td className="px-6 py-3.5 text-sm text-slate-600">{e.detail || '—'}</td>
+                  <td className="px-6 py-3.5 text-sm text-slate-600 max-w-0">{e.detail || '—'}</td>
                   <td className="px-6 py-3.5 text-sm text-slate-500">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-mono">{e.ip_address || '—'}</span>
@@ -265,7 +351,7 @@ export function AuditLog() {
         </div>
         <div className="shrink-0 border-t border-[#E3E6EB] px-6 py-3 flex items-center justify-between">
           <p className="text-xs text-slate-400">
-            Página {page} de {totalPages} · {total} evento(s)
+            Página {page} de {totalPages} · {total} evento(s){filtered.length !== entries.length ? ` · ${filtered.length} visibles` : ''}
           </p>
           <div className="flex items-center gap-2">
             <button
@@ -284,6 +370,60 @@ export function AuditLog() {
             </button>
           </div>
         </div>
+      </div>
+
+      {selected && (
+        <aside className="shrink-0 w-80 bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0">
+          <div className="shrink-0 px-4 py-3 border-b border-[#E3E6EB] flex items-center justify-between gap-2">
+            <h3 className="text-sm font-semibold text-[#3F4650] flex items-center gap-2">
+              <FileText size={14} className="text-slate-400" />
+              Detalle del evento
+            </h3>
+            <button onClick={() => setSelected(null)} className="p-1.5 text-slate-400 hover:bg-slate-100 rounded-lg">
+              <XIcon size={14} />
+            </button>
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-3 text-sm">
+            <div>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Fecha y hora</p>
+              <p className="text-slate-800">{fmt(selected.created_at)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Acción</p>
+              <p className="text-slate-800">{ACTION_LABELS[selected.action] || selected.action}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Usuario</p>
+              <p className="text-slate-800">{selected.username || '—'}{selected.action === 'login_failed' && !selected.username ? ' (intento anónimo)' : ''}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Tipo / Entidad</p>
+              <p className="text-slate-800">
+                {ENTITY_LABELS[selected.entity_type || ''] || selected.entity_type || '—'}
+                {selected.entity_id ? <span className="font-mono text-xs text-slate-500"> · {selected.entity_id}</span> : null}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Equipo</p>
+              <div className="flex items-center gap-1.5 flex-wrap mt-1">
+                <span className="font-mono text-xs bg-slate-100 px-2 py-0.5 rounded-md">{selected.ip_address || '—'}</span>
+                {selected.device_status && (
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${DEVICE_META[selected.device_status].badge}`}>
+                    {DEVICE_META[selected.device_status].label}
+                  </span>
+                )}
+                {selected.device_shared && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700">Compartido</span>
+                )}
+              </div>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Detalle</p>
+              <p className="text-slate-700 break-words whitespace-pre-wrap bg-slate-50 rounded-lg px-3 py-2 text-xs">{selected.detail || '—'}</p>
+            </div>
+          </div>
+        </aside>
+      )}
       </div>
       </>)}
     </div>
