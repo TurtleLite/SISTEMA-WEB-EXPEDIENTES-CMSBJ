@@ -286,6 +286,21 @@ def generate_excel_report(
             detail=f"El reporte tiene {len(records)} registros; máximo {settings.REPORT_MAX_RECORDS} por archivo. "
                    f"Use filtros (especialidad, perfil, criticidad o estatus) para acotarlo.",
         )
+    filt = report.filters or {}
+    is_date_report = bool(filt.get("fecha_desde") or filt.get("fecha_hasta"))
+    if is_date_report:
+        breakdown = _user_counts(db, records=records)
+        columns = ["Usuario", "Expedientes creados"]
+        data = [{"Usuario": b["full_name"], "Expedientes creados": b["count"]} for b in breakdown]
+        os.makedirs(settings.REPORTS_DIR, exist_ok=True)
+        filepath = os.path.join(settings.REPORTS_DIR, f"reporte_{report.id}.xlsx")
+        from app.services.excel_service import export_to_excel
+        export_to_excel(data, columns, filepath, title=report.name, filters=report.filters, count=len(records))
+        report.file_path_excel = filepath
+        db.commit()
+        log_audit(db, current_user, "report_generate", entity_type="report", entity_id=report_id,
+                  detail=f"generó el reporte {report.name} ({len(records)} expedientes en el rango)", ip_address=client_ip(request))
+        return {"message": "Reporte Excel generado", "file_path": filepath, "filename": _report_sequence_filename(db, report), "count": len(records)}
     data = _report_rows(records)
     os.makedirs(settings.REPORTS_DIR, exist_ok=True)
     filepath = os.path.join(settings.REPORTS_DIR, f"reporte_{report.id}.xlsx")
@@ -318,6 +333,19 @@ def preview_report(
             detail=f"El reporte tiene {len(records)} registros; máximo {settings.REPORT_MAX_RECORDS} para previsualizar. "
                    f"Use filtros para acotarlo.",
         )
+    filt = report.filters or {}
+    is_date_report = bool(filt.get("fecha_desde") or filt.get("fecha_hasta"))
+    if is_date_report:
+        breakdown = _user_counts(db, records=records)
+        return {
+            "name": report.name,
+            "description": report.description,
+            "filters": report.filters,
+            "columns": ["Usuario", "Expedientes creados"],
+            "count": len(records),
+            "records": [{"Usuario": b["full_name"], "Expedientes creados": b["count"]} for b in breakdown],
+            "record_ids": [],
+        }
     rows = _report_rows(records)
     return {
         "name": report.name,

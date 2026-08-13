@@ -20,12 +20,16 @@ const criticidadLabel = (v: string) => CRITICIDAD_LABELS[v] || v
 
 interface PreviewData {
   name: string
+  filters?: Record<string, any>
   columns: string[]
   records: Record<string, any>[]
   count: number
   record_ids?: string[]
   created_by_breakdown?: { full_name: string; count: number }[]
 }
+
+const isDateReport = (p: PreviewData | null): boolean =>
+  !!(p?.filters?.fecha_desde || p?.filters?.fecha_hasta)
 
 export function Reports() {
   const [reports, setReports] = useState<Report[]>([])
@@ -162,7 +166,7 @@ export function Reports() {
 
   const handleDrop = async (targetIdx: number) => {
     setDragOverIdx(null)
-    if (!preview || previewReportId === null || dragIdx === null || dragIdx === targetIdx || !canReorder()) {
+    if (!preview || previewReportId === null || dragIdx === null || dragIdx === targetIdx || !canReorder() || isDateReport(preview)) {
       setDragIdx(null)
       return
     }
@@ -488,7 +492,7 @@ export function Reports() {
               </button>
             </div>
             <div className="flex-1 overflow-auto min-h-0">
-              {preview.created_by_breakdown && preview.created_by_breakdown.length > 0 && (
+              {!isDateReport(preview) && preview.created_by_breakdown && preview.created_by_breakdown.length > 0 && (
                 <div className="flex items-center gap-3 px-8 py-3 bg-amber-50/70 border-b border-amber-100 flex-wrap shrink-0">
                   <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Expedientes por usuario:</span>
                   {preview.created_by_breakdown.map((b) => (
@@ -498,7 +502,7 @@ export function Reports() {
                   ))}
                 </div>
               )}
-              {canReorder() && preview.records.length > 1 && (
+              {canReorder() && !isDateReport(preview) && preview.records.length > 1 && (
                 <div className="flex items-center gap-2 px-8 py-2 bg-sky-50 border-b border-sky-100 text-xs text-sky-700 shrink-0">
                   <span>Arrastre las filas para acomodar la posición antes de generar el Excel.</span>
                   {savingOrder && <span className="text-sky-500">Guardando orden…</span>}
@@ -525,9 +529,9 @@ export function Reports() {
                   ) : preview.records.map((record, idx) => (
                     <tr
                       key={record._id || idx}
-                      draggable={canReorder()}
+                      draggable={canReorder() && !isDateReport(preview)}
                       onDragStart={(e) => handleDragStart(e, idx)}
-                      onDragOver={(e) => { if (canReorder()) { e.preventDefault(); setDragOverIdx(idx) } }}
+                      onDragOver={(e) => { if (canReorder() && !isDateReport(preview)) { e.preventDefault(); setDragOverIdx(idx) } }}
                       onDrop={(e) => { e.preventDefault(); handleDrop(idx) }}
                       onDragEnd={() => { setDragIdx(null); setDragOverIdx(null) }}
                       className={`border-b border-[#E3E6EB] transition-colors ${dragOverIdx === idx && dragIdx !== null && dragIdx !== idx ? 'bg-sky-50 ring-1 ring-inset ring-sky-200' : ''} ${dragIdx === idx ? 'opacity-50' : ''} ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FA]'} ${canReorder() ? 'cursor-grab active:cursor-grabbing' : ''}`}
