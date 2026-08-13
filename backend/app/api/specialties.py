@@ -87,22 +87,39 @@ def rename_specialty(
 @router.delete("/")
 def delete_specialty(
     name: str,
+    replacement: str = "",
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
-    if not name.strip():
+    name = name.strip()
+    replacement = replacement.strip()
+    if not name:
         raise HTTPException(status_code=400, detail="Nombre de especialidad inválido")
-    res = db.execute(
-        text(
-            "UPDATE list_records "
-            "SET data = data - 'especialidad', updated_at = now() "
-            "WHERE data->>'especialidad' = :name"
-        ),
-        {"name": name.strip()},
-    )
+    if replacement == name:
+        raise HTTPException(status_code=400, detail="El reemplazo no puede ser la misma especialidad")
+    if replacement:
+        res = db.execute(
+            text(
+                "UPDATE list_records "
+                "SET data = jsonb_set(data, '{especialidad}', CAST(:new AS JSONB)), updated_at = now() "
+                "WHERE data->>'especialidad' = :name"
+            ),
+            {"name": name, "new": json.dumps(replacement)},
+        )
+        message = f"Especialidad reasignada a '{replacement}' en {res.rowcount} expediente(s)"
+    else:
+        res = db.execute(
+            text(
+                "UPDATE list_records "
+                "SET data = data - 'especialidad', updated_at = now() "
+                "WHERE data->>'especialidad' = :name"
+            ),
+            {"name": name},
+        )
+        message = f"Especialidad eliminada de {res.rowcount} expediente(s)"
     db.query(CatalogItem).filter(
         CatalogItem.item_type == "especialidad",
-        CatalogItem.name == name.strip(),
+        CatalogItem.name == name,
     ).delete()
     db.commit()
-    return {"message": f"Especialidad eliminada de {res.rowcount} expediente(s)", "updated": res.rowcount}
+    return {"message": message, "updated": res.rowcount}

@@ -65,6 +65,9 @@ export function ListDetail() {
   const [creatingEsp, setCreatingEsp] = useState(false)
   const [creatingLoc, setCreatingLoc] = useState(false)
   const [newLocTipo, setNewLocTipo] = useState('')
+  const [deleteTarget, setDeleteTarget] = useState<{ type: 'esp' | 'loc'; name: string; count: number } | null>(null)
+  const [replaceValue, setReplaceValue] = useState('')
+  const [deleting, setDeleting] = useState(false)
 
   const loadEspecialidades = async () => {
     try {
@@ -302,15 +305,8 @@ export function ListDetail() {
   }
 
   const handleDeleteEsp = async (s: Specialty) => {
-    if (!await confirm(`¿Eliminar la especialidad "${s.name}"? Se quitará de ${s.count} expediente(s).`)) return
-    try {
-      const res = await specialtiesApi.remove(s.name)
-      toast(res.data?.message || 'Especialidad eliminada', 'success')
-      await loadSpecialties()
-      await loadEspecialidades()
-    } catch (err: any) {
-      toast(err.response?.data?.detail || 'Error al eliminar la especialidad', 'error')
-    }
+    setDeleteTarget({ type: 'esp', name: s.name, count: s.count })
+    setReplaceValue('')
   }
 
   const loadLocalities = async () => {
@@ -371,13 +367,32 @@ export function ListDetail() {
   }
 
   const handleDeleteLoc = async (l: { name: string; tipo: string; count: number }) => {
-    if (!await confirm(`¿Eliminar la localidad "${l.name}"? Se quitará de ${l.count} expediente(s).`)) return
+    setDeleteTarget({ type: 'loc', name: l.name, count: l.count })
+    setReplaceValue('')
+  }
+
+  const confirmDeleteWithReplacement = async () => {
+    if (!deleteTarget || deleting) return
+    setDeleting(true)
     try {
-      const res = await localitiesApi.remove(l.name)
-      toast(res.data?.message || 'Localidad eliminada', 'success')
-      await loadLocalities()
+      const replacement = replaceValue.trim()
+      if (deleteTarget.type === 'esp') {
+        const res = await specialtiesApi.remove(deleteTarget.name, replacement)
+        toast(res.data?.message || 'Especialidad eliminada', 'success')
+        await loadSpecialties()
+        await loadEspecialidades()
+      } else {
+        const res = await localitiesApi.remove(deleteTarget.name, replacement)
+        toast(res.data?.message || 'Localidad eliminada', 'success')
+        await loadLocalities()
+      }
+      setDeleteTarget(null)
+      setReplaceValue('')
+      loadRecords(true)
     } catch (err: any) {
-      toast(err.response?.data?.detail || 'Error al eliminar la localidad', 'error')
+      toast(err.response?.data?.detail || 'Error al eliminar', 'error')
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -948,6 +963,54 @@ export function ListDetail() {
             <p className="px-5 py-3 text-xs text-[#8A919C] border-t border-[#E3E6EB] shrink-0">
               Puede crear localidades aquí o escribirlas directamente en el formulario del expediente. Tipos: {TIPO_LOCALIDAD_OPTIONS.join(' · ')}.
             </p>
+          </div>
+        </div>
+      )}
+
+      {deleteTarget && (
+        <div className="fixed inset-0 z-[210] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6">
+            <h3 className="font-serif text-lg font-bold text-[#3F4650] mb-2">
+              Eliminar {deleteTarget.type === 'esp' ? 'especialidad' : 'localidad'} "{deleteTarget.name}"
+            </h3>
+            <p className="text-sm text-slate-600 leading-relaxed mb-4">
+              Está en <b>{deleteTarget.count}</b> expediente(s). Indique qué valor se asignará en su lugar:
+            </p>
+            <input
+              type="text"
+              list="reemplazos-sugeridos"
+              value={replaceValue}
+              onChange={(e) => setReplaceValue(e.target.value)}
+              autoFocus
+              placeholder="Escriba el reemplazo o seleccione uno existente"
+              className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+            />
+            <datalist id="reemplazos-sugeridos">
+              {(deleteTarget.type === 'esp' ? specialties : localities)
+                .map((x) => x.name)
+                .filter((n) => n !== deleteTarget.name)
+                .map((n) => (
+                  <option key={n} value={n} />
+                ))}
+            </datalist>
+            <p className="mt-2 text-xs text-slate-400">
+              Si lo deja vacío, {deleteTarget.type === 'esp' ? 'la especialidad' : 'la localidad'} se quitará de los expedientes sin reemplazo.
+            </p>
+            <div className="mt-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => void confirmDeleteWithReplacement()}
+                disabled={deleting || replaceValue.trim() === deleteTarget.name}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 shadow-sm transition-all duration-200 disabled:opacity-50"
+              >
+                {deleting ? 'Eliminando...' : 'Eliminar'}
+              </button>
+            </div>
           </div>
         </div>
       )}

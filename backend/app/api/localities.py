@@ -1,5 +1,3 @@
-import json
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -72,14 +70,17 @@ def rename_locality(
         raise HTTPException(status_code=400, detail="La localidad original y la nueva son obligatorias")
     if old == new:
         return {"message": "Sin cambios", "updated": 0}
-    res = db.execute(
-        text(
-            "UPDATE list_records "
-            "SET data = jsonb_set(data, '{localidad}', CAST(:new AS JSONB)), updated_at = now() "
-            "WHERE data->>'localidad' = :old"
-        ),
-        {"old": old, "new": json.dumps(new)},
+    from app.models.list_definition import ListRecord
+    from app.services.record_service import _compose_domicilio
+    rows = (
+        db.query(ListRecord)
+        .filter(ListRecord.data.op("->>")("localidad") == old)
+        .all()
     )
+    for record in rows:
+        d = dict(record.data)
+        d["localidad"] = new
+        record.data = _compose_domicilio(d)
     catalog = db.query(CatalogItem).filter(
         CatalogItem.item_type == "localidad",
         CatalogItem.name == old,
@@ -87,28 +88,61 @@ def rename_locality(
     if catalog:
         catalog.name = new
     db.commit()
-    return {"message": f"Localidad renombrada en {res.rowcount} expediente(s)", "updated": res.rowcount}
+    return {"message": f"Localidad renombrada en {len(rows)} expediente(s)", "updated": len(rows)}
 
 
 @router.delete("/")
 def delete_locality(
     name: str,
+    replacement: str = "",
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
-    if not name.strip():
+    name = name.strip()
+    replacement = replacement.strip()
+    if not name:
         raise HTTPException(status_code=400, detail="Nombre de localidad inválido")
-    res = db.execute(
-        text(
-            "UPDATE list_records "
-            "SET data = (data - 'localidad') - 'tipo_localidad', updated_at = now() "
-            "WHERE data->>'localidad' = :name"
-        ),
-        {"name": name.strip()},
-    )
+    if replacement == name:
+        raise HTTPException(status_code=400, detail="El reemplazo no puede ser la misma localidad")
+    from app.models.list_definition import ListRecord
+    from app.services.record_service import _compose_domicilio
+    if replacement:
+        # Toma el tipo de localidad del reemplazo si existe en el catálogo.
+        rep = db.query(CatalogItem).filter(
+            CatalogItem.item_type == "localidad",
+            CatalogItem.name == replacement,
+        ).first()
+        tipo = rep.locality_type or "" if rep else ""
+        rows = (
+            db.query(ListRecord)
+            .filter(ListRecord.data.op("->>")("localidad") == name)
+            .all()
+        )
+        for record in rows:
+            d = dict(record.data)
+            d["localidad"] = replacement
+            if tipo:
+                d["tipo_localidad"] = tipo
+            elif "tipo_localidad" in d:
+                del d["tipo_localidad"]
+            record.data = _compose_domicilio(d)
+        db.commit()
+        message = f"Localidad reasignada a '{replacement}' en {len(rows)} expediente(s)"
+        updated = len(rows)
+    else:
+        res = db.execute(
+            text(
+                "UPDATE list_records "
+                "SET data = (data - 'localidad') - 'tipo_localidad', updated_at = now() "
+                "WHERE data->>'localidad' = :name"
+            ),
+            {"name": name},
+        )
+        message = f"Localidad eliminada de {res.rowcount} expediente(s)"
+        updated = res.rowcount
     db.query(CatalogItem).filter(
         CatalogItem.item_type == "localidad",
-        CatalogItem.name == name.strip(),
+        CatalogItem.name == name,
     ).delete()
     db.commit()
-    return {"message": f"Localidad eliminada de {res.rowcount} expediente(s)", "updated": res.rowcount}
+    return {"message": message, "updated": updated}
