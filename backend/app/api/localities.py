@@ -18,18 +18,32 @@ def list_localities(
     current_user: User = Depends(require_role("admin")),
 ):
     rows = db.execute(text(
-        "SELECT data->>'localidad' AS loc, data->>'tipo_localidad' AS tipo, COUNT(*) AS n "
+        "SELECT data->>'localidad' AS loc, data->>'tipo_localidad' AS tipo, "
+        "data->>'municipio' AS mun, data->>'departamento' AS dept, COUNT(*) AS n "
         "FROM list_records "
         "WHERE data->>'localidad' IS NOT NULL AND data->>'localidad' != '' "
-        "GROUP BY loc, tipo"
+        "GROUP BY loc, tipo, mun, dept"
     )).all()
     merged = {}
-    for loc, tipo, n in rows:
-        merged.setdefault(loc, {"tipo": tipo or "", "count": 0})
-        merged[loc]["count"] += n
+    for loc, tipo, mun, dept, n in rows:
+        info = merged.setdefault(loc, {"tipo": tipo or "", "count": 0, "municipios": set(), "departamentos": set()})
+        info["count"] += n
+        if mun:
+            info["municipios"].add(mun)
+        if dept:
+            info["departamentos"].add(dept)
     for item in db.query(CatalogItem).filter(CatalogItem.item_type == "localidad"):
-        merged.setdefault(item.name, {"tipo": item.locality_type or "", "count": 0})
-    return [{"name": name, "tipo": info["tipo"], "count": info["count"]} for name, info in sorted(merged.items())]
+        merged.setdefault(item.name, {"tipo": item.locality_type or "", "count": 0, "municipios": set(), "departamentos": set()})
+    return [
+        {
+            "name": name,
+            "tipo": info["tipo"],
+            "count": info["count"],
+            "municipio": ", ".join(sorted(info["municipios"])),
+            "departamento": ", ".join(sorted(info["departamentos"])),
+        }
+        for name, info in sorted(merged.items())
+    ]
 
 
 @router.post("/")

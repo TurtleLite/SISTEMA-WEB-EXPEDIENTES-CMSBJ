@@ -56,7 +56,7 @@ export function ListDetail() {
   const [espSaving, setEspSaving] = useState(false)
   const [previewRecord, setPreviewRecord] = useState<ListRecord | null>(null)
   const [showLocModal, setShowLocModal] = useState(false)
-  const [localities, setLocalities] = useState<{ name: string; tipo: string; count: number }[]>([])
+  const [localities, setLocalities] = useState<{ name: string; tipo: string; count: number; municipio: string; departamento: string }[]>([])
   const [editingLoc, setEditingLoc] = useState<{ name: string; tipo: string; count: number } | null>(null)
   const [newLocName, setNewLocName] = useState('')
   const [locSaving, setLocSaving] = useState(false)
@@ -396,7 +396,7 @@ export function ListDetail() {
     }
   }
 
-  const similarLocalities = (items: { name: string; tipo: string; count: number }[] = localities): { names: string[] }[] => {
+  const similarLocalities = (items: { name: string; tipo: string; count: number; municipio: string; departamento: string }[] = localities): { names: string[] }[] => {
     const groups: { names: string[] }[] = []
     const used = new Set<number>()
     for (let i = 0; i < items.length; i++) {
@@ -931,7 +931,10 @@ export function ListDetail() {
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-[#3F4650] truncate">{l.name}</p>
                       <p className="text-xs text-[#8A919C]">
-                        {l.tipo ? `${l.tipo} · ` : ''}{l.count} expediente(s)
+                        {l.tipo ? `${l.tipo} · ` : ''}
+                        {l.municipio ? `${l.municipio} · ` : ''}
+                        {l.departamento ? `${l.departamento} · ` : ''}
+                        {l.count} expediente(s)
                       </p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
