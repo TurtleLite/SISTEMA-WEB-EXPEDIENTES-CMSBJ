@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import FileResponse
+from sqlalchemy import func
 from sqlalchemy.orm import Session
+from collections import Counter
 from app.core.database import get_db
 from app.core.config import settings
 from app.models.report import Report
@@ -106,6 +108,33 @@ def _report_sequence_filename(db: Session, report: Report) -> str:
     return f"REPORTE_{name}.xlsx"
 
 
+def _user_counts(db: Session, records: list[ListRecord] = None, list_id: int = None) -> list[dict]:
+    """Cuántos expedientes creó cada usuario (nombre completo con título)."""
+    counter = Counter()
+    if records is not None:
+        for rec in records:
+            counter[rec.created_by if rec.created_by is not None else 0] += 1
+    elif list_id is not None:
+        rows = (
+            db.query(ListRecord.created_by, func.count(ListRecord.id))
+            .filter(ListRecord.list_definition_id == list_id)
+            .group_by(ListRecord.created_by)
+            .all()
+        )
+        counter = Counter({uid: c for uid, c in rows})
+    uid_ints = [uid for uid in counter if uid]
+    users = {}
+    if uid_ints:
+        users = {u.id: u.full_name for u in db.query(User).filter(User.id.in_(uid_ints)).all()}
+    result = []
+    for uid, c in counter.most_common():
+        result.append({
+            "full_name": users.get(uid, "Importación") if uid else "Importación (sin usuario)",
+            "count": c,
+        })
+    return result
+
+
 def _report_rows(records: list[ListRecord]) -> list[dict]:
     rows = []
     for idx, rec in enumerate(records, 1):
@@ -163,7 +192,6 @@ def list_reports(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("direccion", "direccion_medica")),
 ):
-    from sqlalchemy import func
     reports = db.query(Report).order_by(Report.created_at.desc()).all()
     counts = dict(
         db.query(ListRecord.list_definition_id, func.count(ListRecord.id))
@@ -174,10 +202,13 @@ def list_reports(
         filt = r.filters or {}
         has_filters = any(filt.get(k) for k in ("especialidad", "perfil", "criticidad", "estatus_cirugia", "fecha_desde", "fecha_hasta"))
         if has_filters:
-            record_count = len(_records_for_report(db, r))
+            records = _records_for_report(db, r)
+            record_count = len(records)
+            breakdown = _user_counts(db, records=records)
         else:
             ld = _list_for_report(db, r)
             record_count = counts.get(ld.id, 0) if ld else 0
+            breakdown = _user_counts(db, list_id=ld.id) if ld else []
         result.append({
             "id": str(r.id),
             "name": r.name,
@@ -189,6 +220,7 @@ def list_reports(
             "file_path_pdf": r.file_path_pdf,
             "created_at": str(r.created_at),
             "record_count": record_count,
+            "created_by_breakdown": breakdown,
         })
     return result
 
@@ -295,6 +327,7 @@ def preview_report(
         "count": len(rows),
         "records": rows[:200],
         "record_ids": [str(r.id) for r in records],
+        "created_by_breakdown": _user_counts(db, records=records),
     }
 
 

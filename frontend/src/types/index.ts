@@ -51,4 +51,5 @@ export interface Report {
   file_path_pdf?: string
   created_at: string
   record_count?: number
+  created_by_breakdown?: { full_name: string; count: number }[]
 }

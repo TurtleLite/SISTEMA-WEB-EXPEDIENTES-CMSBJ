@@ -24,6 +24,7 @@ interface PreviewData {
   records: Record<string, any>[]
   count: number
   record_ids?: string[]
+  created_by_breakdown?: { full_name: string; count: number }[]
 }
 
 export function Reports() {
@@ -285,6 +286,19 @@ export function Reports() {
                 </span>
               ))}
             </div>
+            {report.created_by_breakdown && report.created_by_breakdown.length > 0 && (
+              <div className="mt-3 pt-3 border-t border-[#E3E6EB]">
+                <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Expedientes por usuario</p>
+                <div className="space-y-1">
+                  {report.created_by_breakdown.map((b) => (
+                    <div key={b.full_name} className="flex items-center justify-between gap-2 text-xs">
+                      <span className="text-slate-600 truncate">{b.full_name}</span>
+                      <span className="font-semibold text-slate-800 shrink-0">{b.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2 mt-4">
               <button
                 onClick={() => handlePreview(report.id)}
@@ -474,6 +488,16 @@ export function Reports() {
               </button>
             </div>
             <div className="flex-1 overflow-auto min-h-0">
+              {preview.created_by_breakdown && preview.created_by_breakdown.length > 0 && (
+                <div className="flex items-center gap-3 px-8 py-3 bg-amber-50/70 border-b border-amber-100 flex-wrap shrink-0">
+                  <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Expedientes por usuario:</span>
+                  {preview.created_by_breakdown.map((b) => (
+                    <span key={b.full_name} className="text-xs bg-white border border-amber-200 rounded-lg px-2 py-1 text-slate-700">
+                      <b>{b.full_name}</b>: {b.count}
+                    </span>
+                  ))}
+                </div>
+              )}
               {canReorder() && preview.records.length > 1 && (
                 <div className="flex items-center gap-2 px-8 py-2 bg-sky-50 border-b border-sky-100 text-xs text-sky-700 shrink-0">
                   <span>Arrastre las filas para acomodar la posición antes de generar el Excel.</span>
