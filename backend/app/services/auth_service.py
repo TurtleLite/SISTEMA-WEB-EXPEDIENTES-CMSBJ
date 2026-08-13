@@ -281,6 +281,8 @@ def revoke_user_session(db: Session, session_id: int, current_user: User, reques
     if not session.revoked_at:
         session.revoked_at = _now()
         db.commit()
+    owner = db.query(User).filter(User.id == session.user_id).first()
+    owner_name = owner.username if owner else "usuario desconocido"
     log_audit(db, current_user, "session_revoked", entity_type="session", entity_id=session.id,
-              detail=f"sesión de usuario_id={session.user_id}", ip_address=client_ip(request))
+              detail=f"sesión de {owner_name} cerrada", ip_address=client_ip(request))
     return {"message": "Sesión cerrada correctamente"}
