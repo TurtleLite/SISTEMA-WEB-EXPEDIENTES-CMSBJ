@@ -56,6 +56,7 @@ const ACTION_LABELS: Record<string, string> = {
   daylist_save: 'Listado del día guardado',
   daylist_export: 'Listado del día exportado',
   daylist_delete: 'Listado del día eliminado',
+  audit_export: 'Auditoría exportada',
 }
 
 const ENTITY_LABELS: Record<string, string> = {
@@ -101,6 +102,7 @@ const GENERIC_DETAIL: Record<string, string> = {
   daylist_save: 'guardó listado del día',
   daylist_export: 'exportó listado del día',
   daylist_delete: 'eliminó listado del día',
+  audit_export: 'exportó eventos técnicos',
 }
 
 const genericDetail = (action: string, detail: string | null): string =>
@@ -132,28 +134,6 @@ const timeAgo = (value: string): string => {
 }
 
 const PAGE_SIZE = 50
-
-const exportCsv = (entries: AuditEntry[]) => {
-  const header = ['Fecha y hora', 'Usuario', 'Acción', 'Tipo', 'Entidad', 'Detalle', 'IP', 'Equipo']
-  const rows = entries.map((e) => [
-    fmt(e.created_at),
-    e.username || '',
-    ACTION_LABELS[e.action] || e.action,
-    ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '',
-    e.entity_id || '',
-    (e.detail || '').replace(/[\n\r]/g, ' '),
-    e.ip_address || '',
-    e.device_status || '',
-  ])
-  const csv = [header, ...rows].map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n')
-  const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `auditoria_${new Date().toISOString().slice(0, 10)}.csv`
-  a.click()
-  URL.revokeObjectURL(url)
-}
 
 export function AuditLog() {
   const [tab, setTab] = useState<'eventos' | 'equipos'>('eventos')
@@ -203,6 +183,27 @@ export function AuditLog() {
   const toggleQuick = (key: 'pending' | 'blocked' | 'shared') => {
     setQuick((p) => ({ ...p, [key]: !p[key] }))
     setSelected(null)
+  }
+
+  const handleExportExcel = async () => {
+    try {
+      const params: any = {}
+      if (applied && action) params.action = action
+      if (applied && entityType) params.entity_type = entityType
+      if (applied && username) params.username = username
+      const res = await auditApi.exportExcel(params)
+      const url = window.URL.createObjectURL(new Blob([res.data]))
+      const a = document.createElement('a')
+      a.href = url
+      const cd = res.headers['content-disposition']
+      const match = cd && cd.match(/filename="?(.+?)"?\s*$/i)
+      a.download = match ? match[1] : `EVENTOS_TECNICOS_${new Date().toISOString().slice(0, 10)}.xlsx`
+      a.click()
+      window.URL.revokeObjectURL(url)
+      toast('Eventos exportados a Excel', 'success')
+    } catch {
+      toast('Error al exportar los eventos', 'error')
+    }
   }
 
   return (
@@ -266,10 +267,10 @@ export function AuditLog() {
             Compartido
           </button>
           <button
-            onClick={() => exportCsv(filtered)}
-            disabled={filtered.length === 0}
+            onClick={handleExportExcel}
+            disabled={total === 0}
             className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border border-[#E3E6EB] text-slate-500 hover:border-slate-400 flex items-center gap-1.5 disabled:opacity-40"
-            title="Descargar los eventos visibles en Excel/CSV"
+            title="Exportar todos los eventos (con los filtros aplicados) a Excel con encabezado institucional"
           >
             <Download size={13} />
             Exportar

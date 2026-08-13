@@ -47,7 +47,9 @@ export const authApi = {
 }
 
 export const auditApi = {
-  list: (params?: any) => api.get('/audit/', { params }),
+  list: (params: any) => api.get('/audit/', { params }),
+  exportExcel: (params: any) =>
+    api.get('/audit/export-excel', { params, responseType: 'blob' }),
 }
 
 export const devicesApi = {
