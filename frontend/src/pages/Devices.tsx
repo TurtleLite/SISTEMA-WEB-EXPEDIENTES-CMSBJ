@@ -149,18 +149,18 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1">
-        <div className="flex-1 min-h-0 overflow-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
               <tr className="bg-slate-100 border-b border-[#E3E6EB]">
-                <th className="w-[24%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
-                <th className="w-[13%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Estado</th>
-                <th className="w-[14%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuarios</th>
-                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Primera vez</th>
-                <th className="w-[14%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Última actividad</th>
-                <th className="w-[6%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Eventos</th>
-                <th className="w-[14%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Nota</th>
-                <th className="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Acción</th>
+                <th className="w-[22%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
+                <th className="w-[12%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Estado</th>
+                <th className="w-[13%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuarios</th>
+                <th className="w-[14%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Primera vez</th>
+                <th className="w-[13%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Última actividad</th>
+                <th className="w-[6%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Eventos</th>
+                <th className="w-[13%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Nota</th>
+                <th className="text-right px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Acción</th>
               </tr>
             </thead>
             <tbody>
@@ -176,7 +176,7 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                 const meta = STATUS_META[d.status]
                 return (
                   <tr key={d.id} className={`border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50 ${d.status === 'pending' ? 'bg-amber-50/40' : d.status === 'blocked' ? 'bg-rose-50/40' : ''}`}>
-                    <td className="px-6 py-4 min-w-0">
+                    <td className="px-4 py-4 min-w-0">
                       <div className="flex items-center gap-2 min-w-0">
                         <Monitor size={15} className="text-slate-400 shrink-0" />
                         <span className="text-sm font-mono text-slate-800 truncate">{d.device_id}</span>
@@ -188,13 +188,13 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                       </div>
                       {d.note && <p className="text-xs text-slate-500 mt-0.5 truncate">{d.note}</p>}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${meta.badge}`}>{meta.label}</span>
                       {d.status === 'blocked' && d.blocked_by && (
                         <p className="text-[10px] text-rose-500 mt-1 truncate">por {d.blocked_by}</p>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm min-w-0">
+                    <td className="px-4 py-4 text-sm min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <UsersIcon size={13} className="text-slate-400 shrink-0" />
                         {d.users.length === 0 ? (
@@ -206,13 +206,13 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600 min-w-0">
+                    <td className="px-4 py-4 text-sm text-slate-600 min-w-0">
                       <p className="truncate">{fmt(d.first_seen_at)}</p>
                       {d.first_username && <p className="text-xs text-slate-400 truncate">inicial: {d.first_username}</p>}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600 min-w-0"><p className="truncate">{fmt(d.last_event_at || d.last_seen_at)}</p></td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{d.events}</td>
-                    <td className="px-6 py-4 min-w-0">
+                    <td className="px-4 py-4 text-sm text-slate-600 min-w-0"><p className="truncate">{fmt(d.last_event_at || d.last_seen_at)}</p></td>
+                    <td className="px-4 py-4 text-sm text-slate-600">{d.events}</td>
+                    <td className="px-4 py-4 min-w-0">
                       <div className="flex items-center gap-1">
                         <input
                           type="text"
@@ -231,7 +231,7 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-right whitespace-nowrap">
+                    <td className="px-4 py-4 text-right whitespace-nowrap">
                       {d.status !== 'approved' ? (
                         <button
                           onClick={() => handleApprove(d)}
