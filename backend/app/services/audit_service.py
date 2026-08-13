@@ -1,15 +1,30 @@
 from sqlalchemy.orm import Session
 from app.models.audit_log import AuditLog
+import ipaddress
+
+
+def _is_public_ip(ip: str) -> bool:
+    try:
+        addr = ipaddress.ip_address(ip)
+    except ValueError:
+        return False
+    return not (
+        addr.is_private or addr.is_loopback or addr.is_link_local
+        or addr.is_multicast or addr.is_unspecified or addr.is_reserved
+    )
 
 
 def client_ip(request) -> str:
     if request is None:
         return ""
+    peer = request.client.host if request.client else None
+    if peer and _is_public_ip(peer):
+        return peer[:45]
     forwarded = request.headers.get("x-forwarded-for", "")
     if forwarded:
         return forwarded.split(",")[0].strip()[:45]
-    if request.client and request.client.host:
-        return request.client.host[:45]
+    if peer:
+        return peer[:45]
     return ""
 
 

@@ -146,10 +146,21 @@ def list_reports(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("direccion", "direccion_medica")),
 ):
+    from sqlalchemy import func
     reports = db.query(Report).order_by(Report.created_at.desc()).all()
+    counts = dict(
+        db.query(ListRecord.list_definition_id, func.count(ListRecord.id))
+        .group_by(ListRecord.list_definition_id).all()
+    )
     result = []
     for r in reports:
-        record_count = len(_records_for_report(db, r))
+        filt = r.filters or {}
+        has_filters = any(filt.get(k) for k in ("especialidad", "perfil", "criticidad", "estatus_cirugia"))
+        if has_filters:
+            record_count = len(_records_for_report(db, r))
+        else:
+            ld = _list_for_report(db, r)
+            record_count = counts.get(ld.id, 0) if ld else 0
         result.append({
             "id": str(r.id),
             "name": r.name,
