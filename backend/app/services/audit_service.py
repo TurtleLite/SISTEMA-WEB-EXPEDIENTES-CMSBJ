@@ -32,7 +32,7 @@ def client_device_id(request) -> str:
     """Identificador permanente del equipo (generado por el navegador y enviado en X-Device-ID)."""
     if request is None:
         return ""
-    return (request.headers.get("x-device-id") or "").strip()[:50]
+    return (request.headers.get("x-device-id") or "").strip()[:40]
 
 
 def client_ip(request) -> str:

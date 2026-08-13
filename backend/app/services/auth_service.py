@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.user import User
 from app.models.user_session import UserSession
 from app.core.security import hash_password, verify_password, create_access_token, decode_access_token
-from app.services.audit_service import log_audit, client_ip, client_real_ip
+from app.services.audit_service import log_audit, client_ip, client_real_ip, client_device_id
 from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.core.database import get_db
