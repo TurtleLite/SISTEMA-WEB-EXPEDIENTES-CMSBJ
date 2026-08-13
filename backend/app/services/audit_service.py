@@ -75,6 +75,7 @@ def list_logs(
     entity_type: str = None,
     user_id: int = None,
     username: str = None,
+    ascending: bool = False,
 ) -> tuple[list[AuditLog], int]:
     query = db.query(AuditLog)
     if action:
@@ -86,7 +87,8 @@ def list_logs(
     if username:
         query = query.filter(AuditLog.username.ilike(f"%{username}%"))
     total = query.count()
-    items = query.order_by(AuditLog.id.desc()).offset(skip).limit(limit).all()
+    order = AuditLog.id.asc() if ascending else AuditLog.id.desc()
+    items = query.order_by(order).offset(skip).limit(limit).all()
     return items, total
 
 

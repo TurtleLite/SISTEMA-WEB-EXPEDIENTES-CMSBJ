@@ -126,6 +126,7 @@ def export_audit_excel(
         action=action,
         entity_type=entity_type,
         username=username,
+        ascending=True,
     )
     status_map = get_device_status_map(db)
     columns = ["No", "Fecha y hora", "Usuario", "Acción", "Tipo", "Detalle", "Equipo", "Estado del equipo"]
