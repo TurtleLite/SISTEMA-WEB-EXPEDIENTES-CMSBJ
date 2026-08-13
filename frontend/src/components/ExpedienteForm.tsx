@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { listsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
 import { ListRecord } from '../types'
@@ -164,6 +164,40 @@ function filledFields(data: Record<string, any>): number {
   return Object.values(data).filter((v) => v !== undefined && v !== null && String(v).trim() !== '').length
 }
 
+interface DraftData {
+  data: Record<string, any>
+  customEspecialidad?: boolean
+}
+
+const DRAFT_PREFIX = 'expediente_draft'
+
+const draftKey = (listId: string, recordId?: string): string =>
+  `${DRAFT_PREFIX}_${listId}_${recordId || 'nuevo'}`
+
+const readDraft = (key: string): DraftData | null => {
+  try {
+    const raw = localStorage.getItem(key)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+const writeDraft = (key: string, data: Record<string, any>, customEspecialidad: boolean): void => {
+  try {
+    localStorage.setItem(key, JSON.stringify({ data, customEspecialidad, savedAt: Date.now() }))
+  } catch { /* almacenamiento lleno o no disponible */ }
+}
+
+const clearDraft = (key: string): void => {
+  try { localStorage.removeItem(key) } catch { /* ignore */ }
+}
+
+const hasContent = (data: Record<string, any>): boolean =>
+  Object.values(data).some((v) => v !== undefined && v !== null && String(v).trim() !== '')
+
 interface Props {
   listId: string
   role?: string
@@ -195,19 +229,27 @@ interface LocalidadOption {
 
 export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, editingRecord }: Props) {
   const sections = filterSections(role)
+  const draftKeyStr = draftKey(listId, editingRecord?.id ? String(editingRecord.id) : undefined)
   const [data, setData] = useState<Record<string, any>>(() => {
     const base = editingRecord?.data ? { ...editingRecord.data } : {}
     if (!base.nombre_medico && medicoName) base.nombre_medico = medicoName
+    const draft = readDraft(draftKeyStr)
+    if (draft?.data && hasContent(draft.data)) {
+      return { ...base, ...draft.data }
+    }
     return base
   })
   const [expanded, setExpanded] = useState<string>(sections.length > 0 ? sections[0].title : '')
   const [saving, setSaving] = useState(false)
   const [especialidades, setEspecialidades] = useState<string[]>([])
-  const [customEspecialidad, setCustomEspecialidad] = useState(false)
+  const [customEspecialidad, setCustomEspecialidad] = useState<boolean>(() => {
+    const draft = readDraft(draftKeyStr)
+    return !!draft?.customEspecialidad
+  })
   const [localidades, setLocalidades] = useState<LocalidadOption[]>([])
   const [localidadMatch, setLocalidadMatch] = useState<LocalidadOption | null>(null)
   const [confirmCopy, setConfirmCopy] = useState<{ numero: string; propuesta: string } | null>(null)
-  const { toast } = useNotification()
+  const { toast, confirm } = useNotification()
 
   useEffect(() => {
     listsApi.getEspecialidades(listId).then((res) => {
@@ -232,6 +274,92 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingRecord])
+
+  const originalRef = useRef<Record<string, any>>(editingRecord?.data ? { ...editingRecord.data } : {})
+  const dataRef = useRef(data)
+  dataRef.current = data
+  const customEspRef = useRef(customEspecialidad)
+  customEspRef.current = customEspecialidad
+  const dirtyRef = useRef(false)
+
+  const dirty = useMemo(
+    () => JSON.stringify(data) !== JSON.stringify(originalRef.current),
+    [data]
+  )
+  dirtyRef.current = dirty
+
+  useEffect(() => {
+    const draft = readDraft(draftKeyStr)
+    if (draft?.data && hasContent(draft.data)) {
+      toast('Se restauró el borrador guardado automáticamente: sus datos están a salvo.', 'info')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (saving) return
+    if (!hasContent(data) && !customEspecialidad) return
+    const t = setTimeout(() => {
+      writeDraft(draftKeyStr, data, customEspecialidad)
+    }, 300)
+    return () => clearTimeout(t)
+  }, [data, customEspecialidad, draftKeyStr, saving])
+
+  useEffect(() => {
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (!dirtyRef.current) return
+      writeDraft(draftKeyStr, dataRef.current, customEspRef.current)
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
+    return () => window.removeEventListener('beforeunload', onBeforeUnload)
+  }, [draftKeyStr])
+
+  useEffect(() => {
+    const lastHashRef = { current: window.location.hash }
+    let allowLeave = false
+    let reverting = false
+    const onHashChange = async () => {
+      if (reverting) {
+        reverting = false
+        return
+      }
+      if (allowLeave) return
+      if (!dirtyRef.current) return
+      const ok = await confirm('Tiene datos sin guardar en el formulario de expediente. ¿Salir de todos modos?')
+      if (ok) {
+        allowLeave = true
+        clearDraft(draftKeyStr)
+      } else {
+        reverting = true
+        window.location.hash = lastHashRef.current
+      }
+    }
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [draftKeyStr])
+
+  const handleClose = async () => {
+    if (dirty) {
+      const ok = await confirm('Hay datos sin guardar en el formulario de expediente. ¿Desea salir y descartar el borrador?')
+      if (!ok) return
+    }
+    clearDraft(draftKeyStr)
+    onClose()
+  }
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        void handleClose()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dirty])
 
   const allComplete = sections.every((s) => isSectionComplete(s, data))
 
@@ -304,6 +432,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
         await listsApi.createRecord(listId, { data: payload })
         toast('Expediente creado correctamente', 'success')
       }
+      clearDraft(draftKeyStr)
       onSaved()
       onClose()
     } catch (err: any) {
@@ -325,9 +454,17 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
             <h2 className="text-xl font-bold text-slate-900">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
             <p className="text-sm text-slate-500 mt-1">{editingRecord ? 'Modifique los campos necesarios' : 'Complete todas las secciones para crear el registro'}</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg text-slate-400">
-            ✕
-          </button>
+          <div className="flex items-center gap-3">
+            {dirty && (
+              <span className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-3 py-1">
+                <CheckCircle2 size={13} />
+                Borrador guardado automáticamente
+              </span>
+            )}
+            <button onClick={() => void handleClose()} title="Cerrar" className="p-2 hover:bg-slate-100 rounded-lg text-slate-400">
+              ✕
+            </button>
+          </div>
         </div>
 
         <div className="px-5 pt-2 shrink-0">
@@ -776,7 +913,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
 
         <div className="px-5 py-3 border-t border-[#E3E6EB] flex items-center justify-between shrink-0">
           <button
-            onClick={onClose}
+            onClick={() => void handleClose()}
             className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg"
           >
             Cancelar
@@ -812,6 +949,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
               <button
                 onClick={() => {
                   setConfirmCopy(null)
+                  clearDraft(draftKeyStr)
                   onClose()
                 }}
                 className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg border border-slate-200"
