@@ -153,13 +153,13 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
               <tr className="bg-slate-100 border-b border-[#E3E6EB]">
-                <th className="w-[22%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
-                <th className="w-[12%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Estado</th>
-                <th className="w-[13%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuarios</th>
-                <th className="w-[14%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Primera vez</th>
-                <th className="w-[13%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Última actividad</th>
+                <th className="w-[20%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
+                <th className="w-[11%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Estado</th>
+                <th className="w-[12%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuarios</th>
+                <th className="w-[13%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Primera vez</th>
+                <th className="w-[12%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Última actividad</th>
                 <th className="w-[6%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Eventos</th>
-                <th className="w-[13%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Nota</th>
+                <th className="w-[12%] text-left px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Nota</th>
                 <th className="text-right px-4 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Acción</th>
               </tr>
             </thead>
