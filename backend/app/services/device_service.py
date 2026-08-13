@@ -3,10 +3,22 @@ from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.models.device_registration import DeviceRegistration
 from app.services.audit_service import client_device_id, log_audit
 
 DEVICE_STATUSES = ("pending", "approved", "blocked")
+
+_AUTO_APPROVE_USERS = {
+    u.strip().lower()
+    for u in settings.AUTO_APPROVE_DEVICE_USERS.split(",")
+    if u.strip()
+}
+
+
+def _auto_approves(username: str) -> bool:
+    """Usuarios de confianza: sus equipos quedan aprobados automáticamente en el login."""
+    return username.strip().lower() in _AUTO_APPROVE_USERS
 
 
 def _now() -> datetime:
@@ -28,26 +40,36 @@ def register_device_use(db: Session, request, user) -> DeviceRegistration | None
     if not device_id:
         return None
     now = _now()
+    auto = _auto_approves(user.username)
     reg = db.query(DeviceRegistration).filter(DeviceRegistration.device_id == device_id).first()
     if reg is None:
         reg = DeviceRegistration(
             device_id=device_id,
-            status="pending",
+            status="approved" if auto else "pending",
             first_user_id=user.id,
             first_username=user.username,
             users_json=json.dumps([user.username]),
             first_seen_at=now,
             last_seen_at=now,
         )
+        if auto:
+            reg.approved_by = "auto"
+            reg.approved_at = now
         db.add(reg)
         db.commit()
         log_audit(db, user, "device_registered", entity_type="device", entity_id=reg.id,
-                  detail=f"equipo {device_id} visto por primera vez", ip_address=device_id)
+                  detail=f"equipo {device_id} visto por primera vez"
+                         + (" (auto-aprobado)" if auto else ""),
+                  ip_address=device_id)
     else:
         users = _users_of(reg)
         if user.username not in users:
             users.append(user.username)
             reg.users_json = json.dumps(users)
+        if reg.status == "pending" and auto:
+            reg.status = "approved"
+            reg.approved_by = "auto"
+            reg.approved_at = now
         reg.last_seen_at = now
         db.commit()
     return reg
