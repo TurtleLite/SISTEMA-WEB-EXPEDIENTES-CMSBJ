@@ -224,14 +224,17 @@ def update_record(db: Session, record_id: int, data: dict, user_id: int = None, 
 
 
 def delete_record(db: Session, record_id: int, user_id: int = None, user_role: str = None):
+    from fastapi import HTTPException
+    try:
+        record_id = int(record_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=404, detail="Registro no encontrado")
     record = db.query(ListRecord).filter(ListRecord.id == record_id).first()
     if not record:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Registro no encontrado")
     if user_role in ("direccion", "direccion_medica"):
         pass
     else:
-        from fastapi import HTTPException
         role_name = {"admin": "Administrador", "direccion": "Dirección", "direccion_medica": "Dirección Médica", "medico": "Médico"}
         raise HTTPException(status_code=403, detail=f"{role_name.get(user_role, 'Usuario')} no puede eliminar este registro")
     db.delete(record)

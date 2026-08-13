@@ -17,6 +17,9 @@ from app.models.list_definition import ListRecord
 from app.models.user import User
 import os
 from app.core.config import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/lists", tags=["Listas"])
 
@@ -468,22 +471,49 @@ def bulk_delete_records_endpoint(
     current_user: User = Depends(get_current_user),
 ):
     from fastapi import HTTPException
+    from sqlalchemy.exc import SQLAlchemyError, OperationalError
     from app.services.record_service import delete_record
-    ids = payload.get("ids", [])
+    import time
+
+    ids = []
+    for x in payload.get("ids", []):
+        try:
+            ids.append(int(x))
+        except (TypeError, ValueError):
+            logger.warning(f"bulk-delete: id inválido ignorado -> {x!r}")
+
     deleted = 0
     errors = []
     for record_id in ids:
-        try:
-            delete_record(db, record_id, user_id=current_user.id, user_role=current_user.role)
-            deleted += 1
-        except HTTPException as e:
-            errors.append({"id": record_id, "detail": e.detail})
+        for attempt in range(3):
+            try:
+                delete_record(db, record_id, user_id=current_user.id, user_role=current_user.role)
+                deleted += 1
+                break
+            except HTTPException as e:
+                db.rollback()
+                errors.append({"id": record_id, "detail": e.detail})
+                break
+            except OperationalError as e:
+                db.rollback()
+                sqlstate = getattr(e.orig, "sqlstate", "") if e.orig else ""
+                if sqlstate == "40001" and attempt < 2:
+                    time.sleep(0.2 * (attempt + 1))
+                    continue
+                logger.error(f"bulk-delete: error de BD al eliminar id={record_id}: {e}")
+                errors.append({"id": record_id, "detail": "Error de base de datos al eliminar"})
+                break
+            except SQLAlchemyError as e:
+                db.rollback()
+                logger.error(f"bulk-delete: error al eliminar id={record_id}: {e}")
+                errors.append({"id": record_id, "detail": "Error de base de datos al eliminar"})
+                break
     if deleted:
         log_audit(db, current_user, "record_delete_bulk", entity_type="record",
                   detail=f"eliminó {deleted} expediente(s)", ip_address=client_ip(request))
     message = f"{deleted} registro(s) eliminado(s)"
     if errors:
-        message += f", {len(errors)} no eliminado(s) por permisos"
+        message += f", {len(errors)} no eliminado(s)"
     return {"message": message, "deleted": deleted, "errors": errors}
 
 
