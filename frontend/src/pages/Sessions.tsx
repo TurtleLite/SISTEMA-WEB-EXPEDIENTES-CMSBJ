@@ -67,7 +67,7 @@ export function Sessions() {
     if (userId) params.user_id = userId
     try {
       const res = await authApi.sessions(params)
-      setSessions(res.data || [])
+      setSessions((res.data || []).filter((s: SessionItem) => s.active))
     } catch {
       toast('Error al cargar las sesiones', 'error')
     }
