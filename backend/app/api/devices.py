@@ -69,6 +69,7 @@ def block_device(
 @router.post("/{device_id}/note")
 def set_device_note(
     device_id: str,
+    request: Request,
     data: dict = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
