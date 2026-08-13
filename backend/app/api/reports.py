@@ -261,6 +261,7 @@ def preview_report(
 @router.get("/{report_id}/download")
 def download_report(
     report_id: int,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("direccion", "direccion_medica")),
 ):
