@@ -10,6 +10,7 @@ class UserSession(Base):
     user_id = Column(Integer, nullable=False, index=True)
     jti = Column(String(64), unique=True, nullable=False, index=True)
     ip_address = Column(String(45), nullable=True)
+    device_id = Column(String(50), nullable=True, index=True)
     user_agent = Column(String(255), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     expires_at = Column(DateTime(timezone=True), nullable=True)

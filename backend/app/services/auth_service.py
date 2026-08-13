@@ -113,12 +113,13 @@ def _purge_old_sessions(db: Session, user: User):
     ).delete(synchronize_session=False)
 
 
-def _create_session(db: Session, user: User, jti: str, expires_at: datetime, ip_address: str = None, request=None):
+def _create_session(db: Session, user: User, jti: str, expires_at: datetime, ip_address: str = None, request=None, device_id: str = None):
     _purge_old_sessions(db, user)
     session = UserSession(
         user_id=user.id,
         jti=jti,
         ip_address=ip_address,
+        device_id=(device_id or "")[:50] or None,
         user_agent=((request.headers.get("user-agent", "") if request else "") or "")[:255],
         expires_at=expires_at,
         last_seen_at=_now(),
@@ -139,14 +140,30 @@ def login(db: Session, username: str, password: str, request=None) -> dict:
         _register_ip_failure(ip)
         raise
     _clear_ip_failures(ip)
+    from app.services.device_service import register_device_use
+    reg = register_device_use(db, request, user)
+    if reg and reg.status == "blocked":
+        log_audit(db, user, "login_blocked", entity_type="auth",
+                  detail=f"equipo bloqueado {reg.device_id}", ip_address=ip)
+        raise HTTPException(status_code=403, detail="Este equipo está bloqueado. Contacte al administrador del sistema.")
+    device_id = client_device_id(request)
     token, jti, expires_at = create_access_token({"sub": str(user.id), "role": user.role})
-    _create_session(db, user, jti, expires_at, ip, request)
+    _create_session(db, user, jti, expires_at, ip, request, device_id=device_id)
     log_audit(db, user, "login", entity_type="auth", ip_address=ip)
     from app.schemas.user import UserResponse
+    device_info = None
+    if reg:
+        from app.services.device_service import _users_of
+        device_info = {
+            "id": reg.device_id,
+            "status": reg.status,
+            "shared": len(_users_of(reg)) > 1,
+        }
     return {
         "access_token": token,
         "token_type": "bearer",
         "user": UserResponse.model_validate(user),
+        "device": device_info,
     }
 
 
@@ -215,16 +232,28 @@ def get_user_sessions(db: Session, current_user: User, include_others: bool = Fa
     elif target_user_id:
         query = query.filter(UserSession.user_id == target_user_id)
     rows = query.order_by(UserSession.last_seen_at.desc().nullslast()).all()
+    from app.services.device_service import get_device_status_map
+    status_map = get_device_status_map(db)
     now = _now()
     result = []
     for session, username, full_name in rows:
         active = bool(session.revoked_at is None and (_as_utc(session.expires_at) is None or _as_utc(session.expires_at) > now))
+        device_status = None
+        device_shared = False
+        if session.device_id:
+            info = status_map.get(session.device_id)
+            if info:
+                device_status = info["status"]
+                device_shared = info["shared"]
         result.append({
             "id": str(session.id),
             "user_id": str(session.user_id),
             "username": username,
             "full_name": full_name,
             "ip_address": session.ip_address,
+            "device_id": session.device_id,
+            "device_status": device_status,
+            "device_shared": device_shared,
             "user_agent": session.user_agent,
             "created_at": str(session.created_at),
             "expires_at": str(session.expires_at) if session.expires_at else None,

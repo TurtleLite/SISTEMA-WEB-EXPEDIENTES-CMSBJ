@@ -12,7 +12,15 @@ interface AuditEntry {
   entity_id: string | null
   detail: string | null
   ip_address: string | null
+  device_status: 'pending' | 'approved' | 'blocked' | null
+  device_shared: boolean
   created_at: string
+}
+
+const DEVICE_META: Record<string, { label: string; badge: string }> = {
+  pending: { label: 'Pendiente', badge: 'bg-amber-100 text-amber-700' },
+  approved: { label: 'Aprobado', badge: 'bg-emerald-100 text-emerald-700' },
+  blocked: { label: 'Bloqueado', badge: 'bg-rose-100 text-rose-700' },
 }
 
 const ACTION_LABELS: Record<string, string> = {
@@ -25,6 +33,11 @@ const ACTION_LABELS: Record<string, string> = {
   user_update: 'Usuario actualizado',
   user_delete: 'Usuario eliminado',
   user_unlock: 'Usuario desbloqueado',
+  device_registered: 'Equipo registrado',
+  device_approved: 'Equipo aprobado',
+  device_blocked: 'Equipo bloqueado',
+  device_note: 'Nota de equipo',
+  login_blocked: 'Equipo bloqueado rechazado',
   list_create: 'Lista creada',
   list_update: 'Lista actualizada',
   list_delete: 'Lista eliminada',
@@ -52,6 +65,7 @@ const ENTITY_LABELS: Record<string, string> = {
   report: 'Reporte',
   daylist: 'Listado del día',
   session: 'Sesión',
+  device: 'Equipo',
 }
 
 const ACTION_OPTIONS = Object.entries(ACTION_LABELS).sort((a, b) => a[1].localeCompare(b[1]))
@@ -179,8 +193,10 @@ export function AuditLog() {
                   </td>
                 </tr>
               )}
-              {entries.map((e) => (
-                <tr key={e.id} className="border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50">
+              {entries.map((e) => {
+                const deviceMeta = e.device_status ? DEVICE_META[e.device_status] : null
+                return (
+                <tr key={e.id} className={`border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50 ${e.device_status === 'pending' ? 'bg-amber-50/40' : e.device_status === 'blocked' ? 'bg-rose-50/40' : ''}`}>
                   <td className="px-6 py-3.5 text-sm text-slate-600 whitespace-nowrap">{fmt(e.created_at)}</td>
                   <td className="px-6 py-3.5 text-sm font-medium text-slate-900">
                     {e.username || '—'}
@@ -199,9 +215,24 @@ export function AuditLog() {
                   </td>
                   <td className="px-6 py-3.5 text-sm text-slate-600">{ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '—'}</td>
                   <td className="px-6 py-3.5 text-sm text-slate-600">{e.detail || '—'}</td>
-                  <td className="px-6 py-3.5 text-sm text-slate-500 font-mono">{e.ip_address || '—'}</td>
+                  <td className="px-6 py-3.5 text-sm text-slate-500">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-mono">{e.ip_address || '—'}</span>
+                      {deviceMeta && (
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${deviceMeta.badge}`}>
+                          {deviceMeta.label}
+                        </span>
+                      )}
+                      {e.device_shared && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700" title="Equipo usado por más de un usuario">
+                          Compartido
+                        </span>
+                      )}
+                    </div>
+                  </td>
                 </tr>
-              ))}
+                )
+              })}
             </tbody>
           </table>
         </div>

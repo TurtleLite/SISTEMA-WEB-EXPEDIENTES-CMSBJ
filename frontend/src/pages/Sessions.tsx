@@ -9,6 +9,9 @@ interface SessionItem {
   username: string
   full_name: string
   ip_address: string
+  device_id: string | null
+  device_status: 'pending' | 'approved' | 'blocked' | null
+  device_shared: boolean
   user_agent: string
   created_at: string
   expires_at: string | null
@@ -16,6 +19,12 @@ interface SessionItem {
   revoked_at: string | null
   is_current: boolean
   active: boolean
+}
+
+const DEVICE_META: Record<string, { label: string; badge: string }> = {
+  pending: { label: 'Pendiente', badge: 'bg-amber-100 text-amber-700' },
+  approved: { label: 'Aprobado', badge: 'bg-emerald-100 text-emerald-700' },
+  blocked: { label: 'Bloqueado', badge: 'bg-rose-100 text-rose-700' },
 }
 
 const fmt = (value: string | null) => {
@@ -124,6 +133,7 @@ export function Sessions() {
               <tr className="bg-slate-100 border-b border-[#E3E6EB]">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuario</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Dispositivo</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">IP</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Creada</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Última actividad</th>
@@ -135,11 +145,13 @@ export function Sessions() {
             <tbody>
               {sessions.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-400">No hay sesiones registradas</td>
+                  <td colSpan={9} className="px-6 py-10 text-center text-sm text-slate-400">No hay sesiones registradas</td>
                 </tr>
               )}
-              {sessions.map((s) => (
-                <tr key={s.id} className={`border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50 ${s.is_current ? 'bg-emerald-50/60' : ''}`}>
+              {sessions.map((s) => {
+                const deviceMeta = s.device_status ? DEVICE_META[s.device_status] : null
+                return (
+                <tr key={s.id} className={`border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50 ${s.is_current ? 'bg-emerald-50/60' : ''} ${s.device_status === 'pending' ? 'bg-amber-50/40' : s.device_status === 'blocked' ? 'bg-rose-50/40' : ''}`}>
                   <td className="px-6 py-4 text-sm">
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${s.is_current ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
@@ -160,6 +172,21 @@ export function Sessions() {
                         <p>{browserFromAgent(s.user_agent)}</p>
                         <p className="text-xs text-slate-400">{deviceFromAgent(s.user_agent)}</p>
                       </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-mono text-slate-700">{s.device_id || '—'}</span>
+                      {deviceMeta && (
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${deviceMeta.badge}`}>
+                          {deviceMeta.label}
+                        </span>
+                      )}
+                      {s.device_shared && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700" title="Equipo usado por más de un usuario">
+                          Compartido
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">{s.ip_address || '—'}</td>
@@ -184,7 +211,8 @@ export function Sessions() {
                     </button>
                   </td>
                 </tr>
-              ))}
+                )
+              })}
             </tbody>
           </table>
         </div>

@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { listsApi } from '../services/api'
 import {
   LayoutDashboard, Users, FileText, Table2, LogOut, Activity, UserCircle2, Lock, ClipboardList,
-  ShieldCheck, ScrollText,
+  ShieldCheck, ScrollText, Monitor, AlertTriangle,
 } from 'lucide-react'
 import { ROLE_META } from '../constants'
 import { RoleAvatar } from './RoleAvatar'
@@ -50,13 +50,14 @@ const navSections: NavSection[] = [
     items: [
       { label: 'Usuarios', path: '/users', icon: <Users size={18} />, roles: ['admin'] },
       { label: 'Sesiones', path: '/seguridad', icon: <ShieldCheck size={18} />, roles: ['admin'] },
+      { label: 'Equipos', path: '/equipos', icon: <Monitor size={18} />, roles: ['admin'] },
       { label: 'Auditoría', path: '/auditoria', icon: <ScrollText size={18} />, roles: ['admin'] },
     ],
   },
 ]
 
 export function Layout({ children }: { children: ReactNode }) {
-  const { user, logout } = useAuth()
+  const { user, logout, device } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [denied, setDenied] = useState<string | null>(null)
@@ -190,6 +191,14 @@ export function Layout({ children }: { children: ReactNode }) {
             </span>
           </div>
         </header>
+        {device?.status === 'pending' && (
+          <div className="bg-amber-50 border-b border-amber-200 px-6 py-2 flex items-center justify-center gap-2 text-amber-800">
+            <AlertTriangle size={15} className="shrink-0" />
+            <p className="text-xs font-medium">
+              Este equipo ({device.id}) está pendiente de aprobación del administrador. Sus acciones quedan resaltadas en la auditoría.
+            </p>
+          </div>
+        )}
         <main className="flex-1 p-6 flex flex-col overflow-y-auto min-h-0 relative">
           <div className="flex-1 min-h-0">{children}</div>
         </main>

@@ -45,7 +45,14 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class DeviceInfo(BaseModel):
+    id: Optional[str] = None
+    status: Optional[str] = None  # pending | approved | blocked
+    shared: bool = False
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserResponse
+    device: Optional[DeviceInfo] = None

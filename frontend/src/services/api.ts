@@ -50,6 +50,13 @@ export const auditApi = {
   list: (params?: any) => api.get('/audit/', { params }),
 }
 
+export const devicesApi = {
+  list: () => api.get('/devices/'),
+  approve: (deviceId: string, note?: string) => api.post(`/devices/${deviceId}/approve`, { note: note || '' }),
+  block: (deviceId: string, note?: string) => api.post(`/devices/${deviceId}/block`, { note: note || '' }),
+  setNote: (deviceId: string, note: string) => api.post(`/devices/${deviceId}/note`, { note }),
+}
+
 export const usersApi = {
   list: () => api.get('/users/'),
   me: () => api.get('/users/me'),

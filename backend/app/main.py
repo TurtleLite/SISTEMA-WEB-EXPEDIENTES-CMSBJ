@@ -3,7 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
-from app.api import auth, users, lists, reports, day_lists, specialties, localities, audit
+from app.api import auth, users, lists, reports, day_lists, specialties, localities, audit, devices
 from app.core.database import engine, Base, SessionLocal
 from sqlalchemy import inspect, text
 import logging
@@ -98,6 +98,13 @@ async def lifespan(app: FastAPI):
                     conn.execute(text("ALTER TABLE reports ADD COLUMN record_order JSON"))
                     conn.commit()
                 logger.info("Added record_order column to reports")
+        if "user_sessions" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("user_sessions")]
+            if "device_id" not in columns:
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE user_sessions ADD COLUMN device_id VARCHAR(50)"))
+                    conn.commit()
+                logger.info("Added device_id column to user_sessions")
     except Exception as e:
         logger.warning(f"Could not add column: {e}")
 
@@ -195,6 +202,7 @@ app.include_router(day_lists.router)
 app.include_router(specialties.router)
 app.include_router(localities.router)
 app.include_router(audit.router)
+app.include_router(devices.router)
 
 
 @app.middleware("http")
