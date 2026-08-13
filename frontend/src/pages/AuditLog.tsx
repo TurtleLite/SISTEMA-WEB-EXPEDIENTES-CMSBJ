@@ -70,16 +70,41 @@ const ENTITY_LABELS: Record<string, string> = {
 }
 
 const GENERIC_DETAIL: Record<string, string> = {
-  report_delete: 'eliminó reporte',
+  login: 'inició sesión',
+  login_failed: 'intento de sesión fallido',
+  login_locked: 'cuenta bloqueada',
+  logout: 'finalizó sesión',
+  session_revoked: 'cerró sesión',
+  user_create: 'creó usuario',
+  user_update: 'actualizó usuario',
   user_delete: 'eliminó usuario',
+  user_unlock: 'desbloqueó usuario',
+  device_registered: 'registró equipo',
+  device_approved: 'aprobó equipo',
+  device_blocked: 'bloqueó equipo',
+  device_note: 'anotó equipo',
+  login_blocked: 'equipo bloqueado rechazado',
+  list_create: 'creó lista',
+  list_update: 'actualizó lista',
+  list_delete: 'eliminó lista',
+  list_import: 'importó expedientes',
+  list_export_excel: 'exportó lista',
+  record_create: 'creó expediente',
+  record_update: 'actualizó expediente',
   record_delete: 'eliminó expediente',
   record_delete_bulk: 'eliminó expedientes',
-  list_delete: 'eliminó lista',
+  record_export: 'exportó expedientes',
+  report_create: 'creó reporte',
+  report_generate: 'generó reporte',
+  report_download: 'descargó reporte',
+  report_delete: 'eliminó reporte',
+  daylist_save: 'guardó listado del día',
+  daylist_export: 'exportó listado del día',
   daylist_delete: 'eliminó listado del día',
-  session_revoked: 'cerró sesión',
-  device_blocked: 'bloqueó equipo',
-  device_approved: 'aprobó equipo',
 }
+
+const genericDetail = (action: string, detail: string | null): string =>
+  GENERIC_DETAIL[action] || (detail ? 'detalle' : '—')
 
 const ACTION_OPTIONS = Object.entries(ACTION_LABELS).sort((a, b) => a[1].localeCompare(b[1]))
 
@@ -340,7 +365,7 @@ export function AuditLog() {
                   </td>
                   <td className="px-6 py-3.5 text-sm text-slate-600">{ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '—'}</td>
                   <td className="px-6 py-3.5 text-sm text-slate-600 max-w-0">
-                    {GENERIC_DETAIL[e.action] || e.detail || '—'}
+                    {genericDetail(e.action, e.detail)}
                   </td>
                   <td className="px-6 py-3.5 text-sm text-slate-500">
                     <div className="flex items-center gap-1.5 flex-wrap">
