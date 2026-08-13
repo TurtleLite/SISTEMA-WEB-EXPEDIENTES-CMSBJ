@@ -43,7 +43,7 @@ export function Reports() {
   const [orderSaved, setOrderSaved] = useState(false)
   const [form, setForm] = useState({
     name: '', description: '', list_definition_id: '', especialidad: '', perfil: '',
-    criticidad: '', estatus_cirugia: '', columns_selected: [] as string[],
+    criticidad: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '', columns_selected: [] as string[],
   })
   const { user } = useAuth()
   const { toast } = useNotification()
@@ -110,10 +110,12 @@ export function Reports() {
           perfil: form.perfil || undefined,
           criticidad: form.criticidad || undefined,
           estatus_cirugia: form.estatus_cirugia || undefined,
+          fecha_desde: form.fecha_desde || undefined,
+          fecha_hasta: form.fecha_hasta || undefined,
         },
       })
       setShowModal(false)
-      setForm({ name: '', description: '', list_definition_id: systemListId, especialidad: '', perfil: '', criticidad: '', estatus_cirugia: '', columns_selected: [] })
+      setForm({ name: '', description: '', list_definition_id: systemListId, especialidad: '', perfil: '', criticidad: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '', columns_selected: [] })
       setEspecialidades([])
       setPerfiles([])
       setCriticidades([])
@@ -229,6 +231,8 @@ export function Reports() {
     if (filters?.perfil) items.push({ label: 'Perfil', value: filters.perfil, cls: 'bg-sky-50 text-sky-700 border-sky-200' })
     if (filters?.criticidad) items.push({ label: 'Criticidad', value: criticidadLabel(filters.criticidad), cls: 'bg-rose-50 text-rose-700 border-rose-200' })
     if (filters?.estatus_cirugia) items.push({ label: 'Estatus', value: filters.estatus_cirugia, cls: 'bg-violet-50 text-violet-700 border-violet-200' })
+    if (filters?.fecha_desde) items.push({ label: 'Desde', value: filters.fecha_desde, cls: 'bg-amber-50 text-amber-700 border-amber-200' })
+    if (filters?.fecha_hasta) items.push({ label: 'Hasta', value: filters.fecha_hasta, cls: 'bg-amber-50 text-amber-700 border-amber-200' })
     return items
   }
 
@@ -413,6 +417,35 @@ export function Reports() {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="border border-amber-200 rounded-xl p-3 space-y-3 bg-amber-50/40">
+                <p className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Expedientes creados por fecha</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-amber-700 mb-1">Desde</label>
+                    <input
+                      type="date"
+                      value={form.fecha_desde}
+                      max={form.fecha_hasta || undefined}
+                      onChange={(e) => setForm({ ...form, fecha_desde: e.target.value })}
+                      className="w-full px-3 py-2.5 border border-amber-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-amber-300/30 focus:border-amber-400 transition-all duration-200"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-amber-700 mb-1">Hasta</label>
+                    <input
+                      type="date"
+                      value={form.fecha_hasta}
+                      min={form.fecha_desde || undefined}
+                      onChange={(e) => setForm({ ...form, fecha_hasta: e.target.value })}
+                      className="w-full px-3 py-2.5 border border-amber-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-amber-300/30 focus:border-amber-400 transition-all duration-200"
+                    />
+                  </div>
+                </div>
+                <p className="text-[11px] text-amber-600">
+                  El reporte contará y listará solo los expedientes creados entre las fechas indicadas (sin fechas = todos).
+                </p>
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-4">

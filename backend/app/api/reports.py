@@ -29,6 +29,23 @@ def _records_for_report(db: Session, report: Report):
     conds = []
     params = {"lid": ld.id}
 
+    from datetime import datetime, timedelta
+
+    desde = filt.get("fecha_desde")
+    hasta = filt.get("fecha_hasta")
+    if desde:
+        try:
+            params["desde"] = datetime.strptime(str(desde), "%Y-%m-%d")
+            conds.append("created_at >= :desde")
+        except ValueError:
+            pass
+    if hasta:
+        try:
+            params["hasta"] = datetime.strptime(str(hasta), "%Y-%m-%d") + timedelta(days=1)
+            conds.append("created_at < :hasta")
+        except ValueError:
+            pass
+
     especialidad = filt.get("especialidad")
     if especialidad:
         conds.append("data->>'especialidad' = :esp")
@@ -155,7 +172,7 @@ def list_reports(
     result = []
     for r in reports:
         filt = r.filters or {}
-        has_filters = any(filt.get(k) for k in ("especialidad", "perfil", "criticidad", "estatus_cirugia"))
+        has_filters = any(filt.get(k) for k in ("especialidad", "perfil", "criticidad", "estatus_cirugia", "fecha_desde", "fecha_hasta"))
         if has_filters:
             record_count = len(_records_for_report(db, r))
         else:

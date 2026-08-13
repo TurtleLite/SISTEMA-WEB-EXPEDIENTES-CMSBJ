@@ -781,9 +781,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               kg/mts²
                             </span>
                           </div>
-                        ) : field.key === 'nombre' || field.key === 'apellido' || field.key === 'persona_responsable' || field.key === 'diagnostico' ? (
+                        ) : field.key === 'nombre' || field.key === 'apellido' || field.key === 'persona_responsable' ? (
                           <textarea
-                            rows={field.key === 'diagnostico' ? 3 : 1}
+                            rows={1}
                             value={data[field.key] || ''}
                             onChange={(e) => {
                               const val = e.target.value
