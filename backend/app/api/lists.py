@@ -121,13 +121,22 @@ def export_expediente(
     current_user: User = Depends(require_role("direccion", "direccion_medica", "medico")),
 ):
     from app.services.list_service import get_list_definition
-    from app.services.record_service import get_records
+    from app.services.record_service import get_records, count_records
     from app.services.expediente_service import export_expediente_excel
 
     from fastapi.responses import FileResponse
+    from fastapi import HTTPException
     import os
     ld = get_list_definition(db, list_id)
-    records = get_records(db, list_id)
+    total = count_records(db, list_id)
+    if total > settings.EXPORT_MAX_RECORDS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Hay {total} expedientes. Para evitar fallos de memoria, la exportación se limita a "
+                   f"{settings.EXPORT_MAX_RECORDS} por archivo. Exporte por selección en lotes de "
+                   f"{settings.EXPORT_MAX_RECORDS} o menos.",
+        )
+    records = get_records(db, list_id, limit=settings.EXPORT_MAX_RECORDS)
     os.makedirs(settings.EXPORTS_DIR, exist_ok=True)
     filepath = os.path.join(settings.EXPORTS_DIR, f"expediente_{list_id}.xlsx")
     logo_path = os.path.join(os.path.dirname(__file__), '..', 'assets', 'logo_sbj.png')
@@ -193,9 +202,16 @@ def export_expediente_selected(
     from app.services.record_service import get_records_by_ids
     from app.services.expediente_service import export_expediente_excel
     from fastapi.responses import FileResponse
+    from fastapi import HTTPException
     import re
     import os
     ids = data.get("ids", [])
+    if len(ids) > settings.EXPORT_MAX_RECORDS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Máximo {settings.EXPORT_MAX_RECORDS} expedientes por exportación (solicitó {len(ids)}). "
+                   f"Seleccione menos expedientes o expórtelos por lotes.",
+        )
     ld = get_list_definition(db, list_id)
     records = get_records_by_ids(db, ids) if ids else []
     os.makedirs(settings.EXPORTS_DIR, exist_ok=True)

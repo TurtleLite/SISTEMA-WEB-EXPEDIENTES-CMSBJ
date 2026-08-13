@@ -162,6 +162,10 @@ La base de datos está alojada en la nube de **CockroachLabs** (SQL distribuido,
 5. Agrega variables de entorno:
    - `DATABASE_URL` → la URL de CockroachLabs (formato `cockroachdb://...`)
    - `SECRET_KEY` → una clave secreta aleatoria (mínimo 32 caracteres)
+   - Opcionales (optimización a escala):
+     - `EXPORT_MAX_RECORDS` → máx. expedientes por archivo Excel (default `200`; una hoja por expediente)
+     - `REPORT_MAX_RECORDS` → máx. filas por reporte/previsualización (default `50000`)
+     - `AUDIT_RETENTION_DAYS` → días de retención de auditoría (default `90`; `0` = conservar todo)
 6. Deploy. La API quedará en `https://<tu-servicio>.onrender.com` (docs en `/docs`, salud en `/health`)
 
 ### 3. Frontend (Render — Static Site)

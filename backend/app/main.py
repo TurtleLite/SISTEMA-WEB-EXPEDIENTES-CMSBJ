@@ -107,6 +107,15 @@ async def lifespan(app: FastAPI):
         ensure_system_lists(db)
         from app.services.user_service import reset_default_users
         reset_default_users(db, only_if_empty=True)
+        if settings.AUDIT_RETENTION_DAYS > 0:
+            from app.models.audit_log import AuditLog
+            from datetime import datetime, timedelta, timezone
+            cutoff = datetime.now(timezone.utc) - timedelta(days=settings.AUDIT_RETENTION_DAYS)
+            purged = db.query(AuditLog).filter(AuditLog.created_at < cutoff).delete(synchronize_session=False)
+            db.commit()
+            if purged:
+                logger.info(f"Auditoría: purgados {purged} registros anteriores a {cutoff.date()} "
+                            f"(AUDIT_RETENTION_DAYS={settings.AUDIT_RETENTION_DAYS})")
         db.close()
         logger.info("Usuarios por defecto asegurados (solo si la tabla está vacía)")
     except Exception as e:

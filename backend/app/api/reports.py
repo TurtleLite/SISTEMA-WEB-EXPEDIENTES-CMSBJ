@@ -231,6 +231,12 @@ def generate_excel_report(
         raise HTTPException(status_code=404, detail="Lista no encontrada")
     columns = _report_columns()
     records = _records_for_report(db, report)
+    if len(records) > settings.REPORT_MAX_RECORDS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"El reporte tiene {len(records)} registros; máximo {settings.REPORT_MAX_RECORDS} por archivo. "
+                   f"Use filtros (especialidad, perfil, criticidad o estatus) para acotarlo.",
+        )
     data = _report_rows(records)
     os.makedirs(settings.REPORTS_DIR, exist_ok=True)
     filepath = os.path.join(settings.REPORTS_DIR, f"reporte_{report.id}.xlsx")
@@ -257,6 +263,12 @@ def preview_report(
         raise HTTPException(status_code=404, detail="Lista no encontrada")
     columns = _report_columns()
     records = _records_for_report(db, report)
+    if len(records) > settings.REPORT_MAX_RECORDS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"El reporte tiene {len(records)} registros; máximo {settings.REPORT_MAX_RECORDS} para previsualizar. "
+                   f"Use filtros para acotarlo.",
+        )
     rows = _report_rows(records)
     return {
         "name": report.name,

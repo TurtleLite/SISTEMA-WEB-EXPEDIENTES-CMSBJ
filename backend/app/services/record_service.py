@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, func, text
+from sqlalchemy import or_, func, text, literal_column
 from app.models.list_definition import ListRecord, ListDefinition
 from typing import Optional
 import unicodedata
@@ -14,30 +14,26 @@ def _is_expediente_list(db: Session, list_id: int) -> bool:
     return bool(ld and ld.name == _EXPEDIENTE_LIST_NAME)
 
 
-def _expediente_base(value: str) -> str:
-    """Devuelve el número base (sin el sufijo de copia entre paréntesis)."""
-    v = str(value or "").strip()
-    if "(" in v:
-        v = v.split("(", 1)[0].strip()
-    return v
-
-
-def _numeros_expediente(db: Session) -> list[str]:
-    ld = db.query(ListDefinition).filter(ListDefinition.name == _EXPEDIENTE_LIST_NAME).first()
-    if not ld:
-        return []
-    rows = db.query(ListRecord.data.op("->>")("expediente")).filter(
-        ListRecord.list_definition_id == ld.id,
-    ).all()
-    return [str(r[0] or "").strip() for r in rows]
-
-
 def copias_de_numero(db: Session, numero: str) -> int:
-    """Cuenta cuántos expedientes existen con el mismo número base."""
+    """Cuenta expedientes con el mismo número base usando índices (igualdad + prefijo),
+    sin cargar toda la lista en memoria."""
     numero = str(numero or "").strip()
     if not numero:
         return 0
-    return sum(1 for v in _numeros_expediente(db) if _expediente_base(v) == numero)
+    ld = db.query(ListDefinition).filter(ListDefinition.name == _EXPEDIENTE_LIST_NAME).first()
+    if not ld:
+        return 0
+    escaped = numero.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    field = ListRecord.data.op("->>")("expediente")
+    return (
+        db.query(func.count(ListRecord.id))
+        .filter(
+            ListRecord.list_definition_id == ld.id,
+            or_(field == numero, field.like(f"{escaped} (%)", escape="\\")),
+        )
+        .scalar()
+        or 0
+    )
 
 
 def numero_expediente_final(db: Session, numero: str) -> str:
@@ -102,8 +98,14 @@ def _apply_search(query, search: Optional[str], search_field: Optional[str]):
         return query
     pattern = f"%{_strip_accents(search)}%"
     fields = [search_field] if search_field else _SEARCH_FIELDS
+    # Las tablas de acentos van como literales para que coincidan con los índices
+    # trigram creados sobre la misma expresión (db_indexes).
     clauses = [
-        func.translate(ListRecord.data.op("->>")(field), _ACCENT_FROM, _ACCENT_TO).ilike(pattern)
+        func.translate(
+            ListRecord.data.op("->>")(field),
+            literal_column(f"'{_ACCENT_FROM}'"),
+            literal_column(f"'{_ACCENT_TO}'"),
+        ).ilike(pattern)
         for field in fields
     ]
     return query.filter(or_(*clauses))
@@ -242,7 +244,15 @@ def delete_record(db: Session, record_id: int, user_id: int = None, user_role: s
 
 
 def get_records_by_ids(db: Session, ids: list[int]) -> list[ListRecord]:
-    return db.query(ListRecord).filter(ListRecord.id.in_(ids)).all()
+    parsed = []
+    for x in ids:
+        try:
+            parsed.append(int(x))
+        except (TypeError, ValueError):
+            continue
+    if not parsed:
+        return []
+    return db.query(ListRecord).filter(ListRecord.id.in_(parsed)).all()
 
 
 def get_distinct_field_values(db: Session, list_id: int, field: str) -> list:

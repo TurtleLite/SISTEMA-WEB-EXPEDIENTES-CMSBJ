@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     REPORTS_DIR: str = "reports"
     EXPORTS_DIR: str = "exports"
+    # Optimización a escala: límites configurables por variable de entorno
+    EXPORT_MAX_RECORDS: int = 200          # máx. expedientes por archivo Excel (una hoja por expediente)
+    REPORT_MAX_RECORDS: int = 50000        # máx. filas al generar/previsualizar un reporte
+    AUDIT_RETENTION_DAYS: int = 90         # días que se conservan los registros de auditoría (0 = conservar todo)
 
     class Config:
         env_file = ".env"
