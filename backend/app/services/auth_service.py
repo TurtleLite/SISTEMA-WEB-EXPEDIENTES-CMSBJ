@@ -16,6 +16,7 @@ MAX_FAILED_ATTEMPTS = 5
 LOCK_MINUTES = 15
 IP_WINDOW_MINUTES = 15
 MAX_ATTEMPTS_PER_IP = 20
+ACTIVE_WINDOW_MINUTES = 10  # una sesión es "activa en tiempo real" si hubo actividad en los últimos 10 minutos
 
 _ip_attempts: dict[str, deque] = {}
 
@@ -237,7 +238,13 @@ def get_user_sessions(db: Session, current_user: User, include_others: bool = Fa
     now = _now()
     result = []
     for session, username, full_name in rows:
-        active = bool(session.revoked_at is None and (_as_utc(session.expires_at) is None or _as_utc(session.expires_at) > now))
+        # "Activa" en tiempo real: sin revocar, token vigente y con actividad en los últimos minutos.
+        active = bool(
+            session.revoked_at is None
+            and (_as_utc(session.expires_at) is None or _as_utc(session.expires_at) > now)
+            and session.last_seen_at is not None
+            and (now - _as_utc(session.last_seen_at)) <= timedelta(minutes=ACTIVE_WINDOW_MINUTES)
+        )
         device_status = None
         device_shared = False
         if session.device_id:
