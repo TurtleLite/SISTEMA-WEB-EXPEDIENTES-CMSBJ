@@ -163,7 +163,7 @@ async def cors_and_logging(request: Request, call_next):
         headers = _cors_headers(origin)
         if headers:
             headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-            headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, X-Requested-With"
+            headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, X-Requested-With, X-Device-ID"
             headers["Access-Control-Max-Age"] = "86400"
             logger.info(f"OPTIONS {request.url.path} -> CORS preflight OK ({origin})")
         else:
