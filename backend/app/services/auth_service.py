@@ -218,9 +218,7 @@ def logout_current(db: Session, credentials: HTTPAuthorizationCredentials = None
     if jti:
         session = db.query(UserSession).filter(UserSession.jti == jti).first()
         if session and not session.revoked_at:
-            session.revoked_at = _now()
-            session.refresh_hash = None
-            session.refresh_expires_at = _now()
+            db.delete(session)
             db.commit()
 
 
@@ -263,6 +261,8 @@ def require_role(*roles: str):
 
 
 def get_user_sessions(db: Session, current_user: User, include_others: bool = False, target_user_id: int = None, current_jti: str = None) -> list[dict]:
+    db.query(UserSession).filter(UserSession.revoked_at.isnot(None)).delete(synchronize_session=False)
+    db.commit()
     query = (
         db.query(UserSession, User.username, User.full_name)
         .join(User, User.id == UserSession.user_id)
@@ -320,9 +320,7 @@ def revoke_user_session(db: Session, session_id: int, current_user: User, reques
     if session.user_id != current_user.id and current_user.role not in ("admin",):
         raise HTTPException(status_code=403, detail="No tienes permisos para cerrar esta sesión")
     if not session.revoked_at:
-        session.revoked_at = _now()
-        session.refresh_hash = None
-        session.refresh_expires_at = _now()
+        db.delete(session)
         db.commit()
     owner = db.query(User).filter(User.id == session.user_id).first()
     owner_name = owner.username if owner else "usuario desconocido"

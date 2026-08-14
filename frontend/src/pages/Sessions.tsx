@@ -197,7 +197,7 @@ export function Sessions() {
                     {s.active ? (
                       <span className="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Activa</span>
                     ) : (
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-500">Cerrada</span>
+                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-500">Inactiva</span>
                     )}
                   </td>
                   <td className="px-6 py-4 text-right">
