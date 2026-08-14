@@ -143,6 +143,8 @@ export function AuditLog() {
   const [action, setAction] = useState('')
   const [entityType, setEntityType] = useState('')
   const [username, setUsername] = useState('')
+  const [fechaDesde, setFechaDesde] = useState('')
+  const [fechaHasta, setFechaHasta] = useState('')
   const [applied, setApplied] = useState(false)
   const [selected, setSelected] = useState<AuditEntry | null>(null)
   const [quick, setQuick] = useState<{ pending: boolean; blocked: boolean; shared: boolean }>({ pending: false, blocked: false, shared: false })
@@ -153,6 +155,8 @@ export function AuditLog() {
     if (applied && action) params.action = action
     if (applied && entityType) params.entity_type = entityType
     if (applied && username) params.username = username
+    if (applied && fechaDesde) params.fecha_desde = fechaDesde
+    if (applied && fechaHasta) params.fecha_hasta = fechaHasta
     try {
       const res = await auditApi.list(params)
       setEntries(res.data.items || [])
@@ -160,7 +164,7 @@ export function AuditLog() {
     } catch {
       toast('Error al cargar el registro de auditoría', 'error')
     }
-  }, [action, entityType, username, applied, toast])
+  }, [action, entityType, username, fechaDesde, fechaHasta, applied, toast])
 
   useEffect(() => {
     load(page)
@@ -191,6 +195,8 @@ export function AuditLog() {
       if (applied && action) params.action = action
       if (applied && entityType) params.entity_type = entityType
       if (applied && username) params.username = username
+      if (applied && fechaDesde) params.fecha_desde = fechaDesde
+      if (applied && fechaHasta) params.fecha_hasta = fechaHasta
       const res = await auditApi.exportExcel(params)
       const url = window.URL.createObjectURL(new Blob([res.data]))
       const a = document.createElement('a')
@@ -309,6 +315,26 @@ export function AuditLog() {
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
             placeholder="Nombre de usuario"
+            className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+          />
+        </div>
+        <div className="min-w-32">
+          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Desde</label>
+          <input
+            type="date"
+            value={fechaDesde}
+            max={fechaHasta || undefined}
+            onChange={(e) => setFechaDesde(e.target.value)}
+            className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+          />
+        </div>
+        <div className="min-w-32">
+          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Hasta</label>
+          <input
+            type="date"
+            value={fechaHasta}
+            min={fechaDesde || undefined}
+            onChange={(e) => setFechaHasta(e.target.value)}
             className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
           />
         </div>

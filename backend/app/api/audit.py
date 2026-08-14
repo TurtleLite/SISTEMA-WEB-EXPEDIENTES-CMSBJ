@@ -47,12 +47,6 @@ ACTION_LABELS = {
     "audit_export": "Auditoría exportada",
 }
 
-DEVICE_STATUS_LABELS = {
-    "pending": "Pendiente",
-    "approved": "Aprobado",
-    "blocked": "Bloqueado",
-}
-
 ENTITY_LABELS = {
     "auth": "Autenticación",
     "user": "Usuario",
@@ -82,6 +76,8 @@ def list_audit_logs(
     entity_type: str = None,
     user_id: int = None,
     username: str = None,
+    fecha_desde: str = None,
+    fecha_hasta: str = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
@@ -93,6 +89,8 @@ def list_audit_logs(
         entity_type=entity_type,
         user_id=user_id,
         username=username,
+        fecha_desde=fecha_desde,
+        fecha_hasta=fecha_hasta,
     )
     status_map = get_device_status_map(db)
     serialized = []
@@ -115,6 +113,8 @@ def export_audit_excel(
     action: str = None,
     entity_type: str = None,
     username: str = None,
+    fecha_desde: str = None,
+    fecha_hasta: str = None,
     request: Request = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
@@ -126,14 +126,14 @@ def export_audit_excel(
         action=action,
         entity_type=entity_type,
         username=username,
+        fecha_desde=fecha_desde,
+        fecha_hasta=fecha_hasta,
         ascending=True,
     )
-    status_map = get_device_status_map(db)
-    columns = ["No", "Fecha y hora", "Usuario", "Acción", "Tipo", "Detalle", "Equipo", "Estado del equipo"]
+    columns = ["No", "Fecha y hora", "Usuario", "Acción", "Tipo", "Detalle", "Equipo"]
     rows = []
     for idx, item in enumerate(items, 1):
         entry = serialize_log(item)
-        info = status_map.get(entry.get("ip_address") or "")
         rows.append({
             "No": idx,
             "Fecha y hora": _fmt_dt(entry["created_at"]),
@@ -142,7 +142,6 @@ def export_audit_excel(
             "Tipo": ENTITY_LABELS.get(entry.get("entity_type") or "", entry.get("entity_type") or "—"),
             "Detalle": entry.get("detail") or "—",
             "Equipo": entry.get("ip_address") or "—",
-            "Estado del equipo": DEVICE_STATUS_LABELS.get((info or {}).get("status") or "", "—"),
         })
     os.makedirs(settings.REPORTS_DIR, exist_ok=True)
     now = datetime.now(timezone(timedelta(hours=-6)))
@@ -152,6 +151,7 @@ def export_audit_excel(
         rows, columns, filepath,
         title="Eventos Técnicos del Sistema",
         count=total,
+        filters={"fecha_desde": fecha_desde, "fecha_hasta": fecha_hasta} if (fecha_desde or fecha_hasta) else None,
     )
     log_audit(db, current_user, "audit_export", entity_type="auth",
               detail=f"exportó los eventos técnicos del sistema ({total} eventos)", ip_address=client_ip(request))

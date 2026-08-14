@@ -75,8 +75,11 @@ def list_logs(
     entity_type: str = None,
     user_id: int = None,
     username: str = None,
+    fecha_desde: str = None,
+    fecha_hasta: str = None,
     ascending: bool = False,
 ) -> tuple[list[AuditLog], int]:
+    from datetime import datetime, timedelta
     query = db.query(AuditLog)
     if action:
         query = query.filter(AuditLog.action == action)
@@ -86,6 +89,16 @@ def list_logs(
         query = query.filter(AuditLog.user_id == user_id)
     if username:
         query = query.filter(AuditLog.username.ilike(f"%{username}%"))
+    if fecha_desde:
+        try:
+            query = query.filter(AuditLog.created_at >= datetime.strptime(fecha_desde, "%Y-%m-%d"))
+        except ValueError:
+            pass
+    if fecha_hasta:
+        try:
+            query = query.filter(AuditLog.created_at < datetime.strptime(fecha_hasta, "%Y-%m-%d") + timedelta(days=1))
+        except ValueError:
+            pass
     total = query.count()
     order = AuditLog.id.asc() if ascending else AuditLog.id.desc()
     items = query.order_by(order).offset(skip).limit(limit).all()
