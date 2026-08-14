@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
-import { auditApi } from '../services/api'
+import { auditApi, usersApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { Search, ChevronLeft, ChevronRight, ScrollText, Monitor, Download, X as XIcon, FileText } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ScrollText, Monitor, Download, X as XIcon, FileText } from 'lucide-react'
 import { Devices } from './Devices'
 
 interface AuditEntry {
@@ -145,19 +145,19 @@ export function AuditLog() {
   const [username, setUsername] = useState('')
   const [fechaDesde, setFechaDesde] = useState('')
   const [fechaHasta, setFechaHasta] = useState('')
-  const [applied, setApplied] = useState(false)
   const [selected, setSelected] = useState<AuditEntry | null>(null)
   const [showExport, setShowExport] = useState(false)
   const [expForm, setExpForm] = useState({ action: '', entityType: '', username: '', fechaDesde: '', fechaHasta: '' })
+  const [users, setUsers] = useState<{ username: string; full_name: string }[]>([])
   const { toast } = useNotification()
 
   const load = useCallback(async (p: number) => {
     const params: any = { skip: (p - 1) * PAGE_SIZE, limit: PAGE_SIZE }
-    if (applied && action) params.action = action
-    if (applied && entityType) params.entity_type = entityType
-    if (applied && username) params.username = username
-    if (applied && fechaDesde) params.fecha_desde = fechaDesde
-    if (applied && fechaHasta) params.fecha_hasta = fechaHasta
+    if (action) params.action = action
+    if (entityType) params.entity_type = entityType
+    if (username) params.username = username
+    if (fechaDesde) params.fecha_desde = fechaDesde
+    if (fechaHasta) params.fecha_hasta = fechaHasta
     try {
       const res = await auditApi.list(params)
       setEntries(res.data.items || [])
@@ -165,27 +165,32 @@ export function AuditLog() {
     } catch {
       toast('Error al cargar el registro de auditoría', 'error')
     }
-  }, [action, entityType, username, fechaDesde, fechaHasta, applied, toast])
+  }, [action, entityType, username, fechaDesde, fechaHasta, toast])
 
   useEffect(() => {
-    load(page)
+    const t = setTimeout(() => load(page), 250)
+    return () => clearTimeout(t)
   }, [load, page])
 
-  const applyFilters = () => {
+  useEffect(() => {
     setPage(1)
-    setApplied(true)
-  }
+  }, [action, entityType, username, fechaDesde, fechaHasta])
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const filterDirty = !!(action || entityType || username || fechaDesde || fechaHasta)
 
-  const openExport = () => {
+  const openExport = async () => {
     setExpForm({
-      action: applied ? action : '',
-      entityType: applied ? entityType : '',
-      username: applied ? username : '',
-      fechaDesde: applied ? fechaDesde : '',
-      fechaHasta: applied ? fechaHasta : '',
+      action: action,
+      entityType: entityType,
+      username: username,
+      fechaDesde: fechaDesde,
+      fechaHasta: fechaHasta,
     })
+    try {
+      const res = await usersApi.list()
+      setUsers((res.data || []).sort((a: any, b: any) => (a.full_name || a.username).localeCompare(b.full_name || b.username)))
+    } catch { setUsers([]) }
     setShowExport(true)
   }
 
@@ -288,7 +293,6 @@ export function AuditLog() {
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
             placeholder="Nombre de usuario"
             className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
           />
@@ -313,17 +317,10 @@ export function AuditLog() {
             className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
           />
         </div>
-        <button
-          onClick={applyFilters}
-          className="px-4 py-2 bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] text-sm font-medium transition-all duration-200 flex items-center gap-2"
-        >
-          <Search size={15} />
-          Buscar
-        </button>
-        {applied && (action || entityType || username || fechaDesde || fechaHasta) && (
+        {filterDirty && (
           <button
             onClick={() => {
-              setAction(''); setEntityType(''); setUsername(''); setFechaDesde(''); setFechaHasta(''); setApplied(false); setPage(1)
+              setAction(''); setEntityType(''); setUsername(''); setFechaDesde(''); setFechaHasta(''); setPage(1)
             }}
             className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200 border border-[#E3E6EB] flex items-center gap-1.5"
           >
@@ -527,13 +524,18 @@ export function AuditLog() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Usuario</label>
-                  <input
-                    type="text"
+                  <select
                     value={expForm.username}
                     onChange={(e) => setExpForm((f) => ({ ...f, username: e.target.value }))}
-                    placeholder="Nombre de usuario"
                     className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
-                  />
+                  >
+                    <option value="">Todos los usuarios</option>
+                    {users.map((u) => (
+                      <option key={u.username} value={u.username}>
+                        {u.full_name || u.username}{u.full_name && u.full_name !== u.username ? ` (${u.username})` : ''}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
