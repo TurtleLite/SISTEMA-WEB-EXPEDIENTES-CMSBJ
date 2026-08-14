@@ -459,7 +459,6 @@ export function AuditLog() {
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Tipo / Entidad</p>
               <p className="text-slate-800">
                 {ENTITY_LABELS[selected.entity_type || ''] || selected.entity_type || '—'}
-                {selected.entity_id ? <span className="font-mono text-xs text-slate-500"> · {selected.entity_id}</span> : null}
               </p>
             </div>
             <div>
