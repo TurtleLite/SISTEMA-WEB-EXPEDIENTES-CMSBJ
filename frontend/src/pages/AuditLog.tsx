@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { auditApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { Search, ChevronLeft, ChevronRight, ScrollText, Monitor, Download, X as XIcon, ShieldQuestion, ShieldAlert, Users as UsersIcon, FileText } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, ScrollText, Monitor, Download, X as XIcon, FileText } from 'lucide-react'
 import { Devices } from './Devices'
 
 interface AuditEntry {
@@ -147,7 +147,6 @@ export function AuditLog() {
   const [fechaHasta, setFechaHasta] = useState('')
   const [applied, setApplied] = useState(false)
   const [selected, setSelected] = useState<AuditEntry | null>(null)
-  const [quick, setQuick] = useState<{ pending: boolean; blocked: boolean; shared: boolean }>({ pending: false, blocked: false, shared: false })
   const [showExport, setShowExport] = useState(false)
   const [expForm, setExpForm] = useState({ action: '', entityType: '', username: '', fechaDesde: '', fechaHasta: '' })
   const { toast } = useNotification()
@@ -178,18 +177,6 @@ export function AuditLog() {
   }
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
-
-  const filtered = entries.filter((e) => {
-    if (quick.pending && e.device_status !== 'pending') return false
-    if (quick.blocked && e.device_status !== 'blocked') return false
-    if (quick.shared && !e.device_shared) return false
-    return true
-  })
-
-  const toggleQuick = (key: 'pending' | 'blocked' | 'shared') => {
-    setQuick((p) => ({ ...p, [key]: !p[key] }))
-    setSelected(null)
-  }
 
   const openExport = () => {
     setExpForm({
@@ -259,31 +246,7 @@ export function AuditLog() {
       {tab === 'eventos' && (<>
 
       <div className="shrink-0 bg-white rounded-xl border border-[#E3E6EB] p-3 flex items-end gap-3 flex-wrap">
-        <div className="flex items-center gap-2 self-center flex-wrap">
-          <button
-            onClick={() => toggleQuick('pending')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${quick.pending ? 'bg-amber-50 border-amber-300 text-amber-700' : 'border-[#E3E6EB] text-slate-500 hover:border-amber-300'}`}
-            title="Solo eventos de equipos pendientes de aprobación"
-          >
-            <ShieldQuestion size={13} />
-            Pendiente
-          </button>
-          <button
-            onClick={() => toggleQuick('blocked')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${quick.blocked ? 'bg-rose-50 border-rose-300 text-rose-700' : 'border-[#E3E6EB] text-slate-500 hover:border-rose-300'}`}
-            title="Solo eventos de equipos bloqueados"
-          >
-            <ShieldAlert size={13} />
-            Bloqueado
-          </button>
-          <button
-            onClick={() => toggleQuick('shared')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${quick.shared ? 'bg-violet-50 border-violet-300 text-violet-700' : 'border-[#E3E6EB] text-slate-500 hover:border-violet-300'}`}
-            title="Solo eventos de equipos compartidos entre usuarios"
-          >
-            <UsersIcon size={13} />
-            Compartido
-          </button>
+        <div className="flex items-center gap-2 self-center">
           <button
             onClick={openExport}
             disabled={total === 0}
@@ -385,15 +348,15 @@ export function AuditLog() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 && (
+              {entries.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-6 py-10 text-center text-sm text-slate-400">
                     <ScrollText size={28} className="mx-auto mb-2 text-slate-200" />
-                    {quick.pending || quick.blocked || quick.shared ? 'No hay eventos que coincidan con el filtro rápido' : 'No hay eventos que coincidan'}
+                    No hay eventos que coincidan
                   </td>
                 </tr>
               )}
-              {filtered.map((e) => {
+              {entries.map((e) => {
                 const deviceMeta = e.device_status ? DEVICE_META[e.device_status] : null
                 return (
                 <tr key={e.id} onClick={() => setSelected(e)} className={`border-b border-l-4 border-l-transparent border-slate-100 transition-all duration-150 hover:bg-slate-100/50 cursor-pointer ${e.device_status === 'pending' ? 'bg-amber-50/40 border-l-amber-400' : e.device_status === 'blocked' ? 'bg-rose-50/40 border-l-rose-500' : ''} ${selected?.id === e.id ? 'bg-[#6E7B91]/10 border-l-[#6E7B91]' : ''}`}>
@@ -448,7 +411,7 @@ export function AuditLog() {
         </div>
         <div className="shrink-0 border-t border-[#E3E6EB] px-6 py-3 flex items-center justify-between">
           <p className="text-xs text-slate-400">
-            Página {page} de {totalPages} · {total} evento(s){filtered.length !== entries.length ? ` · ${filtered.length} visibles` : ''}
+            Página {page} de {totalPages} · {total} evento(s)
           </p>
           <div className="flex items-center gap-2">
             <button
