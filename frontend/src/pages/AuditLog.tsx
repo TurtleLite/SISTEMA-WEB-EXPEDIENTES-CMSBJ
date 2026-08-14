@@ -148,6 +148,8 @@ export function AuditLog() {
   const [applied, setApplied] = useState(false)
   const [selected, setSelected] = useState<AuditEntry | null>(null)
   const [quick, setQuick] = useState<{ pending: boolean; blocked: boolean; shared: boolean }>({ pending: false, blocked: false, shared: false })
+  const [showExport, setShowExport] = useState(false)
+  const [expForm, setExpForm] = useState({ action: '', entityType: '', username: '', fechaDesde: '', fechaHasta: '' })
   const { toast } = useNotification()
 
   const load = useCallback(async (p: number) => {
@@ -189,14 +191,25 @@ export function AuditLog() {
     setSelected(null)
   }
 
+  const openExport = () => {
+    setExpForm({
+      action: applied ? action : '',
+      entityType: applied ? entityType : '',
+      username: applied ? username : '',
+      fechaDesde: applied ? fechaDesde : '',
+      fechaHasta: applied ? fechaHasta : '',
+    })
+    setShowExport(true)
+  }
+
   const handleExportExcel = async () => {
     try {
       const params: any = {}
-      if (applied && action) params.action = action
-      if (applied && entityType) params.entity_type = entityType
-      if (applied && username) params.username = username
-      if (applied && fechaDesde) params.fecha_desde = fechaDesde
-      if (applied && fechaHasta) params.fecha_hasta = fechaHasta
+      if (expForm.action) params.action = expForm.action
+      if (expForm.entityType) params.entity_type = expForm.entityType
+      if (expForm.username) params.username = expForm.username
+      if (expForm.fechaDesde) params.fecha_desde = expForm.fechaDesde
+      if (expForm.fechaHasta) params.fecha_hasta = expForm.fechaHasta
       const res = await auditApi.exportExcel(params)
       const url = window.URL.createObjectURL(new Blob([res.data]))
       const a = document.createElement('a')
@@ -206,6 +219,7 @@ export function AuditLog() {
       a.download = match ? match[1] : `EVENTOS_TECNICOS_${new Date().toISOString().slice(0, 10)}.xlsx`
       a.click()
       window.URL.revokeObjectURL(url)
+      setShowExport(false)
       toast('Eventos exportados a Excel', 'success')
     } catch {
       toast('Error al exportar los eventos', 'error')
@@ -214,11 +228,9 @@ export function AuditLog() {
 
   return (
     <div className="h-full flex flex-col gap-4">
-      <div className="shrink-0">
-        <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Auditoría</h1>
-        <p className="text-sm text-[#6F7682] mt-0.5">
-          Historial de quién creó, modificó, exportó o descargó información ({total} evento(s)) y administración de los equipos autorizados.
-        </p>
+      <div className="shrink-0 flex items-baseline gap-3">
+        <h1 className="font-serif text-xl font-bold text-[#3F4650]">Auditoría</h1>
+        <p className="text-xs text-[#8A919C]">{total} evento(s) registrado(s)</p>
       </div>
 
       <div className="shrink-0 flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-fit">
@@ -273,10 +285,10 @@ export function AuditLog() {
             Compartido
           </button>
           <button
-            onClick={handleExportExcel}
+            onClick={openExport}
             disabled={total === 0}
             className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border border-[#E3E6EB] text-slate-500 hover:border-slate-400 flex items-center gap-1.5 disabled:opacity-40"
-            title="Exportar todos los eventos (con los filtros aplicados) a Excel con encabezado institucional"
+            title="Exportar eventos a Excel: primero elige los filtros"
           >
             <Download size={13} />
             Exportar
@@ -511,6 +523,94 @@ export function AuditLog() {
       )}
       </div>
       </>)}
+
+      {showExport && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowExport(false)}>
+          <div className="bg-white rounded-2xl w-[95vw] max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E3E6EB] shrink-0">
+              <h2 className="font-serif text-lg font-bold text-[#3F4650]">Exportar eventos técnicos</h2>
+              <button onClick={() => setShowExport(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none p-1 rounded-full hover:bg-slate-100">×</button>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0 p-5 space-y-3">
+              <p className="text-xs text-[#8A919C]">
+                Elija los filtros para el Excel. Se exportarán todos los eventos que coincidan, en orden cronológico.
+              </p>
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Acción</label>
+                <select
+                  value={expForm.action}
+                  onChange={(e) => setExpForm((f) => ({ ...f, action: e.target.value }))}
+                  className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                >
+                  <option value="">Todas</option>
+                  {ACTION_OPTIONS.map(([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Tipo</label>
+                  <select
+                    value={expForm.entityType}
+                    onChange={(e) => setExpForm((f) => ({ ...f, entityType: e.target.value }))}
+                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                  >
+                    <option value="">Todos</option>
+                    {Object.entries(ENTITY_LABELS).map(([key, label]) => (
+                      <option key={key} value={key}>{label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Usuario</label>
+                  <input
+                    type="text"
+                    value={expForm.username}
+                    onChange={(e) => setExpForm((f) => ({ ...f, username: e.target.value }))}
+                    placeholder="Nombre de usuario"
+                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Desde</label>
+                  <input
+                    type="date"
+                    value={expForm.fechaDesde}
+                    max={expForm.fechaHasta || undefined}
+                    onChange={(e) => setExpForm((f) => ({ ...f, fechaDesde: e.target.value }))}
+                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Hasta</label>
+                  <input
+                    type="date"
+                    value={expForm.fechaHasta}
+                    min={expForm.fechaDesde || undefined}
+                    onChange={(e) => setExpForm((f) => ({ ...f, fechaHasta: e.target.value }))}
+                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="shrink-0 border-t border-[#E3E6EB] px-5 py-3 flex justify-end gap-2 bg-white">
+              <button onClick={() => setShowExport(false)} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
+                Cancelar
+              </button>
+              <button
+                onClick={handleExportExcel}
+                className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm transition-all duration-200 font-medium flex items-center gap-2"
+              >
+                <Download size={15} />
+                Exportar Excel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
