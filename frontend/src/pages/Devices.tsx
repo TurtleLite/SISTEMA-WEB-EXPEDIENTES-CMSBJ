@@ -143,10 +143,7 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
         || d.users.some((u) => u.toLowerCase().includes(query))
         || (d.first_username || '').toLowerCase().includes(query))
     }
-    const rank = { pending: 0, approved: 1, blocked: 2 } as Record<string, number>
     return [...list].sort((a, b) => {
-      const ra = rank[a.status], rb = rank[b.status]
-      if (ra !== rb) return ra - rb
       const ta = a.last_event_at || a.last_seen_at || ''
       const tb = b.last_event_at || b.last_seen_at || ''
       return tb.localeCompare(ta)
