@@ -45,11 +45,11 @@ def create_list_definition(db: Session, data: ListDefinitionCreate, user_id: int
 
 
 def get_list_definitions(db: Session, skip: int = 0, limit: int = 100) -> list[ListDefinition]:
-    return db.query(ListDefinition).offset(skip).limit(limit).all()
+    return db.query(ListDefinition).filter(ListDefinition.deleted_at.is_(None)).offset(skip).limit(limit).all()
 
 
 def get_list_definition(db: Session, list_id: int) -> ListDefinition:
-    ld = db.query(ListDefinition).filter(ListDefinition.id == list_id).first()
+    ld = db.query(ListDefinition).filter(ListDefinition.id == list_id, ListDefinition.deleted_at.is_(None)).first()
     if not ld:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Lista no encontrada")
@@ -75,6 +75,7 @@ def update_list_definition(db: Session, list_id: int, data, user_role: str) -> L
 
 
 def delete_list_definition(db: Session, list_id: int, user_role: str):
+    from datetime import datetime, timezone
     ld = db.query(ListDefinition).filter(ListDefinition.id == list_id).first()
     if not ld:
         from fastapi import HTTPException
@@ -82,5 +83,45 @@ def delete_list_definition(db: Session, list_id: int, user_role: str):
     if ld.is_system and user_role != "admin":
         from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="Solo el administrador puede eliminar la plantilla del sistema")
-    db.delete(ld)
+    if ld.deleted_at:
+        return
+    # Soft delete: la lista y sus expedientes van a la papelera (restaurables).
+    now = datetime.now(timezone.utc)
+    db.query(ListRecord).filter(ListRecord.list_definition_id == list_id, ListRecord.deleted_at.is_(None)) \
+        .update({ListRecord.deleted_at: now}, synchronize_session=False)
+    ld.deleted_at = now
     db.commit()
+
+
+def get_trashed_lists(db: Session) -> list[dict]:
+    lists = db.query(ListDefinition).filter(ListDefinition.deleted_at.isnot(None)).all()
+    result = []
+    for ld in lists:
+        count = db.query(ListRecord).filter(
+            ListRecord.list_definition_id == ld.id, ListRecord.deleted_at.isnot(None)
+        ).count()
+        result.append({
+            "id": str(ld.id),
+            "name": ld.name,
+            "description": ld.description,
+            "is_system": ld.is_system,
+            "deleted_at": str(ld.deleted_at),
+            "records_in_trash": count,
+        })
+    return result
+
+
+def restore_list_definition(db: Session, list_id: int, user_role: str) -> ListDefinition:
+    ld = db.query(ListDefinition).filter(ListDefinition.id == list_id).first()
+    if not ld:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Lista no encontrada")
+    if user_role != "admin":
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="Solo el administrador puede restaurar una lista")
+    if ld.deleted_at:
+        db.query(ListRecord).filter(ListRecord.list_definition_id == list_id) \
+            .update({ListRecord.deleted_at: None}, synchronize_session=False)
+        ld.deleted_at = None
+        db.commit()
+    return ld

@@ -11,6 +11,7 @@ export interface User {
 
 export interface AuthResponse {
   access_token: string
+  refresh_token?: string | null
   token_type: string
   user: User
 }
@@ -37,6 +38,18 @@ export interface ListRecord {
   data: Record<string, any>
   created_by: string | null
   created_at: string
+  updated_at?: string | null
+  updated_by?: string | null
+  deleted_at?: string | null
+}
+
+export interface TrashedList {
+  id: string
+  name: string
+  description?: string
+  is_system: boolean
+  deleted_at: string
+  records_in_trash: number
 }
 
 export interface Report {

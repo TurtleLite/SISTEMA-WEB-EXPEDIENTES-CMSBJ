@@ -36,6 +36,7 @@ ACTION_LABELS = {
     "record_update": "Expediente actualizado",
     "record_delete": "Expediente eliminado",
     "record_delete_bulk": "Expedientes eliminados",
+    "record_restore": "Expediente restaurado",
     "record_export": "Expedientes exportados",
     "report_create": "Reporte creado",
     "report_generate": "Reporte generado",

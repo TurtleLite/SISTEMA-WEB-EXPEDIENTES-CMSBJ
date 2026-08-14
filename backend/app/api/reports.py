@@ -69,10 +69,12 @@ def _records_for_report(db: Session, report: Report):
         params["estat"] = estatus
 
     if not conds:
-        records = db.query(ListRecord).filter(ListRecord.list_definition_id == ld.id).all()
+        records = db.query(ListRecord).filter(
+            ListRecord.list_definition_id == ld.id, ListRecord.deleted_at.is_(None)
+        ).all()
     else:
         from sqlalchemy import text
-        sql = text(f"SELECT id FROM list_records WHERE list_definition_id = :lid AND {' AND '.join(conds)}")
+        sql = text(f"SELECT id FROM list_records WHERE list_definition_id = :lid AND deleted_at IS NULL AND {' AND '.join(conds)}")
         ids = db.execute(sql, params).scalars().all()
         records = db.query(ListRecord).filter(ListRecord.id.in_(ids)).all()
 
@@ -117,7 +119,7 @@ def _user_counts(db: Session, records: list[ListRecord] = None, list_id: int = N
     elif list_id is not None:
         rows = (
             db.query(ListRecord.created_by, func.count(ListRecord.id))
-            .filter(ListRecord.list_definition_id == list_id)
+            .filter(ListRecord.list_definition_id == list_id, ListRecord.deleted_at.is_(None))
             .group_by(ListRecord.created_by)
             .all()
         )
@@ -195,6 +197,7 @@ def list_reports(
     reports = db.query(Report).order_by(Report.created_at.desc()).all()
     counts = dict(
         db.query(ListRecord.list_definition_id, func.count(ListRecord.id))
+        .filter(ListRecord.deleted_at.is_(None))
         .group_by(ListRecord.list_definition_id).all()
     )
     result = []

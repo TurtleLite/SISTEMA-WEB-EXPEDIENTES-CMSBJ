@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { getDeviceId } from '../utils/deviceId'
 
 const API_URL = import.meta.env.VITE_API_URL || '/api'
@@ -9,8 +9,36 @@ const api = axios.create({
   timeout: 60000,
 })
 
+const TOKEN_KEY = 'token'
+const REFRESH_KEY = 'refreshToken'
+
+let refreshPromise: Promise<string | null> | null = null
+
+async function refreshAccessToken(): Promise<string | null> {
+  const refreshToken = sessionStorage.getItem(REFRESH_KEY)
+  if (!refreshToken) return null
+  try {
+    const res = await axios.post(`${API_URL}/auth/refresh`, { refresh_token: refreshToken }, { timeout: 30000 })
+    const data = res.data
+    sessionStorage.setItem(TOKEN_KEY, data.access_token)
+    if (data.refresh_token) {
+      sessionStorage.setItem(REFRESH_KEY, data.refresh_token)
+    }
+    return data.access_token
+  } catch {
+    return null
+  }
+}
+
+function clearAuth() {
+  sessionStorage.removeItem(TOKEN_KEY)
+  sessionStorage.removeItem(REFRESH_KEY)
+  sessionStorage.removeItem('user')
+  sessionStorage.removeItem('device')
+}
+
 api.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('token')
+  const token = sessionStorage.getItem(TOKEN_KEY)
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -23,16 +51,30 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401 && !error.config?.url?.includes('/auth/')) {
-      sessionStorage.removeItem('token')
-      sessionStorage.removeItem('user')
+  async (error: AxiosError) => {
+    const url: string = error.config?.url || ''
+    const isAuthEndpoint = url.includes('/auth/login') || url.includes('/auth/refresh')
+    const status = error.response?.status
+    const config = error.config
+
+    if (status === 401 && !isAuthEndpoint && config && !(config as any)._retried) {
+      (config as any)._retried = true
+      if (!refreshPromise) {
+        refreshPromise = refreshAccessToken().finally(() => { refreshPromise = null })
+      }
+      const newToken = await refreshPromise
+      if (newToken) {
+        config.headers.Authorization = `Bearer ${newToken}`
+        return api.request(config)
+      }
+      clearAuth()
       window.location.hash = '#/login'
     }
-    if ((error.code === 'ECONNABORTED' || error.message?.includes('timeout')) &&
-        error.config?.method?.toLowerCase() === 'get' && !error.config?._retried) {
-      error.config._retried = true
-      return api.request(error.config)
+
+    if (config && (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) &&
+        config.method?.toLowerCase() === 'get' && !(config as any)._retried) {
+      (config as any)._retried = true
+      return api.request(config)
     }
     return Promise.reject(error)
   }
@@ -87,6 +129,11 @@ export const listsApi = {
     api.put(`/lists/${listId}/records/${recordId}`, data),
   deleteRecord: (listId: string | number, recordId: string | number) =>
     api.delete(`/lists/${listId}/records/${recordId}`),
+  trashRecords: (listId: string | number) => api.get(`/lists/${listId}/records/trash`),
+  restoreRecord: (listId: string | number, recordId: string | number) =>
+    api.post(`/lists/${listId}/records/${recordId}/restore`),
+  trashLists: () => api.get('/lists/trash'),
+  restoreList: (listId: string | number) => api.post(`/lists/trash/${listId}/restore`),
   importExcel: (listId: string | number, file: File) => {
     const formData = new FormData()
     formData.append('file', file)

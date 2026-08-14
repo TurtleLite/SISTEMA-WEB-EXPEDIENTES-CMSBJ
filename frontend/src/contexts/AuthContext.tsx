@@ -47,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } catch {
         sessionStorage.removeItem('token')
+        sessionStorage.removeItem('refreshToken')
         sessionStorage.removeItem('user')
       }
     }
@@ -73,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const res = await authApi.login(username, password)
     const data = res.data
     sessionStorage.setItem('token', data.access_token)
+    if (data.refresh_token) sessionStorage.setItem('refreshToken', data.refresh_token)
     sessionStorage.setItem('user', JSON.stringify(data.user))
     if (data.device) {
       sessionStorage.setItem('device', JSON.stringify(data.device))
@@ -92,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // la sesión se cierra igualmente aunque el servidor no responda
     }
     sessionStorage.removeItem('token')
+    sessionStorage.removeItem('refreshToken')
     sessionStorage.removeItem('user')
     sessionStorage.removeItem('device')
     setToken(null)

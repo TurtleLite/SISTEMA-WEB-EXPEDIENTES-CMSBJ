@@ -62,6 +62,29 @@ def list_lists(
     ]
 
 
+@router.get("/trash")
+def list_trash(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("admin")),
+):
+    from app.services.list_service import get_trashed_lists
+    return get_trashed_lists(db)
+
+
+@router.post("/trash/{list_id}/restore")
+def restore_list(
+    list_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("admin")),
+):
+    from app.services.list_service import restore_list_definition
+    ld = restore_list_definition(db, list_id, current_user.role)
+    log_audit(db, current_user, "list_update", entity_type="list", entity_id=list_id,
+              detail=f"restauró la lista {ld.name} desde la papelera", ip_address=client_ip(request))
+    return {"message": f"Lista {ld.name} restaurada correctamente"}
+
+
 @router.get("/{list_id}", response_model=dict)
 def get_list(
     list_id: int,
@@ -170,7 +193,8 @@ def list_localidades(
     rows = db.execute(text(
         "SELECT data->>'localidad' AS loc, data->>'tipo_localidad' AS tipo, COUNT(*) AS n "
         "FROM list_records "
-        "WHERE list_definition_id = :lid AND data->>'localidad' IS NOT NULL AND data->>'localidad' != '' "
+        "WHERE list_definition_id = :lid AND deleted_at IS NULL "
+        "AND data->>'localidad' IS NOT NULL AND data->>'localidad' != '' "
         "GROUP BY loc, tipo ORDER BY loc"
     ), {"lid": list_id}).all()
     items = {r[0]: {"localidad": r[0], "tipo": r[1] or "", "count": r[2]} for r in rows}
@@ -329,7 +353,8 @@ def list_duplicate_identidades(
     rows = db.execute(text(
         "SELECT data->>'identidad' AS identidad, array_agg(id) AS ids "
         "FROM list_records "
-        "WHERE list_definition_id = :lid AND data->>'identidad' IS NOT NULL AND data->>'identidad' != '' "
+        "WHERE list_definition_id = :lid AND deleted_at IS NULL "
+        "AND data->>'identidad' IS NOT NULL AND data->>'identidad' != '' "
         "GROUP BY data->>'identidad' HAVING COUNT(*) > 1 "
         "ORDER BY COUNT(*) DESC"
     ), {"lid": list_id}).all()
@@ -349,6 +374,43 @@ def list_duplicate_identidades(
     return result
 
 
+@router.get("/{list_id}/records/trash")
+def list_trash_records(
+    list_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("direccion", "direccion_medica")),
+):
+    from app.services.record_service import get_trashed_records, _updated_at_iso
+    records = get_trashed_records(db, list_id)
+    return [
+        {
+            "id": str(r.id),
+            "list_definition_id": str(r.list_definition_id),
+            "data": r.data,
+            "created_by": str(r.created_by) if r.created_by else None,
+            "created_at": str(r.created_at),
+            "deleted_at": str(r.deleted_at),
+            "updated_at": _updated_at_iso(r),
+        }
+        for r in records
+    ]
+
+
+@router.post("/{list_id}/records/{record_id}/restore")
+def restore_record_endpoint(
+    list_id: int,
+    record_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("direccion", "direccion_medica")),
+):
+    from app.services.record_service import restore_record
+    restore_record(db, record_id, user_id=current_user.id, user_role=current_user.role)
+    log_audit(db, current_user, "record_restore", entity_type="record", entity_id=record_id,
+              detail="restauró un expediente desde la papelera", ip_address=client_ip(request))
+    return {"message": "Expediente restaurado correctamente"}
+
+
 @router.get("/{list_id}/records/by-ids")
 def list_records_by_ids(
     list_id: int,
@@ -359,6 +421,7 @@ def list_records_by_ids(
     from app.services.record_service import get_records_by_ids
     id_list = [int(x) for x in ids.split(",") if x.strip().isdigit()]
     records = get_records_by_ids(db, id_list)
+    from app.services.record_service import _updated_at_iso
     return [
         {
             "id": str(r.id),
@@ -366,6 +429,8 @@ def list_records_by_ids(
             "data": r.data,
             "created_by": str(r.created_by) if r.created_by else None,
             "created_at": str(r.created_at),
+            "updated_at": _updated_at_iso(r),
+            "updated_by": str(r.updated_by) if r.updated_by else None,
         }
         for r in records
     ]
@@ -387,7 +452,7 @@ def list_records(
     current_user: User = Depends(get_current_user),
 ):
     if page_size is not None:
-        from app.services.record_service import paginate_records
+        from app.services.record_service import paginate_records, _updated_at_iso
         page = page or 1
         excluded = [s.strip() for s in (exclude_statuses or "").split(",") if s.strip()]
         items, total = paginate_records(
@@ -403,6 +468,8 @@ def list_records(
                 "data": r.data,
                 "created_by": str(r.created_by) if r.created_by else None,
                 "created_at": str(r.created_at),
+                "updated_at": _updated_at_iso(r),
+                "updated_by": str(r.updated_by) if r.updated_by else None,
             }
 
         return {
@@ -420,6 +487,8 @@ def list_records(
             "data": r.data,
             "created_by": str(r.created_by) if r.created_by else None,
             "created_at": str(r.created_at),
+            "updated_at": _updated_at_iso(r),
+            "updated_by": str(r.updated_by) if r.updated_by else None,
         }
         for r in records
     ]
@@ -457,7 +526,8 @@ def update_record_endpoint(
     if current_user.role not in ("direccion", "direccion_medica", "medico"):
         from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="No tienes permisos para esta acción")
-    update_record(db, record_id, data.get("data", data), user_id=current_user.id, user_role=current_user.role)
+    update_record(db, record_id, data.get("data", data), user_id=current_user.id, user_role=current_user.role,
+                  expected_updated_at=data.get("expected_updated_at"))
     log_audit(db, current_user, "record_update", entity_type="record", entity_id=record_id,
               ip_address=client_ip(request))
     return {"message": "Registro actualizado correctamente"}

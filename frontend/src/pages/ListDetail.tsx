@@ -9,6 +9,7 @@ import { ExpedienteForm, SECTIONS } from '../components/ExpedienteForm'
 import { specialtiesApi, localitiesApi } from '../services/api'
 import { areSimilarNames, normalizeText, shortName } from '../utils/format'
 import { TIPO_LOCALIDAD_OPTIONS } from '../constants'
+import { ConfirmDangerModal } from '../components/ConfirmDangerModal'
 
 const RECORD_COLUMNS = ['nombre', 'edad', 'diagnostico', 'perfil', 'domicilio', 'telefono', 'albergue', 'nombre_medico']
 const COLUMN_WIDTHS: Record<string, string> = {
@@ -81,6 +82,14 @@ export function ListDetail() {
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'esp' | 'loc'; name: string; count: number } | null>(null)
   const [replaceValue, setReplaceValue] = useState('')
   const [deleting, setDeleting] = useState(false)
+
+  // Papelera y borrado con doble confirmación
+  const [deleteRecordsTarget, setDeleteRecordsTarget] = useState<{ count: number } | null>(null)
+  const [deletingRecords, setDeletingRecords] = useState(false)
+
+  // Edición concurrente (lock optimista)
+  const [conflict, setConflict] = useState<{ recordId: string; message: string; who?: string } | null>(null)
+  const conflictRef = useRef<{ data: Record<string, any>; force: boolean } | null>(null)
 
   const loadEspecialidades = async () => {
     try {
@@ -203,18 +212,34 @@ export function ListDetail() {
     }
   }
 
-  const handleSaveRecord = async () => {
+  const handleSaveRecord = async (force = false) => {
     try {
       if (editingRecord) {
-        await listsApi.updateRecord(id, editingRecord.id, { data: formData })
+        const payload: any = { data: formData }
+        if (!force && editingRecord.updated_at) {
+          payload.expected_updated_at = editingRecord.updated_at
+        }
+        await listsApi.updateRecord(id, editingRecord.id, payload)
       } else {
         await listsApi.createRecord(id, { data: formData })
       }
       setShowModal(false)
       setEditingRecord(null)
       setFormData({})
+      setConflict(null)
+      conflictRef.current = null
       loadRecords()
     } catch (err: any) {
+      if (err.response?.status === 409) {
+        const detail = err.response.data?.detail
+        setConflict({
+          recordId: String(editingRecord?.id || ''),
+          message: typeof detail === 'string' ? detail : (detail?.message || 'Este expediente fue modificado por otra persona.'),
+          who: typeof detail === 'object' && detail ? detail.updated_by_name : undefined,
+        })
+        conflictRef.current = { data: formData, force: false }
+        return
+      }
       toast(err.response?.data?.detail || 'Error al guardar registro', 'error')
     }
   }
@@ -246,18 +271,38 @@ export function ListDetail() {
     }
   }
 
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = () => {
     const ids = Array.from(selectedIds)
     if (ids.length === 0) return
-    if (!await confirm(`¿Eliminar ${ids.length} registro(s) seleccionado(s)?`)) return
+    setDeleteRecordsTarget({ count: ids.length })
+  }
+
+  const confirmDeleteRecords = async () => {
+    if (!deleteRecordsTarget || deletingRecords) return
+    setDeletingRecords(true)
     try {
+      const ids = Array.from(selectedIds)
       const res = await api.post(`/lists/${id}/records/bulk-delete`, { ids })
       setSelectedIds(new Set())
+      setDeleteRecordsTarget(null)
       loadRecords()
       toast(res.data.message, 'success')
     } catch (err: any) {
       toast(err.response?.data?.detail || 'Error al eliminar', 'error')
+    } finally {
+      setDeletingRecords(false)
     }
+  }
+
+  const formatEditedBy = (r: ListRecord) => {
+    if (!r.updated_at) return null
+    const d = new Date(r.updated_at)
+    const diff = Date.now() - d.getTime()
+    const ago = diff < 60000 ? 'hace un momento'
+      : diff < 3600000 ? `hace ${Math.floor(diff / 60000)} min`
+      : diff < 86400000 ? `hace ${Math.floor(diff / 3600000)} h`
+      : `hace ${Math.floor(diff / 86400000)} días`
+    return `Editado ${ago}`
   }
 
   const loadSpecialties = async () => {
@@ -688,6 +733,7 @@ export function ListDetail() {
           role={user?.role}
           medicoName={user?.full_name}
           editingRecord={editingRecord || undefined}
+          expectedUpdatedAt={editingRecord?.updated_at || null}
           onClose={() => { setShowExpedienteForm(false); setEditingRecord(null) }}
           onSaved={() => loadRecords(true)}
         />
@@ -731,8 +777,66 @@ export function ListDetail() {
               <button onClick={() => { setShowModal(false); setEditingRecord(null) }} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
                 Cancelar
               </button>
-              <button onClick={handleSaveRecord} className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
+              <button onClick={() => void handleSaveRecord()} className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
                 {editingRecord ? 'Actualizar' : 'Crear'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteRecordsTarget && (
+        <ConfirmDangerModal
+          title={`Eliminar ${deleteRecordsTarget.count} expediente(s)`}
+          message={
+            <span>
+              Los expedientes seleccionados se enviarán a la <b>papelera</b> y podrán
+              restaurarse durante <b>15 días</b> desde la papelera en la sección de Listas.
+            </span>
+          }
+          loading={deletingRecords}
+          onCancel={() => setDeleteRecordsTarget(null)}
+          onConfirm={() => void confirmDeleteRecords()}
+        />
+      )}
+
+      {conflict && (
+        <div className="fixed inset-0 z-[220] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl p-6">
+            <h3 className="font-serif text-lg font-bold text-[#3F4650] mb-2">No se pudo guardar</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              {conflict.message}
+              {conflict.who && (
+                <span className="block mt-1 text-xs text-slate-500">Última edición por: <b>{conflict.who}</b></span>
+              )}
+            </p>
+            <div className="mt-6 flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  setConflict(null)
+                  setShowModal(false)
+                  setEditingRecord(null)
+                  setFormData({})
+                  loadRecords(true)
+                }}
+                className="w-full px-4 py-2.5 text-sm font-medium bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] transition-all duration-200"
+              >
+                Ver la versión actualizada
+              </button>
+              <button
+                onClick={() => {
+                  setConflict(null)
+                  void handleSaveRecord(true)
+                }}
+                className="w-full px-4 py-2.5 text-sm font-medium bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-200"
+              >
+                Sobrescribir de todas formas
+              </button>
+              <button
+                onClick={() => setConflict(null)}
+                className="w-full px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+              >
+                Cancelar
               </button>
             </div>
           </div>
@@ -1077,6 +1181,7 @@ export function ListDetail() {
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Expediente Nº {previewRecord.data?.expediente || '—'} · {previewRecord.data?.especialidad || 'Sin especialidad'}
+                  {formatEditedBy(previewRecord) && <span className="ml-2 text-[#8A919C]">{formatEditedBy(previewRecord)}</span>}
                 </p>
               </div>
               <button onClick={() => setPreviewRecord(null)} className="text-slate-400 hover:text-slate-600 transition-colors duration-200">

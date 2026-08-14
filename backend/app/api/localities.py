@@ -21,7 +21,7 @@ def list_localities(
         "SELECT data->>'localidad' AS loc, data->>'tipo_localidad' AS tipo, "
         "data->>'municipio' AS mun, data->>'departamento' AS dept, COUNT(*) AS n "
         "FROM list_records "
-        "WHERE data->>'localidad' IS NOT NULL AND data->>'localidad' != '' "
+        "WHERE deleted_at IS NULL AND data->>'localidad' IS NOT NULL AND data->>'localidad' != '' "
         "GROUP BY loc, tipo, mun, dept"
     )).all()
     merged = {}

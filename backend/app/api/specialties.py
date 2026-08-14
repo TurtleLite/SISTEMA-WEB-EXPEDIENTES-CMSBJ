@@ -20,7 +20,7 @@ def list_specialties(
     rows = db.execute(text(
         "SELECT data->>'especialidad' AS esp, COUNT(*) AS n "
         "FROM list_records "
-        "WHERE data->>'especialidad' IS NOT NULL AND data->>'especialidad' != '' "
+        "WHERE deleted_at IS NULL AND data->>'especialidad' IS NOT NULL AND data->>'especialidad' != '' "
         "GROUP BY esp"
     )).all()
     counts = {r[0]: r[1] for r in rows}

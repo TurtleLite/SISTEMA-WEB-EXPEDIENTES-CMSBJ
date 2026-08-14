@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.schemas.user import LoginRequest, TokenResponse
+from app.schemas.user import LoginRequest, TokenResponse, RefreshRequest
 from app.services.auth_service import (
     login, logout_current, get_current_user, require_role,
-    get_user_sessions, revoke_user_session, security,
+    get_user_sessions, revoke_user_session, refresh_session, security,
 )
 from app.services.audit_service import client_ip
 from app.models.user import User
@@ -16,6 +16,11 @@ router = APIRouter(prefix="/auth", tags=["Autenticación"])
 @router.post("/login", response_model=TokenResponse)
 def login_endpoint(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
     return login(db, data.username, data.password, request)
+
+
+@router.post("/refresh", response_model=TokenResponse)
+def refresh_endpoint(data: RefreshRequest, request: Request, db: Session = Depends(get_db)):
+    return refresh_session(db, data.refresh_token, request)
 
 
 @router.post("/logout")

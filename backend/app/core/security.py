@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from uuid import uuid4
+import hashlib
+import secrets
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from app.core.config import settings
@@ -30,3 +32,15 @@ def create_access_token(
 
 def decode_access_token(token: str) -> dict:
     return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+
+
+def create_refresh_token() -> tuple[str, str, datetime]:
+    """Devuelve (refresh_token, hash_sha256, expires_at). El token se guarda SOLO como hash."""
+    token = secrets.token_urlsafe(48)
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+    expire = datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    return token, token_hash, expire
+
+
+def hash_refresh_token(token: str) -> str:
+    return hashlib.sha256(token.encode()).hexdigest()

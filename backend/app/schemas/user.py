@@ -45,6 +45,10 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class RefreshRequest(BaseModel):
+    refresh_token: str
+
+
 class DeviceInfo(BaseModel):
     id: Optional[str] = None
     status: Optional[str] = None  # pending | approved | blocked
@@ -53,6 +57,7 @@ class DeviceInfo(BaseModel):
 
 class TokenResponse(BaseModel):
     access_token: str
+    refresh_token: Optional[str] = None
     token_type: str = "bearer"
     user: UserResponse
     device: Optional[DeviceInfo] = None

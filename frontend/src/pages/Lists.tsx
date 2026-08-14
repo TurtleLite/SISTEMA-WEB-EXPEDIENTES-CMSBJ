@@ -1,18 +1,26 @@
 import { useState, useEffect } from 'react'
 import { listsApi } from '../services/api'
-import { ListDefinition } from '../types'
+import { ListDefinition, TrashedList } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Trash2, Upload, Eye, Shield } from 'lucide-react'
+import { Plus, Trash2, Upload, Eye, Shield, RotateCcw } from 'lucide-react'
+import { ConfirmDangerModal } from '../components/ConfirmDangerModal'
 
 export function Lists() {
   const [lists, setLists] = useState<ListDefinition[]>([])
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState({ name: '', description: '', columns: [{ key: '', label: '', type: 'text' }] })
   const { user } = useAuth()
-  const { toast, confirm } = useNotification()
+  const { toast } = useNotification()
   const navigate = useNavigate()
+  const [deleteTarget, setDeleteTarget] = useState<ListDefinition | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const [showTrash, setShowTrash] = useState(false)
+  const [trash, setTrash] = useState<TrashedList[]>([])
+  const [restoringId, setRestoringId] = useState<string | null>(null)
+  const [trashRecords, setTrashRecords] = useState<{ id: string; data: Record<string, any>; deleted_at: string }[]>([])
+  const [trashListId, setTrashListId] = useState<string | null>(null)
 
   const loadLists = async () => {
     try {
@@ -22,6 +30,13 @@ export function Lists() {
   }
 
   useEffect(() => { loadLists() }, [])
+
+  const loadTrash = async () => {
+    try {
+      const res = await listsApi.trashLists()
+      setTrash(res.data)
+    } catch { toast('Error al cargar la papelera', 'error') }
+  }
 
   const addColumn = () => {
     setForm({ ...form, columns: [...form.columns, { key: '', label: '', type: 'text' }] })
@@ -55,13 +70,50 @@ export function Lists() {
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!await confirm('¿Eliminar esta lista?')) return
+  const handleDelete = async () => {
+    if (!deleteTarget) return
+    setDeleting(true)
     try {
-      await listsApi.delete(id)
+      await listsApi.delete(deleteTarget.id)
+      setDeleteTarget(null)
       loadLists()
-      toast('Lista eliminada correctamente', 'success')
+      toast('Lista enviada a la papelera (se eliminará definitivamente en 15 días)', 'success')
     } catch (err) { toast('Error al eliminar', 'error') }
+    finally { setDeleting(false) }
+  }
+
+  const handleRestoreList = async (listId: string) => {
+    setRestoringId(listId)
+    try {
+      const res = await listsApi.restoreList(listId)
+      toast(res.data?.message || 'Lista restaurada', 'success')
+      await loadTrash()
+      await loadLists()
+    } catch (err: any) {
+      toast(err.response?.data?.detail || 'Error al restaurar', 'error')
+    } finally { setRestoringId(null) }
+  }
+
+  const openTrashRecords = async (listId: string) => {
+    setTrashListId(listId)
+    setTrashRecords([])
+    try {
+      const res = await listsApi.trashRecords(listId)
+      setTrashRecords(res.data)
+    } catch { toast('Error al cargar los expedientes de la papelera', 'error') }
+  }
+
+  const handleRestoreRecord = async (recordId: string) => {
+    if (!trashListId) return
+    setRestoringId(recordId)
+    try {
+      const res = await listsApi.restoreRecord(trashListId, recordId)
+      toast(res.data?.message || 'Expediente restaurado', 'success')
+      await openTrashRecords(trashListId)
+      await loadTrash()
+    } catch (err: any) {
+      toast(err.response?.data?.detail || 'Error al restaurar', 'error')
+    } finally { setRestoringId(null) }
   }
 
   return (
@@ -82,13 +134,23 @@ export function Lists() {
             Ver registros
           </button>
           {user?.role === 'admin' && (
-            <button
-              onClick={() => setShowModal(true)}
-              className="flex items-center gap-1.5 bg-[#6E7B91] text-white px-4 py-2 rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
-            >
-              <Plus size={16} />
-              Nueva Lista
-            </button>
+            <>
+              <button
+                onClick={() => { setShowTrash(true); loadTrash() }}
+                className="flex items-center gap-1.5 bg-white border border-[#E3E6EB] text-slate-700 px-4 py-2 rounded-xl hover:bg-slate-100 shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+                title="Expedientes y listas eliminados (restaurables por 15 días)"
+              >
+                <RotateCcw size={16} />
+                Papelera
+              </button>
+              <button
+                onClick={() => setShowModal(true)}
+                className="flex items-center gap-1.5 bg-[#6E7B91] text-white px-4 py-2 rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+              >
+                <Plus size={16} />
+                Nueva Lista
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -116,7 +178,7 @@ export function Lists() {
                   <Eye size={16} />
                 </button>
                 {user?.role === 'admin' && (
-                  <button onClick={() => handleDelete(list.id)} className="p-1.5 hover:bg-red-50 rounded-lg text-red-500 transition-all duration-200 hover:scale-110 active:scale-95">
+                  <button onClick={() => setDeleteTarget(list)} className="p-1.5 hover:bg-red-50 rounded-lg text-red-500 transition-all duration-200 hover:scale-110 active:scale-95" title="Eliminar (va a la papelera por 15 días)">
                     <Trash2 size={15} />
                   </button>
                 )}
@@ -139,8 +201,7 @@ export function Lists() {
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl px-5 py-3 w-[95vw] max-w-5xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <h2 className="font-serif text-lg font-bold mb-4 text-[#3F4650]">Nueva Lista Personalizable</h2>
-            <div className="space-y-3">
+            <h2 className="font-serif text-lg font-bold mb-4 text-[#3F4650]">Nueva Lista Personalizable</h2>            <div className="space-y-3">
               <input
                 placeholder="Nombre de la lista"
                 value={form.name}
@@ -192,6 +253,104 @@ export function Lists() {
                 Crear Lista
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {deleteTarget && (
+        <ConfirmDangerModal
+          title={`Eliminar "${deleteTarget.name}"`}
+          message={
+            <span>
+              La lista y <b>todos sus registros</b> se enviarán a la papelera.
+              Podrá restaurarlos durante <b>15 días</b>; después se eliminarán definitivamente.
+            </span>
+          }
+          loading={deleting}
+          onCancel={() => setDeleteTarget(null)}
+          onConfirm={() => void handleDelete()}
+        />
+      )}
+
+      {showTrash && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowTrash(false)}>
+          <div className="bg-white rounded-2xl w-[95vw] max-w-2xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E3E6EB] shrink-0">
+              <h2 className="font-serif text-lg font-bold text-[#3F4650]">
+                {trashListId ? 'Expedientes en la papelera' : 'Papelera (15 días)'}
+              </h2>
+              <div className="flex items-center gap-2">
+                {trashListId && (
+                  <button onClick={() => setTrashListId(null)} className="text-sm text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg px-2 py-1 transition-colors duration-200">
+                    ← Volver
+                  </button>
+                )}
+                <button onClick={() => setShowTrash(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none p-1 rounded-full hover:bg-slate-100">×</button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto min-h-0 p-5 space-y-2">
+              {trashListId ? (
+                trashRecords.length === 0 ? (
+                  <p className="text-sm text-[#8A919C] text-center py-8">No hay expedientes en la papelera de esta lista</p>
+                ) : (
+                  trashRecords.map((r) => (
+                    <div key={r.id} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F8F9FA] border border-[#E3E6EB] rounded-xl">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-[#3F4650] truncate">
+                          {[r.data?.nombre, r.data?.apellido].filter(Boolean).join(' ') || 'Sin nombre'}
+                        </p>
+                        <p className="text-xs text-[#8A919C]">
+                          {r.data?.expediente ? `Exp. ${r.data?.expediente} · ` : ''}
+                          {r.data?.diagnostico ? `${String(r.data.diagnostico).slice(0, 60)} · ` : ''}
+                          eliminado {new Date(r.deleted_at).toLocaleString('es-HN')}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => void handleRestoreRecord(r.id)}
+                        disabled={restoringId === r.id}
+                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200 disabled:opacity-50 shrink-0"
+                      >
+                        <RotateCcw size={14} />
+                        {restoringId === r.id ? 'Restaurando...' : 'Restaurar'}
+                      </button>
+                    </div>
+                  ))
+                )
+              ) : trash.length === 0 ? (
+                <p className="text-sm text-[#8A919C] text-center py-8">La papelera está vacía</p>
+              ) : (
+                trash.map((t) => (
+                  <div key={t.id} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F8F9FA] border border-[#E3E6EB] rounded-xl">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-[#3F4650] truncate">{t.name}</p>
+                      <p className="text-xs text-[#8A919C]">
+                        {t.records_in_trash} registro(s) · eliminada {new Date(t.deleted_at).toLocaleString('es-HN')}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => void openTrashRecords(t.id)}
+                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 bg-white border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200"
+                      >
+                        <Eye size={14} />
+                        Ver
+                      </button>
+                      <button
+                        onClick={() => void handleRestoreList(t.id)}
+                        disabled={restoringId === t.id}
+                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200 disabled:opacity-50"
+                      >
+                        <RotateCcw size={14} />
+                        {restoringId === t.id ? 'Restaurando...' : 'Restaurar'}
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            <p className="px-5 py-3 text-xs text-[#8A919C] border-t border-[#E3E6EB] shrink-0">
+              Los expedientes y listas permanecen aquí <b>15 días</b>; después se eliminan definitivamente.
+            </p>
           </div>
         </div>
       )}

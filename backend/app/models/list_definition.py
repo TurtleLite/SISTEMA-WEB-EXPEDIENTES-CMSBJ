@@ -16,6 +16,7 @@ class ListDefinition(Base):
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    deleted_at = Column(DateTime(timezone=True), nullable=True, index=True)
 
     creator = relationship("User", backref="list_definitions")
     records = relationship("ListRecord", back_populates="list_definition", cascade="all, delete-orphan")
@@ -30,6 +31,8 @@ class ListRecord(Base):
     created_by = Column(Integer, ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    updated_by = Column(Integer, ForeignKey("users.id"), nullable=True)
+    deleted_at = Column(DateTime(timezone=True), nullable=True, index=True)
 
     list_definition = relationship("ListDefinition", back_populates="records")
     creator = relationship("User", backref="list_records")

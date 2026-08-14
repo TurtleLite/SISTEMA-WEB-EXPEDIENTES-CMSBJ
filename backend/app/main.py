@@ -105,6 +105,31 @@ async def lifespan(app: FastAPI):
                     conn.execute(text("ALTER TABLE user_sessions ADD COLUMN device_id VARCHAR(50)"))
                     conn.commit()
                 logger.info("Added device_id column to user_sessions")
+            if "refresh_hash" not in columns:
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE user_sessions ADD COLUMN refresh_hash VARCHAR(64)"))
+                    conn.execute(text("ALTER TABLE user_sessions ADD COLUMN refresh_expires_at TIMESTAMPTZ"))
+                    conn.commit()
+                logger.info("Added refresh columns to user_sessions")
+        if "list_records" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("list_records")]
+            if "updated_by" not in columns:
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE list_records ADD COLUMN updated_by INTEGER REFERENCES users(id)"))
+                    conn.commit()
+                logger.info("Added updated_by column to list_records")
+            if "deleted_at" not in columns:
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE list_records ADD COLUMN deleted_at TIMESTAMPTZ"))
+                    conn.commit()
+                logger.info("Added deleted_at column to list_records (papelera)")
+        if "list_definitions" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("list_definitions")]
+            if "deleted_at" not in columns:
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE list_definitions ADD COLUMN deleted_at TIMESTAMPTZ"))
+                    conn.commit()
+                logger.info("Added deleted_at column to list_definitions (papelera)")
     except Exception as e:
         logger.warning(f"Could not add column: {e}")
 
@@ -112,6 +137,10 @@ async def lifespan(app: FastAPI):
         db = SessionLocal()
         from app.services.list_service import ensure_system_lists
         ensure_system_lists(db)
+        from app.services.record_service import purge_trash
+        purged = purge_trash(db)
+        if purged:
+            logger.info(f"Papelera: purgados {purged} registro(s) vencidos (TRASH_RETENTION_DAYS={settings.TRASH_RETENTION_DAYS})")
         from app.services.user_service import reset_default_users
         reset_default_users(db, only_if_empty=True)
         if settings.AUDIT_RETENTION_DAYS > 0:

@@ -198,6 +198,38 @@ const clearDraft = (key: string): void => {
 const hasContent = (data: Record<string, any>): boolean =>
   Object.values(data).some((v) => v !== undefined && v !== null && String(v).trim() !== '')
 
+const formatAgo = (iso: string): string => {
+  const d = new Date(iso)
+  const diff = Date.now() - d.getTime()
+  if (diff < 60000) return 'hace un momento'
+  if (diff < 3600000) return `hace ${Math.floor(diff / 60000)} min`
+  if (diff < 86400000) return `hace ${Math.floor(diff / 3600000)} h`
+  return `hace ${Math.floor(diff / 86400000)} días`
+}
+
+const validateDates = (data: Record<string, any>): string | null => {
+  const hoy = new Date(todayHonduras())
+  const fechaRaw = String(data.fecha_elaboracion || '').trim()
+  if (fechaRaw) {
+    const f = new Date(fechaRaw + 'T00:00:00')
+    if (isNaN(f.getTime())) return 'La fecha de elaboración no es válida (formato AAAA-MM-DD)'
+    if (f > hoy) return 'La fecha de elaboración no puede ser posterior a hoy'
+    if (f < new Date('1950-01-01T00:00:00')) return 'La fecha de elaboración es demasiado antigua (antes de 1950)'
+  }
+  const edadRaw = String(data.edad || '').trim()
+  if (edadRaw) {
+    const m = edadRaw.match(/^(\d{1,3})\s*([am]?)$/)
+    if (m) {
+      const n = parseInt(m[1], 10)
+      const unidad = m[2] || 'a'
+      if (unidad === 'm' && (n < 0 || n > 12)) return 'Edad en meses inválida (debe ser 0-12)'
+      if (unidad === 'a' && n > 120) return 'La edad no puede ser mayor de 120 años'
+      if (unidad === 'a' && n === 0) return 'La edad no puede ser 0 años'
+    }
+  }
+  return null
+}
+
 interface Props {
   listId: string
   role?: string
@@ -205,6 +237,7 @@ interface Props {
   onClose: () => void
   onSaved: () => void
   editingRecord?: ListRecord
+  expectedUpdatedAt?: string | null
 }
 
 function filterSections(role?: string): Section[] {
@@ -227,7 +260,7 @@ interface LocalidadOption {
   count: number
 }
 
-export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, editingRecord }: Props) {
+export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, editingRecord, expectedUpdatedAt }: Props) {
   const sections = filterSections(role)
   const draftKeyStr = draftKey(listId, editingRecord?.id ? String(editingRecord.id) : undefined)
   const [data, setData] = useState<Record<string, any>>(() => {
@@ -249,6 +282,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const [localidades, setLocalidades] = useState<LocalidadOption[]>([])
   const [localidadMatch, setLocalidadMatch] = useState<LocalidadOption | null>(null)
   const [confirmCopy, setConfirmCopy] = useState<{ numero: string; propuesta: string } | null>(null)
+  const [conflict, setConflict] = useState<{ message: string; who?: string } | null>(null)
+  const conflictRef = useRef(false)
   const { toast, confirm } = useNotification()
 
   useEffect(() => {
@@ -400,6 +435,11 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       toast(`La historia de enfermedad actual debe tener al menos ${MIN_TEXT_LENGTH} caracteres`, 'error')
       return
     }
+    const fechaErr = validateDates(data)
+    if (fechaErr) {
+      toast(fechaErr, 'error')
+      return
+    }
     setSaving(true)
     try {
       const numero = String(data.expediente || '').trim()
@@ -418,15 +458,17 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     }
   }
 
-  const performSave = async () => {
-    if (saving) return
+  const performSave = async (force = false) => {
+    if (saving && !force) return
     setSaving(true)
     try {
       const payload = { ...data }
       if (!editingRecord) payload.fecha_elaboracion = todayHonduras()
       if (!payload.nombre_medico && medicoName) payload.nombre_medico = medicoName
       if (editingRecord) {
-        await listsApi.updateRecord(listId, editingRecord.id, { data: payload })
+        const body: any = { data: payload }
+        if (!force && expectedUpdatedAt) body.expected_updated_at = expectedUpdatedAt
+        await listsApi.updateRecord(listId, editingRecord.id, body)
         toast('Expediente actualizado correctamente', 'success')
       } else {
         await listsApi.createRecord(listId, { data: payload })
@@ -436,6 +478,15 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       onSaved()
       onClose()
     } catch (err: any) {
+      if (err.response?.status === 409) {
+        const detail = err.response.data?.detail
+        setConflict({
+          message: typeof detail === 'string' ? detail : (detail?.message || 'Este expediente fue modificado por otra persona.'),
+          who: typeof detail === 'object' && detail ? detail.updated_by_name : undefined,
+        })
+        conflictRef.current = false
+        return
+      }
       toast(err.response?.data?.detail || 'Error al guardar el expediente', 'error')
     } finally {
       setSaving(false)
@@ -452,7 +503,13 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
         <div className="px-5 py-3 border-b border-[#E3E6EB] flex items-center justify-between shrink-0">
           <div>
             <h2 className="text-xl font-bold text-slate-900">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
-            <p className="text-sm text-slate-500 mt-1">{editingRecord ? 'Modifique los campos necesarios' : 'Complete todas las secciones para crear el registro'}</p>
+            <p className="text-sm text-slate-500 mt-1">
+              {editingRecord
+                ? editingRecord.updated_at
+                  ? `Modifique los campos necesarios · Editado ${formatAgo(editingRecord.updated_at)}`
+                  : 'Modifique los campos necesarios'
+                : 'Complete todas las secciones para crear el registro'}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             {dirty && (
@@ -964,6 +1021,49 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                 className="px-5 py-2.5 rounded-lg text-sm font-medium bg-slate-500 text-white hover:bg-slate-600 shadow-sm"
               >
                 Sí, continuar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {conflict && (
+        <div className="fixed inset-0 z-[70] bg-slate-900/30 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+            <h3 className="font-serif text-lg font-bold text-[#3F4650] mb-3">No se pudo guardar</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              {conflict.message}
+              {conflict.who && (
+                <span className="block mt-1 text-xs text-slate-500">Última edición por: <b>{conflict.who}</b></span>
+              )}
+            </p>
+            <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+              Si sobrescribe, sus cambios reemplazarán la versión actual del expediente.
+            </p>
+            <div className="mt-6 flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  setConflict(null)
+                  onClose()
+                }}
+                className="w-full px-4 py-2.5 text-sm font-medium bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] transition-all duration-200"
+              >
+                Salir y ver el expediente actualizado
+              </button>
+              <button
+                onClick={() => {
+                  setConflict(null)
+                  void performSave(true)
+                }}
+                className="w-full px-4 py-2.5 text-sm font-medium bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-200"
+              >
+                Sobrescribir de todas formas
+              </button>
+              <button
+                onClick={() => setConflict(null)}
+                className="w-full px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+              >
+                Cancelar
               </button>
             </div>
           </div>

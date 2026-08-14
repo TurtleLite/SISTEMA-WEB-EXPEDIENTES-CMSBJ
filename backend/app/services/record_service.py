@@ -1,12 +1,52 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func, text, literal_column
 from app.models.list_definition import ListRecord, ListDefinition
+from app.core.config import settings
 from typing import Optional
 import unicodedata
 import re
 
 _EXPEDIENTE_LIST_NAME = "Expediente Médico"
 _EXPEDIENTE_SEQUENCE = "expediente_seq"
+
+
+def _not_deleted(query):
+    return query.filter(ListRecord.deleted_at.is_(None))
+
+
+def _validate_dates(data: dict):
+    """Rechaza fechas imposibles en el expediente: elaboración futura o demasiado antigua,
+    y edades fuera de rango (0-120 años)."""
+    from fastapi import HTTPException
+    from datetime import date, datetime, timezone
+
+    hoy = date.today()
+
+    fecha_raw = str(data.get("fecha_elaboracion", "") or "").strip()
+    if fecha_raw:
+        try:
+            f = date.fromisoformat(fecha_raw[:10])
+        except ValueError:
+            raise HTTPException(status_code=400, detail="La fecha de elaboración no es válida (formato AAAA-MM-DD)")
+        if f > hoy:
+            raise HTTPException(status_code=400, detail="La fecha de elaboración no puede ser posterior a hoy")
+        if f < date(1950, 1, 1):
+            raise HTTPException(status_code=400, detail="La fecha de elaboración es demasiado antigua (antes de 1950)")
+
+    edad_raw = str(data.get("edad", "") or "").strip()
+    if edad_raw:
+        m = re.match(r"^\s*(\d{1,3})\s*([am]?)\s*$", edad_raw)
+        if m:
+            n = int(m.group(1))
+            unidad = m.group(2) or "a"
+            if unidad == "m":
+                if n < 0 or n > 12:
+                    raise HTTPException(status_code=400, detail="Edad en meses inválida (debe ser 0-12)")
+            else:
+                if n > 120:
+                    raise HTTPException(status_code=400, detail="La edad no puede ser mayor de 120 años")
+                if n == 0:
+                    raise HTTPException(status_code=400, detail="La edad no puede ser 0 años")
 
 
 def _is_expediente_list(db: Session, list_id: int) -> bool:
@@ -29,6 +69,7 @@ def copias_de_numero(db: Session, numero: str) -> int:
         db.query(func.count(ListRecord.id))
         .filter(
             ListRecord.list_definition_id == ld.id,
+            ListRecord.deleted_at.is_(None),
             or_(field == numero, field.like(f"{escaped} (%)", escape="\\")),
         )
         .scalar()
@@ -52,7 +93,7 @@ def renumber_expedientes(db: Session):
     db.execute(text(f"CREATE SEQUENCE IF NOT EXISTS {_EXPEDIENTE_SEQUENCE} START 1"))
     records = (
         db.query(ListRecord)
-        .filter(ListRecord.list_definition_id == ld.id)
+        .filter(ListRecord.list_definition_id == ld.id, ListRecord.deleted_at.is_(None))
         .order_by(ListRecord.id.asc())
         .all()
     )
@@ -134,6 +175,7 @@ def _compose_domicilio(data: dict) -> dict:
 def add_record(db: Session, list_id: int, data: dict, user_id: int = None) -> ListRecord:
     if _is_expediente_list(db, list_id):
         data = dict(data)
+        _validate_dates(data)
         data = _compose_domicilio(data)
         numero = re.sub(r"\D", "", str(data.get("expediente", "") or ""))
         if not numero:
@@ -141,7 +183,7 @@ def add_record(db: Session, list_id: int, data: dict, user_id: int = None) -> Li
             raise HTTPException(status_code=400, detail="El número de expediente es obligatorio: regístrelo manualmente")
         data["expediente"] = numero_expediente_final(db, numero)
         data.setdefault("estatus_cirugia", "En espera")
-    record = ListRecord(list_definition_id=list_id, data=data, created_by=user_id)
+    record = ListRecord(list_definition_id=list_id, data=data, created_by=user_id, updated_by=user_id)
     db.add(record)
     db.commit()
     db.refresh(record)
@@ -149,12 +191,12 @@ def add_record(db: Session, list_id: int, data: dict, user_id: int = None) -> Li
 
 
 def count_records(db: Session, list_id: int) -> int:
-    return db.query(ListRecord).filter(ListRecord.list_definition_id == list_id).count()
+    return db.query(ListRecord).filter(ListRecord.list_definition_id == list_id, ListRecord.deleted_at.is_(None)).count()
 
 
 def get_records(db: Session, list_id: int, skip: int = 0, limit: int = 1000,
                 search: Optional[str] = None, search_field: Optional[str] = None) -> list[ListRecord]:
-    query = db.query(ListRecord).filter(ListRecord.list_definition_id == list_id)
+    query = _not_deleted(db.query(ListRecord).filter(ListRecord.list_definition_id == list_id))
     query = _apply_search(query, search, search_field)
     return query.order_by(ListRecord.id.desc()).offset(skip).limit(limit).all()
 
@@ -164,7 +206,7 @@ def paginate_records(db: Session, list_id: int, search: Optional[str] = None,
                      page_size: int = 50, exclude_statuses: Optional[list] = None,
                      waiting_only: bool = False,
                      estatus_cirugia: Optional[str] = None) -> tuple[list[ListRecord], int]:
-    query = db.query(ListRecord).filter(ListRecord.list_definition_id == list_id)
+    query = _not_deleted(db.query(ListRecord).filter(ListRecord.list_definition_id == list_id))
     query = _apply_search(query, search, search_field)
     if estatus_cirugia:
         query = query.filter(ListRecord.data.op("->>")("estatus_cirugia") == estatus_cirugia)
@@ -187,18 +229,50 @@ def paginate_records(db: Session, list_id: int, search: Optional[str] = None,
 
 
 def get_record(db: Session, record_id: int) -> ListRecord:
-    record = db.query(ListRecord).filter(ListRecord.id == record_id).first()
+    record = db.query(ListRecord).filter(ListRecord.id == record_id, ListRecord.deleted_at.is_(None)).first()
     if not record:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Registro no encontrado")
     return record
 
 
-def update_record(db: Session, record_id: int, data: dict, user_id: int = None, user_role: str = None) -> ListRecord:
-    record = db.query(ListRecord).filter(ListRecord.id == record_id).first()
+def _updated_at_iso(record: ListRecord) -> str:
+    return record.updated_at.isoformat() if record.updated_at else None
+
+
+def update_record(db: Session, record_id: int, data: dict, user_id: int = None, user_role: str = None,
+                  expected_updated_at: str = None) -> ListRecord:
+    from datetime import datetime, timezone
+    record = db.query(ListRecord).filter(ListRecord.id == record_id, ListRecord.deleted_at.is_(None)).first()
     if not record:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Registro no encontrado")
+    # Bloqueo optimista: si otro usuario editó mientras tanto, exigir decisión explícita.
+    if expected_updated_at:
+        try:
+            expected = datetime.fromisoformat(expected_updated_at.replace("Z", "+00:00"))
+            if expected.tzinfo is None:
+                expected = expected.replace(tzinfo=timezone.utc)
+            current = record.updated_at
+            if current is not None:
+                if current.tzinfo is None:
+                    current = current.replace(tzinfo=timezone.utc)
+                if abs((current - expected).total_seconds()) > 1.0:
+                    from fastapi import HTTPException
+                    owner = None
+                    if record.updated_by:
+                        from app.models.user import User
+                        owner = db.query(User).filter(User.id == record.updated_by).first()
+                    raise HTTPException(
+                        status_code=409,
+                        detail={
+                            "message": "Este expediente fue modificado por otra persona mientras lo editaba.",
+                            "current_updated_at": _updated_at_iso(record),
+                            "updated_by_name": (owner.full_name if owner else None),
+                        },
+                    )
+        except ValueError:
+            pass
     if user_role in ("direccion", "direccion_medica"):
         pass
     elif user_role == "medico":
@@ -217,15 +291,19 @@ def update_record(db: Session, record_id: int, data: dict, user_id: int = None, 
         raise HTTPException(status_code=403, detail="Acción no permitida")
     if _is_expediente_list(db, record.list_definition_id):
         data = dict(data)
+        _validate_dates(data)
         data = _compose_domicilio(data)
         data["expediente"] = record.data.get("expediente")
     record.data = data
+    record.updated_by = user_id
     db.commit()
     db.refresh(record)
     return record
 
 
 def delete_record(db: Session, record_id: int, user_id: int = None, user_role: str = None):
+    """Soft delete: mueve el expediente a la papelera (restaurable por TRASH_RETENTION_DAYS días)."""
+    from datetime import datetime, timezone
     from fastapi import HTTPException
     try:
         record_id = int(record_id)
@@ -239,8 +317,57 @@ def delete_record(db: Session, record_id: int, user_id: int = None, user_role: s
     else:
         role_name = {"admin": "Administrador", "direccion": "Dirección", "direccion_medica": "Dirección Médica", "medico": "Médico"}
         raise HTTPException(status_code=403, detail=f"{role_name.get(user_role, 'Usuario')} no puede eliminar este registro")
-    db.delete(record)
+    if not record.deleted_at:
+        record.deleted_at = datetime.now(timezone.utc)
+        db.commit()
+
+
+def restore_record(db: Session, record_id: int, user_id: int = None, user_role: str = None) -> ListRecord:
+    from fastapi import HTTPException
+    try:
+        record_id = int(record_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=404, detail="Registro no encontrado")
+    record = db.query(ListRecord).filter(ListRecord.id == record_id).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="Registro no encontrado")
+    if user_role not in ("direccion", "direccion_medica"):
+        raise HTTPException(status_code=403, detail="No tienes permisos para restaurar registros")
+    if record.deleted_at:
+        record.deleted_at = None
+        record.updated_by = user_id
+        db.commit()
+    return record
+
+
+def get_trashed_records(db: Session, list_id: int) -> list[ListRecord]:
+    return (
+        db.query(ListRecord)
+        .filter(ListRecord.list_definition_id == list_id, ListRecord.deleted_at.isnot(None))
+        .order_by(ListRecord.deleted_at.desc())
+        .all()
+    )
+
+
+def purge_trash(db: Session) -> int:
+    """Elimina físicamente expedientes y listas con más de TRASH_RETENTION_DAYS días en la papelera."""
+    from datetime import datetime, timedelta, timezone
+    from app.models.list_definition import ListDefinition
+    if settings.TRASH_RETENTION_DAYS <= 0:
+        return 0
+    cutoff = datetime.now(timezone.utc) - timedelta(days=settings.TRASH_RETENTION_DAYS)
+    expired = (
+        db.query(ListRecord)
+        .filter(ListRecord.deleted_at.isnot(None), ListRecord.deleted_at < cutoff)
+        .delete(synchronize_session=False)
+    )
+    expired_lists = (
+        db.query(ListDefinition)
+        .filter(ListDefinition.deleted_at.isnot(None), ListDefinition.deleted_at < cutoff)
+        .delete(synchronize_session=False)
+    )
     db.commit()
+    return expired + expired_lists
 
 
 def get_records_by_ids(db: Session, ids: list[int]) -> list[ListRecord]:
@@ -252,7 +379,7 @@ def get_records_by_ids(db: Session, ids: list[int]) -> list[ListRecord]:
             continue
     if not parsed:
         return []
-    return db.query(ListRecord).filter(ListRecord.id.in_(parsed)).all()
+    return _not_deleted(db.query(ListRecord).filter(ListRecord.id.in_(parsed))).all()
 
 
 def get_distinct_field_values(db: Session, list_id: int, field: str) -> list:

@@ -4,7 +4,7 @@ from collections import deque
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.models.user_session import UserSession
-from app.core.security import hash_password, verify_password, create_access_token, decode_access_token
+from app.core.security import hash_password, verify_password, create_access_token, decode_access_token, create_refresh_token, hash_refresh_token
 from app.services.audit_service import log_audit, client_ip, client_real_ip, client_device_id
 from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -109,12 +109,14 @@ def _purge_old_sessions(db: Session, user: User):
     ).delete(synchronize_session=False)
     db.query(UserSession).filter(
         UserSession.user_id == user.id,
-        UserSession.expires_at.isnot(None),
-        UserSession.expires_at < now,
+        UserSession.refresh_expires_at.isnot(None),
+        UserSession.refresh_expires_at < now,
     ).delete(synchronize_session=False)
 
 
-def _create_session(db: Session, user: User, jti: str, expires_at: datetime, ip_address: str = None, request=None, device_id: str = None):
+def _create_session(db: Session, user: User, jti: str, expires_at: datetime, refresh_hash: str = None,
+                    refresh_expires_at: datetime = None, ip_address: str = None, request=None,
+                    device_id: str = None):
     _purge_old_sessions(db, user)
     session = UserSession(
         user_id=user.id,
@@ -123,11 +125,24 @@ def _create_session(db: Session, user: User, jti: str, expires_at: datetime, ip_
         device_id=(device_id or "")[:50] or None,
         user_agent=((request.headers.get("user-agent", "") if request else "") or "")[:255],
         expires_at=expires_at,
+        refresh_hash=refresh_hash,
+        refresh_expires_at=refresh_expires_at,
         last_seen_at=_now(),
     )
     db.add(session)
     db.commit()
     return session
+
+
+def _token_response(user: User, access_token: str, refresh_token: str = None, device_info: dict = None) -> dict:
+    from app.schemas.user import UserResponse
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+        "user": UserResponse.model_validate(user),
+        "device": device_info,
+    }
 
 
 def login(db: Session, username: str, password: str, request=None) -> dict:
@@ -149,9 +164,9 @@ def login(db: Session, username: str, password: str, request=None) -> dict:
         raise HTTPException(status_code=403, detail="Este equipo está bloqueado. Contacte al administrador del sistema.")
     device_id = client_device_id(request)
     token, jti, expires_at = create_access_token({"sub": str(user.id), "role": user.role})
-    _create_session(db, user, jti, expires_at, ip, request, device_id=device_id)
+    refresh_token, refresh_hash, refresh_expires_at = create_refresh_token()
+    _create_session(db, user, jti, expires_at, refresh_hash, refresh_expires_at, ip, request, device_id=device_id)
     log_audit(db, user, "login", entity_type="auth", ip_address=ip)
-    from app.schemas.user import UserResponse
     device_info = None
     if reg:
         from app.services.device_service import _users_of
@@ -160,12 +175,41 @@ def login(db: Session, username: str, password: str, request=None) -> dict:
             "status": reg.status,
             "shared": len(_users_of(reg)) > 1,
         }
-    return {
-        "access_token": token,
-        "token_type": "bearer",
-        "user": UserResponse.model_validate(user),
-        "device": device_info,
-    }
+    return _token_response(user, token, refresh_token, device_info)
+
+
+def refresh_session(db: Session, refresh_token: str, request=None) -> dict:
+    """Renueva la sesión: emite un access token nuevo y ROTÁ el refresh token (uso único).
+    Presentar un refresh ya usado (hash no encontrado) se trata como intento de reutilización."""
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="Token de refresco requerido")
+    token_hash = hash_refresh_token(refresh_token)
+    session = db.query(UserSession).filter(UserSession.refresh_hash == token_hash).first()
+    if not session:
+        raise HTTPException(status_code=401, detail="Sesión inválida. Inicie sesión de nuevo.")
+    if session.revoked_at:
+        raise HTTPException(status_code=401, detail="Sesión cerrada o revocada. Inicie sesión de nuevo.")
+    now = _now()
+    if not session.refresh_expires_at or _as_utc(session.refresh_expires_at) < now:
+        raise HTTPException(status_code=401, detail="Sesión expirada. Inicie sesión de nuevo.")
+    user = db.query(User).filter(User.id == session.user_id).first()
+    if not user or not user.is_active:
+        raise HTTPException(status_code=401, detail="Usuario no encontrado o inactivo")
+    access_token, jti, expires_at = create_access_token({"sub": str(user.id), "role": user.role})
+    new_refresh_token, new_hash, new_expires = create_refresh_token()
+    session.jti = jti
+    session.expires_at = expires_at
+    session.refresh_hash = new_hash
+    session.refresh_expires_at = new_expires
+    session.last_seen_at = now
+    db.commit()
+    from app.services.device_service import get_device_status_map
+    status_map = get_device_status_map(db)
+    device_info = None
+    if session.device_id and session.device_id in status_map:
+        info = status_map[session.device_id]
+        device_info = {"id": session.device_id, "status": info["status"], "shared": info["shared"]}
+    return _token_response(user, access_token, new_refresh_token, device_info)
 
 
 def logout_current(db: Session, credentials: HTTPAuthorizationCredentials = None, user: User = None, ip: str = None):
@@ -182,6 +226,8 @@ def logout_current(db: Session, credentials: HTTPAuthorizationCredentials = None
         session = db.query(UserSession).filter(UserSession.jti == jti).first()
         if session and not session.revoked_at:
             session.revoked_at = _now()
+            session.refresh_hash = None
+            session.refresh_expires_at = _now()
             db.commit()
 
 
@@ -238,10 +284,11 @@ def get_user_sessions(db: Session, current_user: User, include_others: bool = Fa
     now = _now()
     result = []
     for session, username, full_name in rows:
-        # "Activa" en tiempo real: sin revocar, token vigente y con actividad en los últimos minutos.
+        session_end = _as_utc(session.refresh_expires_at) or _as_utc(session.expires_at)
+        # "Activa" en tiempo real: sin revocar, con sesión vigente y con actividad en los últimos minutos.
         active = bool(
             session.revoked_at is None
-            and (_as_utc(session.expires_at) is None or _as_utc(session.expires_at) > now)
+            and (session_end is None or session_end > now)
             and session.last_seen_at is not None
             and (now - _as_utc(session.last_seen_at)) <= timedelta(minutes=ACTIVE_WINDOW_MINUTES)
         )
@@ -263,7 +310,7 @@ def get_user_sessions(db: Session, current_user: User, include_others: bool = Fa
             "device_shared": device_shared,
             "user_agent": session.user_agent,
             "created_at": str(session.created_at),
-            "expires_at": str(session.expires_at) if session.expires_at else None,
+            "expires_at": str(session_end) if session_end else None,
             "last_seen_at": str(session.last_seen_at) if session.last_seen_at else None,
             "revoked_at": str(session.revoked_at) if session.revoked_at else None,
             "is_current": bool(current_jti and session.jti == current_jti),
@@ -280,6 +327,8 @@ def revoke_user_session(db: Session, session_id: int, current_user: User, reques
         raise HTTPException(status_code=403, detail="No tienes permisos para cerrar esta sesión")
     if not session.revoked_at:
         session.revoked_at = _now()
+        session.refresh_hash = None
+        session.refresh_expires_at = _now()
         db.commit()
     owner = db.query(User).filter(User.id == session.user_id).first()
     owner_name = owner.username if owner else "usuario desconocido"
