@@ -35,4 +35,4 @@ class ListRecord(Base):
     deleted_at = Column(DateTime(timezone=True), nullable=True, index=True)
 
     list_definition = relationship("ListDefinition", back_populates="records")
-    creator = relationship("User", backref="list_records")
+    creator = relationship("User", backref="list_records", foreign_keys=[created_by])
