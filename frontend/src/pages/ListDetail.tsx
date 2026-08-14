@@ -4,7 +4,7 @@ import { listsApi, default as api } from '../services/api'
 import { ListDefinition, ListRecord } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
-import { Plus, Upload, Search, Pencil, Trash2, Download, Stethoscope, CheckSquare, Square, Settings2, Eye, MapPin, X, Info } from 'lucide-react'
+import { Plus, Upload, Search, Pencil, Trash2, Download, Stethoscope, CheckSquare, Square, Settings2, Eye, MapPin, X, Info, Check } from 'lucide-react'
 import { ExpedienteForm, SECTIONS } from '../components/ExpedienteForm'
 import { specialtiesApi, localitiesApi } from '../services/api'
 import { areSimilarNames, normalizeText, shortName } from '../utils/format'
@@ -62,6 +62,11 @@ export function ListDetail() {
   const [locSaving, setLocSaving] = useState(false)
   const [espSearch, setEspSearch] = useState('')
   const [locSearch, setLocSearch] = useState('')
+  const [dismissedLocGroups, setDismissedLocGroups] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('sbj_loc_similar_dismissed') || '[]')
+    } catch { return [] }
+  })
   const [creatingEsp, setCreatingEsp] = useState(false)
   const [creatingLoc, setCreatingLoc] = useState(false)
   const [newLocTipo, setNewLocTipo] = useState('')
@@ -910,24 +915,44 @@ export function ListDetail() {
                   </>
                 )
               )}
-              {similarLocalities(filteredLocalities).length > 0 && (
+              {(() => {
+                const groups = similarLocalities(filteredLocalities).filter((g) => !dismissedLocGroups.includes(g.names.join('|')))
+                if (groups.length === 0) return null
+                const markAsRead = () => {
+                  const keys = similarLocalities(filteredLocalities).map((g) => g.names.join('|'))
+                  const merged = Array.from(new Set([...dismissedLocGroups, ...keys]))
+                  setDismissedLocGroups(merged)
+                  localStorage.setItem('sbj_loc_similar_dismissed', JSON.stringify(merged))
+                  toast('Advertencia marcada como leída', 'success')
+                }
+                return (
                 <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-2">
-                  <p className="text-xs font-semibold text-amber-800 uppercase tracking-wider">Advertencia</p>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-semibold text-amber-800 uppercase tracking-wider">Advertencia</p>
+                    <button
+                      onClick={markAsRead}
+                      className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 hover:text-amber-900 transition-colors duration-200 shrink-0"
+                    >
+                      <Check size={12} />
+                      Marcar como leída
+                    </button>
+                  </div>
                   <p className="text-xs text-amber-700 mt-1">
-                    Se detectaron {similarLocalities(filteredLocalities).length} grupo(s) de localidades con nombres similares:
+                    Se detectaron {groups.length} grupo(s) de localidades con nombres similares:
                   </p>
                   <ul className="mt-2 space-y-1">
-                    {similarLocalities(filteredLocalities).map((g, gi) => (
+                    {groups.map((g, gi) => (
                       <li key={gi} className="text-xs text-amber-800">
                         • {g.names.join('  /  ')}
                       </li>
                     ))}
                   </ul>
                   <p className="text-xs text-amber-600 mt-2">
-                    Considere unificarlas renombrando para evitar duplicados.
+                    Considere unificarlas renombrando para evitar duplicados. Si ya las revisó, márquelas como leídas para ocultar esta advertencia.
                   </p>
                 </div>
-              )}
+                )
+              })()}
               {editingLoc ? (
                 <div className="flex items-center gap-2 mb-4">
                   <input

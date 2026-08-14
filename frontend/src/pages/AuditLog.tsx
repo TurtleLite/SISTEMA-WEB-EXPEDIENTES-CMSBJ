@@ -345,20 +345,31 @@ export function AuditLog() {
           <Search size={15} />
           Buscar
         </button>
+        {applied && (action || entityType || username || fechaDesde || fechaHasta) && (
+          <button
+            onClick={() => {
+              setAction(''); setEntityType(''); setUsername(''); setFechaDesde(''); setFechaHasta(''); setApplied(false); setPage(1)
+            }}
+            className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200 border border-[#E3E6EB] flex items-center gap-1.5"
+          >
+            <XIcon size={14} />
+            Limpiar filtros
+          </button>
+        )}
       </div>
 
       <div className="flex-1 min-h-0 flex gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1">
         <div className="flex-1 min-h-0 overflow-auto">
-          <table className="w-full">
+          <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
               <tr className="bg-slate-100 border-b border-[#E3E6EB]">
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Fecha y hora</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuario</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Acción</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Detalle</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
+                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Fecha y hora</th>
+                <th className="w-[12%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuario</th>
+                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Acción</th>
+                <th className="w-[10%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo</th>
+                <th className="w-[22%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Detalle</th>
+                <th className="w-[26%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
               </tr>
             </thead>
             <tbody>
@@ -374,36 +385,44 @@ export function AuditLog() {
                 const deviceMeta = e.device_status ? DEVICE_META[e.device_status] : null
                 return (
                 <tr key={e.id} onClick={() => setSelected(e)} className={`border-b border-l-4 border-l-transparent border-slate-100 transition-all duration-150 hover:bg-slate-100/50 cursor-pointer ${e.device_status === 'pending' ? 'bg-amber-50/40 border-l-amber-400' : e.device_status === 'blocked' ? 'bg-rose-50/40 border-l-rose-500' : ''} ${selected?.id === e.id ? 'bg-[#6E7B91]/10 border-l-[#6E7B91]' : ''}`}>
-                  <td className="px-6 py-3.5 text-sm text-slate-600 whitespace-nowrap" title={fmt(e.created_at)}>{timeAgo(e.created_at)}</td>
-                  <td className="px-6 py-3.5 text-sm font-medium text-slate-900">
-                    {e.username || '—'}
+                  <td className="px-6 py-3.5 text-sm text-slate-600 whitespace-nowrap overflow-hidden text-ellipsis" title={`Fecha exacta: ${fmt(e.created_at)}`}>{timeAgo(e.created_at)}</td>
+                  <td className="px-6 py-3.5 text-sm font-medium text-slate-900 min-w-0">
+                    <span className="block truncate" title={e.username || ''}>
+                      {e.username || '—'}
+                    </span>
                     {e.action === 'login_failed' && !e.username && <span className="ml-1 text-xs text-amber-600">(intento anónimo)</span>}
                   </td>
-                  <td className="px-6 py-3.5">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  <td className="px-6 py-3.5 min-w-0">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium inline-block max-w-full truncate align-middle ${
                       e.action === 'login' || e.action === 'user_unlock'
                         ? 'bg-emerald-100 text-emerald-700'
                         : e.action.includes('failed') || e.action.includes('delete') || e.action.includes('revoked')
                           ? 'bg-rose-100 text-rose-700'
                           : 'bg-slate-100 text-slate-600'
-                    }`}>
+                    }`} title={ACTION_LABELS[e.action] || e.action}>
                       {ACTION_LABELS[e.action] || e.action}
                     </span>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-slate-600">{ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '—'}</td>
-                  <td className="px-6 py-3.5 text-sm text-slate-600 max-w-0">
-                    {genericDetail(e.action, e.detail)}
+                  <td className="px-6 py-3.5 text-sm text-slate-600 min-w-0">
+                    <span className="block truncate" title={ENTITY_LABELS[e.entity_type || ''] || e.entity_type || ''}>
+                      {ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '—'}
+                    </span>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-slate-500">
+                  <td className="px-6 py-3.5 text-sm text-slate-600 min-w-0">
+                    <span className="block truncate" title={e.detail || ''}>
+                      {genericDetail(e.action, e.detail)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-3.5 text-sm text-slate-500 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-mono">{e.ip_address || '—'}</span>
+                      <span className="font-mono truncate min-w-0" title={e.ip_address || ''}>{e.ip_address || '—'}</span>
                       {deviceMeta && (
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${deviceMeta.badge}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold shrink-0 ${deviceMeta.badge}`}>
                           {deviceMeta.label}
                         </span>
                       )}
                       {e.device_shared && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700" title="Equipo usado por más de un usuario">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700 shrink-0" title="Equipo usado por más de un usuario">
                           Compartido
                         </span>
                       )}
