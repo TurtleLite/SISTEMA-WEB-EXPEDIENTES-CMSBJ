@@ -448,34 +448,6 @@ export function AuditLog() {
               <p className="text-slate-800">{fmt(selected.created_at)}</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Acción</p>
-              <p className="text-slate-800">{ACTION_LABELS[selected.action] || selected.action}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Usuario</p>
-              <p className="text-slate-800">{selected.username || '—'}{selected.action === 'login_failed' && !selected.username ? ' (intento anónimo)' : ''}</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Tipo / Entidad</p>
-              <p className="text-slate-800">
-                {ENTITY_LABELS[selected.entity_type || ''] || selected.entity_type || '—'}
-              </p>
-            </div>
-            <div>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Equipo</p>
-              <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                <span className="font-mono text-xs bg-slate-100 px-2 py-0.5 rounded-md">{selected.ip_address || '—'}</span>
-                {selected.device_status && (
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${DEVICE_META[selected.device_status].badge}`}>
-                    {DEVICE_META[selected.device_status].label}
-                  </span>
-                )}
-                {selected.device_shared && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700">Compartido</span>
-                )}
-              </div>
-            </div>
-            <div>
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Detalle</p>
               <p className="text-slate-700 break-words whitespace-pre-wrap bg-slate-50 rounded-lg px-3 py-2 text-xs">{selected.detail || '—'}</p>
             </div>
