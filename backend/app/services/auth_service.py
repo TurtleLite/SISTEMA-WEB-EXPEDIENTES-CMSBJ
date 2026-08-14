@@ -107,11 +107,6 @@ def _purge_old_sessions(db: Session, user: User):
         UserSession.revoked_at.isnot(None),
         UserSession.revoked_at < cutoff_long_ago,
     ).delete(synchronize_session=False)
-    db.query(UserSession).filter(
-        UserSession.user_id == user.id,
-        UserSession.refresh_expires_at.isnot(None),
-        UserSession.refresh_expires_at < now,
-    ).delete(synchronize_session=False)
 
 
 def _create_session(db: Session, user: User, jti: str, expires_at: datetime, refresh_hash: str = None,
@@ -190,8 +185,6 @@ def refresh_session(db: Session, refresh_token: str, request=None) -> dict:
     if session.revoked_at:
         raise HTTPException(status_code=401, detail="Sesión cerrada o revocada. Inicie sesión de nuevo.")
     now = _now()
-    if not session.refresh_expires_at or _as_utc(session.refresh_expires_at) < now:
-        raise HTTPException(status_code=401, detail="Sesión expirada. Inicie sesión de nuevo.")
     user = db.query(User).filter(User.id == session.user_id).first()
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="Usuario no encontrado o inactivo")
@@ -284,7 +277,8 @@ def get_user_sessions(db: Session, current_user: User, include_others: bool = Fa
     now = _now()
     result = []
     for session, username, full_name in rows:
-        session_end = _as_utc(session.refresh_expires_at) or _as_utc(session.expires_at)
+        # El refresh token no vence: la sesión solo termina al cerrarla o revocarla.
+        session_end = _as_utc(session.refresh_expires_at)
         # "Activa" en tiempo real: sin revocar, con sesión vigente y con actividad en los últimos minutos.
         active = bool(
             session.revoked_at is None

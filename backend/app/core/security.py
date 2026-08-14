@@ -35,10 +35,11 @@ def decode_access_token(token: str) -> dict:
 
 
 def create_refresh_token() -> tuple[str, str, datetime]:
-    """Devuelve (refresh_token, hash_sha256, expires_at). El token se guarda SOLO como hash."""
+    """Devuelve (refresh_token, hash_sha256, expires_at). El token se guarda SOLO como hash.
+    El refresh token NO vence: la sesión dura indefinidamente hasta cerrarla o revocarla."""
     token = secrets.token_urlsafe(48)
     token_hash = hashlib.sha256(token.encode()).hexdigest()
-    expire = datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    expire = None
     return token, token_hash, expire
 
 
