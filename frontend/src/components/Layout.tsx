@@ -61,6 +61,8 @@ export function Layout({ children }: { children: ReactNode }) {
   const location = useLocation()
   const [denied, setDenied] = useState<string | null>(null)
 
+  const visibleSections = navSections
+
   useEffect(() => {
     if (!denied) return
     const t = setTimeout(() => setDenied(null), 3500)
@@ -106,17 +108,16 @@ export function Layout({ children }: { children: ReactNode }) {
           <p className="text-sm font-semibold">No tienes acceso a {denied}</p>
         </div>
       )}
-      <aside className="w-56 bg-white flex flex-col shrink-0 h-screen sticky top-0 shadow-lg">
-        <div className="h-16 shrink-0 px-5 flex items-center justify-center border-b border-[#E3E6EB]">
-          <img src="/logo_sbj.png" alt="Logo SBJ Cirugias" className="w-36 h-auto" />
+      <aside className="w-48 bg-white flex flex-col shrink-0 h-screen sticky top-0 shadow-lg">
+        <div className="px-5 pt-3 pb-2 border-b border-[#E3E6EB] flex items-center justify-center">
+          <img src="/logo_sbj.png" alt="Logo SBJ Cirugias" className="w-36 h-auto mx-auto" />
         </div>
-        <nav className="flex-1 px-3 py-4 overflow-y-auto">
-          {navSections.map((section, idx) => (
-            <div key={section.title} className={idx > 0 ? 'pt-3 mt-3 border-t border-[#F0F2F5]' : ''}>
-              <p className="px-3 pt-1 pb-2 text-[10px] font-semibold uppercase tracking-widest text-[#98A0AC]">
+        <nav className="flex-1 px-3 py-2 flex flex-col justify-between overflow-y-auto">
+          {visibleSections.map((section) => (
+            <div key={section.title} className="mb-1">
+              <p className="px-3 pt-1 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-[#98A0AC]">
                 {section.title}
               </p>
-              <div className="space-y-0.5">
               {section.items.map((item) => {
                 const target = item.path === '/lists' && systemListId ? `/lists/${systemListId}` : item.path
                 const isActive = location.pathname === target || (item.path === '/lists' && location.pathname.startsWith('/lists'))
@@ -138,16 +139,15 @@ export function Layout({ children }: { children: ReactNode }) {
                   </button>
                 )
               })}
-              </div>
             </div>
           ))}
         </nav>
-        <div className="p-3 border-t border-[#E3E6EB] space-y-1">
+        <div className="p-3 border-t border-[#E3E6EB]">
           <button
             onClick={() => navigate('/perfil')}
-            className="w-full flex items-center gap-3 p-2 text-left rounded-lg group hover:bg-[#F8F9FA] transition-colors duration-200"
+            className="w-full flex items-center gap-3 mb-2 text-left group"
           >
-            <div className="transition-transform duration-200 group-hover:scale-110 shrink-0">
+            <div className="transition-transform duration-200 group-hover:scale-110">
               <RoleAvatar role={user?.role} size="sm" />
             </div>
             <div className="flex-1 min-w-0">
@@ -165,14 +165,14 @@ export function Layout({ children }: { children: ReactNode }) {
                     .join(' ')
                 })()}
               </p>
-              <span className={`inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
+              <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
                 {roleLabels[user?.role || '']}
               </span>
             </div>
           </button>
           <button
             onClick={logout}
-            className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[#6F7682] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#6F7682] hover:text-red-500 hover:bg-[#F8F9FA] rounded-lg transition-colors duration-200"
           >
             <LogOut size={15} />
             Cerrar sesión
