@@ -8,7 +8,7 @@ export interface RoleMeta {
 export const ROLE_META: Record<string, RoleMeta> = {
   admin: {
     label: 'Administrador',
-    badge: 'bg-violet-100 text-violet-800 border-violet-200',
+    badge: 'bg-black text-white border-black',
     gradient: 'from-black to-black',
     permissions: [
       'Expedientes (solo consultar)',
