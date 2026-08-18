@@ -24,9 +24,9 @@ const parseName = (fullName: string) => {
 }
 
 const inputClass =
-  'w-full px-3.5 py-2 border border-[#E3E6EB] rounded-lg text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200'
+  'w-full px-3.5 py-2 border border-[#D8F1EC] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200'
 const labelClass =
-  'block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1'
+  'block text-[11px] font-semibold uppercase tracking-wider text-[#547A72] mb-1'
 
 export function Profile() {
   const { user, updateUser } = useAuth()
@@ -81,19 +81,19 @@ export function Profile() {
       <div className="flex items-center gap-4 shrink-0">
         <RoleAvatar role={user.role} size="lg" />
         <div className="min-w-0">
-          <h1 className="font-serif text-xl font-bold text-slate-900 truncate">{user.full_name}</h1>
+          <h1 className="font-serif text-xl font-bold text-[#134E4A] truncate">{user.full_name}</h1>
           <div className="mt-1.5 flex items-center gap-2.5">
             <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${meta.badge}`}>
               {meta.label}
             </span>
-            <span className="text-xs text-slate-400">@{user.username}</span>
+            <span className="text-xs text-[#6C948C]">@{user.username}</span>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 flex-1 min-h-0">
-        <section className="bg-white rounded-xl border border-[#E3E6EB] shadow-sm px-6 py-5 flex flex-col min-h-0">
-          <h2 className="text-sm font-semibold text-slate-900">Datos personales</h2>
+        <section className="bg-white rounded-xl border border-[#D8F1EC] shadow-sm px-6 py-5 flex flex-col min-h-0">
+          <h2 className="text-sm font-semibold text-[#134E4A]">Datos personales</h2>
           <div className="mt-4 space-y-4">
             <div>
               <label className={labelClass}>Nombre y apellidos</label>
@@ -101,7 +101,7 @@ export function Profile() {
                 <select
                   value={nameParts.titulo}
                   onChange={(e) => setNameParts({ ...nameParts, titulo: e.target.value })}
-                  className="w-20 shrink-0 px-2.5 py-2 border border-[#E3E6EB] rounded-lg text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                  className="w-20 shrink-0 px-2.5 py-2 border border-[#D8F1EC] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                 >
                   <option value="">Sin título</option>
                   <option value="Dr.">Dr.</option>
@@ -135,7 +135,7 @@ export function Profile() {
               </div>
               <div>
                 <label className={labelClass}>Usuario</label>
-                <div className="px-3.5 py-2 border border-slate-100 bg-slate-100 rounded-lg text-sm text-slate-500 truncate">
+                <div className="px-3.5 py-2 border border-[#CCFBF1] bg-[#CCFBF1] rounded-lg text-sm text-[#547A72] truncate">
                   {user.username}
                 </div>
               </div>
@@ -143,10 +143,10 @@ export function Profile() {
           </div>
         </section>
 
-        <section className="bg-white rounded-xl border border-[#E3E6EB] shadow-sm px-6 py-5 flex flex-col min-h-0">
+        <section className="bg-white rounded-xl border border-[#D8F1EC] shadow-sm px-6 py-5 flex flex-col min-h-0">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-slate-900">Contraseña</h2>
-            <p className="text-xs text-slate-400">Opcional, solo si deseas cambiarla</p>
+            <h2 className="text-sm font-semibold text-[#134E4A]">Contraseña</h2>
+            <p className="text-xs text-[#6C948C]">Opcional, solo si deseas cambiarla</p>
           </div>
           <div className="mt-4 space-y-4">
             <div>
@@ -171,7 +171,7 @@ export function Profile() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="mt-auto pt-5 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-[#5F6B80] to-[#6E7B91] hover:shadow-md transition-all duration-200 active:scale-[0.99] disabled:opacity-50"
+            className="mt-auto pt-5 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-[#115E59] to-[#0F766E] hover:shadow-md transition-all duration-200 active:scale-[0.99] disabled:opacity-50"
           >
             {saving ? 'Guardando...' : 'Guardar cambios'}
           </button>

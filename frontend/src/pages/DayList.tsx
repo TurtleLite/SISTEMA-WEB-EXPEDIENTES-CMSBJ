@@ -265,32 +265,32 @@ export function DayList() {
   return (
     <div className="h-full flex flex-col min-h-0">
       <div className="flex flex-wrap items-center justify-between gap-3 shrink-0">
-        <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Listado Diario de Cirugías</h1>
+        <h1 className="font-serif text-2xl font-bold text-[#134E4A]">Listado Diario de Cirugías</h1>
         <div className="flex items-center gap-2">
-          <label className="text-sm text-slate-500 hidden sm:block">Fecha del listado:</label>
-          <div className="flex items-center gap-1 bg-white border border-[#E3E6EB] rounded-xl px-1.5 py-1 shadow-sm">
-            <button onClick={() => shift(-1)} className="p-1 text-slate-400 hover:text-[#3F4650] rounded-lg hover:bg-[#F8F9FA] transition-colors">
+          <label className="text-sm text-[#547A72] hidden sm:block">Fecha del listado:</label>
+          <div className="flex items-center gap-1 bg-white border border-[#D8F1EC] rounded-xl px-1.5 py-1 shadow-sm">
+            <button onClick={() => shift(-1)} className="p-1 text-[#6C948C] hover:text-[#134E4A] rounded-lg hover:bg-[#F0FDFA] transition-colors">
               <ChevronLeft size={16} />
             </button>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="text-sm text-slate-700 bg-transparent focus:outline-none"
+              className="text-sm text-[#2C5F57] bg-transparent focus:outline-none"
             />
-            <button onClick={() => shift(1)} className="p-1 text-slate-400 hover:text-[#3F4650] rounded-lg hover:bg-[#F8F9FA] transition-colors">
+            <button onClick={() => shift(1)} className="p-1 text-[#6C948C] hover:text-[#134E4A] rounded-lg hover:bg-[#F0FDFA] transition-colors">
               <ChevronRight size={16} />
             </button>
           </div>
           <button
             onClick={() => setDate(isoDate(new Date()))}
-            className="px-2.5 py-1.5 text-xs font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-[#F8F9FA] transition-colors"
+            className="px-2.5 py-1.5 text-xs font-medium text-[#115E59] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#F0FDFA] transition-colors"
           >
             Hoy
           </button>
           <button
             onClick={() => { const d = new Date(); d.setDate(d.getDate() + 1); setDate(isoDate(d)) }}
-            className="px-2.5 py-1.5 text-xs font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-[#F8F9FA] transition-colors"
+            className="px-2.5 py-1.5 text-xs font-medium text-[#115E59] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#F0FDFA] transition-colors"
           >
             Mañana
           </button>
@@ -299,28 +299,28 @@ export function DayList() {
 
       <div className="flex-1 grid lg:grid-cols-2 gap-4 min-h-0 mt-4">
         {/* Panel pacientes disponibles */}
-        <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0">
-          <div className="p-3 border-b border-[#E3E6EB] space-y-2.5">
+        <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0">
+          <div className="p-3 border-b border-[#D8F1EC] space-y-2.5">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-[#3F4650]">Pacientes disponibles</h2>
-              <span className="text-xs text-slate-400">{availableTotal} pacientes</span>
+              <h2 className="text-sm font-semibold text-[#134E4A]">Pacientes disponibles</h2>
+              <span className="text-xs text-[#6C948C]">{availableTotal} pacientes</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
-                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6C948C] pointer-events-none" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Buscar paciente, especialidad, perfil..."
-                  className="w-full pl-8 pr-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                  className="w-full pl-8 pr-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                 />
               </div>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 title="Filtrar por estatus de cirugía"
-                className="px-2.5 py-2 border border-[#E3E6EB] rounded-xl text-xs text-slate-600 bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                className="px-2.5 py-2 border border-[#D8F1EC] rounded-xl text-xs text-[#3D6F66] bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
               >
                 <option value="En espera">En espera</option>
                 <option value="Reprogramar">Reprogramar</option>
@@ -332,30 +332,30 @@ export function DayList() {
           </div>
           <div className="flex-1 overflow-y-auto min-h-0" onScroll={handleAvailableScroll} ref={availableScrollRef}>
             {loading ? (
-              <div className="flex items-center justify-center gap-2 text-slate-400 py-12">
-                <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+              <div className="flex items-center justify-center gap-2 text-[#6C948C] py-12">
+                <div className="w-5 h-5 border-2 border-[#547A72] border-t-transparent rounded-full animate-spin" />
                 <span className="text-sm">Cargando...</span>
               </div>
             ) : visibleAvailable.length === 0 ? (
-              <p className="text-sm text-slate-400 text-center py-12">
+              <p className="text-sm text-[#6C948C] text-center py-12">
                 {search || statusFilter !== 'all' ? 'Sin pacientes que coincidan' : 'No hay pacientes disponibles'}
               </p>
             ) : (
-              <ul className="divide-y divide-[#E3E6EB]">
+              <ul className="divide-y divide-[#D8F1EC]">
                 {visibleAvailable.map((r) => (
                   <li key={r.id}>
                     <button
                       onClick={() => add(r)}
-                      className="w-full text-left px-4 py-2.5 flex items-center gap-3 hover:bg-[#F8F9FA] transition-colors group"
+                      className="w-full text-left px-4 py-2.5 flex items-center gap-3 hover:bg-[#F0FDFA] transition-colors group"
                     >
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-900 truncate">{patientName(r)}</p>
-                        <p className="text-xs text-slate-500 truncate">
-                          {[r.data?.especialidad, r.data?.perfil].filter(Boolean).join(' · ') || <span className="text-slate-300">Sin datos</span>}
+                        <p className="text-sm font-medium text-[#134E4A] truncate">{patientName(r)}</p>
+                        <p className="text-xs text-[#547A72] truncate">
+                          {[r.data?.especialidad, r.data?.perfil].filter(Boolean).join(' · ') || <span className="text-[#8FAFA9]">Sin datos</span>}
                         </p>
                       </div>
                       <StatusBadge status={r.data?.estatus_cirugia} />
-                      <span className="w-7 h-7 rounded-lg bg-[#6E7B91] text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                      <span className="w-7 h-7 rounded-lg bg-[#0F766E] text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                         <Plus size={15} />
                       </span>
                     </button>
@@ -366,17 +366,17 @@ export function DayList() {
             {!loading && (
               <div className="flex flex-col items-center gap-2 py-3">
                 {loadingMore ? (
-                  <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-[#547A72] border-t-transparent rounded-full animate-spin" />
                 ) : availableHasMore ? (
                   <button
                     onClick={() => loadAvailable(false)}
-                    className="px-3 py-1.5 text-xs font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-[#F8F9FA] transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium text-[#115E59] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#F0FDFA] transition-colors"
                   >
                     Cargar más
                   </button>
                 ) : null}
                 {visibleAvailable.length > 0 && (
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#6C948C]">
                     Mostrando {visibleAvailable.length} de {availableTotal}
                   </p>
                 )}
@@ -386,17 +386,17 @@ export function DayList() {
         </div>
 
         {/* Panel carrito del día */}
-        <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0">
-          <div className="p-3 border-b border-[#E3E6EB] flex flex-wrap items-center gap-2">
-            <h2 className="text-sm font-semibold text-[#3F4650]">
-              Listado del día <span className="text-[#6E7B91]">· {dayLabel}</span>
+        <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0">
+          <div className="p-3 border-b border-[#D8F1EC] flex flex-wrap items-center gap-2">
+            <h2 className="text-sm font-semibold text-[#134E4A]">
+              Listado del día <span className="text-[#0F766E]">· {dayLabel}</span>
             </h2>
-            {loadingDate && <div className="w-4 h-4 border-2 border-[#6E7B91] border-t-transparent rounded-full animate-spin" />}
+            {loadingDate && <div className="w-4 h-4 border-2 border-[#0F766E] border-t-transparent rounded-full animate-spin" />}
             <div className="ml-auto flex items-center gap-1.5">
               <button
                 onClick={save}
                 disabled={loadingDate}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#6E7B91] text-white rounded-xl text-xs font-medium hover:bg-[#5F6B80] transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0F766E] text-white rounded-xl text-xs font-medium hover:bg-[#115E59] transition-colors disabled:opacity-50"
               >
                 <Save size={14} />
                 {saved ? 'Guardado' : 'Guardar'}
@@ -404,7 +404,7 @@ export function DayList() {
               <button
                 onClick={exportExcel}
                 disabled={cart.length === 0}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-xl text-xs font-medium border border-[#E3E6EB] hover:bg-[#EDF0F4] transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#CCFBF1] text-[#3D6F66] rounded-xl text-xs font-medium border border-[#D8F1EC] hover:bg-[#CCFBF1] transition-colors disabled:opacity-50 disabled:pointer-events-none"
               >
                 <FileSpreadsheet size={14} />
                 Excel
@@ -422,24 +422,24 @@ export function DayList() {
 
           <div className="flex-1 overflow-y-auto min-h-0">
             {loadingDate ? (
-              <div className="flex items-center justify-center gap-2 text-slate-400 py-12">
-                <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+              <div className="flex items-center justify-center gap-2 text-[#6C948C] py-12">
+                <div className="w-5 h-5 border-2 border-[#547A72] border-t-transparent rounded-full animate-spin" />
                 <span className="text-sm">Cargando listado...</span>
               </div>
             ) : cart.length === 0 ? (
-              <div className="flex flex-col items-center justify-center gap-2 py-12 text-slate-400">
+              <div className="flex flex-col items-center justify-center gap-2 py-12 text-[#6C948C]">
                 <ClipboardList size={32} />
                 <p className="text-sm">Agrega pacientes del panel izquierdo para armar el listado del día.</p>
               </div>
             ) : (
-              <div className="divide-y divide-[#E3E6EB]">
+              <div className="divide-y divide-[#D8F1EC]">
                 {grouped.map((sec) => (
                   <div key={sec.esp}>
-                    <div className="flex items-center gap-2 px-4 py-2 bg-[#F8F9FA] border-y border-[#E3E6EB]">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#5F6B80]">{sec.esp}</span>
-                      <span className="px-1.5 py-0.5 rounded-full bg-[#6E7B91] text-white text-[10px] font-semibold">{sec.items.length}</span>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-[#F0FDFA] border-y border-[#D8F1EC]">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#115E59]">{sec.esp}</span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-[#0F766E] text-white text-[10px] font-semibold">{sec.items.length}</span>
                     </div>
-                    <ul className="divide-y divide-[#E3E6EB]">
+                    <ul className="divide-y divide-[#D8F1EC]">
                       {sec.items.map(({ r }, localIdx) => (
                         <li
                           key={r.id}
@@ -448,15 +448,15 @@ export function DayList() {
                           onDragOver={(e) => { e.preventDefault(); setDragOverId(r.id) }}
                           onDrop={(e) => { e.preventDefault(); handleDrop(r.id) }}
                           onDragEnd={() => { setDragId(null); setDragOverId(null) }}
-                          className={`px-4 py-2.5 flex items-center gap-3 transition-colors ${dragOverId === r.id && dragId && dragId !== r.id ? 'bg-slate-100 ring-2 ring-inset ring-[#6E7B91]/40 cursor-grabbing' : 'hover:bg-[#F8F9FA] cursor-grab'}`}
+                          className={`px-4 py-2.5 flex items-center gap-3 transition-colors ${dragOverId === r.id && dragId && dragId !== r.id ? 'bg-[#CCFBF1] ring-2 ring-inset ring-[#0F766E]/40 cursor-grabbing' : 'hover:bg-[#F0FDFA] cursor-grab'}`}
                         >
-                          <span className="w-6 h-6 rounded-full bg-[#6E7B91] text-white text-xs font-semibold flex items-center justify-center flex-none">
+                          <span className="w-6 h-6 rounded-full bg-[#0F766E] text-white text-xs font-semibold flex items-center justify-center flex-none">
                             {localIdx + 1}
                           </span>
-                          <GripVertical size={14} className="text-slate-300 flex-none" />
+                          <GripVertical size={14} className="text-[#8FAFA9] flex-none" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-slate-900 truncate">{patientName(r)}</p>
-                            <p className="text-xs text-slate-500 truncate">
+                            <p className="text-sm font-medium text-[#134E4A] truncate">{patientName(r)}</p>
+                            <p className="text-xs text-[#547A72] truncate">
                               {[r.data?.edad && `Edad: ${r.data.edad}`, r.data?.perfil, r.data?.diagnostico]
                                 .filter(Boolean).join(' · ') || 'Sin datos'}
                             </p>
@@ -477,11 +477,11 @@ export function DayList() {
           </div>
 
           {cart.length > 0 && (
-            <div className="p-3 border-t border-[#E3E6EB]">
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
-                <span><span className="font-semibold text-[#3F4650]">{cart.length}</span> pacientes</span>
+            <div className="p-3 border-t border-[#D8F1EC]">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#547A72]">
+                <span><span className="font-semibold text-[#134E4A]">{cart.length}</span> pacientes</span>
                 {Object.entries(countByEspecialidad).map(([esp, n]) => (
-                  <span key={esp} className="px-2 py-0.5 rounded-full bg-[#F8F9FA] border border-[#E3E6EB] text-[#5F6B80]">
+                  <span key={esp} className="px-2 py-0.5 rounded-full bg-[#F0FDFA] border border-[#D8F1EC] text-[#115E59]">
                     {esp}: {n}
                   </span>
                 ))}
@@ -500,12 +500,12 @@ function StatusBadge({ status }: { status?: string }) {
     'Operado': 'bg-emerald-100 text-emerald-600 border-emerald-200',
     'En espera': 'bg-yellow-100 text-yellow-600 border-yellow-200',
     'Reprogramar': 'bg-orange-100 text-orange-600 border-orange-200',
-    'Cancelado': 'bg-slate-100 text-slate-500 border-slate-200',
+    'Cancelado': 'bg-[#CCFBF1] text-[#547A72] border-[#B7D2CC]',
     'Fuera de perfil San Benito': 'bg-red-100 text-red-600 border-red-200',
     'No se presentó': 'bg-violet-100 text-violet-600 border-violet-200',
   }
   return (
-    <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border whitespace-nowrap ${styles[status || ''] || 'bg-white text-slate-400 border-[#E3E6EB]'}`}>
+    <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border whitespace-nowrap ${styles[status || ''] || 'bg-white text-[#6C948C] border-[#D8F1EC]'}`}>
       {status || 'Sin estatus'}
     </span>
   )

@@ -53,9 +53,9 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
             <div
               key={t.id}
               className={`px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white max-w-sm animate-slide-in ${
-                t.type === 'success' ? 'bg-slate-500' :
+                t.type === 'success' ? 'bg-[#0F766E]' :
                 t.type === 'error' ? 'bg-red-400' :
-                'bg-slate-500'
+                'bg-[#0F766E]'
               }`}
             >
               {t.message}
@@ -65,19 +65,19 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       )}
 
       {confirmState && (
-        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center z-[200]">
+        <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-[200]">
           <div className="bg-white/90 backdrop-blur-sm rounded-xl px-5 py-3 w-full max-w-sm shadow-xl">
-            <p className="text-sm text-slate-700 mb-6">{confirmState.message}</p>
+            <p className="text-sm text-[#2C5F57] mb-6">{confirmState.message}</p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => handleConfirm(false)}
-                className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg"
+                className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#F0FDFA] rounded-lg"
               >
                 Cancelar
               </button>
               <button
                 onClick={() => handleConfirm(true)}
-                className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-slate-500"
+                className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600"
               >
                 Confirmar
               </button>

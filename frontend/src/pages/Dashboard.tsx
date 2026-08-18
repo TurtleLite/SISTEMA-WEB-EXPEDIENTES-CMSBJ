@@ -71,7 +71,7 @@ export function Dashboard() {
     {
       label: 'Reportes',
       icon: <FileText size={22} />,
-      color: 'bg-slate-700',
+      color: 'bg-[#134E4A]',
       allowed: canReports,
       onClick: () => navigate('/reports'),
     },
@@ -92,7 +92,7 @@ export function Dashboard() {
     {
       label: 'Usuarios',
       icon: <Users size={22} />,
-      color: 'bg-slate-600',
+      color: 'bg-[#115E59]',
       allowed: role === 'admin',
       onClick: () => navigate('/users'),
     },
@@ -127,10 +127,10 @@ export function Dashboard() {
       <header className="shrink-0">
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
-            <p className="text-[#5F6B80] text-xs font-semibold uppercase tracking-[0.2em] truncate">
+            <p className="text-[#115E59] text-xs font-semibold uppercase tracking-[0.2em] truncate">
               Centro Médico San Benito José
             </p>
-            <p className="text-slate-400 text-sm capitalize truncate">{hoy}</p>
+            <p className="text-[#6C948C] text-sm capitalize truncate">{hoy}</p>
           </div>
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-medium text-emerald-700 shrink-0">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -138,11 +138,11 @@ export function Dashboard() {
           </span>
         </div>
 
-        <h1 className="font-serif text-3xl font-bold text-slate-900 mt-6">{greeting}, {(() => {
+        <h1 className="font-serif text-3xl font-bold text-[#134E4A] mt-6">{greeting}, {(() => {
           const raw = user?.full_name || user?.username || ''
           return raw.replace(/^(Dr|Dra|Lic)\s+/i, '$1. ')
         })()}</h1>
-        <p className="text-slate-500 text-sm mt-1">{roleLabels[role]}</p>
+        <p className="text-[#547A72] text-sm mt-1">{roleLabels[role]}</p>
       </header>
 
       <div className="flex-1 flex items-center min-h-0 mt-7">
@@ -151,12 +151,12 @@ export function Dashboard() {
             <button
               key={opt.label}
               onClick={() => (opt.allowed ? opt.onClick() : setDenied(opt.label))}
-              className="h-44 flex flex-col items-center justify-center gap-3 rounded-2xl bg-white border border-slate-100 hover:border-[#E3E6EB] hover:shadow-md transition-all duration-200 group"
+              className="h-44 flex flex-col items-center justify-center gap-3 rounded-2xl bg-white border border-[#CCFBF1] hover:border-[#5EEAD4] hover:shadow-lg hover:shadow-[#14B8A6]/10 transition-all duration-200 group"
             >
               <div className={`w-11 h-11 rounded-xl ${opt.color} text-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-200`}>
                 {opt.icon}
               </div>
-              <span className="text-base font-semibold text-slate-700">{opt.label}</span>
+              <span className="text-base font-semibold text-[#2C5F57]">{opt.label}</span>
             </button>
           ))}
         </div>

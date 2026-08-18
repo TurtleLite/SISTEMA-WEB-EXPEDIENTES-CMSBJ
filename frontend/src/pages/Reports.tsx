@@ -245,12 +245,12 @@ export function Reports() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Reportes</h1>
+          <h1 className="font-serif text-2xl font-bold text-[#134E4A]">Reportes</h1>
         </div>
         {(user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica') && (
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-1.5 bg-[#6E7B91] text-white px-4 py-2 rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+            className="flex items-center gap-1.5 bg-[#0F766E] text-white px-4 py-2 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
           >
             <Plus size={16} />
             Nuevo Reporte
@@ -259,7 +259,7 @@ export function Reports() {
       </div>
 
       {reports.length === 0 && (
-        <div className="text-center py-16 text-slate-400">
+        <div className="text-center py-16 text-[#6C948C]">
           <p className="text-sm">No hay reportes creados todavía. Crea el primero con "Nuevo Reporte".</p>
         </div>
       )}
@@ -268,19 +268,19 @@ export function Reports() {
         {reports.map((report) => {
           const badges = filterBadges(report.filters)
           return (
-          <div key={report.id} className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] p-6 hover:shadow-md hover:border-[#E3E6EB] transition-all duration-200">
+          <div key={report.id} className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] p-6 hover:shadow-md hover:border-[#D8F1EC] transition-all duration-200">
             <div className="flex items-start justify-between gap-2">
-              <h3 className="font-semibold text-slate-900">{report.name}</h3>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#F8F9FA] text-[#5F6B80] rounded-lg text-xs font-semibold border border-[#E3E6EB] whitespace-nowrap">
+              <h3 className="font-semibold text-[#134E4A]">{report.name}</h3>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#F0FDFA] text-[#115E59] rounded-lg text-xs font-semibold border border-[#D8F1EC] whitespace-nowrap">
                 {report.record_count ?? 0} registros
               </span>
             </div>
             {report.description && (
-              <p className="text-sm text-slate-500 mt-1 mb-3">{report.description}</p>
+              <p className="text-sm text-[#547A72] mt-1 mb-3">{report.description}</p>
             )}
             <div className="flex flex-wrap gap-1.5 mt-2">
               {badges.length === 0 && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-500 rounded-lg text-xs font-medium border border-[#E3E6EB]">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#CCFBF1] text-[#547A72] rounded-lg text-xs font-medium border border-[#D8F1EC]">
                   General
                 </span>
               )}
@@ -291,13 +291,13 @@ export function Reports() {
               ))}
             </div>
             {report.created_by_breakdown && report.created_by_breakdown.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-[#E3E6EB]">
-                <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Expedientes por usuario</p>
+              <div className="mt-3 pt-3 border-t border-[#D8F1EC]">
+                <p className="text-[11px] font-semibold text-[#6C948C] uppercase tracking-wider mb-1.5">Expedientes por usuario</p>
                 <div className="space-y-1">
                   {report.created_by_breakdown.map((b) => (
                     <div key={b.full_name} className="flex items-center justify-between gap-2 text-xs">
-                      <span className="text-slate-600 truncate">{b.full_name}</span>
-                      <span className="font-semibold text-slate-800 shrink-0">{b.count}</span>
+                      <span className="text-[#3D6F66] truncate">{b.full_name}</span>
+                      <span className="font-semibold text-[#134E4A] shrink-0">{b.count}</span>
                     </div>
                   ))}
                 </div>
@@ -313,7 +313,7 @@ export function Reports() {
               </button>
               <button
                 onClick={() => handleGenerate(report.id)}
-                className="flex items-center gap-1 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-xl text-xs font-medium hover:bg-slate-100 border border-[#E3E6EB] transition-all duration-200 hover:scale-105 active:scale-95"
+                className="flex items-center gap-1 px-3 py-1.5 bg-[#CCFBF1] text-[#3D6F66] rounded-xl text-xs font-medium hover:bg-[#CCFBF1] border border-[#D8F1EC] transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 <FileSpreadsheet size={14} />
                 Generar Excel
@@ -328,14 +328,14 @@ export function Reports() {
                 </button>
               )}
             </div>
-            <div className="flex justify-between items-end mt-4 pt-2 border-t border-[#E3E6EB]">
-              <span className="text-[11px] text-slate-400">
+            <div className="flex justify-between items-end mt-4 pt-2 border-t border-[#D8F1EC]">
+              <span className="text-[11px] text-[#6C948C]">
                 Creado el {new Date(report.created_at).toLocaleDateString('es-ES')}
               </span>
         {(user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica') && (
                 deleteConfirm === report.id ? (
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="text-slate-500">¿Eliminar?</span>
+                    <span className="text-[#547A72]">¿Eliminar?</span>
                     <button
                       onClick={() => handleDelete(report.id)}
                       className="px-2 py-1 bg-red-400 text-white rounded-lg hover:bg-red-500 transition-all duration-200"
@@ -344,7 +344,7 @@ export function Reports() {
                     </button>
                     <button
                       onClick={() => setDeleteConfirm(null)}
-                      className="px-2 py-1 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-all duration-200"
+                      className="px-2 py-1 bg-[#CCFBF1] text-[#3D6F66] rounded-lg hover:bg-[#B7D2CC] transition-all duration-200"
                     >
                       No
                     </button>
@@ -366,11 +366,11 @@ export function Reports() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl px-5 py-4 w-[95vw] max-w-4xl shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-serif text-lg font-bold text-[#3F4650]">Nuevo Reporte</h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors duration-200">
+              <h2 className="font-serif text-lg font-bold text-[#134E4A]">Nuevo Reporte</h2>
+              <button onClick={() => setShowModal(false)} className="text-[#6C948C] hover:text-[#3D6F66] transition-colors duration-200">
                 <X size={20} />
               </button>
             </div>
@@ -379,23 +379,23 @@ export function Reports() {
                 placeholder="Nombre del reporte *"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
               />
               <input
                 placeholder="Descripción (opcional)"
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
               />
 
-              <div className="border border-[#E3E6EB] rounded-xl p-3 space-y-3 bg-[#F8F9FA]/50">
-                <p className="text-xs font-semibold text-[#5F6B80] uppercase tracking-wider">Filtros</p>
+              <div className="border border-[#D8F1EC] rounded-xl p-3 space-y-3 bg-[#F0FDFA]/50">
+                <p className="text-xs font-semibold text-[#115E59] uppercase tracking-wider">Filtros</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <select
                     value={form.especialidad}
                     onChange={(e) => setForm({ ...form, especialidad: e.target.value })}
                     disabled={!form.list_definition_id}
-                    className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200 disabled:opacity-50"
+                    className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200 disabled:opacity-50"
                   >
                     <option value="">Especialidad (todas)</option>
                     {especialidades.map((esp) => (
@@ -406,7 +406,7 @@ export function Reports() {
                     value={form.perfil}
                     onChange={(e) => setForm({ ...form, perfil: e.target.value })}
                     disabled={!form.list_definition_id}
-                    className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200 disabled:opacity-50"
+                    className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200 disabled:opacity-50"
                   >
                     <option value="">Perfil (todos)</option>
                     {perfiles.map((p) => (
@@ -417,7 +417,7 @@ export function Reports() {
                     value={form.criticidad}
                     onChange={(e) => setForm({ ...form, criticidad: e.target.value })}
                     disabled={!form.list_definition_id}
-                    className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200 disabled:opacity-50"
+                    className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200 disabled:opacity-50"
                   >
                     <option value="">Criticidad clínica (todas)</option>
                     {criticidades.map((c) => (
@@ -427,7 +427,7 @@ export function Reports() {
                   <select
                     value={form.estatus_cirugia}
                     onChange={(e) => setForm({ ...form, estatus_cirugia: e.target.value })}
-                    className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                    className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                   >
                     <option value="">Estatus de cirugía (todos)</option>
                     {STATUS_OPTIONS.map((s) => (
@@ -467,10 +467,10 @@ export function Reports() {
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-4">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200">
                 Cancelar
               </button>
-              <button onClick={handleCreate} className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
+              <button onClick={handleCreate} className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
                 Crear Reporte
               </button>
             </div>
@@ -479,15 +479,15 @@ export function Reports() {
       )}
 
       {preview && (
-        <div className="fixed inset-0 bg-[#F8F9FA] z-50 flex flex-col">
-          <div className="flex items-center justify-between px-8 py-4 border-b border-[#E3E6EB] bg-white shrink-0">
+        <div className="fixed inset-0 bg-[#F0FDFA] z-50 flex flex-col">
+          <div className="flex items-center justify-between px-8 py-4 border-b border-[#D8F1EC] bg-white shrink-0">
               <div>
-                <h2 className="font-serif text-lg font-bold text-[#3F4650]">{preview.name}</h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <h2 className="font-serif text-lg font-bold text-[#134E4A]">{preview.name}</h2>
+                <p className="text-xs text-[#547A72] mt-0.5">
                   {preview.count} registros{preview.count > preview.records.length ? ` · mostrando ${preview.records.length}` : ''}
                 </p>
               </div>
-              <button onClick={() => setPreview(null)} className="text-slate-400 hover:text-slate-600 transition-colors duration-200">
+              <button onClick={() => setPreview(null)} className="text-[#6C948C] hover:text-[#3D6F66] transition-colors duration-200">
                 <X size={20} />
               </button>
             </div>
@@ -496,7 +496,7 @@ export function Reports() {
                 <div className="flex items-center gap-3 px-8 py-3 bg-amber-50/70 border-b border-amber-100 flex-wrap shrink-0">
                   <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Expedientes por usuario:</span>
                   {preview.created_by_breakdown.map((b) => (
-                    <span key={b.full_name} className="text-xs bg-white border border-amber-200 rounded-lg px-2 py-1 text-slate-700">
+                    <span key={b.full_name} className="text-xs bg-white border border-amber-200 rounded-lg px-2 py-1 text-[#2C5F57]">
                       <b>{b.full_name}</b>: {b.count}
                     </span>
                   ))}
@@ -511,9 +511,9 @@ export function Reports() {
               )}
               <table className="w-full text-sm">
                 <thead className="sticky top-0 z-10">
-                  <tr className="bg-[#6E7B91] text-white">
+                  <tr className="bg-[#0F766E] text-white">
                     {preview.columns.map((col, ci) => (
-                      <th key={col} className={`text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${ci === 0 ? 'sticky left-0 z-20 bg-[#6E7B91] border-r border-white/30' : ''}`}>
+                      <th key={col} className={`text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${ci === 0 ? 'sticky left-0 z-20 bg-[#0F766E] border-r border-white/30' : ''}`}>
                         {col}
                       </th>
                     ))}
@@ -522,7 +522,7 @@ export function Reports() {
                 <tbody>
                   {preview.records.length === 0 ? (
                     <tr>
-                      <td colSpan={preview.columns.length} className="px-4 py-12 text-center text-slate-400">
+                      <td colSpan={preview.columns.length} className="px-4 py-12 text-center text-[#6C948C]">
                         {loadingPreview ? 'Cargando...' : 'Sin registros para este reporte'}
                       </td>
                     </tr>
@@ -534,15 +534,15 @@ export function Reports() {
                       onDragOver={(e) => { if (canReorder() && !isDateReport(preview)) { e.preventDefault(); setDragOverIdx(idx) } }}
                       onDrop={(e) => { e.preventDefault(); handleDrop(idx) }}
                       onDragEnd={() => { setDragIdx(null); setDragOverIdx(null) }}
-                      className={`border-b border-[#E3E6EB] transition-colors ${dragOverIdx === idx && dragIdx !== null && dragIdx !== idx ? 'bg-sky-50 ring-1 ring-inset ring-sky-200' : ''} ${dragIdx === idx ? 'opacity-50' : ''} ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FA]'} ${canReorder() ? 'cursor-grab active:cursor-grabbing' : ''}`}
+                      className={`border-b border-[#D8F1EC] transition-colors ${dragOverIdx === idx && dragIdx !== null && dragIdx !== idx ? 'bg-sky-50 ring-1 ring-inset ring-sky-200' : ''} ${dragIdx === idx ? 'opacity-50' : ''} ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F0FDFA]'} ${canReorder() ? 'cursor-grab active:cursor-grabbing' : ''}`}
                     >
                       {preview.columns.map((col, ci) => (
                         <td
                           key={col}
                           title={record[col] ? String(record[col]) : undefined}
-                          className={`px-4 py-2.5 text-slate-700 ${ci === 0 ? 'sticky left-0 z-10 bg-inherit border-r border-[#E3E6EB] font-medium' : ''} ${['Nombre/Name', 'Diagnostic/Procedure', 'Origin', 'Referred by', 'Observación'].includes(col) ? 'max-w-[220px] truncate' : 'whitespace-nowrap'}`}
+                          className={`px-4 py-2.5 text-[#2C5F57] ${ci === 0 ? 'sticky left-0 z-10 bg-inherit border-r border-[#D8F1EC] font-medium' : ''} ${['Nombre/Name', 'Diagnostic/Procedure', 'Origin', 'Referred by', 'Observación'].includes(col) ? 'max-w-[220px] truncate' : 'whitespace-nowrap'}`}
                         >
-                          {col === 'No' ? idx + 1 : (record[col] || <span className="text-slate-300">-</span>)}
+                          {col === 'No' ? idx + 1 : (record[col] || <span className="text-[#8FAFA9]">-</span>)}
                         </td>
                       ))}
                     </tr>
@@ -550,8 +550,8 @@ export function Reports() {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-end px-8 py-3 border-t border-[#E3E6EB] bg-white shrink-0">
-              <button onClick={() => { setPreview(null); setPreviewReportId(null) }} className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm transition-all duration-200 font-medium">
+            <div className="flex justify-end px-8 py-3 border-t border-[#D8F1EC] bg-white shrink-0">
+              <button onClick={() => { setPreview(null); setPreviewReportId(null) }} className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm transition-all duration-200 font-medium">
                 Cerrar
               </button>
             </div>

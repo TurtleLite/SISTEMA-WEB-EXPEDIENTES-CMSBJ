@@ -13,7 +13,7 @@ const statusStyles: Record<string, string> = {
   'No apto para cirugía': 'bg-rose-100 text-rose-700 border-rose-200',
   'En espera': 'bg-yellow-100 text-yellow-600 border-yellow-200',
   'Reprogramar': 'bg-orange-100 text-orange-600 border-orange-200',
-  'Cancelado': 'bg-slate-100 text-slate-500 border-slate-200',
+  'Cancelado': 'bg-[#CCFBF1] text-[#547A72] border-[#B7D2CC]',
   'No se presentó': 'bg-violet-100 text-violet-600 border-violet-200',
   'Fuera de perfil': 'bg-red-100 text-red-600 border-red-200',
 }
@@ -127,71 +127,71 @@ export function EstadoCirugia() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Estatus de Cirugía</h1>
+          <h1 className="font-serif text-2xl font-bold text-[#134E4A]">Estatus de Cirugía</h1>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] p-3 shrink-0 transition-shadow duration-200 hover:shadow-md">
+      <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] p-3 shrink-0 transition-shadow duration-200 hover:shadow-md">
         <div className="flex items-center gap-2.5">
           <div className="relative flex-1 max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6C948C] pointer-events-none" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar por paciente, especialidad o perfil..."
-              className="w-full pl-9 pr-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+              className="w-full pl-9 pr-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
             />
           </div>
           <div className="relative">
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="px-3 py-2 pr-8 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200 appearance-none"
+              className="px-3 py-2 pr-8 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200 appearance-none"
             >
               <option value="">Todos los estatus</option>
               {STATUS_OPTIONS.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
-            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6C948C] pointer-events-none" />
           </div>
-          <span className="text-sm text-slate-500 ml-auto">
-            <span className="font-medium text-slate-700">{total}</span> registros
+          <span className="text-sm text-[#547A72] ml-auto">
+            <span className="font-medium text-[#2C5F57]">{total}</span> registros
           </span>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1 transition-shadow duration-200 hover:shadow-md">
+      <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0 flex-1 transition-shadow duration-200 hover:shadow-md">
         <div className="flex-1 min-h-0 overflow-y-auto" onScroll={handleScroll}>
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-slate-100 border-b border-[#E3E6EB]">
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Paciente</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Especialidad</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Perfil</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Estatus de Cirugía</th>
+              <tr className="bg-[#CCFBF1] border-b border-[#D8F1EC]">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Paciente</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Especialidad</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Perfil</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Estatus de Cirugía</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
                   <td colSpan={4} className="px-4 py-12 text-center">
-                    <div className="flex items-center justify-center gap-2 text-slate-400">
-                      <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                    <div className="flex items-center justify-center gap-2 text-[#6C948C]">
+                      <div className="w-5 h-5 border-2 border-[#547A72] border-t-transparent rounded-full animate-spin" />
                       <span className="text-sm">Cargando...</span>
                     </div>
                   </td>
                 </tr>
               ) : records.length === 0 ? (
-                <tr><td colSpan={4} className="px-4 py-12 text-center text-slate-400 text-sm">Sin registros</td></tr>
+                <tr><td colSpan={4} className="px-4 py-12 text-center text-[#6C948C] text-sm">Sin registros</td></tr>
               ) : records.map((r, idx) => (
-                <tr key={r.id} className={`border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-100/20'}`}>
-                  <td className="px-6 py-4 font-medium text-slate-900 max-w-[240px] truncate" title={`${r.data?.nombre || ''} ${r.data?.apellido || ''}`}>
+                <tr key={r.id} className={`border-b border-[#CCFBF1] transition-all duration-150 hover:bg-[#CCFBF1] ${idx % 2 === 0 ? 'bg-white' : 'bg-[#CCFBF1]'}`}>
+                  <td className="px-6 py-4 font-medium text-[#134E4A] max-w-[240px] truncate" title={`${r.data?.nombre || ''} ${r.data?.apellido || ''}`}>
                     {`${r.data?.nombre || ''} ${r.data?.apellido || ''}`}
                   </td>
-                  <td className="px-6 py-4 text-slate-600 max-w-[200px] truncate" title={r.data?.especialidad || ''}>{r.data?.especialidad || <span className="text-slate-300">-</span>}</td>
-                  <td className="px-6 py-4 text-slate-600">{r.data?.perfil || <span className="text-slate-300">-</span>}</td>
+                  <td className="px-6 py-4 text-[#3D6F66] max-w-[200px] truncate" title={r.data?.especialidad || ''}>{r.data?.especialidad || <span className="text-[#8FAFA9]">-</span>}</td>
+                  <td className="px-6 py-4 text-[#3D6F66]">{r.data?.perfil || <span className="text-[#8FAFA9]">-</span>}</td>
                   <td className="px-6 py-4">
                     {editingId === r.id ? (
                       <div className="space-y-1.5">
@@ -199,7 +199,7 @@ export function EstadoCirugia() {
                           autoFocus
                           value={statusDraft}
                           onChange={(e) => setStatusDraft(e.target.value)}
-                          className="px-2 py-1.5 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                          className="px-2 py-1.5 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                         >
                           <option value="">Sin estatus</option>
                           {STATUS_OPTIONS.map((s) => (
@@ -211,18 +211,18 @@ export function EstadoCirugia() {
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
                           placeholder="Observación (opcional)"
-                          className="w-64 px-2.5 py-1.5 border border-[#E3E6EB] rounded-xl text-xs bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                          className="w-64 px-2.5 py-1.5 border border-[#D8F1EC] rounded-xl text-xs bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                         />
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => updateStatus(r.id, statusDraft)}
-                            className="px-2.5 py-1 text-xs font-medium bg-[#6E7B91] text-white rounded-lg hover:bg-[#5F6B80] transition-colors"
+                            className="px-2.5 py-1 text-xs font-medium bg-[#0F766E] text-white rounded-lg hover:bg-[#115E59] transition-colors"
                           >
                             Guardar
                           </button>
                           <button
                             onClick={() => { setEditingId(null); setStatusDraft(''); setComment('') }}
-                            className="px-2.5 py-1 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+                            className="px-2.5 py-1 text-xs font-medium text-[#3D6F66] bg-[#CCFBF1] rounded-lg hover:bg-[#B7D2CC] transition-colors"
                           >
                             Cancelar
                           </button>
@@ -237,13 +237,13 @@ export function EstadoCirugia() {
                             setComment(r.data?.observacion_estatus || '')
                           }}
                           className={`px-3 py-1 rounded-full text-xs font-medium border transition-all duration-200 hover:scale-105 active:scale-95 ${
-                            statusStyles[r.data?.estatus_cirugia] || 'bg-white text-slate-400 border-[#E3E6EB] hover:border-[#E3E6EB]'
+                            statusStyles[r.data?.estatus_cirugia] || 'bg-white text-[#6C948C] border-[#D8F1EC] hover:border-[#D8F1EC]'
                           }`}
                         >
                           {r.data?.estatus_cirugia || 'Asignar'}
                         </button>
                         {r.data?.observacion_estatus && (
-                          <p className="max-w-[260px] truncate text-xs text-slate-500" title={r.data.observacion_estatus}>
+                          <p className="max-w-[260px] truncate text-xs text-[#547A72]" title={r.data.observacion_estatus}>
                             {r.data.observacion_estatus}
                           </p>
                         )}
@@ -255,13 +255,13 @@ export function EstadoCirugia() {
             </tbody>
           </table>
           {!loading && hasMore && (
-            <div className="flex items-center justify-center gap-2 py-3 border-t border-[#E3E6EB]">
+            <div className="flex items-center justify-center gap-2 py-3 border-t border-[#D8F1EC]">
               {loadingMore ? (
-                <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-[#547A72] border-t-transparent rounded-full animate-spin" />
               ) : (
                 <button
                   onClick={() => loadPage(false)}
-                  className="px-3 py-1.5 text-xs font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-[#F8F9FA] transition-colors"
+                  className="px-3 py-1.5 text-xs font-medium text-[#115E59] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#F0FDFA] transition-colors"
                 >
                   Cargar más
                 </button>

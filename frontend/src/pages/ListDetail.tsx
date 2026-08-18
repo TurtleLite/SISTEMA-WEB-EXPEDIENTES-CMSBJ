@@ -497,15 +497,15 @@ export function ListDetail() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <h1 className="font-serif text-2xl font-bold text-[#3F4650]">{list?.name || 'Cargando...'}</h1>
-          {list?.description && <p className="text-sm text-slate-600 mt-1">{list.description}</p>}
+          <h1 className="font-serif text-2xl font-bold text-[#134E4A]">{list?.name || 'Cargando...'}</h1>
+          {list?.description && <p className="text-sm text-[#3D6F66] mt-1">{list.description}</p>}
         </div>
         <div className="flex gap-2">
           {list?.is_system ? (
             user?.role !== 'admin' && (
             <button
               onClick={() => { setEditingRecord(null); setShowExpedienteForm(true) }}
-              className="flex items-center gap-1.5 bg-[#6E7B91] text-white px-5 py-2.5 rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+              className="flex items-center gap-1.5 bg-[#0F766E] text-white px-5 py-2.5 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
             >
               <Stethoscope size={16} />
               Nuevo
@@ -520,7 +520,7 @@ export function ListDetail() {
                 setFormData(empty)
                 setShowModal(true)
               }}
-              className="flex items-center gap-1.5 bg-[#6E7B91] text-white px-5 py-2.5 rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+              className="flex items-center gap-1.5 bg-[#0F766E] text-white px-5 py-2.5 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
             >
               <Plus size={16} />
               Nuevo
@@ -545,13 +545,13 @@ export function ListDetail() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1 transition-shadow duration-200 hover:shadow-md">
-        <div className="p-3 border-b border-[#E3E6EB] space-y-2.5 shrink-0 bg-slate-100/30">
+      <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0 flex-1 transition-shadow duration-200 hover:shadow-md">
+        <div className="p-3 border-b border-[#D8F1EC] space-y-2.5 shrink-0 bg-[#CCFBF1]">
         <div className="flex gap-2.5 flex-wrap">
               <select
                 value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
-                className="px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                className="px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
               >
                 <option value="">Todos los campos</option>
                 {list?.columns_config.map((col) => (
@@ -559,16 +559,16 @@ export function ListDetail() {
                 ))}
               </select>
               <div className="relative flex-1 min-w-[180px]">
-                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6C948C]" />
                 <input
                   type="text"
                   placeholder="Buscar..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                  className="w-full pl-9 pr-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                 />
               </div>
-              <span className="ml-auto self-center text-xs text-slate-400 whitespace-nowrap">
+              <span className="ml-auto self-center text-xs text-[#6C948C] whitespace-nowrap">
                 {total.toLocaleString()} expediente{total === 1 ? '' : 's'}
               </span>
             </div>
@@ -577,7 +577,7 @@ export function ListDetail() {
                 <select
                   value={especialidadFilter}
                   onChange={(e) => { setEspecialidadFilter(e.target.value); setSelectedIds(new Set()) }}
-                  className="px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                  className="px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                 >
                 <option value="">Todas las especialidades</option>
                 {especialidades.map((esp) => (
@@ -588,7 +588,7 @@ export function ListDetail() {
                 <>
                   <button
                     onClick={openEspModal}
-                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 bg-white border border-[#E3E6EB] rounded-xl hover:bg-[#F8F9FA] transition-all duration-200"
+                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3D6F66] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#F0FDFA] transition-all duration-200"
                     title="Administrar especialidades"
                   >
                     <Settings2 size={15} />
@@ -596,7 +596,7 @@ export function ListDetail() {
                   </button>
                   <button
                     onClick={openLocModal}
-                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 bg-white border border-[#E3E6EB] rounded-xl hover:bg-[#F8F9FA] transition-all duration-200"
+                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3D6F66] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#F0FDFA] transition-all duration-200"
                     title="Administrar localidades"
                   >
                     <MapPin size={15} />
@@ -609,7 +609,7 @@ export function ListDetail() {
                   {!list?.is_system || user?.role !== 'admin' ? (
                     <button
                       onClick={handleExportSelected}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+                      className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
                     >
                       <Download size={16} />
                       Exportar {selectedIds.size} seleccionados
@@ -618,7 +618,7 @@ export function ListDetail() {
                   {selectedIds.size === 1 && canEditSelected && (
                     <button
                       onClick={handleEditSelected}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+                      className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
                     >
                       <Pencil size={16} />
                       Editar
@@ -627,7 +627,7 @@ export function ListDetail() {
                   {selectedIds.size === 1 && (
                     <button
                       onClick={handlePreviewSelected}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+                      className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
                     >
                       <Eye size={16} />
                       Vista previa
@@ -654,18 +654,18 @@ export function ListDetail() {
         <div ref={scrollRef} onScroll={handleScroll} className="flex-1 min-h-0 overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-slate-100 border-b border-[#E3E6EB]">
+              <tr className="bg-[#CCFBF1] border-b border-[#D8F1EC]">
                 {list?.is_system && (
                   <th className="w-10 px-3 py-4">
-                    <button onClick={toggleSelectAll} className="text-slate-400 hover:text-slate-600 transition-colors duration-200">
+                    <button onClick={toggleSelectAll} className="text-[#6C948C] hover:text-[#3D6F66] transition-colors duration-200">
                       {selectedIds.size === records.length && records.length > 0
-                        ? <CheckSquare size={16} className="text-slate-600" />
+                        ? <CheckSquare size={16} className="text-[#3D6F66]" />
                         : <Square size={16} />}
                     </button>
                   </th>
                 )}
                 {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col) => (
-                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''}`}>
+                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''}`}>
                     {col.label}
                   </th>
                 ))}
@@ -673,11 +673,11 @@ export function ListDetail() {
             </thead>
             <tbody>
               {records.map((record, idx) => (
-                <tr key={record.id} className={`border-b border-slate-100 transition-all duration-150 hover:bg-slate-100/50 ${selectedIds.has(record.id) ? 'bg-slate-100/30' : idx % 2 === 0 ? 'bg-white' : 'bg-slate-100/20'}`}>
+                <tr key={record.id} className={`border-b border-[#CCFBF1] transition-all duration-150 hover:bg-[#CCFBF1] ${selectedIds.has(record.id) ? 'bg-[#CCFBF1]' : idx % 2 === 0 ? 'bg-white' : 'bg-[#CCFBF1]'}`}>
                   {list?.is_system && (
                     <td className="w-10 px-3 py-4">
-                      <button onClick={() => toggleSelect(record.id)} className="text-slate-300 hover:text-slate-500 transition-colors duration-200">
-                        {selectedIds.has(record.id) ? <CheckSquare size={16} className="text-slate-500" /> : <Square size={16} />}
+                      <button onClick={() => toggleSelect(record.id)} className="text-[#8FAFA9] hover:text-[#547A72] transition-colors duration-200">
+                        {selectedIds.has(record.id) ? <CheckSquare size={16} className="text-[#547A72]" /> : <Square size={16} />}
                       </button>
                     </td>
                   )}
@@ -685,17 +685,17 @@ export function ListDetail() {
                     <td
                       key={col.key}
                       title={String(col.key === 'domicilio' ? domicilioPreview(record.data) : (record.data[col.key] ?? ''))}
-                      className={`px-3 py-4 text-sm text-slate-700 truncate ${COLUMN_WIDTHS[col.key] || ''}`}
+                      className={`px-3 py-4 text-sm text-[#2C5F57] truncate ${COLUMN_WIDTHS[col.key] || ''}`}
                     >
                       {col.key === 'telefono'
                         ? [record.data.telefono, record.data.telefono2, record.data.telefono3]
                             .filter(Boolean)
-                            .join(' / ') || <span className="text-slate-300">-</span>
+                            .join(' / ') || <span className="text-[#8FAFA9]">-</span>
                         : col.key === 'domicilio'
-                          ? domicilioPreview(record.data) || <span className="text-slate-300">-</span>
+                          ? domicilioPreview(record.data) || <span className="text-[#8FAFA9]">-</span>
                           : col.key === 'nombre_medico'
-                            ? shortName(record.data.nombre_medico) || <span className="text-slate-300">-</span>
-                            : record.data[col.key] || <span className="text-slate-300">-</span>
+                            ? shortName(record.data.nombre_medico) || <span className="text-[#8FAFA9]">-</span>
+                            : record.data[col.key] || <span className="text-[#8FAFA9]">-</span>
                       }
                     </td>
                   ))}
@@ -703,7 +703,7 @@ export function ListDetail() {
               ))}
               {records.length === 0 && (
                 <tr>
-                  <td colSpan={100} className="px-4 py-12 text-center text-slate-400 text-sm">
+                  <td colSpan={100} className="px-4 py-12 text-center text-[#6C948C] text-sm">
                     {search || especialidadFilter ? 'Sin resultados de búsqueda' : 'No hay registros aún'}
                   </td>
                 </tr>
@@ -712,16 +712,16 @@ export function ListDetail() {
           </table>
           <div className="flex items-center justify-center gap-2 py-4">
             {loadingMore ? (
-              <span className="text-sm text-slate-400">Cargando...</span>
+              <span className="text-sm text-[#6C948C]">Cargando...</span>
             ) : hasMore ? (
               <button
                 onClick={() => loadRecords(false)}
-                className="text-sm font-medium text-[#6E7B91] hover:underline"
+                className="text-sm font-medium text-[#0F766E] hover:underline"
               >
                 Cargar más
               </button>
             ) : records.length > 0 ? (
-              <span className="text-xs text-slate-400">Fin de la lista</span>
+              <span className="text-xs text-[#6C948C]">Fin de la lista</span>
             ) : null}
           </div>
         </div>
@@ -739,45 +739,45 @@ export function ListDetail() {
         />
       )}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl px-5 py-3 w-[95vw] max-w-5xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
-            <h2 className="font-serif text-lg font-bold mb-4 shrink-0 text-[#3F4650]">
+            <h2 className="font-serif text-lg font-bold mb-4 shrink-0 text-[#134E4A]">
               {editingRecord ? 'Editar Registro' : 'Nuevo Registro'}
             </h2>
             <div className="flex-1 overflow-y-auto min-h-0 space-y-3">
               {list?.columns_config.map((col) => (
                 <div key={col.key}>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">{col.label}</label>
+                  <label className="block text-sm font-medium text-[#2C5F57] mb-1">{col.label}</label>
                   {col.type === 'date' ? (
                     <input
                       type="date"
                       value={formData[col.key] || ''}
                       onChange={(e) => setFormData({ ...formData, [col.key]: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     />
                   ) : col.type === 'number' ? (
                     <input
                       type="number"
                       value={formData[col.key] || ''}
                       onChange={(e) => setFormData({ ...formData, [col.key]: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     />
                   ) : (
                     <input
                       type="text"
                       value={formData[col.key] || ''}
                       onChange={(e) => setFormData({ ...formData, [col.key]: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     />
                   )}
                 </div>
               ))}
             </div>
             <div className="flex justify-end gap-2 mt-4 shrink-0">
-              <button onClick={() => { setShowModal(false); setEditingRecord(null) }} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
+              <button onClick={() => { setShowModal(false); setEditingRecord(null) }} className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200">
                 Cancelar
               </button>
-              <button onClick={() => void handleSaveRecord()} className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
+              <button onClick={() => void handleSaveRecord()} className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
                 {editingRecord ? 'Actualizar' : 'Crear'}
               </button>
             </div>
@@ -803,11 +803,11 @@ export function ListDetail() {
       {conflict && (
         <div className="fixed inset-0 z-[220] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl p-6">
-            <h3 className="font-serif text-lg font-bold text-[#3F4650] mb-2">No se pudo guardar</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <h3 className="font-serif text-lg font-bold text-[#134E4A] mb-2">No se pudo guardar</h3>
+            <p className="text-sm text-[#3D6F66] leading-relaxed">
               {conflict.message}
               {conflict.who && (
-                <span className="block mt-1 text-xs text-slate-500">Última edición por: <b>{conflict.who}</b></span>
+                <span className="block mt-1 text-xs text-[#547A72]">Última edición por: <b>{conflict.who}</b></span>
               )}
             </p>
             <div className="mt-6 flex flex-col gap-2">
@@ -819,7 +819,7 @@ export function ListDetail() {
                   setFormData({})
                   loadRecords(true)
                 }}
-                className="w-full px-4 py-2.5 text-sm font-medium bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] transition-all duration-200"
+                className="w-full px-4 py-2.5 text-sm font-medium bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-all duration-200"
               >
                 Ver la versión actualizada
               </button>
@@ -834,7 +834,7 @@ export function ListDetail() {
               </button>
               <button
                 onClick={() => setConflict(null)}
-                className="w-full px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+                className="w-full px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200"
               >
                 Cancelar
               </button>
@@ -846,9 +846,9 @@ export function ListDetail() {
       {showEspModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowEspModal(false)}>
           <div className="bg-white rounded-2xl w-[95vw] max-w-xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E3E6EB] shrink-0">
-              <h2 className="font-serif text-lg font-bold text-[#3F4650]">Administrar especialidades</h2>
-              <button onClick={() => setShowEspModal(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none p-1 rounded-full hover:bg-slate-100">×</button>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#D8F1EC] shrink-0">
+              <h2 className="font-serif text-lg font-bold text-[#134E4A]">Administrar especialidades</h2>
+              <button onClick={() => setShowEspModal(false)} className="text-[#6C948C] hover:text-[#3D6F66] text-xl leading-none p-1 rounded-full hover:bg-[#CCFBF1]">×</button>
             </div>
             <div className="flex-1 overflow-y-auto min-h-0 p-5 space-y-2">
               {editingEsp ? (
@@ -859,16 +859,16 @@ export function ListDetail() {
                     onChange={(e) => setNewEspName(e.target.value)}
                     autoFocus
                     placeholder={`Nuevo nombre para "${editingEsp.name}"`}
-                    className="flex-1 px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                    className="flex-1 px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                   />
                   <button
                     onClick={handleRenameEsp}
                     disabled={espSaving}
-                    className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] transition-all duration-200 font-medium disabled:opacity-50"
+                    className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-all duration-200 font-medium disabled:opacity-50"
                   >
                     {espSaving ? 'Guardando...' : 'Guardar'}
                   </button>
-                  <button onClick={() => setEditingEsp(null)} className="px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
+                  <button onClick={() => setEditingEsp(null)} className="px-3 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200">
                     Cancelar
                   </button>
                 </div>
@@ -882,18 +882,18 @@ export function ListDetail() {
                         onChange={(e) => setNewEspName(e.target.value)}
                         autoFocus
                         placeholder="Nombre de la nueva especialidad"
-                        className="flex-1 px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                        className="flex-1 px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                       />
                       <button
                         onClick={handleCreateEsp}
                         disabled={espSaving}
-                        className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] transition-all duration-200 font-medium disabled:opacity-50"
+                        className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-all duration-200 font-medium disabled:opacity-50"
                       >
                         {espSaving ? 'Guardando...' : 'Crear'}
                       </button>
                       <button
                         onClick={() => { setCreatingEsp(false); setNewEspName('') }}
-                        className="px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+                        className="px-3 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200"
                       >
                         Cancelar
                       </button>
@@ -901,32 +901,32 @@ export function ListDetail() {
                   ) : (
                     <button
                       onClick={() => { setCreatingEsp(true); setNewEspName('') }}
-                      className="mb-3 flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#5F6B80] bg-slate-50 border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200"
+                      className="mb-3 flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#115E59] bg-[#F0FDFA] border border-[#D8F1EC] rounded-xl hover:bg-[#CCFBF1] transition-all duration-200"
                     >
                       <Plus size={15} />
                       Nueva especialidad
                     </button>
                   )}
                   <div className="relative mb-3">
-                    <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6C948C]" />
                     <input
                       type="text"
                       value={espSearch}
                       onChange={(e) => setEspSearch(e.target.value)}
                       placeholder="Buscar especialidad..."
-                      className="w-full pl-9 pr-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="w-full pl-9 pr-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     />
                   </div>
                   {filteredSpecialties.map((s) => (
-                    <div key={s.name} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F8F9FA] border border-[#E3E6EB] rounded-xl">
+                    <div key={s.name} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F0FDFA] border border-[#D8F1EC] rounded-xl">
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-[#3F4650] truncate">{s.name}</p>
-                        <p className="text-xs text-[#8A919C]">{s.count} expediente(s)</p>
+                        <p className="text-sm font-medium text-[#134E4A] truncate">{s.name}</p>
+                        <p className="text-xs text-[#6C948C]">{s.count} expediente(s)</p>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => { setEditingEsp(s); setNewEspName(s.name) }}
-                          className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors duration-200"
+                          className="p-2 text-[#547A72] hover:text-[#2C5F57] hover:bg-[#CCFBF1] rounded-lg transition-colors duration-200"
                           title="Renombrar"
                         >
                           <Pencil size={16} />
@@ -944,10 +944,10 @@ export function ListDetail() {
                 </>
               )}
               {specialties.length === 0 && !editingEsp && (
-                <p className="text-sm text-[#8A919C] text-center py-8">No hay especialidades registradas</p>
+                <p className="text-sm text-[#6C948C] text-center py-8">No hay especialidades registradas</p>
               )}
               {!editingEsp && espSearch.trim() && filteredSpecialties.length === 0 && (
-                <p className="text-sm text-[#8A919C] text-center py-8">Sin resultados para "{espSearch}"</p>
+                <p className="text-sm text-[#6C948C] text-center py-8">Sin resultados para "{espSearch}"</p>
               )}
             </div>
           </div>
@@ -957,9 +957,9 @@ export function ListDetail() {
       {showLocModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowLocModal(false)}>
           <div className="bg-white rounded-2xl w-[95vw] max-w-xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E3E6EB] shrink-0">
-              <h2 className="font-serif text-lg font-bold text-[#3F4650]">Administrar localidades</h2>
-              <button onClick={() => setShowLocModal(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none p-1 rounded-full hover:bg-slate-100">×</button>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#D8F1EC] shrink-0">
+              <h2 className="font-serif text-lg font-bold text-[#134E4A]">Administrar localidades</h2>
+              <button onClick={() => setShowLocModal(false)} className="text-[#6C948C] hover:text-[#3D6F66] text-xl leading-none p-1 rounded-full hover:bg-[#CCFBF1]">×</button>
             </div>
             <div className="flex-1 overflow-y-auto min-h-0 p-5 space-y-2">
               {!editingLoc && (
@@ -971,12 +971,12 @@ export function ListDetail() {
                       onChange={(e) => setNewLocName(e.target.value)}
                       autoFocus
                       placeholder="Nombre de la nueva localidad"
-                      className="flex-1 px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="flex-1 px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     />
                     <select
                       value={newLocTipo}
                       onChange={(e) => setNewLocTipo(e.target.value)}
-                      className="px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     >
                       <option value="">Tipo</option>
                       {TIPO_LOCALIDAD_OPTIONS.map((t) => (
@@ -986,13 +986,13 @@ export function ListDetail() {
                     <button
                       onClick={handleCreateLoc}
                       disabled={locSaving}
-                      className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] transition-all duration-200 font-medium disabled:opacity-50"
+                      className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-all duration-200 font-medium disabled:opacity-50"
                     >
                       {locSaving ? 'Guardando...' : 'Crear'}
                     </button>
                     <button
                       onClick={() => { setCreatingLoc(false); setNewLocName(''); setNewLocTipo('') }}
-                      className="px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+                      className="px-3 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200"
                     >
                       Cancelar
                     </button>
@@ -1001,19 +1001,19 @@ export function ListDetail() {
                   <>
                     <button
                       onClick={() => { setCreatingLoc(true); setNewLocName(''); setNewLocTipo('') }}
-                      className="mb-3 flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#5F6B80] bg-slate-50 border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200"
+                      className="mb-3 flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#115E59] bg-[#F0FDFA] border border-[#D8F1EC] rounded-xl hover:bg-[#CCFBF1] transition-all duration-200"
                     >
                       <Plus size={15} />
                       Nueva localidad
                     </button>
                     <div className="relative mb-3">
-                      <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6C948C]" />
                       <input
                         type="text"
                         value={locSearch}
                         onChange={(e) => setLocSearch(e.target.value)}
                         placeholder="Buscar localidad..."
-                        className="w-full pl-9 pr-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                        className="w-full pl-9 pr-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                       />
                     </div>
                   </>
@@ -1065,25 +1065,25 @@ export function ListDetail() {
                     onChange={(e) => setNewLocName(e.target.value)}
                     autoFocus
                     placeholder={`Nuevo nombre para "${editingLoc.name}"`}
-                    className="flex-1 px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                    className="flex-1 px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                   />
                   <button
                     onClick={handleRenameLoc}
                     disabled={locSaving}
-                    className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] transition-all duration-200 font-medium disabled:opacity-50"
+                    className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-all duration-200 font-medium disabled:opacity-50"
                   >
                     {locSaving ? 'Guardando...' : 'Guardar'}
                   </button>
-                  <button onClick={() => setEditingLoc(null)} className="px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
+                  <button onClick={() => setEditingLoc(null)} className="px-3 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200">
                     Cancelar
                   </button>
                 </div>
               ) : (
                 filteredLocalities.map((l) => (
-                  <div key={`${l.name}-${l.tipo}`} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F8F9FA] border border-[#E3E6EB] rounded-xl">
+                  <div key={`${l.name}-${l.tipo}`} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F0FDFA] border border-[#D8F1EC] rounded-xl">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#3F4650] truncate">{l.name}</p>
-                      <p className="text-xs text-[#8A919C]">
+                      <p className="text-sm font-medium text-[#134E4A] truncate">{l.name}</p>
+                      <p className="text-xs text-[#6C948C]">
                         {l.tipo ? `${l.tipo} · ` : ''}
                         {l.municipio ? `${l.municipio} · ` : ''}
                         {l.departamento ? `${l.departamento} · ` : ''}
@@ -1093,7 +1093,7 @@ export function ListDetail() {
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => { setEditingLoc(l); setNewLocName(l.name) }}
-                        className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors duration-200"
+                        className="p-2 text-[#547A72] hover:text-[#2C5F57] hover:bg-[#CCFBF1] rounded-lg transition-colors duration-200"
                         title="Renombrar"
                       >
                         <Pencil size={16} />
@@ -1110,13 +1110,13 @@ export function ListDetail() {
                 ))
               )}
               {localities.length === 0 && !editingLoc && (
-                <p className="text-sm text-[#8A919C] text-center py-8">No hay localidades registradas</p>
+                <p className="text-sm text-[#6C948C] text-center py-8">No hay localidades registradas</p>
               )}
               {!editingLoc && locSearch.trim() && filteredLocalities.length === 0 && (
-                <p className="text-sm text-[#8A919C] text-center py-8">Sin resultados para "{locSearch}"</p>
+                <p className="text-sm text-[#6C948C] text-center py-8">Sin resultados para "{locSearch}"</p>
               )}
             </div>
-            <p className="px-5 py-3 text-xs text-[#8A919C] border-t border-[#E3E6EB] shrink-0">
+            <p className="px-5 py-3 text-xs text-[#6C948C] border-t border-[#D8F1EC] shrink-0">
               Puede crear localidades aquí o escribirlas directamente en el formulario del expediente. Tipos: {TIPO_LOCALIDAD_OPTIONS.join(' · ')}.
             </p>
           </div>
@@ -1126,10 +1126,10 @@ export function ListDetail() {
       {deleteTarget && (
         <div className="fixed inset-0 z-[210] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6">
-            <h3 className="font-serif text-lg font-bold text-[#3F4650] mb-2">
+            <h3 className="font-serif text-lg font-bold text-[#134E4A] mb-2">
               Eliminar {deleteTarget.type === 'esp' ? 'especialidad' : 'localidad'} "{deleteTarget.name}"
             </h3>
-            <p className="text-sm text-slate-600 leading-relaxed mb-4">
+            <p className="text-sm text-[#3D6F66] leading-relaxed mb-4">
               Está en <b>{deleteTarget.count}</b> expediente(s). Indique qué valor se asignará en su lugar:
             </p>
             <input
@@ -1139,7 +1139,7 @@ export function ListDetail() {
               onChange={(e) => setReplaceValue(e.target.value)}
               autoFocus
               placeholder="Escriba el reemplazo o seleccione uno existente"
-              className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+              className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
             />
             <datalist id="reemplazos-sugeridos">
               {(deleteTarget.type === 'esp' ? specialties : localities)
@@ -1149,13 +1149,13 @@ export function ListDetail() {
                   <option key={n} value={n} />
                 ))}
             </datalist>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-[#6C948C]">
               Si lo deja vacío, {deleteTarget.type === 'esp' ? 'la especialidad' : 'la localidad'} se quitará de los expedientes sin reemplazo.
             </p>
             <div className="mt-6 flex items-center justify-end gap-3">
               <button
                 onClick={() => setDeleteTarget(null)}
-                className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+                className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200"
               >
                 Cancelar
               </button>
@@ -1172,27 +1172,27 @@ export function ListDetail() {
       )}
 
       {previewRecord && (
-        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white w-[95vw] max-w-4xl max-h-[90vh] flex flex-col overflow-hidden rounded-2xl shadow-2xl">
-            <div className="px-5 py-4 border-b border-[#E3E6EB] flex items-center justify-between shrink-0">
+            <div className="px-5 py-4 border-b border-[#D8F1EC] flex items-center justify-between shrink-0">
               <div>
-                <h2 className="font-serif text-lg font-bold text-[#3F4650]">
+                <h2 className="font-serif text-lg font-bold text-[#134E4A]">
                   {`${previewRecord.data?.nombre || ''} ${previewRecord.data?.apellido || ''}`.trim() || 'Expediente'}
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-[#547A72] mt-0.5">
                   Expediente Nº {previewRecord.data?.expediente || '—'} · {previewRecord.data?.especialidad || 'Sin especialidad'}
-                  {formatEditedBy(previewRecord) && <span className="ml-2 text-[#8A919C]">{formatEditedBy(previewRecord)}</span>}
+                  {formatEditedBy(previewRecord) && <span className="ml-2 text-[#6C948C]">{formatEditedBy(previewRecord)}</span>}
                 </p>
               </div>
-              <button onClick={() => setPreviewRecord(null)} className="text-slate-400 hover:text-slate-600 transition-colors duration-200">
+              <button onClick={() => setPreviewRecord(null)} className="text-[#6C948C] hover:text-[#3D6F66] transition-colors duration-200">
                 <X size={20} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto min-h-0 px-5 py-4 space-y-3">
               {SECTIONS.map((section) => (
-                <div key={section.title} className="border border-[#E3E6EB] rounded-xl overflow-hidden">
-                  <div className="px-4 py-2.5 bg-slate-50 border-b border-[#E3E6EB]">
-                    <h3 className="text-sm font-semibold text-[#3F4650]">{section.title}</h3>
+                <div key={section.title} className="border border-[#D8F1EC] rounded-xl overflow-hidden">
+                  <div className="px-4 py-2.5 bg-[#F0FDFA] border-b border-[#D8F1EC]">
+                    <h3 className="text-sm font-semibold text-[#134E4A]">{section.title}</h3>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-2.5 px-4 py-3">
                     {section.fields.map((f) => {
@@ -1202,9 +1202,9 @@ export function ListDetail() {
                       }
                       return (
                         <div key={f.key} className={['localidad', 'diagnostico', 'historia_enfermedad', 'examen_fisico', 'domicilio'].includes(f.key) ? 'sm:col-span-2' : ''}>
-                          <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{f.label}</p>
-                          <p className="text-sm text-slate-800 mt-0.5 break-words whitespace-pre-wrap">
-                            {value || <span className="text-slate-300">—</span>}
+                          <p className="text-[11px] font-medium text-[#6C948C] uppercase tracking-wider">{f.label}</p>
+                          <p className="text-sm text-[#134E4A] mt-0.5 break-words whitespace-pre-wrap">
+                            {value || <span className="text-[#8FAFA9]">—</span>}
                           </p>
                         </div>
                       )
@@ -1213,8 +1213,8 @@ export function ListDetail() {
                 </div>
               ))}
             </div>
-            <div className="flex justify-end px-5 py-3 border-t border-[#E3E6EB] bg-white shrink-0">
-              <button onClick={() => setPreviewRecord(null)} className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm transition-all duration-200 font-medium">
+            <div className="flex justify-end px-5 py-3 border-t border-[#D8F1EC] bg-white shrink-0">
+              <button onClick={() => setPreviewRecord(null)} className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm transition-all duration-200 font-medium">
                 Cerrar
               </button>
             </div>

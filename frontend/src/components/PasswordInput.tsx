@@ -23,7 +23,7 @@ export function PasswordInput({ value, onChange, placeholder, className = '', di
         type="button"
         onClick={() => setVisible(!visible)}
         disabled={disabled}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200 disabled:text-slate-300"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6C948C] hover:text-[#3D6F66] transition-colors duration-200 disabled:text-[#8FAFA9]"
         aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
         title={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
       >

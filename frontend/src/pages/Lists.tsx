@@ -120,7 +120,7 @@ export function Lists() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <h1 className="font-serif text-2xl font-bold text-[#3F4650]">Listas Personalizables</h1>
+          <h1 className="font-serif text-2xl font-bold text-[#134E4A]">Listas Personalizables</h1>
         </div>
         <div className="flex gap-2">
           <button
@@ -128,7 +128,7 @@ export function Lists() {
               const firstList = lists[0]
               if (firstList) navigate(`/lists/${firstList.id}`)
             }}
-            className="flex items-center gap-1.5 bg-white border border-[#E3E6EB] text-slate-700 px-4 py-2 rounded-xl hover:bg-slate-100 shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+            className="flex items-center gap-1.5 bg-white border border-[#D8F1EC] text-[#2C5F57] px-4 py-2 rounded-xl hover:bg-[#CCFBF1] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
           >
             <Eye size={16} />
             Ver registros
@@ -137,7 +137,7 @@ export function Lists() {
             <>
               <button
                 onClick={() => { setShowTrash(true); loadTrash() }}
-                className="flex items-center gap-1.5 bg-white border border-[#E3E6EB] text-slate-700 px-4 py-2 rounded-xl hover:bg-slate-100 shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+                className="flex items-center gap-1.5 bg-white border border-[#D8F1EC] text-[#2C5F57] px-4 py-2 rounded-xl hover:bg-[#CCFBF1] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
                 title="Expedientes y listas eliminados (restaurables por 15 días)"
               >
                 <RotateCcw size={16} />
@@ -145,7 +145,7 @@ export function Lists() {
               </button>
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center gap-1.5 bg-[#6E7B91] text-white px-4 py-2 rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+                className="flex items-center gap-1.5 bg-[#0F766E] text-white px-4 py-2 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
               >
                 <Plus size={16} />
                 Nueva Lista
@@ -158,12 +158,12 @@ export function Lists() {
       <div className="flex-1 overflow-y-auto min-h-0 pr-1">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {lists.map((list) => (
-          <div key={list.id} className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] p-6 hover:shadow-md hover:border-[#E3E6EB] transition-all duration-200">
+          <div key={list.id} className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] p-6 hover:shadow-md hover:border-[#D8F1EC] transition-all duration-200">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-slate-900">{list.name}</h3>
+                <h3 className="font-semibold text-[#134E4A]">{list.name}</h3>
                 {list.is_system && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">
+                  <span className="flex items-center gap-1 px-2 py-0.5 bg-[#CCFBF1] text-[#3D6F66] rounded-full text-xs font-medium">
                     <Shield size={12} />
                     Sistema
                   </span>
@@ -172,7 +172,7 @@ export function Lists() {
               <div className="flex gap-1">
                 <button
                   onClick={() => navigate(`/lists/${list.id}`)}
-                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition-all duration-200 hover:scale-110 active:scale-95"
+                  className="p-1.5 hover:bg-[#CCFBF1] rounded-lg text-[#547A72] transition-all duration-200 hover:scale-110 active:scale-95"
                   title="Ver registros"
                 >
                   <Eye size={16} />
@@ -185,11 +185,11 @@ export function Lists() {
               </div>
             </div>
             {list.description && (
-              <p className="text-sm text-slate-500 mb-3">{list.description}</p>
+              <p className="text-sm text-[#547A72] mb-3">{list.description}</p>
             )}
             <button
               onClick={() => navigate(`/lists/${list.id}`)}
-              className="text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors duration-200"
+              className="text-sm text-[#547A72] hover:text-[#2C5F57] font-medium transition-colors duration-200"
             >
               Ver registros →
             </button>
@@ -199,25 +199,25 @@ export function Lists() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl px-5 py-3 w-[95vw] max-w-5xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <h2 className="font-serif text-lg font-bold mb-4 text-[#3F4650]">Nueva Lista Personalizable</h2>            <div className="space-y-3">
+            <h2 className="font-serif text-lg font-bold mb-4 text-[#134E4A]">Nueva Lista Personalizable</h2>            <div className="space-y-3">
               <input
                 placeholder="Nombre de la lista"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
               />
               <input
                 placeholder="Descripción (opcional)"
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
               />
-              <div className="border border-[#E3E6EB] rounded-xl p-4">
+              <div className="border border-[#D8F1EC] rounded-xl p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-slate-700">Columnas</span>
-                  <button onClick={addColumn} className="text-xs text-slate-500 hover:text-slate-700 transition-colors duration-200">
+                  <span className="text-sm font-medium text-[#2C5F57]">Columnas</span>
+                  <button onClick={addColumn} className="text-xs text-[#547A72] hover:text-[#2C5F57] transition-colors duration-200">
                     + Agregar columna
                   </button>
                 </div>
@@ -227,12 +227,12 @@ export function Lists() {
                       placeholder="Etiqueta"
                       value={col.label}
                       onChange={(e) => updateColumn(idx, 'label', e.target.value)}
-                      className="flex-1 px-2 py-1.5 border border-[#E3E6EB] rounded-lg text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="flex-1 px-2 py-1.5 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     />
                     <select
                       value={col.type}
                       onChange={(e) => updateColumn(idx, 'type', e.target.value)}
-                      className="px-2 py-1.5 border border-[#E3E6EB] rounded-lg text-sm focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400 transition-all duration-200"
+                      className="px-2 py-1.5 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
                     >
                       <option value="text">Texto</option>
                       <option value="number">Número</option>
@@ -246,10 +246,10 @@ export function Lists() {
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-4">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200">
                 Cancelar
               </button>
-              <button onClick={handleCreate} className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
+              <button onClick={handleCreate} className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 font-medium">
                 Crear Lista
               </button>
             </div>
@@ -275,31 +275,31 @@ export function Lists() {
       {showTrash && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowTrash(false)}>
           <div className="bg-white rounded-2xl w-[95vw] max-w-2xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E3E6EB] shrink-0">
-              <h2 className="font-serif text-lg font-bold text-[#3F4650]">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#D8F1EC] shrink-0">
+              <h2 className="font-serif text-lg font-bold text-[#134E4A]">
                 {trashListId ? 'Expedientes en la papelera' : 'Papelera (15 días)'}
               </h2>
               <div className="flex items-center gap-2">
                 {trashListId && (
-                  <button onClick={() => setTrashListId(null)} className="text-sm text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg px-2 py-1 transition-colors duration-200">
+                  <button onClick={() => setTrashListId(null)} className="text-sm text-[#547A72] hover:text-[#2C5F57] hover:bg-[#CCFBF1] rounded-lg px-2 py-1 transition-colors duration-200">
                     ← Volver
                   </button>
                 )}
-                <button onClick={() => setShowTrash(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none p-1 rounded-full hover:bg-slate-100">×</button>
+                <button onClick={() => setShowTrash(false)} className="text-[#6C948C] hover:text-[#3D6F66] text-xl leading-none p-1 rounded-full hover:bg-[#CCFBF1]">×</button>
               </div>
             </div>
             <div className="flex-1 overflow-y-auto min-h-0 p-5 space-y-2">
               {trashListId ? (
                 trashRecords.length === 0 ? (
-                  <p className="text-sm text-[#8A919C] text-center py-8">No hay expedientes en la papelera de esta lista</p>
+                  <p className="text-sm text-[#6C948C] text-center py-8">No hay expedientes en la papelera de esta lista</p>
                 ) : (
                   trashRecords.map((r) => (
-                    <div key={r.id} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F8F9FA] border border-[#E3E6EB] rounded-xl">
+                    <div key={r.id} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F0FDFA] border border-[#D8F1EC] rounded-xl">
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-[#3F4650] truncate">
+                        <p className="text-sm font-medium text-[#134E4A] truncate">
                           {[r.data?.nombre, r.data?.apellido].filter(Boolean).join(' ') || 'Sin nombre'}
                         </p>
-                        <p className="text-xs text-[#8A919C]">
+                        <p className="text-xs text-[#6C948C]">
                           {r.data?.expediente ? `Exp. ${r.data?.expediente} · ` : ''}
                           {r.data?.diagnostico ? `${String(r.data.diagnostico).slice(0, 60)} · ` : ''}
                           eliminado {new Date(r.deleted_at).toLocaleString('es-HN')}
@@ -308,7 +308,7 @@ export function Lists() {
                       <button
                         onClick={() => void handleRestoreRecord(r.id)}
                         disabled={restoringId === r.id}
-                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200 disabled:opacity-50 shrink-0"
+                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#115E59] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#CCFBF1] transition-all duration-200 disabled:opacity-50 shrink-0"
                       >
                         <RotateCcw size={14} />
                         {restoringId === r.id ? 'Restaurando...' : 'Restaurar'}
@@ -317,20 +317,20 @@ export function Lists() {
                   ))
                 )
               ) : trash.length === 0 ? (
-                <p className="text-sm text-[#8A919C] text-center py-8">La papelera está vacía</p>
+                <p className="text-sm text-[#6C948C] text-center py-8">La papelera está vacía</p>
               ) : (
                 trash.map((t) => (
-                  <div key={t.id} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F8F9FA] border border-[#E3E6EB] rounded-xl">
+                  <div key={t.id} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F0FDFA] border border-[#D8F1EC] rounded-xl">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#3F4650] truncate">{t.name}</p>
-                      <p className="text-xs text-[#8A919C]">
+                      <p className="text-sm font-medium text-[#134E4A] truncate">{t.name}</p>
+                      <p className="text-xs text-[#6C948C]">
                         {t.records_in_trash} registro(s) · eliminada {new Date(t.deleted_at).toLocaleString('es-HN')}
                       </p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => void openTrashRecords(t.id)}
-                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 bg-white border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200"
+                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#3D6F66] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#CCFBF1] transition-all duration-200"
                       >
                         <Eye size={14} />
                         Ver
@@ -338,7 +338,7 @@ export function Lists() {
                       <button
                         onClick={() => void handleRestoreList(t.id)}
                         disabled={restoringId === t.id}
-                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#5F6B80] bg-white border border-[#E3E6EB] rounded-xl hover:bg-slate-100 transition-all duration-200 disabled:opacity-50"
+                        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-[#115E59] bg-white border border-[#D8F1EC] rounded-xl hover:bg-[#CCFBF1] transition-all duration-200 disabled:opacity-50"
                       >
                         <RotateCcw size={14} />
                         {restoringId === t.id ? 'Restaurando...' : 'Restaurar'}
@@ -348,7 +348,7 @@ export function Lists() {
                 ))
               )}
             </div>
-            <p className="px-5 py-3 text-xs text-[#8A919C] border-t border-[#E3E6EB] shrink-0">
+            <p className="px-5 py-3 text-xs text-[#6C948C] border-t border-[#D8F1EC] shrink-0">
               Los expedientes y listas permanecen aquí <b>15 días</b>; después se eliminan definitivamente.
             </p>
           </div>

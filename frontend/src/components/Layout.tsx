@@ -101,7 +101,7 @@ export function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="h-screen bg-[#F8F9FA] flex overflow-hidden">
+    <div className="h-screen bg-[#F0FDFA] flex overflow-hidden">
       {denied && (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex items-center gap-2.5 bg-rose-50 border-2 border-rose-200 text-rose-700 px-5 py-4 rounded-xl shadow-xl animate-pulse">
           <Lock size={16} className="shrink-0" />
@@ -109,13 +109,13 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       )}
       <aside className="w-48 bg-white flex flex-col shrink-0 h-screen sticky top-0 shadow-lg">
-        <div className="px-5 pt-3 pb-2 border-b border-[#E3E6EB] flex items-center justify-center">
+        <div className="px-5 pt-3 pb-2 border-b border-[#D8F1EC] flex items-center justify-center">
           <img src="/logo_sbj.png" alt="Logo SBJ Cirugias" className="w-36 h-auto mx-auto" />
         </div>
         <nav className="flex-1 px-3 py-2 flex flex-col justify-between overflow-y-auto">
           {visibleSections.map((section) => (
             <div key={section.title} className="mb-1">
-              <p className="px-3 pt-1 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-[#98A0AC]">
+              <p className="px-3 pt-1 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-[#7FA69E]">
                 {section.title}
               </p>
               {section.items.map((item) => {
@@ -127,11 +127,11 @@ export function Layout({ children }: { children: ReactNode }) {
                     onClick={() => handleNavClick(item)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 relative ${
                       isActive
-                        ? 'bg-[#EDF0F4] text-[#3F4650]'
-                        : 'text-[#6F7682] hover:text-[#3F4650] hover:bg-[#F8F9FA]'
+                        ? 'bg-[#CCFBF1] text-[#134E4A]'
+                        : 'text-[#547A72] hover:text-[#134E4A] hover:bg-[#F0FDFA]'
                     }`}
                   >
-                    {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#A6AEB8] rounded-full" />}
+                    {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2DD4BF] rounded-full" />}
                     <span className={`transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>
                       {item.icon}
                     </span>
@@ -142,7 +142,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
           ))}
         </nav>
-        <div className="p-3 border-t border-[#E3E6EB]">
+        <div className="p-3 border-t border-[#D8F1EC]">
           <button
             onClick={() => navigate('/perfil')}
             className="w-full flex items-center gap-3 mb-2 text-left group"
@@ -151,7 +151,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <RoleAvatar role={user?.role} size="sm" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[#3F4650] truncate">
+              <p className="text-sm font-semibold text-[#134E4A] truncate">
                 {(() => {
                   const raw = user?.full_name || ''
                   const titleMatch = raw.match(/^(Dr|Dra|Lic)\.?\s+/i)
@@ -172,7 +172,7 @@ export function Layout({ children }: { children: ReactNode }) {
           </button>
           <button
             onClick={logout}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#6F7682] hover:text-red-500 hover:bg-[#F8F9FA] rounded-lg transition-colors duration-200"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#547A72] hover:text-red-500 hover:bg-[#F0FDFA] rounded-lg transition-colors duration-200"
           >
             <LogOut size={15} />
             Cerrar sesión
@@ -180,7 +180,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </aside>
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="bg-gradient-to-r from-[#5F6B80] via-[#6E7B91] to-[#A6AEB8] px-12 py-1.5 flex items-center shadow-md">
+        <header className="bg-gradient-to-r from-[#115E59] via-[#0F766E] to-[#2DD4BF] px-12 py-1.5 flex items-center shadow-md">
           <div className="flex-1 flex items-center justify-center gap-4">
             <span className="font-serif font-bold text-base text-white">Centro Médico San Benito José</span>
           </div>
@@ -193,10 +193,10 @@ export function Layout({ children }: { children: ReactNode }) {
         <main className="flex-1 p-6 flex flex-col overflow-y-auto min-h-0 relative">
           <div className="flex-1 min-h-0">{children}</div>
         </main>
-        <footer className="pt-[7px] text-center text-xs text-[#8A919C]">
+        <footer className="pt-[7px] text-center text-xs text-[#6C948C]">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </footer>
-        <div className="fixed bottom-1.5 right-3 z-[1] text-[11px] font-medium text-slate-400/70 select-none pointer-events-none tracking-wide">
+        <div className="fixed bottom-1.5 right-3 z-[1] text-[11px] font-medium text-[#6C948C] select-none pointer-events-none tracking-wide">
           Versión 1.0
         </div>
       </div>

@@ -26,23 +26,23 @@ export function ConfirmDangerModal({
   return (
     <div className="fixed inset-0 z-[220] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
       <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-        <div className="px-6 pt-6 pb-4 border-b border-[#E3E6EB]">
+        <div className="px-6 pt-6 pb-4 border-b border-[#D8F1EC]">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-red-50 rounded-xl text-red-500 shrink-0">
               <AlertTriangle size={22} />
             </div>
             <div className="min-w-0">
-              <h3 className="font-serif text-lg font-bold text-[#3F4650] leading-tight">{title}</h3>
+              <h3 className="font-serif text-lg font-bold text-[#134E4A] leading-tight">{title}</h3>
             </div>
-            <button onClick={onCancel} className="ml-auto p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors duration-200 shrink-0">
+            <button onClick={onCancel} className="ml-auto p-1 text-[#6C948C] hover:text-[#3D6F66] hover:bg-[#CCFBF1] rounded-lg transition-colors duration-200 shrink-0">
               <XIcon size={18} />
             </button>
           </div>
         </div>
         <div className="px-6 py-4 space-y-4">
-          <div className="text-sm text-slate-600 leading-relaxed">{message}</div>
+          <div className="text-sm text-[#3D6F66] leading-relaxed">{message}</div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1.5">
               Escriba <span className="text-red-500 font-bold">{confirmWord}</span> para confirmar
             </label>
             <input
@@ -52,14 +52,14 @@ export function ConfirmDangerModal({
               onKeyDown={(e) => { if (e.key === 'Enter' && ok && !loading) onConfirm() }}
               autoFocus
               placeholder={confirmWord}
-              className="w-full px-3 py-2.5 border border-[#E3E6EB] rounded-xl text-sm focus:ring-2 focus:ring-red-200 focus:border-red-400 transition-all duration-200 uppercase"
+              className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-red-200 focus:border-red-400 transition-all duration-200 uppercase"
             />
           </div>
         </div>
-        <div className="px-6 py-4 bg-slate-50 flex items-center justify-end gap-3">
+        <div className="px-6 py-4 bg-[#F0FDFA] flex items-center justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200"
+            className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200"
           >
             Cancelar
           </button>

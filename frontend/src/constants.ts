@@ -8,8 +8,8 @@ export interface RoleMeta {
 export const ROLE_META: Record<string, RoleMeta> = {
   admin: {
     label: 'Administrador',
-    badge: 'bg-slate-100 text-slate-700 border-slate-200',
-    gradient: 'from-[#6E7B91] to-[#5F6B80]',
+    badge: 'bg-violet-100 text-violet-800 border-violet-200',
+    gradient: 'from-violet-600 to-violet-900',
     permissions: [
       'Expedientes (solo consultar)',
       'Localidades y Especialidades (crear, editar, eliminar)',
@@ -19,8 +19,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
   },
   direccion: {
     label: 'Dirección',
-    badge: 'bg-slate-100 text-slate-700 border-slate-200',
-    gradient: 'from-[#6E7B91] to-[#5F6B80]',
+    badge: 'bg-teal-100 text-teal-800 border-teal-200',
+    gradient: 'from-[#0F766E] to-[#115E59]',
     permissions: [
       'Expedientes (ver, editar, eliminar)',
       'Reportes, Listados y Estatus',
@@ -28,8 +28,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
   },
   direccion_medica: {
     label: 'Dirección Médica',
-    badge: 'bg-slate-100 text-slate-700 border-slate-200',
-    gradient: 'from-[#6E7B91] to-[#5F6B80]',
+    badge: 'bg-sky-100 text-sky-800 border-sky-200',
+    gradient: 'from-sky-600 to-sky-800',
     permissions: [
       'Expedientes (ver, editar, eliminar)',
       'Reportes, Listados y Estatus',
@@ -37,8 +37,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
   },
   medico: {
     label: 'Médico',
-    badge: 'bg-slate-100 text-slate-700 border-slate-200',
-    gradient: 'from-[#6E7B91] to-[#5F6B80]',
+    badge: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    gradient: 'from-emerald-600 to-emerald-800',
     permissions: [
       'Expedientes (ver, crear)',
       'Editar solo expedientes propios',

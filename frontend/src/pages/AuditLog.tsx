@@ -223,15 +223,15 @@ export function AuditLog() {
   return (
     <div className="h-full flex flex-col gap-4">
       <div className="shrink-0 flex items-baseline gap-3">
-        <h1 className="font-serif text-xl font-bold text-[#3F4650]">Auditoría</h1>
-        <p className="text-xs text-[#8A919C]">{total} evento(s) registrado(s)</p>
+        <h1 className="font-serif text-xl font-bold text-[#134E4A]">Auditoría</h1>
+        <p className="text-xs text-[#6C948C]">{total} evento(s) registrado(s)</p>
       </div>
 
-      <div className="shrink-0 flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-fit">
+      <div className="shrink-0 flex items-center gap-1 bg-[#CCFBF1] p-1 rounded-xl w-fit">
         <button
           onClick={() => setTab('eventos')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-            tab === 'eventos' ? 'bg-white text-[#3F4650] shadow-sm' : 'text-slate-500 hover:text-[#3F4650]'
+            tab === 'eventos' ? 'bg-white text-[#134E4A] shadow-sm' : 'text-[#547A72] hover:text-[#134E4A]'
           }`}
         >
           <ScrollText size={15} />
@@ -240,7 +240,7 @@ export function AuditLog() {
         <button
           onClick={() => setTab('equipos')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-            tab === 'equipos' ? 'bg-white text-[#3F4650] shadow-sm' : 'text-slate-500 hover:text-[#3F4650]'
+            tab === 'equipos' ? 'bg-white text-[#134E4A] shadow-sm' : 'text-[#547A72] hover:text-[#134E4A]'
           }`}
         >
           <Monitor size={15} />
@@ -252,12 +252,12 @@ export function AuditLog() {
 
       {tab === 'eventos' && (<>
 
-      <div className="shrink-0 bg-white rounded-xl border border-[#E3E6EB] p-3 flex items-end gap-3 flex-wrap">
+      <div className="shrink-0 bg-white rounded-xl border border-[#D8F1EC] p-3 flex items-end gap-3 flex-wrap">
         <div className="flex items-center gap-2 self-center">
           <button
             onClick={openExport}
             disabled={total === 0}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border border-[#E3E6EB] text-slate-500 hover:border-slate-400 flex items-center gap-1.5 disabled:opacity-40"
+            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border border-[#D8F1EC] text-[#547A72] hover:border-[#547A72] flex items-center gap-1.5 disabled:opacity-40"
             title="Exportar eventos a Excel: primero elige los filtros"
           >
             <Download size={13} />
@@ -265,11 +265,11 @@ export function AuditLog() {
           </button>
         </div>
         <div className="flex-1 min-w-40">
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Acción</label>
+          <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Acción</label>
           <select
             value={action}
             onChange={(e) => setAction(e.target.value)}
-            className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
           >
             <option value="">Todas</option>
             {ACTION_OPTIONS.map(([key, label]) => (
@@ -278,11 +278,11 @@ export function AuditLog() {
           </select>
         </div>
         <div className="flex-1 min-w-40">
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Tipo</label>
+          <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Tipo</label>
           <select
             value={entityType}
             onChange={(e) => setEntityType(e.target.value)}
-            className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
           >
             <option value="">Todos</option>
             {Object.entries(ENTITY_LABELS).map(([key, label]) => (
@@ -291,32 +291,32 @@ export function AuditLog() {
           </select>
         </div>
         <div className="flex-1 min-w-40">
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Usuario</label>
+          <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Usuario</label>
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Nombre de usuario"
-            className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
           />
         </div>
         <div className="min-w-32">
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Desde</label>
+          <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Desde</label>
           <input
             type="date"
             value={fechaDesde}
             max={fechaHasta || undefined}
             onChange={(e) => setFechaDesde(e.target.value)}
-            className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
           />
         </div>
         <div className="min-w-32">
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Hasta</label>
+          <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Hasta</label>
           <input
             type="date"
             value={fechaHasta}
             min={fechaDesde || undefined}
             onChange={(e) => setFechaHasta(e.target.value)}
-            className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
           />
         </div>
         {filterDirty && (
@@ -324,7 +324,7 @@ export function AuditLog() {
             onClick={() => {
               setAction(''); setEntityType(''); setUsername(''); setFechaDesde(''); setFechaHasta(''); setPage(1)
             }}
-            className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200 border border-[#E3E6EB] flex items-center gap-1.5"
+            className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200 border border-[#D8F1EC] flex items-center gap-1.5"
           >
             <XIcon size={14} />
             Limpiar filtros
@@ -333,24 +333,24 @@ export function AuditLog() {
       </div>
 
       <div className="flex-1 min-h-0 flex gap-4">
-        <div className="bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0 flex-1">
+        <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0 flex-1">
         <div className="flex-1 min-h-0 overflow-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-slate-100 border-b border-[#E3E6EB]">
-                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Fecha y hora</th>
-                <th className="w-[12%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Usuario</th>
-                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Acción</th>
-                <th className="w-[10%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo</th>
-                <th className="w-[22%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Detalle</th>
-                <th className="w-[26%] text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipo</th>
+              <tr className="bg-[#CCFBF1] border-b border-[#D8F1EC]">
+                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Fecha y hora</th>
+                <th className="w-[12%] text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Usuario</th>
+                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Acción</th>
+                <th className="w-[10%] text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Tipo</th>
+                <th className="w-[22%] text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Detalle</th>
+                <th className="w-[26%] text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Equipo</th>
               </tr>
             </thead>
             <tbody>
               {entries.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-10 text-center text-sm text-slate-400">
-                    <ScrollText size={28} className="mx-auto mb-2 text-slate-200" />
+                  <td colSpan={6} className="px-6 py-10 text-center text-sm text-[#6C948C]">
+                    <ScrollText size={28} className="mx-auto mb-2 text-[#B7D2CC]" />
                     No hay eventos que coincidan
                   </td>
                 </tr>
@@ -358,9 +358,9 @@ export function AuditLog() {
               {entries.map((e) => {
                 const deviceMeta = e.device_status ? DEVICE_META[e.device_status] : null
                 return (
-                <tr key={e.id} onClick={() => setSelected(e)} className={`border-b border-l-4 border-l-transparent border-slate-100 transition-all duration-150 hover:bg-slate-100/50 cursor-pointer ${e.device_status === 'pending' ? 'bg-amber-50/40 border-l-amber-400' : e.device_status === 'blocked' ? 'bg-rose-50/40 border-l-rose-500' : ''} ${selected?.id === e.id ? 'bg-[#6E7B91]/10 border-l-[#6E7B91]' : ''}`}>
-                  <td className="px-6 py-3.5 text-sm text-slate-600 whitespace-nowrap overflow-hidden text-ellipsis" title={`Fecha exacta: ${fmt(e.created_at)}`}>{timeAgo(e.created_at)}</td>
-                  <td className="px-6 py-3.5 text-sm font-medium text-slate-900 min-w-0">
+                <tr key={e.id} onClick={() => setSelected(e)} className={`border-b border-l-4 border-l-transparent border-[#CCFBF1] transition-all duration-150 hover:bg-[#CCFBF1] cursor-pointer ${e.device_status === 'pending' ? 'bg-amber-50/40 border-l-amber-400' : e.device_status === 'blocked' ? 'bg-rose-50/40 border-l-rose-500' : ''} ${selected?.id === e.id ? 'bg-[#0F766E]/10 border-l-[#0F766E]' : ''}`}>
+                  <td className="px-6 py-3.5 text-sm text-[#3D6F66] whitespace-nowrap overflow-hidden text-ellipsis" title={`Fecha exacta: ${fmt(e.created_at)}`}>{timeAgo(e.created_at)}</td>
+                  <td className="px-6 py-3.5 text-sm font-medium text-[#134E4A] min-w-0">
                     <span className="block truncate" title={e.username || ''}>
                       {e.username || '—'}
                     </span>
@@ -372,22 +372,22 @@ export function AuditLog() {
                         ? 'bg-emerald-100 text-emerald-700'
                         : e.action.includes('failed') || e.action.includes('delete') || e.action.includes('revoked')
                           ? 'bg-rose-100 text-rose-700'
-                          : 'bg-slate-100 text-slate-600'
+                          : 'bg-[#CCFBF1] text-[#3D6F66]'
                     }`} title={ACTION_LABELS[e.action] || e.action}>
                       {ACTION_LABELS[e.action] || e.action}
                     </span>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-slate-600 min-w-0">
+                  <td className="px-6 py-3.5 text-sm text-[#3D6F66] min-w-0">
                     <span className="block truncate" title={ENTITY_LABELS[e.entity_type || ''] || e.entity_type || ''}>
                       {ENTITY_LABELS[e.entity_type || ''] || e.entity_type || '—'}
                     </span>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-slate-600 min-w-0">
+                  <td className="px-6 py-3.5 text-sm text-[#3D6F66] min-w-0">
                     <span className="block truncate" title={e.detail || ''}>
                       {genericDetail(e.action, e.detail)}
                     </span>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-slate-500 min-w-0">
+                  <td className="px-6 py-3.5 text-sm text-[#547A72] min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-mono truncate min-w-0" title={e.ip_address || ''}>{e.ip_address || '—'}</span>
                       {deviceMeta && (
@@ -408,48 +408,48 @@ export function AuditLog() {
             </tbody>
           </table>
         </div>
-        <div className="shrink-0 border-t border-[#E3E6EB] px-6 py-3 flex items-center justify-between">
-          <p className="text-xs text-slate-400">
+        <div className="shrink-0 border-t border-[#D8F1EC] px-6 py-3 flex items-center justify-between">
+          <p className="text-xs text-[#6C948C]">
             Página {page} de {totalPages} · {total} evento(s)
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="p-1.5 hover:bg-slate-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-1.5 hover:bg-[#CCFBF1] rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <ChevronLeft size={16} className="text-slate-500" />
+              <ChevronLeft size={16} className="text-[#547A72]" />
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
-              className="p-1.5 hover:bg-slate-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"
+              className="p-1.5 hover:bg-[#CCFBF1] rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <ChevronRight size={16} className="text-slate-500" />
+              <ChevronRight size={16} className="text-[#547A72]" />
             </button>
           </div>
         </div>
       </div>
 
       {selected && (
-        <aside className="shrink-0 w-80 bg-white rounded-xl shadow-sm border border-[#E3E6EB] flex flex-col min-h-0">
-          <div className="shrink-0 px-4 py-3 border-b border-[#E3E6EB] flex items-center justify-between gap-2">
-            <h3 className="text-sm font-semibold text-[#3F4650] flex items-center gap-2">
-              <FileText size={14} className="text-slate-400" />
+        <aside className="shrink-0 w-80 bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0">
+          <div className="shrink-0 px-4 py-3 border-b border-[#D8F1EC] flex items-center justify-between gap-2">
+            <h3 className="text-sm font-semibold text-[#134E4A] flex items-center gap-2">
+              <FileText size={14} className="text-[#6C948C]" />
               Detalle del evento
             </h3>
-            <button onClick={() => setSelected(null)} className="p-1.5 text-slate-400 hover:bg-slate-100 rounded-lg">
+            <button onClick={() => setSelected(null)} className="p-1.5 text-[#6C948C] hover:bg-[#CCFBF1] rounded-lg">
               <XIcon size={14} />
             </button>
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-3 text-sm">
             <div>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Fecha y hora</p>
-              <p className="text-slate-800">{fmt(selected.created_at)}</p>
+              <p className="text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Fecha y hora</p>
+              <p className="text-[#134E4A]">{fmt(selected.created_at)}</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Detalle</p>
-              <p className="text-slate-700 break-words whitespace-pre-wrap bg-slate-50 rounded-lg px-3 py-2 text-xs">{selected.detail || '—'}</p>
+              <p className="text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Detalle</p>
+              <p className="text-[#2C5F57] break-words whitespace-pre-wrap bg-[#F0FDFA] rounded-lg px-3 py-2 text-xs">{selected.detail || '—'}</p>
             </div>
           </div>
         </aside>
@@ -460,20 +460,20 @@ export function AuditLog() {
       {showExport && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowExport(false)}>
           <div className="bg-white rounded-2xl w-[95vw] max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E3E6EB] shrink-0">
-              <h2 className="font-serif text-lg font-bold text-[#3F4650]">Exportar eventos técnicos</h2>
-              <button onClick={() => setShowExport(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none p-1 rounded-full hover:bg-slate-100">×</button>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#D8F1EC] shrink-0">
+              <h2 className="font-serif text-lg font-bold text-[#134E4A]">Exportar eventos técnicos</h2>
+              <button onClick={() => setShowExport(false)} className="text-[#6C948C] hover:text-[#3D6F66] text-xl leading-none p-1 rounded-full hover:bg-[#CCFBF1]">×</button>
             </div>
             <div className="flex-1 overflow-y-auto min-h-0 p-5 space-y-3">
-              <p className="text-xs text-[#8A919C]">
+              <p className="text-xs text-[#6C948C]">
                 Elija los filtros para el Excel. Se exportarán todos los eventos que coincidan, en orden cronológico.
               </p>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Acción</label>
+                <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Acción</label>
                 <select
                   value={expForm.action}
                   onChange={(e) => setExpForm((f) => ({ ...f, action: e.target.value }))}
-                  className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                  className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
                 >
                   <option value="">Todas</option>
                   {ACTION_OPTIONS.map(([key, label]) => (
@@ -483,11 +483,11 @@ export function AuditLog() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Tipo</label>
+                  <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Tipo</label>
                   <select
                     value={expForm.entityType}
                     onChange={(e) => setExpForm((f) => ({ ...f, entityType: e.target.value }))}
-                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                    className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
                   >
                     <option value="">Todos</option>
                     {Object.entries(ENTITY_LABELS).map(([key, label]) => (
@@ -496,11 +496,11 @@ export function AuditLog() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Usuario</label>
+                  <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Usuario</label>
                   <select
                     value={expForm.username}
                     onChange={(e) => setExpForm((f) => ({ ...f, username: e.target.value }))}
-                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                    className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
                   >
                     <option value="">Todos los usuarios</option>
                     {users.map((u) => (
@@ -513,34 +513,34 @@ export function AuditLog() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Desde</label>
+                  <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Desde</label>
                   <input
                     type="date"
                     value={expForm.fechaDesde}
                     max={expForm.fechaHasta || undefined}
                     onChange={(e) => setExpForm((f) => ({ ...f, fechaDesde: e.target.value }))}
-                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                    className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Hasta</label>
+                  <label className="block text-xs font-semibold text-[#6C948C] uppercase tracking-wider mb-1">Hasta</label>
                   <input
                     type="date"
                     value={expForm.fechaHasta}
                     min={expForm.fechaDesde || undefined}
                     onChange={(e) => setExpForm((f) => ({ ...f, fechaHasta: e.target.value }))}
-                    className="w-full px-3 py-2 border border-[#E3E6EB] rounded-xl text-sm bg-white focus:ring-2 focus:ring-slate-300/30 focus:border-slate-400"
+                    className="w-full px-3 py-2 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
                   />
                 </div>
               </div>
             </div>
-            <div className="shrink-0 border-t border-[#E3E6EB] px-5 py-3 flex justify-end gap-2 bg-white">
-              <button onClick={() => setShowExport(false)} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl transition-all duration-200">
+            <div className="shrink-0 border-t border-[#D8F1EC] px-5 py-3 flex justify-end gap-2 bg-white">
+              <button onClick={() => setShowExport(false)} className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200">
                 Cancelar
               </button>
               <button
                 onClick={handleExportExcel}
-                className="px-4 py-2 text-sm bg-[#6E7B91] text-white rounded-xl hover:bg-[#5F6B80] shadow-sm transition-all duration-200 font-medium flex items-center gap-2"
+                className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm transition-all duration-200 font-medium flex items-center gap-2"
               >
                 <Download size={15} />
                 Exportar Excel
