@@ -161,10 +161,10 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
     <div className="h-full flex flex-col gap-2.5 min-h-0">
       {!embedded && (
         <div className="flex items-center justify-between shrink-0">
-          <h1 className="font-serif text-xl font-bold text-[#134E4A]">Equipos</h1>
+          <h1 className="font-serif text-xl font-bold text-[#1E2A32]">Equipos</h1>
           <button
             onClick={load}
-            className="px-2.5 py-1.5 text-xs text-[#115E59] bg-[#F0FDFA] border border-[#D8F1EC] rounded-lg hover:bg-[#CCFBF1] transition-all duration-200 flex items-center gap-1.5"
+            className="px-2.5 py-1.5 text-xs text-[#115E59] bg-[#F7F8FA] border border-[#E4E8EE] rounded-lg hover:bg-[#EEF1F5] transition-all duration-200 flex items-center gap-1.5"
           >
             <RefreshCw size={13} />
             Actualizar
@@ -185,48 +185,48 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
       )}
 
       <div className="shrink-0 flex items-center gap-2 flex-wrap">
-        <div className="flex items-center gap-1 bg-[#CCFBF1] p-0.5 rounded-lg">
+        <div className="flex items-center gap-1 bg-[#EEF1F5] p-0.5 rounded-lg">
           {FILTER_OPTIONS.map((o) => (
             <button
               key={o.key}
               onClick={() => setFilter(o.key)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-all duration-200 ${filter === o.key ? 'bg-white text-[#134E4A] shadow-sm' : 'text-[#547A72] hover:text-[#134E4A]'}`}
+              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-all duration-200 ${filter === o.key ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'}`}
             >
               {o.label} <span className="opacity-60">{o.value}</span>
             </button>
           ))}
         </div>
         <div className="relative flex-1 min-w-40">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#6C948C]" />
+          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#7A8694]" />
           <input
             type="text"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Buscar equipo, usuario o nota..."
-            className="w-full pl-8 pr-2.5 py-1.5 border border-[#D8F1EC] rounded-lg text-xs bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+            className="w-full pl-8 pr-2.5 py-1.5 border border-[#E4E8EE] rounded-lg text-xs bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
           />
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0 flex-1">
+      <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1">
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#CCFBF1] border-b border-[#D8F1EC]">
-                <th className="w-[21%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Equipo</th>
-                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Estado</th>
-                <th className="w-[14%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Usuarios</th>
-                <th className="w-[11%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Actividad</th>
-                <th className="w-[7%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Eventos</th>
-                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Nota</th>
-                <th className="w-[23%] text-right px-3 py-2.5 text-[10px] font-semibold text-[#6C948C] uppercase tracking-wider">Acción</th>
+              <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
+                <th className="w-[21%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Equipo</th>
+                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Estado</th>
+                <th className="w-[14%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Usuarios</th>
+                <th className="w-[11%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Actividad</th>
+                <th className="w-[7%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Eventos</th>
+                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Nota</th>
+                <th className="w-[23%] text-right px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Acción</th>
               </tr>
             </thead>
             <tbody>
               {visible.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-sm text-[#6C948C]">
-                    <Monitor size={26} className="mx-auto mb-2 text-[#B7D2CC]" />
+                  <td colSpan={7} className="px-6 py-10 text-center text-sm text-[#7A8694]">
+                    <Monitor size={26} className="mx-auto mb-2 text-[#D5DBE3]" />
                     {q || filter !== 'all' ? 'Sin resultados para la búsqueda' : 'No hay equipos registrados aún.'}
                   </td>
                 </tr>
@@ -238,11 +238,11 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                 const shownUsers = d.users.slice(0, 2)
                 const extraUsers = d.users.length - shownUsers.length
                 return (
-                  <tr key={d.id} className={`border-b border-l-4 border-[#CCFBF1] ${meta.border} transition-all duration-150 hover:bg-[#CCFBF1]`}>
+                  <tr key={d.id} className={`border-b border-l-4 border-[#EEF1F5] ${meta.border} transition-all duration-150 hover:bg-[#EEF1F5]`}>
                     <td className="px-3 py-2.5 min-w-0">
                       <div className="flex items-center gap-1.5 min-w-0">
-                        <Monitor size={13} className="text-[#6C948C] shrink-0" />
-                        <span className="text-xs font-mono text-[#134E4A] truncate" title={`Primer uso: ${fmt(d.first_seen_at)}`}>{d.device_id}</span>
+                        <Monitor size={13} className="text-[#7A8694] shrink-0" />
+                        <span className="text-xs font-mono text-[#1E2A32] truncate" title={`Primer uso: ${fmt(d.first_seen_at)}`}>{d.device_id}</span>
                         {d.shared && (
                           <span
                             className="px-1 py-0.5 rounded-full text-[9px] font-semibold bg-violet-100 text-violet-700 shrink-0 cursor-help"
@@ -252,7 +252,7 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                           </span>
                         )}
                       </div>
-                      {d.note && <p className="text-[10px] text-[#6C948C] mt-0.5 truncate" title={d.note}>{d.note}</p>}
+                      {d.note && <p className="text-[10px] text-[#7A8694] mt-0.5 truncate" title={d.note}>{d.note}</p>}
                     </td>
                     <td className="px-3 py-2.5">
                       <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium inline-flex items-center gap-1 ${meta.badge}`} title={
@@ -266,21 +266,21 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                     </td>
                     <td className="px-3 py-2.5 min-w-0">
                       <div className="flex items-center gap-1 flex-wrap">
-                        <UsersIcon size={11} className="text-[#6C948C] shrink-0" />
+                        <UsersIcon size={11} className="text-[#7A8694] shrink-0" />
                         {d.users.length === 0 ? (
-                          <span className="text-xs text-[#6C948C]">—</span>
+                          <span className="text-xs text-[#7A8694]">—</span>
                         ) : (
                           shownUsers.map((u) => (
-                            <span key={u} className="px-1 py-0.5 rounded bg-[#CCFBF1] text-[10px] text-[#2C5F57] truncate max-w-full" title={`Primer uso: ${fmt(d.first_seen_at)}`}>{u}</span>
+                            <span key={u} className="px-1 py-0.5 rounded bg-[#EEF1F5] text-[10px] text-[#2B3A45] truncate max-w-full" title={`Primer uso: ${fmt(d.first_seen_at)}`}>{u}</span>
                           ))
                         )}
-                        {extraUsers > 0 && <span className="text-[10px] text-[#6C948C]" title={`${d.users.join(', ')}`}>+{extraUsers}</span>}
+                        {extraUsers > 0 && <span className="text-[10px] text-[#7A8694]" title={`${d.users.join(', ')}`}>+{extraUsers}</span>}
                       </div>
                     </td>
-                    <td className="px-3 py-2.5 text-xs text-[#3D6F66] min-w-0">
+                    <td className="px-3 py-2.5 text-xs text-[#3F4D58] min-w-0">
                       <p className="truncate" title={`Última actividad: ${fmt(d.last_event_at || d.last_seen_at)}`}>{timeAgo(d.last_event_at || d.last_seen_at)}</p>
                     </td>
-                    <td className="px-3 py-2.5 text-xs text-[#3D6F66]">{d.events}</td>
+                    <td className="px-3 py-2.5 text-xs text-[#3F4D58]">{d.events}</td>
                     <td className="px-3 py-2.5 min-w-0">
                       <div className="flex items-center gap-1">
                         <input
@@ -288,12 +288,12 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                           value={notes[d.device_id] ?? d.note ?? ''}
                           onChange={(e) => setNotes((p) => ({ ...p, [d.device_id]: e.target.value }))}
                           placeholder="Ej. Recepción PC1"
-                          className="w-full min-w-0 px-1.5 py-1 border border-[#D8F1EC] rounded text-[10px] focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                          className="w-full min-w-0 px-1.5 py-1 border border-[#E4E8EE] rounded text-[10px] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                         />
                         <button
                           onClick={() => saveNote(d)}
                           disabled={noteSaving === d.device_id}
-                          className="p-1 text-[#547A72] hover:text-[#2C5F57] hover:bg-[#CCFBF1] rounded disabled:opacity-40 shrink-0"
+                          className="p-1 text-[#5F6C79] hover:text-[#2B3A45] hover:bg-[#EEF1F5] rounded disabled:opacity-40 shrink-0"
                           title="Guardar nota"
                         >
                           <Save size={12} />
@@ -322,7 +322,7 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                           </button>
                           <button
                             onClick={() => { setConfirming(null); setBlockReason('') }}
-                            className="p-1 text-[#547A72] hover:bg-[#CCFBF1] rounded"
+                            className="p-1 text-[#5F6C79] hover:bg-[#EEF1F5] rounded"
                             title="Cancelar"
                           >
                             <XIcon size={12} />
@@ -352,11 +352,11 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
             </tbody>
           </table>
         </div>
-        <div className="shrink-0 border-t border-[#D8F1EC] px-3 py-1.5 flex items-center justify-between">
-          <p className="text-[10px] text-[#6C948C]">
+        <div className="shrink-0 border-t border-[#E4E8EE] px-3 py-1.5 flex items-center justify-between">
+          <p className="text-[10px] text-[#7A8694]">
             {counts.approved} aprobado(s) · {counts.pending} pendiente(s) · {counts.blocked} bloqueado(s) · {visible.length} mostrado(s)
           </p>
-          <p className="text-[10px] text-[#6C948C] hidden sm:block">
+          <p className="text-[10px] text-[#7A8694] hidden sm:block">
             <Check size={10} className="inline mr-0.5 text-emerald-500" />
             Bloquear cierra sesiones activas del equipo
           </p>

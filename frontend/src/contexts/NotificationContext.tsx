@@ -52,7 +52,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
           {toasts.map((t) => (
             <div
               key={t.id}
-              className={`px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white max-w-sm animate-slide-in ${
+              className={`px-4 py-3 rounded-lg shadow-md text-sm font-medium text-white max-w-sm animate-slide-in ${
                 t.type === 'success' ? 'bg-[#0F766E]' :
                 t.type === 'error' ? 'bg-red-400' :
                 'bg-[#0F766E]'
@@ -65,13 +65,13 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       )}
 
       {confirmState && (
-        <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-[200]">
+        <div className="fixed inset-0 bg-[#0F172A]/20 backdrop-blur-sm flex items-center justify-center z-[200]">
           <div className="bg-white/90 backdrop-blur-sm rounded-xl px-5 py-3 w-full max-w-sm shadow-xl">
-            <p className="text-sm text-[#2C5F57] mb-6">{confirmState.message}</p>
+            <p className="text-sm text-[#2B3A45] mb-6">{confirmState.message}</p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => handleConfirm(false)}
-                className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#F0FDFA] rounded-lg"
+                className="px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#F7F8FA] rounded-lg"
               >
                 Cancelar
               </button>

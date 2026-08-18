@@ -101,21 +101,21 @@ export function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="h-screen bg-[#F0FDFA] flex overflow-hidden">
+    <div className="h-screen bg-[#F7F8FA] flex overflow-hidden">
       {denied && (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex items-center gap-2.5 bg-rose-50 border-2 border-rose-200 text-rose-700 px-5 py-4 rounded-xl shadow-xl animate-pulse">
           <Lock size={16} className="shrink-0" />
           <p className="text-sm font-semibold">No tienes acceso a {denied}</p>
         </div>
       )}
-      <aside className="w-48 bg-white flex flex-col shrink-0 h-screen sticky top-0 shadow-lg">
-        <div className="px-5 pt-3 pb-2 border-b border-[#D8F1EC] flex items-center justify-center">
+      <aside className="w-48 bg-white flex flex-col shrink-0 h-screen sticky top-0 border-r border-[#E4E8EE]">
+        <div className="px-5 pt-3 pb-2 border-b border-[#E4E8EE] flex items-center justify-center">
           <img src="/logo_sbj.png" alt="Logo SBJ Cirugias" className="w-36 h-auto mx-auto" />
         </div>
         <nav className="flex-1 px-3 py-2 flex flex-col justify-between overflow-y-auto">
           {visibleSections.map((section) => (
             <div key={section.title} className="mb-1">
-              <p className="px-3 pt-1 pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-[#7FA69E]">
+              <p className="px-3 pt-1 pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8794A1]">
                 {section.title}
               </p>
               {section.items.map((item) => {
@@ -125,16 +125,13 @@ export function Layout({ children }: { children: ReactNode }) {
                   <button
                     key={item.path}
                     onClick={() => handleNavClick(item)}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 relative ${
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors duration-150 relative ${
                       isActive
-                        ? 'bg-[#CCFBF1] text-[#134E4A]'
-                        : 'text-[#547A72] hover:text-[#134E4A] hover:bg-[#F0FDFA]'
+                        ? 'bg-[#0F766E] text-white font-semibold shadow-sm'
+                        : 'text-[#5F6C79] font-medium hover:text-[#0F766E] hover:bg-[#F7F8FA]'
                     }`}
                   >
-                    {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#2DD4BF] rounded-full" />}
-                    <span className={`transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>
-                      {item.icon}
-                    </span>
+                    <span className="shrink-0">{item.icon}</span>
                     {item.label}
                   </button>
                 )
@@ -142,16 +139,16 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
           ))}
         </nav>
-        <div className="p-3 border-t border-[#D8F1EC]">
+        <div className="p-3 border-t border-[#E4E8EE]">
           <button
             onClick={() => navigate('/perfil')}
             className="w-full flex items-center gap-3 mb-2 text-left group"
           >
-            <div className="transition-transform duration-200 group-hover:scale-110">
+            <div>
               <RoleAvatar role={user?.role} size="sm" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[#134E4A] truncate">
+              <p className="text-sm font-semibold text-[#1E2A32] truncate">
                 {(() => {
                   const raw = user?.full_name || ''
                   const titleMatch = raw.match(/^(Dr|Dra|Lic)\.?\s+/i)
@@ -172,7 +169,7 @@ export function Layout({ children }: { children: ReactNode }) {
           </button>
           <button
             onClick={logout}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#547A72] hover:text-red-500 hover:bg-[#F0FDFA] rounded-lg transition-colors duration-200"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#5F6C79] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
           >
             <LogOut size={15} />
             Cerrar sesión
@@ -180,9 +177,9 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </aside>
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="bg-gradient-to-r from-[#115E59] via-[#0F766E] to-[#2DD4BF] px-12 py-1.5 flex items-center shadow-md">
-          <div className="flex-1 flex items-center justify-center gap-4">
-            <span className="font-serif font-bold text-base text-white">Centro Médico San Benito José</span>
+        <header className="bg-gradient-to-r from-[#0B2A26] via-[#0F3832] to-[#115E59] px-12 py-2 flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-3">
+            <span className="font-serif font-bold text-[15px] tracking-[0.08em] text-white">CENTRO MÉDICO SAN BENITO JOSÉ</span>
           </div>
           <div className="flex items-center gap-2">
             <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
@@ -193,10 +190,10 @@ export function Layout({ children }: { children: ReactNode }) {
         <main className="flex-1 p-6 flex flex-col overflow-y-auto min-h-0 relative">
           <div className="flex-1 min-h-0">{children}</div>
         </main>
-        <footer className="pt-[7px] text-center text-xs text-[#6C948C]">
+        <footer className="pt-[7px] text-center text-xs text-[#8794A1]">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </footer>
-        <div className="fixed bottom-1.5 right-3 z-[1] text-[11px] font-medium text-[#6C948C] select-none pointer-events-none tracking-wide">
+        <div className="fixed bottom-1.5 right-3 z-[1] text-[11px] font-medium text-[#8E9AA6] select-none pointer-events-none tracking-wide">
           Versión 1.0
         </div>
       </div>

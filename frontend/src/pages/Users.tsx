@@ -132,13 +132,13 @@ export function Users() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <h1 className="font-serif text-2xl font-bold text-[#134E4A]">Usuarios</h1>
+          <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Usuarios</h1>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={handleRefresh}
             title="Actualizar lista"
-            className="flex items-center justify-center bg-white border border-[#D8F1EC] text-[#0F766E] px-3 py-2 rounded-xl hover:bg-[#F0FDFA] hover:border-[#B7D2CC] shadow-sm transition-all duration-200"
+            className="flex items-center justify-center bg-white border border-[#E4E8EE] text-[#0F766E] px-3 py-2 rounded-xl hover:bg-[#F7F8FA] hover:border-[#D5DBE3] shadow-sm transition-all duration-200"
           >
             <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
           </button>
@@ -158,60 +158,60 @@ export function Users() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-[#D8F1EC] flex flex-col min-h-0 flex-1">
+      <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1">
         <div className="flex-1 min-h-0 overflow-y-auto">
         <table className="w-full">
           <thead className="sticky top-0 z-10">
-            <tr className="bg-[#CCFBF1] border-b border-[#D8F1EC]">
-              <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Nombre</th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Usuario</th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Teléfono</th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Rol</th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Estado</th>
-              <th className="text-right px-6 py-4 text-xs font-semibold text-[#6C948C] uppercase tracking-wider">Acciones</th>
+            <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
+              <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Nombre</th>
+              <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Usuario</th>
+              <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Teléfono</th>
+              <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Rol</th>
+              <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Estado</th>
+              <th className="text-right px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {users.map((u) => (
-              <tr key={u.id} className="border-b border-[#CCFBF1] transition-all duration-150 hover:bg-[#CCFBF1]">
-                <td className="px-6 py-4 text-sm font-medium text-[#134E4A]">
+              <tr key={u.id} className="border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5]">
+                <td className="px-6 py-4 text-sm font-medium text-[#1E2A32]">
                   <div className="flex items-center gap-3">
                     <RoleAvatar role={u.role} size="sm" />
                     {u.full_name}
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-[#3D6F66]">{u.username}</td>
-                <td className="px-6 py-4 text-sm text-[#3D6F66]">{u.telefono}</td>
+                <td className="px-6 py-4 text-sm text-[#3F4D58]">{u.username}</td>
+                <td className="px-6 py-4 text-sm text-[#3F4D58]">{u.telefono}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    u.role === 'admin' ? 'bg-[#CCFBF1] text-[#3D6F66]' :
-                    u.role === 'direccion' ? 'bg-[#CCFBF1] text-[#3D6F66]' :
-                    'bg-[#CCFBF1] text-[#3D6F66]'
+                    u.role === 'admin' ? 'bg-[#EEF1F5] text-[#3F4D58]' :
+                    u.role === 'direccion' ? 'bg-[#EEF1F5] text-[#3F4D58]' :
+                    'bg-[#EEF1F5] text-[#3F4D58]'
                   }`}>
                     {roleLabels[u.role] || u.role}
                   </span>
                 </td>
                 <td className="px-6 py-4">
                   {!u.is_active ? (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#CCFBF1] text-[#3D6F66]">Inactivo</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#EEF1F5] text-[#3F4D58]">Inactivo</span>
                   ) : isLocked(u) ? (
                     <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Bloqueado</span>
                   ) : (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#CCFBF1] text-[#3D6F66]">Activo</span>
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#EEF1F5] text-[#3F4D58]">Activo</span>
                   )}
                 </td>
                 <td className="px-6 py-4 text-right">
                   {currentUser?.role === 'admin' && (
                     <>
                       {isLocked(u) && (
-                        <button onClick={() => handleUnlock(u)} title="Desbloquear" className="p-1.5 hover:bg-amber-100 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95">
+                        <button onClick={() => handleUnlock(u)} title="Desbloquear" className="p-1.5 hover:bg-amber-100 rounded-lg transition-all duration-200">
                           <Unlock size={15} className="text-amber-500" />
                         </button>
                       )}
-                      <button onClick={() => openEdit(u)} className="p-1.5 hover:bg-[#CCFBF1] rounded-lg transition-all duration-200 hover:scale-110 active:scale-95">
-                        <Pencil size={15} className="text-[#547A72]" />
+                      <button onClick={() => openEdit(u)} className="p-1.5 hover:bg-[#EEF1F5] rounded-lg transition-all duration-200">
+                        <Pencil size={15} className="text-[#5F6C79]" />
                       </button>
-                      <button onClick={() => handleDelete(u.id)} className="p-1.5 hover:bg-red-100 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 ml-1">
+                      <button onClick={() => handleDelete(u.id)} className="p-1.5 hover:bg-red-100 rounded-lg transition-all duration-200 ml-1">
                         <Trash2 size={15} className="text-red-400" />
                       </button>
                     </>
@@ -225,9 +225,9 @@ export function Users() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[#0F172A]/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl px-5 py-3 w-[95vw] max-w-5xl shadow-2xl">
-            <h2 className="font-serif text-lg font-bold mb-4 text-[#134E4A]">
+            <h2 className="font-serif text-lg font-bold mb-4 text-[#1E2A32]">
               {editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}
             </h2>
             <div className="space-y-3">
@@ -235,7 +235,7 @@ export function Users() {
                 <select
                   value={form.titulo}
                   onChange={(e) => setForm({ ...form, titulo: e.target.value })}
-                  className="w-28 shrink-0 px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+                  className="w-28 shrink-0 px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
                 >
                   <option value="">Sin título</option>
                   <option value="Dr.">Dr.</option>
@@ -246,38 +246,38 @@ export function Users() {
                   placeholder="Nombres"
                   value={form.nombres}
                   onChange={(e) => setForm({ ...form, nombres: capitalizeName(e.target.value) })}
-                  className="flex-1 min-w-0 px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+                  className="flex-1 min-w-0 px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
                 />
               </div>
               <input
                 placeholder="Apellidos"
                 value={form.apellidos}
                 onChange={(e) => setForm({ ...form, apellidos: capitalizeName(e.target.value) })}
-                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
               />
               <input
                 placeholder="Usuario"
                 value={form.username}
                 onChange={(e) => setForm({ ...form, username: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
               />
               <input
                 placeholder="0000-0000"
                 type="tel"
                 value={form.telefono}
                 onChange={(e) => setForm({ ...form, telefono: formatPhone(e.target.value) })}
-                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
               />
               <PasswordInput
                 placeholder={editingUser ? 'Nueva contraseña (dejar vacío)' : 'Contraseña'}
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
               />
               <select
                 value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#D8F1EC] rounded-xl text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] transition-all duration-200"
+                className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
               >
                 <option value="medico">Médico</option>
                 <option value="direccion_medica">Dirección Médica</option>
@@ -286,7 +286,7 @@ export function Users() {
               </select>
             </div>
             <div className="flex justify-end gap-2 mt-4">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200">
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#EEF1F5] rounded-xl transition-all duration-200">
                 Cancelar
               </button>
               <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 font-medium disabled:opacity-50">

@@ -498,12 +498,12 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const pct = total > 0 ? Math.round((filled / total) * 100) : 0
 
   return (
-    <div className="fixed inset-0 bg-[#042F2E]/20 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-[#0F172A]/20 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white w-screen h-screen flex flex-col overflow-hidden">
-        <div className="px-5 py-3 border-b border-[#D8F1EC] flex items-center justify-between shrink-0">
+        <div className="px-5 py-3 border-b border-[#E4E8EE] flex items-center justify-between shrink-0">
           <div>
-            <h2 className="text-xl font-bold text-[#134E4A]">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
-            <p className="text-sm text-[#547A72] mt-1">
+            <h2 className="text-xl font-bold text-[#1E2A32]">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
+            <p className="text-sm text-[#5F6C79] mt-1">
               {editingRecord
                 ? editingRecord.updated_at
                   ? `Modifique los campos necesarios · Editado ${formatAgo(editingRecord.updated_at)}`
@@ -518,7 +518,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                 Borrador guardado automáticamente
               </span>
             )}
-            <button onClick={() => void handleClose()} title="Cerrar" className="p-2 hover:bg-[#CCFBF1] rounded-lg text-[#6C948C]">
+            <button onClick={() => void handleClose()} title="Cerrar" className="p-2 hover:bg-[#EEF1F5] rounded-lg text-[#7A8694]">
               ✕
             </button>
           </div>
@@ -526,13 +526,13 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
 
         <div className="px-5 pt-2 shrink-0">
           <div className="flex items-center gap-3 mb-1">
-            <div className="flex-1 h-2 bg-[#CCFBF1] rounded-full overflow-hidden">
+            <div className="flex-1 h-2 bg-[#EEF1F5] rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#0F766E] rounded-full transition-all duration-500"
                 style={{ width: `${pct}%` }}
               />
             </div>
-            <span className="text-sm font-medium text-[#3D6F66] min-w-[4rem] text-right">
+            <span className="text-sm font-medium text-[#3F4D58] min-w-[4rem] text-right">
               {filled}/{total}
             </span>
           </div>
@@ -543,7 +543,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                 <span
                   key={s.title}
                   className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium transition-colors ${
-                    done ? 'bg-[#CCFBF1] text-[#3D6F66]' : 'bg-[#CCFBF1] text-[#6C948C]'
+                    done ? 'bg-[#EEF1F5] text-[#3F4D58]' : 'bg-[#EEF1F5] text-[#7A8694]'
                   }`}
                 >
                   {done ? <CheckCircle2 size={12} /> : <Circle size={12} />}
@@ -559,35 +559,35 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
             return (
-              <div key={section.title} className="border border-[#D8F1EC] rounded-xl overflow-hidden">
+              <div key={section.title} className="border border-[#E4E8EE] rounded-xl overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleSection(section.title)}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
-                    done ? 'bg-[#F0FDFA]' : 'bg-[#F0FDFA]'
+                    done ? 'bg-[#F7F8FA]' : 'bg-[#F7F8FA]'
                   } hover:brightness-95`}
                 >
-                  <span className={done ? 'text-[#547A72]' : 'text-[#6C948C]'}>
+                  <span className={done ? 'text-[#5F6C79]' : 'text-[#7A8694]'}>
                     {done ? <CheckCircle2 size={20} /> : <Circle size={20} />}
                   </span>
-                  <span className="text-[#547A72]">{section.icon}</span>
-                  <span className={`flex-1 font-medium text-sm ${done ? 'text-[#2C5F57]' : 'text-[#2C5F57]'}`}>
+                  <span className="text-[#5F6C79]">{section.icon}</span>
+                  <span className={`flex-1 font-medium text-sm ${done ? 'text-[#2B3A45]' : 'text-[#2B3A45]'}`}>
                     {section.title}
                   </span>
-                  <span className="text-xs text-[#6C948C]">
+                  <span className="text-xs text-[#7A8694]">
                     {section.fields.filter((f) => {
                       if (f.key === 'criticidad' && !criticidadEnabled(data)) return false
                       const v = data[f.key]
                       return v !== undefined && v !== null && String(v).trim() !== ''
                     }).length}/{section.fields.filter((f) => !(f.key === 'criticidad' && !criticidadEnabled(data))).length}
                   </span>
-                  {isOpen ? <ChevronDown size={16} className="text-[#6C948C]" /> : <ChevronRight size={16} className="text-[#6C948C]" />}
+                  {isOpen ? <ChevronDown size={16} className="text-[#7A8694]" /> : <ChevronRight size={16} className="text-[#7A8694]" />}
                 </button>
                 {isOpen && (
                   <div className="px-4 py-3 grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-3 bg-white">
                     {section.fields.map((field) => (
                       <div key={field.key} className={FULL_WIDTH_KEYS.has(field.key) ? 'lg:col-span-2' : ''}>
-                        <label className="block text-sm font-medium text-[#2C5F57] mb-1">
+                        <label className="block text-sm font-medium text-[#2B3A45] mb-1">
                           {field.label}
                         </label>
                         {field.key === 'especialidad' ? (
@@ -601,7 +601,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                   setValue(field.key, cleaned)
                                 }}
                                 placeholder="Escriba la especialidad"
-                                className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                                className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                               />
                               <button
                                 type="button"
@@ -610,7 +610,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                   if (v && !especialidades.includes(v)) setValue('especialidad', '')
                                   setCustomEspecialidad(false)
                                 }}
-                                className="text-xs text-[#115E59] hover:text-[#134E4A] font-medium"
+                                className="text-xs text-[#115E59] hover:text-[#1E2A32] font-medium"
                               >
                                 ← Volver a seleccionar de la lista
                               </button>
@@ -626,7 +626,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                   setValue(field.key, v)
                                 }
                               }}
-                              className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             >
                               <option value="">Seleccione una especialidad...</option>
                               {especialidades.map((esp) => (
@@ -640,7 +640,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             <select
                               value={data[field.key] || ''}
                               onChange={(e) => setValue(field.key, e.target.value)}
-                              className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             >
                               <option value="">Seleccione...</option>
                               <option value="Baja">Baja</option>
@@ -648,7 +648,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               <option value="Alta">Alta</option>
                             </select>
                           ) : (
-                            <div className="px-3 py-2 rounded-lg bg-[#F0FDFA] border border-dashed border-[#D8F1EC] text-xs text-[#547A72]">
+                            <div className="px-3 py-2 rounded-lg bg-[#F7F8FA] border border-dashed border-[#E4E8EE] text-xs text-[#5F6C79]">
                               Complete primero el diagnóstico (mínimo 5 caracteres) para asignar la criticidad clínica.
                             </div>
                           )
@@ -656,7 +656,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           >
                             <option value="">Seleccione...</option>
                             <option value="M">M</option>
@@ -676,7 +676,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                   const n = e.target.value
                                   setValue('edad', n === '' ? '' : `${n} ${edadUnit}`)
                                 }}
-                                className="flex-1 px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                                className="flex-1 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                               />
                               <select
                                 value={edadUnit}
@@ -684,7 +684,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                   const u = e.target.value
                                   setValue('edad', edadNum === '' ? '' : `${edadNum} ${u}`)
                                 }}
-                                className="w-28 px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                                className="w-28 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                               >
                                 <option value="a">Años</option>
                                 <option value="m">Meses</option>
@@ -695,7 +695,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           >
                             <option value="">Seleccione...</option>
                             <option value="1">1</option>
@@ -707,7 +707,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           >
                             <option value="">Seleccione...</option>
                             <option value="Si">Si</option>
@@ -717,7 +717,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           >
                             <option value="">Seleccione...</option>
                             <option value="En espera">En espera</option>
@@ -735,9 +735,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               value={data[field.key] || ''}
                               onChange={(e) => setValue(field.key, e.target.value.replace(/\D/g, '').slice(0, 10))}
                               placeholder="Solo números"
-                              className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             />
-                            <p className="mt-1 text-[11px] text-[#6C948C]">
+                            <p className="mt-1 text-[11px] text-[#7A8694]">
                               {editingRecord
                                 ? 'No se puede modificar al editar.'
                                 : 'Llene el número manualmente (solo números). Si ya existe, el sistema agrega la copia (1), (2)... como nueva intervención.'}
@@ -756,7 +756,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               setValue(field.key, formatted)
                             }}
                             placeholder="0000-0000-00000"
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           />
                         ) : field.key.startsWith('telefono') ? (
                           <input
@@ -770,7 +770,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               setValue(field.key, formatted)
                             }}
                             placeholder="0000-0000"
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           />
                         ) : field.key === 'presion_arterial' ? (
                           <input
@@ -786,7 +786,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               setValue(field.key, formatted)
                             }}
                             placeholder="000/000"
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           />
                         ) : field.key === 'peso' ? (
                           <div className="relative">
@@ -800,9 +800,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                 setValue('bmi', calcularBMI(v, data.talla))
                               }}
                               placeholder="0 kg"
-                              className="w-full px-3 py-2 pr-10 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                              className="w-full px-3 py-2 pr-10 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6C948C] text-sm pointer-events-none">kg</span>
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A8694] text-sm pointer-events-none">kg</span>
                           </div>
                         ) : field.key === 'talla' ? (
                           <div className="relative">
@@ -816,10 +816,10 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                 setValue('bmi', calcularBMI(data.peso, withUnit))
                               }}
                               placeholder="0.00 mts"
-                              className="w-full px-3 py-2 pr-10 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                              className="w-full px-3 py-2 pr-10 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6C948C] text-sm pointer-events-none">mts</span>
-                            <p className="mt-1 text-[11px] text-[#6C948C]">
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A8694] text-sm pointer-events-none">mts</span>
+                            <p className="mt-1 text-[11px] text-[#7A8694]">
                               El punto decimal se coloca automáticamente (ej. escribir 184 → 1.84)
                             </p>
                           </div>
@@ -832,9 +832,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               disabled
                               title="Se calcula automáticamente con peso y talla"
                               placeholder="Se calcula al llenar Peso y Talla"
-                              className="w-full px-3 py-2 pr-14 border border-[#D8F1EC] rounded-lg text-sm bg-[#F0FDFA] text-[#547A72] focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] disabled:cursor-not-allowed"
+                              className="w-full px-3 py-2 pr-14 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#5F6C79] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] disabled:cursor-not-allowed"
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6C948C] text-sm pointer-events-none whitespace-nowrap">
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A8694] text-sm pointer-events-none whitespace-nowrap">
                               kg/mts²
                             </span>
                           </div>
@@ -847,7 +847,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               const titleCased = titleCase(val)
                               setValue(field.key, titleCased)
                             }}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] resize-none"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none"
                           />
                         ) : field.key === 'departamento' ? (
                           <select
@@ -859,7 +859,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                 setValue('municipio', '')
                               }
                             }}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           >
                             <option value="">Seleccione el departamento...</option>
                             {Object.keys(HONDURAS_DEPARTAMENTOS).map((d) => (
@@ -871,7 +871,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             value={data[field.key] || ''}
                             onChange={(e) => setValue('municipio', e.target.value)}
                             disabled={!data.departamento}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] disabled:bg-[#F0FDFA] disabled:text-[#6C948C]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] disabled:bg-[#F7F8FA] disabled:text-[#7A8694]"
                           >
                             <option value="">{data.departamento ? 'Seleccione el municipio...' : 'Seleccione primero un departamento'}</option>
                             {(HONDURAS_DEPARTAMENTOS[data.departamento] || []).map((m) => (
@@ -882,7 +882,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue('tipo_localidad', e.target.value)}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           >
                             <option value="">Seleccione el tipo...</option>
                             {TIPO_LOCALIDAD_OPTIONS.map((t) => (
@@ -897,7 +897,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               value={data[field.key] || ''}
                               onChange={(e) => handleLocalidadChange(e.target.value)}
                               placeholder="Escriba la localidad o seleccione una existente"
-                              className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             />
                             <datalist id="localidades-sugeridas">
                               {localidades.map((l) => (
@@ -922,7 +922,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             readOnly
                             disabled
                             title="El nombre del médico se asigna automáticamente según el usuario"
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm bg-[#F0FDFA] text-[#3D6F66] disabled:cursor-not-allowed"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
                           />
                         ) : FIELD_UNITS[field.key] ? (
                           <div className="relative">
@@ -931,9 +931,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               value={data[field.key] || ''}
                               onChange={(e) => setValue(field.key, e.target.value)}
                               placeholder="0"
-                              className="w-full px-3 py-2 pr-12 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                              className="w-full px-3 py-2 pr-12 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6C948C] text-sm pointer-events-none whitespace-nowrap">
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A8694] text-sm pointer-events-none whitespace-nowrap">
                               {FIELD_UNITS[field.key]}
                             </span>
                           </div>
@@ -942,21 +942,21 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             type="date"
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           />
                         ) : field.type === 'number' ? (
                           <input
                             type="number"
                             value={data[field.key] ?? ''}
                             onChange={(e) => setValue(field.key, e.target.value === '' ? '' : Number(e.target.value))}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72]"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           />
                         ) : (
                           <textarea
                             rows={field.key === 'domicilio' || field.key === 'historia_enfermedad' || field.key === 'examen_fisico' || field.key === 'diagnostico' ? 3 : 1}
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, CAPITALIZE_FIRST_KEYS.has(field.key) ? capitalizeFirst(e.target.value) : e.target.value)}
-                            className="w-full px-3 py-2 border border-[#D8F1EC] rounded-lg text-sm focus:ring-2 focus:ring-[#8FAFA9] focus:border-[#547A72] resize-none"
+                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none"
                           />
                         )}
                       </div>
@@ -968,10 +968,10 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           })}
         </div>
 
-        <div className="px-5 py-3 border-t border-[#D8F1EC] flex items-center justify-between shrink-0">
+        <div className="px-5 py-3 border-t border-[#E4E8EE] flex items-center justify-between shrink-0">
           <button
             onClick={() => void handleClose()}
-            className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-lg"
+            className="px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#EEF1F5] rounded-lg"
           >
             Cancelar
           </button>
@@ -981,7 +981,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
             className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
               allComplete && !saving
                 ? 'bg-[#0F766E] text-white hover:bg-[#115E59] shadow-sm'
-                : 'bg-[#CCFBF1] text-[#8FAFA9] cursor-not-allowed'
+                : 'bg-[#EEF1F5] text-[#8E9AA6] cursor-not-allowed'
             }`}
           >
             {saving ? 'Guardando...' : allComplete ? (editingRecord ? 'Guardar Cambios' : 'Crear Expediente') : `Complete todas las secciones`}
@@ -990,16 +990,16 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       </div>
 
       {confirmCopy && (
-        <div className="fixed inset-0 z-[60] bg-[#042F2E]/30 flex items-center justify-center">
+        <div className="fixed inset-0 z-[60] bg-[#0F172A]/30 flex items-center justify-center">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
-            <h3 className="font-serif text-lg font-bold text-[#134E4A] mb-3">Confirmación de expediente existente</h3>
-            <p className="text-sm text-[#3D6F66] leading-relaxed">
+            <h3 className="font-serif text-lg font-bold text-[#1E2A32] mb-3">Confirmación de expediente existente</h3>
+            <p className="text-sm text-[#3F4D58] leading-relaxed">
               El número de expediente <b>{confirmCopy.numero}</b> ya existe en el sistema:
             </p>
             <div className="mt-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
               Se guardará como copia: <b>{confirmCopy.propuesta}</b>
             </div>
-            <p className="mt-3 text-sm text-[#3D6F66] leading-relaxed">
+            <p className="mt-3 text-sm text-[#3F4D58] leading-relaxed">
               ¿Esta atención será una nueva intervención del mismo paciente? Si es así, el expediente se creará como copia del expediente original.
             </p>
             <div className="mt-6 flex items-center justify-end gap-3">
@@ -1009,7 +1009,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                   clearDraft(draftKeyStr)
                   onClose()
                 }}
-                className="px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-lg border border-[#B7D2CC]"
+                className="px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#EEF1F5] rounded-lg border border-[#D5DBE3]"
               >
                 No, salir
               </button>
@@ -1028,16 +1028,16 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       )}
 
       {conflict && (
-        <div className="fixed inset-0 z-[70] bg-[#042F2E]/30 flex items-center justify-center">
+        <div className="fixed inset-0 z-[70] bg-[#0F172A]/30 flex items-center justify-center">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
-            <h3 className="font-serif text-lg font-bold text-[#134E4A] mb-3">No se pudo guardar</h3>
-            <p className="text-sm text-[#3D6F66] leading-relaxed">
+            <h3 className="font-serif text-lg font-bold text-[#1E2A32] mb-3">No se pudo guardar</h3>
+            <p className="text-sm text-[#3F4D58] leading-relaxed">
               {conflict.message}
               {conflict.who && (
-                <span className="block mt-1 text-xs text-[#547A72]">Última edición por: <b>{conflict.who}</b></span>
+                <span className="block mt-1 text-xs text-[#5F6C79]">Última edición por: <b>{conflict.who}</b></span>
               )}
             </p>
-            <p className="mt-3 text-sm text-[#3D6F66] leading-relaxed">
+            <p className="mt-3 text-sm text-[#3F4D58] leading-relaxed">
               Si sobrescribe, sus cambios reemplazarán la versión actual del expediente.
             </p>
             <div className="mt-6 flex flex-col gap-2">
@@ -1061,7 +1061,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
               </button>
               <button
                 onClick={() => setConflict(null)}
-                className="w-full px-4 py-2 text-sm text-[#3D6F66] hover:bg-[#CCFBF1] rounded-xl transition-all duration-200"
+                className="w-full px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#EEF1F5] rounded-xl transition-all duration-200"
               >
                 Cancelar
               </button>

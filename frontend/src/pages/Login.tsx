@@ -33,42 +33,48 @@ export function Login() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#CCFBF1] to-[#F0FDFA] p-12 relative overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#5EEAD4]/20 blur-3xl" />
-        <div className="absolute -bottom-32 -left-20 w-[28rem] h-[28rem] rounded-full bg-[#14B8A6]/10 blur-3xl" />
+      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#0B2A26] via-[#0F3832] to-[#115E59] p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '22px 22px' }} />
         <div className="relative text-center">
-          <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-64 h-auto mx-auto" />
-          <p className="mt-10 text-xs font-semibold text-[#547A72] uppercase tracking-[0.3em]">
+          <div className="bg-white rounded-xl shadow-md shadow-black/20 w-fit mx-auto p-5">
+            <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-52 h-auto" />
+          </div>
+          <p className="mt-10 text-[11px] font-semibold text-[#5EEAD4] uppercase tracking-[0.32em]">
             Centro Médico San Benito José
           </p>
-          <h1 className="font-serif text-4xl text-[#134E4A] mt-4 leading-tight">
+          <h1 className="font-serif text-4xl text-white mt-4 leading-tight">
             Sistema Web
-            <span className="block text-2xl font-normal mt-1 text-[#134E4A]">
+            <span className="block text-2xl font-normal mt-1 text-white/90">
               Gestión de Expedientes Médicos
             </span>
           </h1>
+          <p className="mt-8 text-xs text-white/50 max-w-sm mx-auto leading-relaxed">
+            Plataforma institucional para el registro, control y consulta de expedientes de pacientes.
+          </p>
         </div>
 
-        <div className="relative text-center text-xs text-[#6C948C]">
+        <div className="relative text-center text-xs text-white/40">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6 bg-gradient-to-br from-[#F0FDFA] via-white to-[#CCFBF1]">
+      <div className="flex-1 flex items-center justify-center p-6 bg-[#F7F8FA]">
         <div className="w-full max-w-sm">
-          <div className="bg-white rounded-2xl shadow-xl border border-[#D8F1EC] p-8">
+          <div className="bg-white rounded-xl shadow-[#0B2A26]/5 border border-[#E4E8EE] p-8">
           <div className="lg:hidden text-center mb-10">
-            <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-40 h-auto mx-auto mb-6" />
-            <h1 className="font-serif text-2xl text-[#134E4A]">
+            <div className="bg-white rounded-lg shadow-md w-fit mx-auto p-4">
+              <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-36 h-auto" />
+            </div>
+            <h1 className="font-serif text-2xl text-[#1E2A32] mt-5">
               Sistema Web
-              <span className="block text-lg font-normal mt-1 text-[#134E4A]">
+              <span className="block text-lg font-normal mt-1 text-[#1E2A32]">
                 Gestión de Expedientes Médicos
               </span>
             </h1>
           </div>
 
-          <h2 className="font-serif text-2xl text-[#134E4A]">Iniciar sesión</h2>
-          <p className="text-sm text-[#547A72] mt-1.5 mb-8">
+          <h2 className="font-serif text-2xl text-[#1E2A32]">Iniciar sesión</h2>
+          <p className="text-sm text-[#5F6C79] mt-1.5 mb-8">
             Ingrese sus credenciales para continuar.
           </p>
 
@@ -80,29 +86,29 @@ export function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-[#134E4A] mb-1.5">Usuario</label>
+              <label className="block text-sm font-medium text-[#1E2A32] mb-1.5">Usuario</label>
               <div className="relative">
-                <User size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6C948C]" />
+                <User size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7A8694]" />
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   disabled={loading}
-                  className="w-full pl-9 pr-3 py-2.5 border border-[#D8F1EC] rounded-md text-sm bg-white focus:border-[#134E4A] outline-none transition-colors duration-200 disabled:bg-[#F0FDFA] disabled:text-[#6C948C]"
+                  className="w-full pl-9 pr-3 py-2.5 border border-[#E4E8EE] rounded-md text-sm bg-white focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/15 outline-none transition-all duration-200 disabled:bg-[#F7F8FA] disabled:text-[#7A8694]"
                   placeholder="Nombre de usuario"
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#134E4A] mb-1.5">Contraseña</label>
+              <label className="block text-sm font-medium text-[#1E2A32] mb-1.5">Contraseña</label>
               <div className="relative">
-                <Lock size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6C948C]" />
+                <Lock size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7A8694]" />
                 <PasswordInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="w-full pl-9 py-2.5 border border-[#D8F1EC] rounded-md text-sm bg-white focus:border-[#134E4A] outline-none transition-colors duration-200 disabled:bg-[#F0FDFA] disabled:text-[#6C948C]"
+                  className="w-full pl-9 py-2.5 border border-[#E4E8EE] rounded-md text-sm bg-white focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/15 outline-none transition-all duration-200 disabled:bg-[#F7F8FA] disabled:text-[#7A8694]"
                   placeholder="Contraseña"
                 />
               </div>
@@ -110,7 +116,7 @@ export function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-gradient-to-r from-[#0F766E] to-[#14B8A6] text-white rounded-md text-sm font-semibold shadow-sm hover:from-[#115E59] hover:to-[#0F766E] hover:shadow-md transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-[#0F766E] text-white rounded-md text-sm font-semibold shadow-sm hover:bg-[#115E59] transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -124,7 +130,7 @@ export function Login() {
           </form>
           </div>
 
-          <p className="mt-6 text-center text-xs text-[#6C948C]">
+          <p className="mt-6 text-center text-xs text-[#7A8694]">
             ¿Olvidó su contraseña? Contacte al administrador del sistema.
           </p>
         </div>
