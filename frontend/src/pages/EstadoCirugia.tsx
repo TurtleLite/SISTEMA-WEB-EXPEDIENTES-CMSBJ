@@ -167,10 +167,10 @@ export function EstadoCirugia() {
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
-                <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Paciente</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Especialidad</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Perfil</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Estatus de Cirugía</th>
+                <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Paciente</th>
+                <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Especialidad</th>
+                <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Perfil</th>
+                <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Estatus de Cirugía</th>
               </tr>
             </thead>
             <tbody>

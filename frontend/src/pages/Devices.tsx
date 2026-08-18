@@ -213,13 +213,13 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
-                <th className="w-[21%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Equipo</th>
-                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Estado</th>
-                <th className="w-[14%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Usuarios</th>
-                <th className="w-[11%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Actividad</th>
-                <th className="w-[7%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Eventos</th>
-                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Nota</th>
-                <th className="w-[23%] text-right px-3 py-2.5 text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Acción</th>
+                <th className="w-[21%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Equipo</th>
+                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
+                <th className="w-[14%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Usuarios</th>
+                <th className="w-[11%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Actividad</th>
+                <th className="w-[7%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Eventos</th>
+                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Nota</th>
+                <th className="w-[23%] text-right px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
               </tr>
             </thead>
             <tbody>

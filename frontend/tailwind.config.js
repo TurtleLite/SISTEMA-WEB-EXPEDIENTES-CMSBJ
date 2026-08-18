@@ -23,7 +23,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Ubuntu', 'Cantarell', 'sans-serif'],
-        serif: ['Merriweather', 'Georgia', 'Cambria', 'Times New Roman', 'serif'],
+        serif: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Ubuntu', 'Cantarell', 'sans-serif'],
       },
     },
   },

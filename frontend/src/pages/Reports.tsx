@@ -513,7 +513,7 @@ export function Reports() {
                 <thead className="sticky top-0 z-10">
                   <tr className="bg-[#0F766E] text-white">
                     {preview.columns.map((col, ci) => (
-                      <th key={col} className={`text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${ci === 0 ? 'sticky left-0 z-20 bg-[#0F766E] border-r border-white/30' : ''}`}>
+                      <th key={col} className={`text-left px-4 py-3 text-xs font-bold uppercase tracking-wider whitespace-nowrap ${ci === 0 ? 'sticky left-0 z-20 bg-[#0F766E] border-r border-white/30' : ''}`}>
                         {col}
                       </th>
                     ))}

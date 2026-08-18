@@ -665,7 +665,7 @@ export function ListDetail() {
                   </th>
                 )}
                 {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col) => (
-                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''}`}>
+                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''}`}>
                     {col.label}
                   </th>
                 ))}

@@ -42,9 +42,9 @@ export function Login() {
           <p className="mt-12 text-xs font-semibold text-[#99F6E4] uppercase tracking-[0.32em]">
             Centro Médico San Benito José
           </p>
-          <h1 className="font-serif text-5xl text-white mt-4 leading-tight">
+          <h1 className="font-serif font-bold text-5xl text-white mt-4 leading-tight">
             Sistema Web
-            <span className="block text-[26px] font-normal mt-2 text-white/85">
+            <span className="block text-[26px] font-bold mt-2 text-white/85">
               Gestión de Expedientes Médicos
             </span>
           </h1>
@@ -60,15 +60,15 @@ export function Login() {
           <div className="bg-white rounded-2xl shadow-lg shadow-[#134E4A]/5 border border-[#E4E8EE] p-10">
           <div className="lg:hidden text-center mb-10">
             <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-44 h-auto mx-auto mb-6" />
-            <h1 className="font-serif text-2xl text-[#1E2A32]">
+            <h1 className="font-serif font-bold text-2xl text-[#1E2A32]">
               Sistema Web
-              <span className="block text-lg font-normal mt-1 text-[#1E2A32]">
+              <span className="block text-lg font-bold mt-1 text-[#1E2A32]">
                 Gestión de Expedientes Médicos
               </span>
             </h1>
           </div>
 
-          <h2 className="font-serif text-[26px] text-[#1E2A32]">Iniciar sesión</h2>
+          <h2 className="font-serif font-bold text-[26px] text-[#1E2A32]">Iniciar sesión</h2>
           <p className="text-sm text-[#5F6C79] mt-2 mb-4">
             Ingrese sus credenciales para continuar.
           </p>

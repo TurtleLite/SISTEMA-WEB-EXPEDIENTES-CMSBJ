@@ -338,12 +338,12 @@ export function AuditLog() {
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
-                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Fecha y hora</th>
-                <th className="w-[12%] text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Usuario</th>
-                <th className="w-[15%] text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Acción</th>
-                <th className="w-[10%] text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Tipo</th>
-                <th className="w-[22%] text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Detalle</th>
-                <th className="w-[26%] text-left px-6 py-4 text-xs font-semibold text-[#7A8694] uppercase tracking-wider">Equipo</th>
+                <th className="w-[15%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Fecha y hora</th>
+                <th className="w-[12%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Usuario</th>
+                <th className="w-[15%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
+                <th className="w-[10%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Tipo</th>
+                <th className="w-[22%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Detalle</th>
+                <th className="w-[26%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Equipo</th>
               </tr>
             </thead>
             <tbody>
