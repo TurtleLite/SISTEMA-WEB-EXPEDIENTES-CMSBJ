@@ -43,7 +43,10 @@ export function Login() {
             Centro Médico San Benito José
           </p>
           <h1 className="font-serif font-bold text-5xl text-white mt-5 leading-tight tracking-tight">
-            Expedientes Médicos
+            Sistema Web
+            <span className="block text-[26px] font-bold mt-2 text-white/85">
+              Expedientes Médicos
+            </span>
           </h1>
         </div>
 
@@ -58,7 +61,10 @@ export function Login() {
           <div className="lg:hidden text-center mb-10">
             <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-44 h-auto mx-auto mb-6" />
             <h1 className="font-serif font-bold text-2xl text-[#1E2A32]">
-              Expedientes Médicos
+              Sistema Web
+              <span className="block text-lg font-bold mt-1 text-[#1E2A32]">
+                Expedientes Médicos
+              </span>
             </h1>
           </div>
 
