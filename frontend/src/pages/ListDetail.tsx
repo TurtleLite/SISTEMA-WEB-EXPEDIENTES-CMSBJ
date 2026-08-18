@@ -704,7 +704,7 @@ export function ListDetail() {
               {records.length === 0 && (
                 <tr>
                   <td colSpan={100} className="px-4 py-12 text-center text-[#7A8694] text-sm">
-                    {search || especialidadFilter ? 'Sin resultados de búsqueda' : 'No hay registros aún'}
+                    {search || especialidadFilter ? 'No encontramos expedientes con ese criterio. Prueba con otro nombre, número o diagnóstico.' : 'Aún no hay expedientes registrados. Crea el primero con el botón «Nuevo».'}
                   </td>
                 </tr>
               )}
@@ -944,7 +944,7 @@ export function ListDetail() {
                 </>
               )}
               {specialties.length === 0 && !editingEsp && (
-                <p className="text-sm text-[#7A8694] text-center py-8">No hay especialidades registradas</p>
+                <p className="text-sm text-[#7A8694] text-center py-8">Aún no hay especialidades registradas. Agrega la primera con «Nueva especialidad».</p>
               )}
               {!editingEsp && espSearch.trim() && filteredSpecialties.length === 0 && (
                 <p className="text-sm text-[#7A8694] text-center py-8">Sin resultados para "{espSearch}"</p>
@@ -1110,7 +1110,7 @@ export function ListDetail() {
                 ))
               )}
               {localities.length === 0 && !editingLoc && (
-                <p className="text-sm text-[#7A8694] text-center py-8">No hay localidades registradas</p>
+                <p className="text-sm text-[#7A8694] text-center py-8">Aún no hay localidades registradas. Agrega la primera con «Nueva localidad».</p>
               )}
               {!editingLoc && locSearch.trim() && filteredLocalities.length === 0 && (
                 <p className="text-sm text-[#7A8694] text-center py-8">Sin resultados para "{locSearch}"</p>

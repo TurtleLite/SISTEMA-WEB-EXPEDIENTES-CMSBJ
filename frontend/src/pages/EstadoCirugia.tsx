@@ -184,7 +184,7 @@ export function EstadoCirugia() {
                   </td>
                 </tr>
               ) : records.length === 0 ? (
-                <tr><td colSpan={4} className="px-4 py-12 text-center text-[#7A8694] text-sm">Sin registros</td></tr>
+                <tr><td colSpan={4} className="px-4 py-12 text-center text-[#7A8694] text-sm">No hay cirugías que mostrar con los filtros actuales.</td></tr>
               ) : records.map((r, idx) => (
                 <tr key={r.id} className={`border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] ${idx % 2 === 0 ? 'bg-white' : 'bg-[#EEF1F5]'}`}>
                   <td className="px-6 py-4 font-medium text-[#1E2A32] max-w-[240px] truncate" title={`${r.data?.nombre || ''} ${r.data?.apellido || ''}`}>

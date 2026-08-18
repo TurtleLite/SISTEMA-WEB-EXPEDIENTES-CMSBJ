@@ -351,7 +351,7 @@ export function AuditLog() {
                 <tr>
                   <td colSpan={6} className="px-6 py-10 text-center text-sm text-[#7A8694]">
                     <ScrollText size={28} className="mx-auto mb-2 text-[#D5DBE3]" />
-                    No hay eventos que coincidan
+                    No hay actividades registradas con esos filtros.
                   </td>
                 </tr>
               )}

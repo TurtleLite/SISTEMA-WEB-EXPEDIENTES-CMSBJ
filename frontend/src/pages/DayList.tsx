@@ -338,7 +338,7 @@ export function DayList() {
               </div>
             ) : visibleAvailable.length === 0 ? (
               <p className="text-sm text-[#7A8694] text-center py-12">
-                {search || statusFilter !== 'all' ? 'Sin pacientes que coincidan' : 'No hay pacientes disponibles'}
+                {search || statusFilter !== 'all' ? 'No encontramos pacientes con ese criterio. Revisa el nombre o el filtro.' : 'No hay pacientes sin asignar para esta fecha. Prueba con otra fecha.'}
               </p>
             ) : (
               <ul className="divide-y divide-[#E4E8EE]">

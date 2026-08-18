@@ -85,7 +85,7 @@ export function Sessions() {
   }
 
   const handleRevoke = async (s: SessionItem) => {
-    if (!await confirm(`¿Cerrar la sesión de ${s.username}?`)) return
+    if (!await confirm(`¿Cerrar la sesión de ${s.username}? Tendrá que volver a iniciar sesión.`)) return
     try {
       await authApi.revokeSession(s.id)
       toast('Sesión cerrada', 'success')
@@ -145,7 +145,7 @@ export function Sessions() {
             <tbody>
               {sessions.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones registradas</td>
+                  <td colSpan={9} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones activas en este momento.</td>
                 </tr>
               )}
               {sessions.map((s) => {

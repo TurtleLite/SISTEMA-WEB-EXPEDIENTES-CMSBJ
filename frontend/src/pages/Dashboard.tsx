@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { listsApi } from '../services/api'
 import {
-  Users, FileText, Table2, Lock,
+  Users, FileText, FolderOpen, Lock,
   UserCircle2, Activity, ClipboardList, ShieldCheck, ScrollText,
 } from 'lucide-react'
 
@@ -63,7 +63,7 @@ export function Dashboard() {
     },
     {
       label: 'Expedientes',
-      icon: <Table2 size={22} />,
+      icon: <FolderOpen size={22} />,
       color: 'bg-violet-500',
       allowed: true,
       onClick: goExpedientes,

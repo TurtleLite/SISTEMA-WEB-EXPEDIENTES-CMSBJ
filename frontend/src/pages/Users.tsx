@@ -88,7 +88,8 @@ export function Users() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!await confirm('¿Eliminar este usuario?')) return
+    const target = users.find((x) => x.id === id)
+    if (!await confirm(`¿Eliminar al usuario ${target?.username || 'seleccionado'}? Esta acción no se puede deshacer.`)) return
     try {
       await usersApi.delete(id)
       loadUsers()
@@ -101,7 +102,7 @@ export function Users() {
   const isLocked = (u: User) => !!u.locked_until && new Date(u.locked_until).getTime() > Date.now()
 
   const handleUnlock = async (u: User) => {
-    if (!await confirm(`¿Desbloquear al usuario ${u.username}?`)) return
+    if (!await confirm(`¿Desbloquear la cuenta de ${u.username}? Podrá iniciar sesión de nuevo.`)) return
     try {
       await usersApi.unlock(u.id)
       loadUsers()

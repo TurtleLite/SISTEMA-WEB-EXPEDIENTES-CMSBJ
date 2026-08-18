@@ -523,7 +523,7 @@ export function Reports() {
                   {preview.records.length === 0 ? (
                     <tr>
                       <td colSpan={preview.columns.length} className="px-4 py-12 text-center text-[#7A8694]">
-                        {loadingPreview ? 'Cargando...' : 'Sin registros para este reporte'}
+                        {loadingPreview ? 'Cargando...' : 'Este reporte no tiene registros con los filtros seleccionados.'}
                       </td>
                     </tr>
                   ) : preview.records.map((record, idx) => (
