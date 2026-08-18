@@ -33,36 +33,22 @@ export function Login() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#0F766E] via-[#14B8A6] to-[#2DD4BF] p-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '22px 22px' }} />
-        <div className="relative text-center">
-          <div className="bg-white rounded-xl shadow-md shadow-black/20 w-fit mx-auto p-5">
-            <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-52 h-auto" />
-          </div>
-          <p className="mt-10 text-[11px] font-semibold text-white/80 uppercase tracking-[0.32em]">
-            Centro Médico San Benito José
-          </p>
-          <h1 className="font-serif text-4xl text-white mt-4 leading-tight">
-            Sistema Web
-            <span className="block text-2xl font-normal mt-1 text-white/90">
-              Gestión de Expedientes Médicos
-            </span>
-          </h1>
+      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-[#F7F8FA] border-r border-[#E4E8EE] p-12">
+        <div className="flex items-center justify-center flex-1">
+          <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-64 h-auto" />
         </div>
 
-        <div className="relative text-center text-xs text-white/50">
+        <div className="text-center text-xs text-[#8794A1]">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6 bg-[#F7F8FA]">
+      <div className="flex-1 flex items-center justify-center p-6 bg-white">
         <div className="w-full max-w-sm">
-          <div className="bg-white rounded-xl shadow-[#0B2A26]/5 border border-[#E4E8EE] p-8">
+          <div className="p-8">
           <div className="lg:hidden text-center mb-10">
-            <div className="bg-white rounded-lg shadow-md w-fit mx-auto p-4">
-              <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-36 h-auto" />
-            </div>
-            <h1 className="font-serif text-2xl text-[#1E2A32] mt-5">
+            <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-40 h-auto mx-auto mb-6" />
+            <h1 className="font-serif text-2xl text-[#1E2A32]">
               Sistema Web
               <span className="block text-lg font-normal mt-1 text-[#1E2A32]">
                 Gestión de Expedientes Médicos
