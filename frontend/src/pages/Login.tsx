@@ -33,24 +33,21 @@ export function Login() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#14A391] via-[#0D9488] to-[#0F766E] p-14 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-        <div className="relative flex-1 flex flex-col items-center justify-center text-center">
-          <div className="bg-white/95 rounded-2xl shadow-lg shadow-[#0B2A26]/20 px-12 py-8">
+      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-[#0D9488] p-14">
+        <div className="flex-1 flex flex-col items-center justify-center text-center">
+          <div className="bg-white rounded-xl border border-[#0F766E]/10 px-14 py-9">
             <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-72 h-auto" />
           </div>
-          <p className="mt-12 text-xs font-semibold text-[#99F6E4] uppercase tracking-[0.32em]">
+          <div className="w-12 h-px bg-white/25 mt-12" />
+          <p className="mt-6 text-[11px] font-semibold text-[#B7F4EC] uppercase tracking-[0.3em]">
             Centro Médico San Benito José
           </p>
-          <h1 className="font-serif font-bold text-5xl text-white mt-4 leading-tight">
-            Sistema Web
-            <span className="block text-[26px] font-bold mt-2 text-white/85">
-              Gestión de Expedientes Médicos
-            </span>
+          <h1 className="font-serif font-bold text-5xl text-white mt-5 leading-tight tracking-tight">
+            Expedientes Médicos
           </h1>
         </div>
 
-        <div className="relative text-center text-xs text-white/60">
+        <div className="text-center text-xs text-white/55">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </div>
       </div>
@@ -61,10 +58,7 @@ export function Login() {
           <div className="lg:hidden text-center mb-10">
             <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-44 h-auto mx-auto mb-6" />
             <h1 className="font-serif font-bold text-2xl text-[#1E2A32]">
-              Sistema Web
-              <span className="block text-lg font-bold mt-1 text-[#1E2A32]">
-                Gestión de Expedientes Médicos
-              </span>
+              Expedientes Médicos
             </h1>
           </div>
 
