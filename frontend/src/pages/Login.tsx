@@ -33,36 +33,32 @@ export function Login() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#0F766E] via-[#14B8A6] to-[#2DD4BF] p-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '22px 22px' }} />
-        <div className="relative text-center">
-          <div className="bg-white rounded-xl shadow-md shadow-black/20 w-fit mx-auto p-5">
-            <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-52 h-auto" />
-          </div>
-          <p className="mt-10 text-[11px] font-semibold text-white/80 uppercase tracking-[0.32em]">
+      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#8EEFDF] via-[#CCFBF1] to-[#F4FDFA] p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #134E4A 1px, transparent 0)', backgroundSize: '22px 22px' }} />
+        <div className="relative flex-1 flex flex-col items-center justify-center text-center">
+          <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-64 h-auto" />
+          <p className="mt-12 text-[11px] font-semibold text-[#0F766E] uppercase tracking-[0.32em]">
             Centro Médico San Benito José
           </p>
-          <h1 className="font-serif text-4xl text-white mt-4 leading-tight">
+          <h1 className="font-serif text-4xl text-[#134E4A] mt-4 leading-tight">
             Sistema Web
-            <span className="block text-2xl font-normal mt-1 text-white/90">
+            <span className="block text-2xl font-normal mt-1 text-[#134E4A]/80">
               Gestión de Expedientes Médicos
             </span>
           </h1>
         </div>
 
-        <div className="relative text-center text-xs text-white/50">
+        <div className="relative text-center text-xs text-[#5F6C79]">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </div>
       </div>
 
       <div className="flex-1 flex items-center justify-center p-6 bg-[#F7F8FA]">
         <div className="w-full max-w-sm">
-          <div className="bg-white rounded-xl shadow-[#0B2A26]/5 border border-[#E4E8EE] p-8">
+          <div className="bg-white rounded-xl shadow-md shadow-[#134E4A]/5 border border-[#E4E8EE] p-8">
           <div className="lg:hidden text-center mb-10">
-            <div className="bg-white rounded-lg shadow-md w-fit mx-auto p-4">
-              <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-36 h-auto" />
-            </div>
-            <h1 className="font-serif text-2xl text-[#1E2A32] mt-5">
+            <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-40 h-auto mx-auto mb-6" />
+            <h1 className="font-serif text-2xl text-[#1E2A32]">
               Sistema Web
               <span className="block text-lg font-normal mt-1 text-[#1E2A32]">
                 Gestión de Expedientes Médicos
@@ -71,9 +67,10 @@ export function Login() {
           </div>
 
           <h2 className="font-serif text-2xl text-[#1E2A32]">Iniciar sesión</h2>
-          <p className="text-sm text-[#5F6C79] mt-1.5 mb-8">
+          <p className="text-sm text-[#5F6C79] mt-1.5 mb-3">
             Ingrese sus credenciales para continuar.
           </p>
+          <div className="w-10 h-0.5 bg-[#14B8A6] rounded-full mb-8" />
 
           {error && (
             <div className="bg-red-50 text-red-700 px-4 py-3 rounded-md text-sm mb-5 border border-red-100">
