@@ -33,13 +33,13 @@ export function Login() {
 
   return (
     <div className="min-h-screen flex bg-white">
-      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#0B2A26] via-[#0F3832] to-[#115E59] p-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '22px 22px' }} />
+      <div className="hidden lg:flex flex-col justify-between w-[55%] bg-gradient-to-br from-[#0F766E] via-[#14B8A6] to-[#2DD4BF] p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '22px 22px' }} />
         <div className="relative text-center">
           <div className="bg-white rounded-xl shadow-md shadow-black/20 w-fit mx-auto p-5">
             <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-52 h-auto" />
           </div>
-          <p className="mt-10 text-[11px] font-semibold text-[#5EEAD4] uppercase tracking-[0.32em]">
+          <p className="mt-10 text-[11px] font-semibold text-white/80 uppercase tracking-[0.32em]">
             Centro Médico San Benito José
           </p>
           <h1 className="font-serif text-4xl text-white mt-4 leading-tight">
@@ -48,12 +48,9 @@ export function Login() {
               Gestión de Expedientes Médicos
             </span>
           </h1>
-          <p className="mt-8 text-xs text-white/50 max-w-sm mx-auto leading-relaxed">
-            Plataforma institucional para el registro, control y consulta de expedientes de pacientes.
-          </p>
         </div>
 
-        <div className="relative text-center text-xs text-white/40">
+        <div className="relative text-center text-xs text-white/50">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </div>
       </div>
