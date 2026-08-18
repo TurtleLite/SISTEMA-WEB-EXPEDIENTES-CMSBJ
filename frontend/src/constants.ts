@@ -9,7 +9,7 @@ export const ROLE_META: Record<string, RoleMeta> = {
   admin: {
     label: 'Administrador',
     badge: 'bg-violet-100 text-violet-800 border-violet-200',
-    gradient: 'from-violet-600 to-violet-900',
+    gradient: 'from-black to-black',
     permissions: [
       'Expedientes (solo consultar)',
       'Localidades y Especialidades (crear, editar, eliminar)',

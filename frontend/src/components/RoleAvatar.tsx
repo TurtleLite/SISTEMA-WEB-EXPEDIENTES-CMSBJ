@@ -9,7 +9,7 @@ const ROLE_ICONS: Record<string, React.ReactNode> = {
 }
 
 const ROLE_COLORS: Record<string, string> = {
-  admin: 'from-violet-600 to-violet-900',
+  admin: 'from-black to-black',
   direccion: 'from-[#0F766E] to-[#115E59]',
   direccion_medica: 'from-sky-600 to-sky-800',
   medico: 'from-emerald-600 to-emerald-800',
