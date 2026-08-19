@@ -84,18 +84,20 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
 
   return (
     <div className="h-full flex flex-col gap-4">
-      {!embedded && (
-        <div className="flex items-center justify-between shrink-0">
+      <div className="flex items-center justify-between shrink-0">
+        {!embedded ? (
           <h1 className="font-serif text-xl font-bold text-[#1E2A32]">Respaldos</h1>
-          <button
-            onClick={handleGenerate}
-            disabled={generating}
-            className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200 disabled:opacity-50"
-          >
-            <DatabaseBackup size={14} /> {generating ? 'Generando...' : 'Generar respaldo'}
-          </button>
-        </div>
-      )}
+        ) : (
+          <div />
+        )}
+        <button
+          onClick={handleGenerate}
+          disabled={generating}
+          className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200 disabled:opacity-50"
+        >
+          <DatabaseBackup size={14} /> {generating ? 'Generando...' : 'Generar respaldo'}
+        </button>
+      </div>
 
       <div className="shrink-0 flex items-center gap-2 text-[11px] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
         <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
