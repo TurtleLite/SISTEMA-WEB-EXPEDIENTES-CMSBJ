@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { reportsApi, listsApi } from '../services/api'
 import { Report, ListDefinition } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
-import { Plus, FileSpreadsheet, Download, Trash2, Eye, X } from 'lucide-react'
+import { Plus, FileSpreadsheet, Download, Trash2, Eye, X, RefreshCw } from 'lucide-react'
 
 const STATUS_OPTIONS = ['En espera', 'Reprogramar', 'Cancelado', 'Fuera de perfil San Benito', 'Operado', 'No apto para cirugía', 'No se presentó']
 
@@ -17,6 +17,51 @@ const CRITICIDAD_LABELS: Record<string, string> = {
 }
 
 const criticidadLabel = (v: string) => CRITICIDAD_LABELS[v] || v
+
+interface ReportForm {
+  name: string
+  description: string
+  list_definition_id: string
+  especialidad: string
+  perfil: string
+  criticidad: string
+  estatus_cirugia: string
+  fecha_desde: string
+  fecha_hasta: string
+  columns_selected: string[]
+}
+
+const EMPTY_FORM: ReportForm = {
+  name: '', description: '', list_definition_id: '', especialidad: '', perfil: '',
+  criticidad: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '', columns_selected: [],
+}
+
+const anyFilter = (f: ReportForm): boolean =>
+  !!(f.especialidad || f.perfil || f.criticidad || f.estatus_cirugia || f.fecha_desde || f.fecha_hasta)
+
+const fmtFecha = (iso: string) => {
+  const d = new Date(iso + 'T00:00:00')
+  if (isNaN(d.getTime())) return iso
+  return d.toLocaleDateString('es-HN')
+}
+
+const buildAutoName = (f: ReportForm): string => {
+  const parts: string[] = []
+  const hasDates = !!(f.fecha_desde || f.fecha_hasta)
+  parts.push(hasDates ? 'Expedientes creados' : 'Expedientes')
+  if (hasDates) {
+    const range = []
+    if (f.fecha_desde) range.push(fmtFecha(f.fecha_desde))
+    if (f.fecha_hasta) range.push(fmtFecha(f.fecha_hasta))
+    if (range.length) parts.push(range.join(' – '))
+  }
+  if (f.especialidad) parts.push(f.especialidad)
+  if (f.perfil) parts.push(`Perfil ${f.perfil}`)
+  if (f.criticidad) parts.push(`Crítica ${criticidadLabel(f.criticidad).toLowerCase()}`)
+  if (f.estatus_cirugia) parts.push(f.estatus_cirugia)
+  if (parts.length === 1) return 'Expedientes completos'
+  return parts.join(' · ')
+}
 
 interface PreviewData {
   name: string
@@ -46,12 +91,41 @@ export function Reports() {
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null)
   const [savingOrder, setSavingOrder] = useState(false)
   const [orderSaved, setOrderSaved] = useState(false)
-  const [form, setForm] = useState({
-    name: '', description: '', list_definition_id: '', especialidad: '', perfil: '',
-    criticidad: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '', columns_selected: [] as string[],
-  })
+  const [form, setForm] = useState<ReportForm>(EMPTY_FORM)
+  const nameTouched = useRef(false)
   const { user } = useAuth()
   const { toast } = useNotification()
+
+  const setFilter = (patch: Partial<ReportForm>) => {
+    setForm((prev) => {
+      const next = { ...prev, ...patch }
+      if (!nameTouched.current && anyFilter(next)) next.name = buildAutoName(next)
+      return next
+    })
+  }
+
+  const regenName = () => {
+    nameTouched.current = false
+    setForm((p) => ({ ...p, name: buildAutoName(p) }))
+  }
+
+  const clearFilters = () => {
+    setForm((prev) => {
+      const next = { ...prev, especialidad: '', perfil: '', criticidad: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '' }
+      if (!nameTouched.current) next.name = buildAutoName(next)
+      return next
+    })
+  }
+
+  const applyDateShortcut = (kind: 'hoy' | 'mes') => {
+    const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+    const now = new Date()
+    if (kind === 'hoy') setFilter({ fecha_desde: iso(now), fecha_hasta: iso(now) })
+    else {
+      const start = new Date(now.getFullYear(), now.getMonth(), 1)
+      setFilter({ fecha_desde: iso(start), fecha_hasta: iso(now) })
+    }
+  }
 
   const loadEspecialidades = async (listId: string) => {
     try {
@@ -120,7 +194,8 @@ export function Reports() {
         },
       })
       setShowModal(false)
-      setForm({ name: '', description: '', list_definition_id: systemListId, especialidad: '', perfil: '', criticidad: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '', columns_selected: [] })
+      nameTouched.current = false
+      setForm({ ...EMPTY_FORM, list_definition_id: systemListId })
       setEspecialidades([])
       setPerfiles([])
       setCriticidades([])
@@ -375,12 +450,21 @@ export function Reports() {
               </button>
             </div>
             <div className="space-y-3">
-              <input
-                placeholder="Nombre del reporte *"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
-              />
+              <div className="relative">
+                <input
+                  placeholder="Nombre del reporte *"
+                  value={form.name}
+                  onChange={(e) => { nameTouched.current = true; setForm({ ...form, name: e.target.value }) }}
+                  className="w-full px-3 py-2.5 pr-10 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                />
+                <button
+                  onClick={regenName}
+                  title="Regenerar nombre automático según los filtros"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#7A8694] hover:text-[#0F766E] transition-colors duration-200"
+                >
+                  <RefreshCw size={15} />
+                </button>
+              </div>
               <input
                 placeholder="Descripción (opcional)"
                 value={form.description}
@@ -388,82 +472,115 @@ export function Reports() {
                 className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
               />
 
-              <div className="border border-[#E4E8EE] rounded-xl p-3 space-y-3 bg-[#F7F8FA]/50">
-                <p className="text-xs font-semibold text-[#115E59] uppercase tracking-wider">Filtros</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <select
-                    value={form.especialidad}
-                    onChange={(e) => setForm({ ...form, especialidad: e.target.value })}
-                    disabled={!form.list_definition_id}
-                    className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
-                  >
-                    <option value="">Especialidad (todas)</option>
-                    {especialidades.map((esp) => (
-                      <option key={esp} value={esp}>{esp}</option>
-                    ))}
-                  </select>
-                  <select
-                    value={form.perfil}
-                    onChange={(e) => setForm({ ...form, perfil: e.target.value })}
-                    disabled={!form.list_definition_id}
-                    className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
-                  >
-                    <option value="">Perfil (todos)</option>
-                    {perfiles.map((p) => (
-                      <option key={p} value={p}>{p}</option>
-                    ))}
-                  </select>
-                  <select
-                    value={form.criticidad}
-                    onChange={(e) => setForm({ ...form, criticidad: e.target.value })}
-                    disabled={!form.list_definition_id}
-                    className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
-                  >
-                    <option value="">Criticidad clínica (todas)</option>
-                    {criticidades.map((c) => (
-                      <option key={c} value={c}>{criticidadLabel(c)}</option>
-                    ))}
-                  </select>
-                  <select
-                    value={form.estatus_cirugia}
-                    onChange={(e) => setForm({ ...form, estatus_cirugia: e.target.value })}
-                    className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
-                  >
-                    <option value="">Estatus de cirugía (todos)</option>
-                    {STATUS_OPTIONS.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
+              <div className="border border-[#E4E8EE] rounded-xl p-4 space-y-4 bg-[#F7F8FA]/50">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold text-[#115E59] uppercase tracking-wider">Filtros</p>
+                  {anyFilter(form) && (
+                    <button
+                      onClick={clearFilters}
+                      className="text-[11px] font-medium text-[#5F6C79] hover:text-red-600 transition-colors duration-200"
+                    >
+                      Limpiar filtros
+                    </button>
+                  )}
                 </div>
-              </div>
 
-              <div className="border border-amber-200 rounded-xl p-3 space-y-3 bg-amber-50/40">
-                <p className="text-xs font-semibold text-amber-700 uppercase tracking-wider">Expedientes creados por fecha</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="sm:col-span-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-medium text-[#3F4D58]">Periodo de creación</label>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => applyDateShortcut('hoy')}
+                          className="text-[11px] font-medium text-[#0F766E] hover:bg-[#EEF1F5] rounded-lg px-2 py-0.5 transition-colors duration-200"
+                        >
+                          Hoy
+                        </button>
+                        <button
+                          onClick={() => applyDateShortcut('mes')}
+                          className="text-[11px] font-medium text-[#0F766E] hover:bg-[#EEF1F5] rounded-lg px-2 py-0.5 transition-colors duration-200"
+                        >
+                          Este mes
+                        </button>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <input
+                        type="date"
+                        value={form.fecha_desde}
+                        max={form.fecha_hasta || undefined}
+                        onChange={(e) => setFilter({ fecha_desde: e.target.value })}
+                        className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                      />
+                      <input
+                        type="date"
+                        value={form.fecha_hasta}
+                        min={form.fecha_desde || undefined}
+                        onChange={(e) => setFilter({ fecha_hasta: e.target.value })}
+                        className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                      />
+                    </div>
+                    <p className="text-[11px] text-[#7A8694] mt-1">
+                      Sin fechas = todos los expedientes, sin importar cuándo se crearon.
+                    </p>
+                  </div>
+
                   <div>
-                    <label className="block text-xs font-medium text-amber-700 mb-1">Desde</label>
-                    <input
-                      type="date"
-                      value={form.fecha_desde}
-                      max={form.fecha_hasta || undefined}
-                      onChange={(e) => setForm({ ...form, fecha_desde: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-amber-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-amber-300/30 focus:border-amber-400 transition-all duration-200"
-                    />
+                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Especialidad</label>
+                    <select
+                      value={form.especialidad}
+                      onChange={(e) => setFilter({ especialidad: e.target.value })}
+                      disabled={!form.list_definition_id}
+                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
+                    >
+                      <option value="">Todas</option>
+                      {especialidades.map((esp) => (
+                        <option key={esp} value={esp}>{esp}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-amber-700 mb-1">Hasta</label>
-                    <input
-                      type="date"
-                      value={form.fecha_hasta}
-                      min={form.fecha_desde || undefined}
-                      onChange={(e) => setForm({ ...form, fecha_hasta: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-amber-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-amber-300/30 focus:border-amber-400 transition-all duration-200"
-                    />
+                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Estatus de cirugía</label>
+                    <select
+                      value={form.estatus_cirugia}
+                      onChange={(e) => setFilter({ estatus_cirugia: e.target.value })}
+                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                    >
+                      <option value="">Todos</option>
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Perfil</label>
+                    <select
+                      value={form.perfil}
+                      onChange={(e) => setFilter({ perfil: e.target.value })}
+                      disabled={!form.list_definition_id}
+                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
+                    >
+                      <option value="">Todos</option>
+                      {perfiles.map((p) => (
+                        <option key={p} value={p}>{p}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Criticidad clínica</label>
+                    <select
+                      value={form.criticidad}
+                      onChange={(e) => setFilter({ criticidad: e.target.value })}
+                      disabled={!form.list_definition_id}
+                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
+                    >
+                      <option value="">Todas</option>
+                      {criticidades.map((c) => (
+                        <option key={c} value={c}>{criticidadLabel(c)}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
-                <p className="text-[11px] text-amber-600">
-                  El reporte contará y listará solo los expedientes creados entre las fechas indicadas (sin fechas = todos).
-                </p>
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-4">
