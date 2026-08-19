@@ -182,9 +182,6 @@ export function Sessions() {
 
       {tab === 'sesiones' && (<>
       <div className="flex items-center justify-between shrink-0 flex-wrap gap-3">
-        <div>
-          <h2 className="text-sm font-bold text-[#1E2A32]">Sesiones Activas</h2>
-        </div>
         <div className="flex items-center gap-2">
           <select
             value={filterUser}
