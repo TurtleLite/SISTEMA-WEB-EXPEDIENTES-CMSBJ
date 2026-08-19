@@ -208,10 +208,17 @@ export const dayListsApi = {
 export const notificationsApi = {
   list: (params?: any) => api.get('/notifications/', { params }),
   unreadCount: () => api.get('/notifications/unread-count'),
-  send: (data: { title: string; message: string; target_user_id?: string }) =>
+  send: (data: { title: string; message: string; target_user_id?: string; target_role?: string }) =>
     api.post('/notifications/', data),
   markRead: (id: string | number) => api.post(`/notifications/${id}/read`),
   markAllRead: () => api.post('/notifications/read-all'),
+}
+
+export const backupsApi = {
+  list: () => api.get('/backups/'),
+  generate: () => api.post('/backups/generate'),
+  download: (name: string) => api.get(`/backups/${name}/download`, { responseType: 'blob' }),
+  delete: (name: string) => api.delete(`/backups/${name}`),
 }
 
 export default api

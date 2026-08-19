@@ -3,6 +3,7 @@ import { authApi, usersApi, notificationsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
 import { useMessages } from '../contexts/MessagesContext'
 import { LogOut, ShieldCheck, Smartphone, Monitor, Lock, Send, X } from 'lucide-react'
+import { Devices } from './Devices'
 
 interface SessionItem {
   id: string
@@ -58,6 +59,7 @@ const deviceFromAgent = (agent: string) => {
 }
 
 export function Sessions() {
+  const [tab, setTab] = useState<'sesiones' | 'equipos'>('sesiones')
   const [sessions, setSessions] = useState<SessionItem[]>([])
   const [users, setUsers] = useState<{ id: string; username: string; full_name: string }[]>([])
   const [filterUser, setFilterUser] = useState('')
@@ -145,8 +147,47 @@ export function Sessions() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-center justify-between shrink-0 flex-wrap gap-3">
         <div>
-          <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Sesiones Activas</h1>
+          <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Sesiones</h1>
           <p className="text-sm text-[#5F6C79] mt-0.5">
+            Control de acceso en vivo y equipos del centro.
+          </p>
+        </div>
+        <button
+          onClick={() => setShowMessage(true)}
+          className="flex items-center gap-1.5 px-4 py-2 bg-white text-[#0F766E] border border-[#0F766E] rounded-xl hover:bg-[#F7F8FA] text-sm font-medium transition-all duration-200"
+        >
+          <Send size={15} /> Enviar mensaje
+        </button>
+      </div>
+
+      <div className="shrink-0 flex items-center gap-1 bg-[#EEF1F5] p-1 rounded-xl w-fit">
+        <button
+          onClick={() => setTab('sesiones')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+            tab === 'sesiones' ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+          }`}
+        >
+          <ShieldCheck size={15} />
+          Sesiones activas
+        </button>
+        <button
+          onClick={() => setTab('equipos')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+            tab === 'equipos' ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+          }`}
+        >
+          <Monitor size={15} />
+          Equipos
+        </button>
+      </div>
+
+      {tab === 'equipos' && <Devices embedded />}
+
+      {tab === 'sesiones' && (<>
+      <div className="flex items-center justify-between shrink-0 flex-wrap gap-3">
+        <div>
+          <h2 className="text-sm font-bold text-[#1E2A32]">Sesiones Activas</h2>
+          <p className="text-xs text-[#5F6C79] mt-0.5">
             {active.length} sesión(es) activa(s). Puede cerrar cualquier sesión de forma remota.
           </p>
         </div>
@@ -166,12 +207,6 @@ export function Sessions() {
             className="px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200"
           >
             Filtrar
-          </button>
-          <button
-            onClick={() => setShowMessage(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-white text-[#0F766E] border border-[#0F766E] rounded-xl hover:bg-[#F7F8FA] text-sm font-medium transition-all duration-200"
-          >
-            <Send size={15} /> Enviar mensaje
           </button>
         </div>
       </div>
@@ -274,6 +309,7 @@ export function Sessions() {
         <Lock size={14} className="ml-2 text-[#8E9AA6]" />
         La sesión actual no puede cerrarse a menos que sea deliberadamente.
       </div>
+      </>)}
 
       {showMessage && (
         <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-[200]">

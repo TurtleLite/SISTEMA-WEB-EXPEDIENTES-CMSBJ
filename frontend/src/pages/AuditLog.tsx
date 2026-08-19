@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { auditApi, usersApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { ChevronLeft, ChevronRight, ScrollText, Monitor, Download, X as XIcon, FileText } from 'lucide-react'
-import { Devices } from './Devices'
+import { ChevronLeft, ChevronRight, ScrollText, Download, X as XIcon, FileText, DatabaseBackup } from 'lucide-react'
+import { Backups } from './Backups'
 
 interface AuditEntry {
   id: string
@@ -138,7 +138,7 @@ const timeAgo = (value: string): string => {
 const PAGE_SIZE = 50
 
 export function AuditLog() {
-  const [tab, setTab] = useState<'eventos' | 'equipos'>('eventos')
+  const [tab, setTab] = useState<'eventos' | 'respaldos'>('eventos')
   const [entries, setEntries] = useState<AuditEntry[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
@@ -238,17 +238,17 @@ export function AuditLog() {
           Eventos
         </button>
         <button
-          onClick={() => setTab('equipos')}
+          onClick={() => setTab('respaldos')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-            tab === 'equipos' ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+            tab === 'respaldos' ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'
           }`}
         >
-          <Monitor size={15} />
-          Equipos
+          <DatabaseBackup size={15} />
+          Respaldos
         </button>
       </div>
 
-      {tab === 'equipos' && <Devices embedded />}
+      {tab === 'respaldos' && <Backups embedded />}
 
       {tab === 'eventos' && (<>
 
