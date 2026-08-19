@@ -1,0 +1,18 @@
+[Unit]
+Description=Sistema de Expedientes SBJ (FastAPI + frontend)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend
+EnvironmentFile=/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend/.env
+ExecStart=/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+# Reintentos de arranque: espera a PostgreSQL si aún está levantando
+StartLimitIntervalSec=120
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target

@@ -44,7 +44,7 @@ def list_backups() -> list:
 
 def generate_backup() -> dict:
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
-    script = Path(__file__).resolve().parent.parent / "backup_db.py"
+    script = Path(__file__).resolve().parent.parent.parent / "backup_db.py"
     env = dict(os.environ)
     try:
         result = subprocess.run(
