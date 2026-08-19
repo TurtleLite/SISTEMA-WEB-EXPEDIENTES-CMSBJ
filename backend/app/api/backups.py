@@ -1,7 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Request
 from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
 from app.services.auth_service import require_role
-from app.services.backup_service import list_backups, generate_backup, get_backup_path, delete_backup
+from app.services.audit_service import log_audit, client_ip
+from app.services.backup_service import list_backups, generate_backup, get_backup_path, delete_backup, restore_backup
+from app.core.database import get_db
 from app.models.user import User
 
 router = APIRouter(prefix="/backups", tags=["Respaldos"])
@@ -17,6 +20,26 @@ def backups_generate(current_user: User = Depends(require_role("admin"))):
     result = generate_backup()
     if not result.get("ok"):
         raise HTTPException(status_code=500, detail=result.get("error", "No se pudo generar el respaldo"))
+    return result
+
+
+@router.post("/restore")
+async def backups_restore(
+    file: UploadFile = File(...),
+    request: Request = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("admin")),
+):
+    data = await file.read()
+    result = restore_backup(data)
+    log_audit(
+        db, current_user, "backup_restore", entity_type="backup",
+        entity_id=file.filename or "restore.sql.gz",
+        detail="importó un respaldo en la base de datos",
+        ip_address=client_ip(request),
+    )
+    if not result.get("ok"):
+        raise HTTPException(status_code=500, detail=result.get("error", "No se pudo restaurar el respaldo"))
     return result
 
 

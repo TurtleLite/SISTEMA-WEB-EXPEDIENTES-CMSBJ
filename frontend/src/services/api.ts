@@ -217,6 +217,14 @@ export const notificationsApi = {
 export const backupsApi = {
   list: () => api.get('/backups/'),
   generate: () => api.post('/backups/generate'),
+  restore: (file: File) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    return api.post('/backups/restore', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 300000,
+    })
+  },
   download: (name: string) => api.get(`/backups/${name}/download`, { responseType: 'blob' }),
   delete: (name: string) => api.delete(`/backups/${name}`),
 }

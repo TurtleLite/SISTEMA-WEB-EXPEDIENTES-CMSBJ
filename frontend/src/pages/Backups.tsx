@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { backupsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { DatabaseBackup, RefreshCw, Download, Trash2, CheckCircle2 } from 'lucide-react'
+import { DatabaseBackup, RefreshCw, Download, Trash2, CheckCircle2, Upload } from 'lucide-react'
 
 interface BackupItem {
   name: string
@@ -22,7 +22,9 @@ const fmt = (iso: string | null) => {
 export function Backups({ embedded = false }: { embedded?: boolean }) {
   const [items, setItems] = useState<BackupItem[]>([])
   const [generating, setGenerating] = useState(false)
+  const [restoring, setRestoring] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
   const { toast, confirm } = useNotification()
 
   const load = useCallback(async () => {
@@ -66,6 +68,29 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
     }
   }
 
+  const handleRestore = async (file: File | null) => {
+    if (!file) return
+    if (!file.name.endsWith('.sql.gz')) {
+      toast('El archivo debe ser un respaldo .sql.gz', 'error')
+      return
+    }
+    const ok = await confirm(
+      'IMPORTANTE: Al importar este respaldo se reemplazará TODA la base de datos actual (se perderán los datos nuevos). ¿Deseas continuar?'
+    )
+    if (!ok) return
+    setRestoring(true)
+    try {
+      const res = await backupsApi.restore(file)
+      toast(res.data?.message || 'Base de datos restaurada correctamente', 'success')
+      await load()
+    } catch (err: any) {
+      toast(err.response?.data?.detail || 'No se pudo importar el respaldo', 'error')
+    } finally {
+      setRestoring(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
+
   const handleDelete = async (b: BackupItem) => {
     if (!await confirm(`¿Eliminar el respaldo ${b.name}? Esta acción no se puede deshacer.`)) return
     setDeleting(b.name)
@@ -90,13 +115,29 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
         ) : (
           <div />
         )}
-        <button
-          onClick={handleGenerate}
-          disabled={generating}
-          className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200 disabled:opacity-50"
-        >
-          <DatabaseBackup size={14} /> {generating ? 'Generando...' : 'Generar respaldo'}
-        </button>
+        <div className="flex items-center gap-2">
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".sql.gz,application/gzip"
+            className="hidden"
+            onChange={(e) => handleRestore(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            disabled={restoring}
+            className="flex items-center gap-1.5 px-3 py-2 bg-white text-[#0F766E] border border-[#0F766E] rounded-xl hover:bg-[#F7F8FA] text-sm font-medium transition-all duration-200 disabled:opacity-50"
+          >
+            <Upload size={14} /> {restoring ? 'Importando...' : 'Importar respaldo'}
+          </button>
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200 disabled:opacity-50"
+          >
+            <DatabaseBackup size={14} /> {generating ? 'Generando...' : 'Generar respaldo'}
+          </button>
+        </div>
       </div>
 
       <div className="shrink-0 flex items-center gap-2 text-[11px] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
