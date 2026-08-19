@@ -129,6 +129,11 @@ def restore_backup(data: bytes) -> dict:
                         sql.Identifier(seq), sql.Identifier(t)
                     )
                 )
+                cur.execute(
+                    sql.SQL("ALTER TABLE {} ALTER COLUMN id SET DEFAULT nextval({})").format(
+                        sql.Identifier(t), sql.Literal(seq)
+                    )
+                )
             cur.execute(sql.SQL("SELECT COALESCE(MAX(id), 0) + 1 FROM {}").format(sql.Identifier(t)))
             nxt = cur.fetchone()[0]
             cur.execute("SELECT setval(%s, %s, false)", (seq, nxt))
