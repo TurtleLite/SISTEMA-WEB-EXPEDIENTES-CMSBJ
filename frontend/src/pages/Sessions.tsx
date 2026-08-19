@@ -63,6 +63,8 @@ export function Sessions() {
   const [filterUser, setFilterUser] = useState('')
   const [showMessage, setShowMessage] = useState(false)
   const [msgTarget, setMsgTarget] = useState('all')
+  const [msgRole, setMsgRole] = useState('medico')
+  const [msgUser, setMsgUser] = useState('')
   const [msgTitle, setMsgTitle] = useState('')
   const [msgBody, setMsgBody] = useState('')
   const [sending, setSending] = useState(false)
@@ -108,10 +110,19 @@ export function Sessions() {
       toast('El título y el mensaje son obligatorios', 'error')
       return
     }
+    if (msgTarget === 'role' && !msgRole) {
+      toast('Selecciona el tipo de usuario', 'error')
+      return
+    }
+    if (msgTarget === 'user' && !msgUser) {
+      toast('Selecciona el usuario destinatario', 'error')
+      return
+    }
     setSending(true)
     try {
       const payload: any = { title: msgTitle.trim(), message: msgBody.trim() }
-      if (msgTarget !== 'all') payload.target_user_id = msgTarget
+      if (msgTarget === 'role') payload.target_role = msgRole
+      if (msgTarget === 'user') payload.target_user_id = msgUser
       await notificationsApi.send(payload)
       toast('Mensaje enviado correctamente', 'success')
       refresh()
@@ -119,6 +130,8 @@ export function Sessions() {
       setMsgTitle('')
       setMsgBody('')
       setMsgTarget('all')
+      setMsgRole('medico')
+      setMsgUser('')
     } catch (err: any) {
       toast(err.response?.data?.detail || 'No se pudo enviar el mensaje', 'error')
     } finally {
@@ -278,16 +291,50 @@ export function Sessions() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-[#5F6C79] mb-1.5">Destinatario</label>
-                <select
-                  value={msgTarget}
-                  onChange={(e) => setMsgTarget(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                >
-                  <option value="all">Todos los usuarios</option>
-                  {users.map((u) => (
-                    <option key={u.id} value={u.id}>{u.full_name} ({u.username})</option>
+                <div className="flex gap-2 mb-3">
+                  {[
+                    { value: 'all', label: 'Todos' },
+                    { value: 'role', label: 'Por tipo' },
+                    { value: 'user', label: 'Un usuario' },
+                  ].map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setMsgTarget(opt.value)}
+                      className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border transition-colors duration-150 ${
+                        msgTarget === opt.value
+                          ? 'bg-[#0F766E] text-white border-[#0F766E]'
+                          : 'bg-white text-[#5F6C79] border-[#E4E8EE] hover:text-[#0F766E]'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
                   ))}
-                </select>
+                </div>
+                {msgTarget === 'role' && (
+                  <select
+                    value={msgRole}
+                    onChange={(e) => setMsgRole(e.target.value)}
+                    className="w-full px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                  >
+                    <option value="medico">Médicos</option>
+                    <option value="direccion_medica">Dirección Médica</option>
+                    <option value="direccion">Dirección</option>
+                    <option value="admin">Administradores</option>
+                  </select>
+                )}
+                {msgTarget === 'user' && (
+                  <select
+                    value={msgUser}
+                    onChange={(e) => setMsgUser(e.target.value)}
+                    className="w-full px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                  >
+                    <option value="">Selecciona un usuario...</option>
+                    {users.map((u) => (
+                      <option key={u.id} value={u.id}>{u.full_name} ({u.username})</option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               <div>

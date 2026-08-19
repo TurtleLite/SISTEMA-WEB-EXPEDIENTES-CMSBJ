@@ -130,6 +130,13 @@ async def lifespan(app: FastAPI):
                     conn.execute(text("ALTER TABLE list_definitions ADD COLUMN deleted_at TIMESTAMPTZ"))
                     conn.commit()
                 logger.info("Added deleted_at column to list_definitions (papelera)")
+        if "notifications" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("notifications")]
+            if "target_role" not in columns:
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE notifications ADD COLUMN target_role VARCHAR(20)"))
+                    conn.commit()
+                logger.info("Added target_role column to notifications")
     except Exception as e:
         logger.warning(f"Could not add column: {e}")
 

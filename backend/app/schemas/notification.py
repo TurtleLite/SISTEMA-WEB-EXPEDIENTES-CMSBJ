@@ -6,7 +6,8 @@ from datetime import datetime
 class NotificationCreate(BaseModel):
     title: str
     message: str
-    target_user_id: Optional[str] = None  # None = para todos los usuarios
+    target_user_id: Optional[str] = None  # usuario específico
+    target_role: Optional[str] = None  # tipo de usuario: admin, direccion, direccion_medica, medico
 
 
 class NotificationResponse(BaseModel):
@@ -17,6 +18,7 @@ class NotificationResponse(BaseModel):
     sender_username: Optional[str] = None
     target_user_id: Optional[str] = None
     target_username: Optional[str] = None
+    target_role: Optional[str] = None
     is_read: bool
     read_at: Optional[datetime] = None
     created_at: datetime

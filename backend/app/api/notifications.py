@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.schemas.notification import NotificationCreate, NotificationResponse, NotificationUnreadCount
@@ -12,11 +12,13 @@ from app.services.notification_service import (
 )
 from app.services.auth_service import get_current_user, require_role
 from app.services.audit_service import log_audit, client_ip
-from app.models.user import User
+from app.models.user import User, UserRole
 
 router = APIRouter(prefix="/notifications", tags=["Notificaciones"])
 
 MANAGER_ROLES = ("admin", "direccion", "direccion_medica")
+
+VALID_ROLES = {r.value for r in UserRole}
 
 
 def _target_username(db: Session, target_user_id: int) -> str:
@@ -54,21 +56,25 @@ def send_notification(
     current_user: User = Depends(require_role(*MANAGER_ROLES)),
 ):
     if not data.title.strip():
-        from fastapi import HTTPException
         raise HTTPException(status_code=400, detail="El título es obligatorio")
     if not data.message.strip():
-        from fastapi import HTTPException
         raise HTTPException(status_code=400, detail="El mensaje es obligatorio")
+    if data.target_role and data.target_role not in VALID_ROLES:
+        raise HTTPException(status_code=400, detail="Tipo de usuario inválido")
 
     target = None
     if data.target_user_id:
-        from fastapi import HTTPException
         target = db.query(User).filter(User.id == int(data.target_user_id)).first()
         if not target:
             raise HTTPException(status_code=404, detail="El usuario destinatario no existe")
 
     note = create_notification(db, data, current_user, target)
-    who = f"todos los usuarios" if target is None else f"el usuario {target.username}"
+    if target is not None:
+        who = f"el usuario {target.username}"
+    elif data.target_role:
+        who = f"el tipo de usuario {data.target_role}"
+    else:
+        who = "todos los usuarios"
     log_audit(db, current_user, "notification_send", entity_type="notification",
               entity_id=note.id, detail=f"envió mensaje a {who}: {data.title}", ip_address=client_ip(request))
     return serialize_notification(note, _target_username(db, note.target_user_id))
@@ -82,7 +88,6 @@ def mark_read(
 ):
     note = mark_as_read(db, note_id, current_user)
     if not note:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Notificación no encontrada")
     return serialize_notification(note, _target_username(db, note.target_user_id))
 

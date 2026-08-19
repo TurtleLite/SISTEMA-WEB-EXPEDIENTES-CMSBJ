@@ -75,6 +75,7 @@ export interface Notification {
   sender_username?: string | null
   target_user_id?: string | null
   target_username?: string | null
+  target_role?: string | null
   is_read: boolean
   read_at?: string | null
   created_at: string

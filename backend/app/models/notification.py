@@ -11,8 +11,10 @@ class Notification(Base):
     message = Column(Text, nullable=False)
     sender_user_id = Column(Integer, nullable=True, index=True)
     sender_username = Column(String(50), nullable=True)
-    # target_user_id NULL = mensaje para todos los usuarios (broadcast)
+    # target_user_id: mensaje para un usuario específico
     target_user_id = Column(Integer, nullable=True, index=True)
+    # target_role: mensaje para un tipo de usuario (admin, direccion, direccion_medica, medico)
+    target_role = Column(String(20), nullable=True, index=True)
     is_read = Column(Boolean, default=False, nullable=False, index=True)
     read_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)

@@ -8,6 +8,19 @@ import { Bell, CheckCheck, RefreshCw } from 'lucide-react'
 const fmtDate = (iso: string) =>
   new Date(iso).toLocaleString('es-HN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 
+const ROLE_LABELS: Record<string, string> = {
+  admin: 'Administradores',
+  direccion: 'Dirección',
+  direccion_medica: 'Dirección Médica',
+  medico: 'Médicos',
+}
+
+const targetLabel = (n: Notification) => {
+  if (n.target_username) return `Para: ${n.target_username}`
+  if (n.target_role) return `Para: ${ROLE_LABELS[n.target_role] || n.target_role}`
+  return 'Para todos'
+}
+
 export function Notifications() {
   const [notes, setNotes] = useState<Notification[]>([])
   const [loading, setLoading] = useState(false)
@@ -137,7 +150,7 @@ export function Notifications() {
                     <p className="text-sm text-[#5F6C79] mt-1 whitespace-pre-wrap">{n.message}</p>
                     <p className="text-[11px] text-[#8794A1] mt-2">
                       De: {n.sender_username || 'Administración'}
-                      {n.target_username ? ` · Para: ${n.target_username}` : ' · Para todos'}
+                      {' · '}{targetLabel(n)}
                       {n.read_at && <span className="text-[#0F766E]"> · Leído</span>}
                     </p>
                   </div>

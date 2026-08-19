@@ -1,32 +1,55 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode, useRef } from 'react'
 import { useAuth } from './AuthContext'
 import { notificationsApi } from '../services/api'
+import { Notification } from '../types'
 
 interface MessagesContextType {
-  unread: number
+  active: Notification | null
+  close: () => void
   refresh: () => void
 }
 
-const MessagesContext = createContext<MessagesContextType>({ unread: 0, refresh: () => {} })
+const MessagesContext = createContext<MessagesContextType>({
+  active: null,
+  close: () => {},
+  refresh: () => {},
+})
 
 export function MessagesProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
-  const [unread, setUnread] = useState(0)
-  const refreshing = useRef(false)
+  const [active, setActive] = useState<Notification | null>(null)
+  const polling = useRef(false)
 
   const refresh = useCallback(async () => {
-    if (!user) return
-    if (refreshing.current) return
-    refreshing.current = true
+    if (!user || polling.current) return
+    polling.current = true
     try {
-      const res = await notificationsApi.unreadCount()
-      setUnread(res.data?.count ?? 0)
+      const res = await notificationsApi.list({ limit: 1, only_unread: true })
+      const latest = (res.data || [])[0]
+      if (latest) {
+        setActive((prev) => {
+          if (prev && prev.id === latest.id) return prev
+          return latest
+        })
+      }
     } catch {
-      // silencioso: la campana no debe bloquear la app
+      // silencioso: la notificación no debe bloquear la app
     } finally {
-      refreshing.current = false
+      polling.current = false
     }
   }, [user])
+
+  const close = useCallback(async () => {
+    const current = active
+    setActive(null)
+    if (current && !current.is_read) {
+      try {
+        await notificationsApi.markRead(current.id)
+      } catch {
+        // silencioso
+      }
+    }
+  }, [active])
 
   useEffect(() => {
     refresh()
@@ -34,7 +57,7 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!user) return
-    const id = setInterval(refresh, 30000)
+    const id = setInterval(refresh, 20000)
     return () => clearInterval(id)
   }, [user, refresh])
 
@@ -45,7 +68,7 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
   }, [refresh])
 
   return (
-    <MessagesContext.Provider value={{ unread, refresh }}>
+    <MessagesContext.Provider value={{ active, close, refresh }}>
       {children}
     </MessagesContext.Provider>
   )
