@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { listsApi } from '../services/api'
 import {
   LayoutDashboard, Users, FolderOpen, FileText, LogOut, Activity, UserCircle2, Lock, ClipboardList,
-  ShieldCheck, ScrollText, Bell, X,
+  ShieldCheck, ScrollText, Bell, X, Mail,
 } from 'lucide-react'
 import { ROLE_META } from '../constants'
 import { RoleAvatar } from './RoleAvatar'
@@ -34,6 +34,7 @@ const navSections: NavSection[] = [
     title: 'Principal',
     items: [
       { label: 'Inicio', path: '/dashboard', icon: <LayoutDashboard size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico'] },
+      { label: 'Mensajes', path: '/notificaciones', icon: <Mail size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico'] },
       { label: 'Mi Perfil', path: '/perfil', icon: <UserCircle2 size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico'] },
       { label: 'Expedientes', path: '/lists', icon: <FolderOpen size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico'] },
     ],
