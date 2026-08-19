@@ -148,9 +148,6 @@ export function Sessions() {
       <div className="flex items-center justify-between shrink-0 flex-wrap gap-3">
         <div>
           <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Sesiones</h1>
-          <p className="text-sm text-[#5F6C79] mt-0.5">
-            Control de acceso en vivo y equipos del centro.
-          </p>
         </div>
         <button
           onClick={() => setShowMessage(true)}
@@ -187,9 +184,6 @@ export function Sessions() {
       <div className="flex items-center justify-between shrink-0 flex-wrap gap-3">
         <div>
           <h2 className="text-sm font-bold text-[#1E2A32]">Sesiones Activas</h2>
-          <p className="text-xs text-[#5F6C79] mt-0.5">
-            {active.length} sesión(es) activa(s). Puede cerrar cualquier sesión de forma remota.
-          </p>
         </div>
         <div className="flex items-center gap-2">
           <select
