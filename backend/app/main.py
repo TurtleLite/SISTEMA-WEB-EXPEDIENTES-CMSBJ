@@ -3,7 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
-from app.api import auth, users, lists, reports, day_lists, specialties, localities, audit, devices
+from app.api import auth, users, lists, reports, day_lists, specialties, localities, audit, devices, notifications
 from app.core.database import engine, Base, SessionLocal
 from sqlalchemy import inspect, text
 import logging
@@ -232,6 +232,7 @@ app.include_router(specialties.router)
 app.include_router(localities.router)
 app.include_router(audit.router)
 app.include_router(devices.router)
+app.include_router(notifications.router)
 
 
 @app.middleware("http")

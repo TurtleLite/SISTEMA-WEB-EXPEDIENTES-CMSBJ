@@ -66,3 +66,16 @@ export interface Report {
   record_count?: number
   created_by_breakdown?: { full_name: string; count: number }[]
 }
+
+export interface Notification {
+  id: string
+  title: string
+  message: string
+  sender_user_id?: string | null
+  sender_username?: string | null
+  target_user_id?: string | null
+  target_username?: string | null
+  is_read: boolean
+  read_at?: string | null
+  created_at: string
+}

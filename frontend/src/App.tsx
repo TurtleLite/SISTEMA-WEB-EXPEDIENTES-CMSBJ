@@ -1,6 +1,7 @@
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { NotificationProvider } from './contexts/NotificationContext'
+import { MessagesProvider } from './contexts/MessagesContext'
 import { Layout } from './components/Layout'
 import { Login } from './pages/Login'
 import { Dashboard } from './pages/Dashboard'
@@ -13,6 +14,7 @@ import { EstadoCirugia } from './pages/EstadoCirugia'
 import { Profile } from './pages/Profile'
 import { Sessions } from './pages/Sessions'
 import { AuditLog } from './pages/AuditLog'
+import { Notifications } from './pages/Notifications'
 import { Lock } from 'lucide-react'
 import { ReactNode } from 'react'
 
@@ -47,6 +49,7 @@ function App() {
     <HashRouter>
       <AuthProvider>
         <NotificationProvider>
+        <MessagesProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -59,9 +62,11 @@ function App() {
           <Route path="/estado-cirugia" element={<RoleRoute roles={['direccion', 'direccion_medica']} section="Estatus Cirugia"><EstadoCirugia /></RoleRoute>} />
           <Route path="/seguridad" element={<RoleRoute roles={['admin']} section="Sesiones"><Sessions /></RoleRoute>} />
           <Route path="/auditoria" element={<RoleRoute roles={['admin']} section="Auditoria"><AuditLog /></RoleRoute>} />
+          <Route path="/notificaciones" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
+        </MessagesProvider>
         </NotificationProvider>
       </AuthProvider>
     </HashRouter>

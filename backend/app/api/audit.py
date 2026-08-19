@@ -46,6 +46,7 @@ ACTION_LABELS = {
     "daylist_export": "Listado del día exportado",
     "daylist_delete": "Listado del día eliminado",
     "audit_export": "Auditoría exportada",
+    "notification_send": "Mensaje enviado",
 }
 
 ENTITY_LABELS = {
@@ -57,6 +58,7 @@ ENTITY_LABELS = {
     "daylist": "Listado del día",
     "session": "Sesión",
     "device": "Equipo",
+    "notification": "Mensaje",
 }
 
 

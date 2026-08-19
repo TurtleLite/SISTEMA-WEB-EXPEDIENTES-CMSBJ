@@ -1,10 +1,12 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useMessages } from '../contexts/MessagesContext'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { listsApi } from '../services/api'
+import { listsApi, notificationsApi } from '../services/api'
+import { Notification } from '../types'
 import {
   LayoutDashboard, Users, FolderOpen, FileText, LogOut, Activity, UserCircle2, Lock, ClipboardList,
-  ShieldCheck, ScrollText,
+  ShieldCheck, ScrollText, Bell, CheckCheck,
 } from 'lucide-react'
 import { ROLE_META } from '../constants'
 import { RoleAvatar } from './RoleAvatar'
@@ -57,9 +59,41 @@ const navSections: NavSection[] = [
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth()
+  const { unread, refresh } = useMessages()
   const navigate = useNavigate()
   const location = useLocation()
   const [denied, setDenied] = useState<string | null>(null)
+  const [bellOpen, setBellOpen] = useState(false)
+  const [recentNotes, setRecentNotes] = useState<Notification[]>([])
+
+  useEffect(() => {
+    if (!bellOpen) return
+    notificationsApi.list({ limit: 5 })
+      .then(res => setRecentNotes(res.data || []))
+      .catch(() => setRecentNotes([]))
+  }, [bellOpen])
+
+  useEffect(() => {
+    if (bellOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setBellOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [bellOpen])
+
+  const openNotifications = () => {
+    setBellOpen(false)
+    navigate('/notificaciones')
+  }
+
+  const markOneRead = async (n: Notification) => {
+    if (!n.is_read) {
+      try {
+        await notificationsApi.markRead(n.id)
+        refresh()
+      } catch { /* silencioso */ }
+    }
+    setRecentNotes(prev => prev.map(x => x.id === n.id ? { ...x, is_read: true } : x))
+  }
 
   const visibleSections = navSections
 
@@ -182,6 +216,68 @@ export function Layout({ children }: { children: ReactNode }) {
             <span className="font-serif font-bold text-[15px] tracking-[0.08em] text-white">CENTRO MÉDICO SAN BENITO JOSÉ</span>
           </div>
           <div className="flex items-center gap-2">
+            <div className="relative">
+              <button
+                onClick={() => setBellOpen(o => !o)}
+                className="relative p-2 rounded-lg text-white/85 hover:text-white hover:bg-white/10 transition-colors duration-150"
+                title="Notificaciones"
+              >
+                <Bell size={17} />
+                {unread > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                    {unread > 99 ? '99+' : unread}
+                  </span>
+                )}
+              </button>
+              {bellOpen && (
+                <>
+                  <div className="fixed inset-0 z-20" onClick={() => setBellOpen(false)} />
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-[#E4E8EE] z-30 overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-[#E4E8EE] bg-[#F7F8FA]">
+                      <p className="text-sm font-bold text-[#1E2A32]">Notificaciones</p>
+                      <div className="flex items-center gap-2">
+                        {unread > 0 && (
+                          <button
+                            onClick={async () => { try { await notificationsApi.markAllRead(); refresh(); setRecentNotes(prev => prev.map(x => ({ ...x, is_read: true }))) } catch { /* silencioso */ } }}
+                            className="flex items-center gap-1 text-[11px] font-medium text-[#0F766E] hover:text-[#115E59]"
+                          >
+                            <CheckCheck size={13} /> Leer todas
+                          </button>
+                        )}
+                        <button
+                          onClick={openNotifications}
+                          className="text-[11px] font-medium text-[#0F766E] hover:text-[#115E59]"
+                        >
+                          Ver todas
+                        </button>
+                      </div>
+                    </div>
+                    <div className="max-h-80 overflow-y-auto">
+                      {recentNotes.length === 0 ? (
+                        <p className="px-4 py-8 text-center text-sm text-[#7A8694]">No tienes mensajes por ahora.</p>
+                      ) : (
+                        recentNotes.map(n => (
+                          <button
+                            key={n.id}
+                            onClick={() => markOneRead(n)}
+                            className={`w-full text-left px-4 py-3 border-b border-[#F0F2F5] hover:bg-[#F7F8FA] transition-colors duration-150 ${n.is_read ? '' : 'bg-teal-50/60'}`}
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <p className={`text-sm ${n.is_read ? 'text-[#3F4D58] font-medium' : 'text-[#1E2A32] font-bold'}`}>{n.title}</p>
+                              {!n.is_read && <span className="mt-1 w-2 h-2 rounded-full bg-[#0F766E] shrink-0" />}
+                            </div>
+                            <p className="text-xs text-[#5F6C79] mt-0.5 line-clamp-2">{n.message}</p>
+                            <p className="text-[10px] text-[#8E9AA6] mt-1">
+                              {new Date(n.created_at).toLocaleString('es-HN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
             <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
               {roleLabels[user?.role || '']}
             </span>

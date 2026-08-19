@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
-import { authApi, usersApi } from '../services/api'
+import { authApi, usersApi, notificationsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { LogOut, ShieldCheck, Smartphone, Monitor, Lock } from 'lucide-react'
+import { useMessages } from '../contexts/MessagesContext'
+import { LogOut, ShieldCheck, Smartphone, Monitor, Lock, Send, X } from 'lucide-react'
 
 interface SessionItem {
   id: string
@@ -60,7 +61,13 @@ export function Sessions() {
   const [sessions, setSessions] = useState<SessionItem[]>([])
   const [users, setUsers] = useState<{ id: string; username: string; full_name: string }[]>([])
   const [filterUser, setFilterUser] = useState('')
+  const [showMessage, setShowMessage] = useState(false)
+  const [msgTarget, setMsgTarget] = useState('all')
+  const [msgTitle, setMsgTitle] = useState('')
+  const [msgBody, setMsgBody] = useState('')
+  const [sending, setSending] = useState(false)
   const { toast, confirm } = useNotification()
+  const { refresh } = useMessages()
 
   const loadSessions = useCallback(async (userId?: string) => {
     const params: any = { all_users: true }
@@ -95,6 +102,30 @@ export function Sessions() {
     }
   }
 
+  const handleSendMessage = async () => {
+    if (sending) return
+    if (!msgTitle.trim() || !msgBody.trim()) {
+      toast('El título y el mensaje son obligatorios', 'error')
+      return
+    }
+    setSending(true)
+    try {
+      const payload: any = { title: msgTitle.trim(), message: msgBody.trim() }
+      if (msgTarget !== 'all') payload.target_user_id = msgTarget
+      await notificationsApi.send(payload)
+      toast('Mensaje enviado correctamente', 'success')
+      refresh()
+      setShowMessage(false)
+      setMsgTitle('')
+      setMsgBody('')
+      setMsgTarget('all')
+    } catch (err: any) {
+      toast(err.response?.data?.detail || 'No se pudo enviar el mensaje', 'error')
+    } finally {
+      setSending(false)
+    }
+  }
+
   const active = sessions.filter((s: SessionItem) => s.active)
 
   return (
@@ -122,6 +153,12 @@ export function Sessions() {
             className="px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200"
           >
             Filtrar
+          </button>
+          <button
+            onClick={() => setShowMessage(true)}
+            className="flex items-center gap-1.5 px-4 py-2 bg-white text-[#0F766E] border border-[#0F766E] rounded-xl hover:bg-[#F7F8FA] text-sm font-medium transition-all duration-200"
+          >
+            <Send size={15} /> Enviar mensaje
           </button>
         </div>
       </div>
@@ -224,6 +261,76 @@ export function Sessions() {
         <Lock size={14} className="ml-2 text-[#8E9AA6]" />
         La sesión actual no puede cerrarse a menos que sea deliberadamente.
       </div>
+
+      {showMessage && (
+        <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-[200]">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 border border-[#E4E8EE]">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-serif text-lg font-bold text-[#1E2A32]">Enviar mensaje</h2>
+              <button
+                onClick={() => setShowMessage(false)}
+                className="p-1.5 hover:bg-[#F7F8FA] rounded-lg text-[#7A8694]"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#5F6C79] mb-1.5">Destinatario</label>
+                <select
+                  value={msgTarget}
+                  onChange={(e) => setMsgTarget(e.target.value)}
+                  className="w-full px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                >
+                  <option value="all">Todos los usuarios</option>
+                  {users.map((u) => (
+                    <option key={u.id} value={u.id}>{u.full_name} ({u.username})</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#5F6C79] mb-1.5">Título</label>
+                <input
+                  value={msgTitle}
+                  onChange={(e) => setMsgTitle(e.target.value)}
+                  maxLength={200}
+                  placeholder="Ej. Recordatorio de reunión"
+                  className="w-full px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#5F6C79] mb-1.5">Mensaje</label>
+                <textarea
+                  value={msgBody}
+                  onChange={(e) => setMsgBody(e.target.value)}
+                  rows={4}
+                  placeholder="Escribe el mensaje que verán los usuarios..."
+                  className="w-full px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-1">
+                <button
+                  onClick={() => setShowMessage(false)}
+                  className="px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#F7F8FA] rounded-xl"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSendMessage}
+                  disabled={sending}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200 disabled:opacity-50"
+                >
+                  <Send size={14} /> {sending ? 'Enviando...' : 'Enviar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

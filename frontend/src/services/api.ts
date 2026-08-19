@@ -205,4 +205,13 @@ export const dayListsApi = {
     api.get(`/day-lists/${date}/export-excel`, { responseType: 'blob' }),
 }
 
+export const notificationsApi = {
+  list: (params?: any) => api.get('/notifications/', { params }),
+  unreadCount: () => api.get('/notifications/unread-count'),
+  send: (data: { title: string; message: string; target_user_id?: string }) =>
+    api.post('/notifications/', data),
+  markRead: (id: string | number) => api.post(`/notifications/${id}/read`),
+  markAllRead: () => api.post('/notifications/read-all'),
+}
+
 export default api
