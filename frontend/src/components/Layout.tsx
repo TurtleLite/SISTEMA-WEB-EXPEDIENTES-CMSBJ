@@ -184,14 +184,6 @@ export function Layout({ children }: { children: ReactNode }) {
             <span className="font-serif font-bold text-[15px] tracking-[0.08em] text-white">CENTRO MÉDICO SAN BENITO JOSÉ</span>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => navigate('/notificaciones')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white/85 hover:text-white hover:bg-white/10 transition-colors duration-150"
-              title="Ver mensajes"
-            >
-              <Bell size={15} />
-              Mensajes
-            </button>
             <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
               {roleLabels[user?.role || '']}
             </span>
