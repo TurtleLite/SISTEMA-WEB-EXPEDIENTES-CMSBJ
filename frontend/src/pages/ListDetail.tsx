@@ -625,7 +625,7 @@ export function ListDetail() {
                     compensadoFilter === '' ? 'bg-[#EEF1F5] text-[#1E2A32]' : 'text-[#5F6C79] hover:text-[#1E2A32]'
                   }`}
                 >
-                  Todos{compStats ? ` (${compStats.compensados + compStats.descompensados + compStats.sin_definir})` : ''}
+                  Todos
                 </button>
                 <button
                   onClick={() => { setCompensadoFilter('Sí'); setSelectedIds(new Set()) }}
@@ -634,7 +634,7 @@ export function ListDetail() {
                   }`}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Compensados{compStats ? ` (${compStats.compensados})` : ''}
+                  Compensados
                 </button>
                 <button
                   onClick={() => { setCompensadoFilter('No'); setSelectedIds(new Set()) }}
@@ -643,7 +643,7 @@ export function ListDetail() {
                   }`}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                  Descompensados{compStats ? ` (${compStats.descompensados})` : ''}
+                  Descompensados
                 </button>
               </div>
               {user?.role === 'admin' && (
