@@ -370,6 +370,9 @@ def update_record_compensado(
     valor = payload.get("compensado")
     if valor not in (None, "Sí", "No"):
         raise HTTPException(status_code=400, detail="El valor debe ser «Sí», «No» o vacío")
+    obs = payload.get("observacion_compensado")
+    if valor == "No" and not str(obs or "").strip():
+        raise HTTPException(status_code=400, detail="Debe escribir la observación porque el paciente no está compensado")
 
     record = db.query(ListRecord).filter(
         ListRecord.id == record_id,
@@ -384,6 +387,8 @@ def update_record_compensado(
         data.pop("compensado", None)
     else:
         data["compensado"] = valor
+        if str(obs or "").strip():
+            data["observacion_compensado"] = str(obs).strip()
     record.data = data
     flag_modified(record, "data")
     db.commit()

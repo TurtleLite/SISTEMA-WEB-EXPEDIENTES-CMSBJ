@@ -98,6 +98,7 @@ fields: [
       { key: 'diagnostico', label: 'Diagnóstico (mín. 5 caracteres)', type: 'text' },
       { key: 'criticidad', label: 'Criticidad Clínica', type: 'text' },
       { key: 'compensado', label: 'Compensado (Sí, No)', type: 'text' },
+      { key: 'observacion_compensado', label: 'Observación (obligatoria si NO compensado)', type: 'text' },
     ],
   },
   {
@@ -155,23 +156,40 @@ const criticidadEnabled = (data: Record<string, any>): boolean =>
 const clinicalDisabled = (key: string, data: Record<string, any>): boolean =>
   (key === 'criticidad' || key === 'compensado') && !criticidadEnabled(data)
 
+const OBS_COMPENSADO_KEY = 'observacion_compensado'
+
+const compensadoObsRequired = (data: Record<string, any>): boolean =>
+  String(data.compensado || '').trim() === 'No'
+
+const compensadoObsSatisfied = (data: Record<string, any>): boolean =>
+  !compensadoObsRequired(data) || String(data[OBS_COMPENSADO_KEY] || '').trim() !== ''
+
+const compensadoObsMissing = (data: Record<string, any>): boolean =>
+  !compensadoObsSatisfied(data)
+
 function isSectionComplete(section: Section, data: Record<string, any>): boolean {
   return section.fields.every((f) => {
     if (f.optional) return true
     if (clinicalDisabled(f.key, data)) return true
+    if (f.key === OBS_COMPENSADO_KEY) return compensadoObsSatisfied(data)
     const val = data[f.key]
     return val !== undefined && val !== null && String(val).trim() !== ''
   })
 }
 
-function totalFieldsFrom(sections: Section[]): number {
-  return sections.reduce((acc, s) => acc + s.fields.filter((f) => !f.optional).length, 0)
+function totalFieldsFrom(sections: Section[], data: Record<string, any>): number {
+  return sections.reduce((acc, s) => acc + s.fields.filter((f) => !f.optional && !(f.key === OBS_COMPENSADO_KEY && !compensadoObsRequired(data))).length, 0)
 }
 
 function filledFields(sections: Section[], data: Record<string, any>): number {
   return sections.reduce((acc, s) => {
     for (const f of s.fields) {
       if (f.optional) continue
+      if (f.key === OBS_COMPENSADO_KEY) {
+        if (!compensadoObsRequired(data)) continue
+        if (compensadoObsSatisfied(data)) acc++
+        continue
+      }
       if (clinicalDisabled(f.key, data)) continue
       const v = data[f.key]
       if (v !== undefined && v !== null && String(v).trim() !== '') acc++
@@ -465,7 +483,14 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       next.focus()
     } else {
       const i = sections.findIndex((s) => s.title === expanded)
-      if (i !== -1 && i < sections.length - 1) goToSection(i + 1)
+      if (i !== -1 && i < sections.length - 1) {
+        if (expanded === 'Diagnóstico' && compensadoObsMissing(data)) {
+          toast('Debe escribir la observación porque el paciente no está compensado', 'error')
+          body.querySelector<HTMLElement>('[data-obs-compensado]')?.focus()
+          return
+        }
+        goToSection(i + 1)
+      }
     }
   }
 
@@ -568,7 +593,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     }
   }
 
-  const total = totalFieldsFrom(sections)
+  const total = totalFieldsFrom(sections, data)
   const filled = filledFields(sections, data)
   const pct = total > 0 ? Math.round((filled / total) * 100) : 0
 
@@ -652,10 +677,11 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                   <span className="text-xs text-[#7A8694]">
                     {section.fields.filter((f) => {
                       if (f.optional) return false
+                      if (f.key === OBS_COMPENSADO_KEY && !compensadoObsRequired(data)) return false
                       if (clinicalDisabled(f.key, data)) return false
                       const v = data[f.key]
                       return v !== undefined && v !== null && String(v).trim() !== ''
-                    }).length}/{section.fields.filter((f) => !f.optional && !clinicalDisabled(f.key, data)).length}
+                    }).length}/{section.fields.filter((f) => !f.optional && !clinicalDisabled(f.key, data) && !(f.key === OBS_COMPENSADO_KEY && !compensadoObsRequired(data))).length}
                   </span>
                   {isOpen ? <ChevronDown size={16} className="text-[#7A8694]" /> : <ChevronRight size={16} className="text-[#7A8694]" />}
                 </button>
@@ -664,6 +690,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                   <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-4 py-3 grid gap-x-4 gap-y-3 bg-white ${section.compact ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2'}`}>
                     {section.fields.map((field) => {
                       if (field.key === 'telefono2' || field.key === 'telefono3') return null
+                      if (field.key === OBS_COMPENSADO_KEY) return null
                       if (field.key === 'telefono') {
                         const phones = section.fields.filter((f) => f.key.startsWith('telefono'))
                         return (
@@ -759,15 +786,40 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           )
                         ) : field.key === 'compensado' ? (
                           criticidadEnabled(data) ? (
-                            <select
-                              value={data[field.key] || ''}
-                              onChange={(e) => setValue(field.key, e.target.value)}
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                            >
-                              <option value="">Seleccione...</option>
-                              <option value="Sí">Sí</option>
-                              <option value="No">No</option>
-                            </select>
+                            <div className="space-y-3">
+                              <div>
+                                <label className="block text-sm font-medium text-[#2B3A45] mb-1">
+                                  {field.label}
+                                </label>
+                                <select
+                                  value={data[field.key] || ''}
+                                  onChange={(e) => setValue(field.key, e.target.value)}
+                                  className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                                >
+                                  <option value="">Seleccione...</option>
+                                  <option value="Sí">Sí</option>
+                                  <option value="No">No</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className={`block text-sm font-medium mb-1 ${compensadoObsRequired(data) ? 'text-red-700' : 'text-[#2B3A45]'}`}>
+                                  {section.fields.find((f) => f.key === OBS_COMPENSADO_KEY)?.label || 'Observación (obligatoria si NO compensado)'}
+                                </label>
+                                <textarea
+                                  rows={2}
+                                  data-obs-compensado
+                                  value={data[OBS_COMPENSADO_KEY] || ''}
+                                  onChange={(e) => setValue(OBS_COMPENSADO_KEY, capitalizeFirst(e.target.value))}
+                                  placeholder={compensadoObsRequired(data) ? 'Escriba el motivo por el cual no está compensado...' : 'Opcional'}
+                                  className={`w-full px-3 py-2 border rounded-lg text-sm resize-none focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] ${compensadoObsMissing(data) ? 'border-red-400 bg-red-50/40' : 'border-[#E4E8EE]'}`}
+                                />
+                                {compensadoObsMissing(data) && (
+                                  <p className="mt-1 text-xs text-red-600 font-medium">
+                                    Debe escribir la observación porque el paciente no está compensado.
+                                  </p>
+                                )}
+                              </div>
+                            </div>
                           ) : (
                             <div className="px-3 py-2 rounded-lg bg-[#F7F8FA] border border-dashed border-[#E4E8EE] text-xs text-[#5F6C79]">
                               Complete primero el diagnóstico (mínimo 5 caracteres) para indicar si está compensado.
@@ -1084,7 +1136,13 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                     {sIdx < sections.length - 1 ? (
                       <button
                         type="button"
-                        onClick={() => goToSection(sIdx + 1)}
+                        onClick={() => {
+                          if (section.title === 'Diagnóstico' && compensadoObsMissing(data)) {
+                            toast('Debe escribir la observación porque el paciente no está compensado', 'error')
+                            return
+                          }
+                          goToSection(sIdx + 1)
+                        }}
                         className="px-4 py-2 text-sm font-medium text-white bg-[#0F766E] hover:bg-[#115E59] rounded-lg transition-colors"
                       >
                         Siguiente sección →

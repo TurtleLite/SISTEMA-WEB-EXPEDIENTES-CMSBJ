@@ -49,6 +49,17 @@ def _validate_dates(data: dict):
                     raise HTTPException(status_code=400, detail="La edad no puede ser 0 años")
 
 
+def _validate_compensado(data: dict):
+    """Rechaza expedientes descompensados sin la observación obligatoria."""
+    from fastapi import HTTPException
+    if str(data.get("compensado", "") or "").strip() == "No":
+        if not str(data.get("observacion_compensado", "") or "").strip():
+            raise HTTPException(
+                status_code=400,
+                detail="Debe escribir la observación porque el paciente no está compensado",
+            )
+
+
 def _is_expediente_list(db: Session, list_id: int) -> bool:
     ld = db.query(ListDefinition).filter(ListDefinition.id == list_id).first()
     return bool(ld and ld.name == _EXPEDIENTE_LIST_NAME)
@@ -176,6 +187,7 @@ def add_record(db: Session, list_id: int, data: dict, user_id: int = None) -> Li
     if _is_expediente_list(db, list_id):
         data = dict(data)
         _validate_dates(data)
+        _validate_compensado(data)
         data = _compose_domicilio(data)
         numero = re.sub(r"\D", "", str(data.get("expediente", "") or ""))
         if not numero:
@@ -295,6 +307,7 @@ def update_record(db: Session, record_id: int, data: dict, user_id: int = None, 
     if _is_expediente_list(db, record.list_definition_id):
         data = dict(data)
         _validate_dates(data)
+        _validate_compensado(data)
         data = _compose_domicilio(data)
         data["expediente"] = record.data.get("expediente")
     record.data = data

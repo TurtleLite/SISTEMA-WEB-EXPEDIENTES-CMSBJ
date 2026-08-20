@@ -142,12 +142,20 @@ def _user_counts(db: Session, records: list[ListRecord] = None, list_id: int = N
     return result
 
 
-def _report_rows(records: list[ListRecord]) -> list[dict]:
+def _report_rows(records: list[ListRecord], filt: dict | None = None) -> list[dict]:
+    filt = filt or {}
     rows = []
     for idx, rec in enumerate(records, 1):
         d = rec.data or {}
         nombre = " ".join(x for x in [d.get("nombre", ""), d.get("apellido", "")] if x).strip()
         telefono = " / ".join(x for x in [d.get("telefono"), d.get("telefono2"), d.get("telefono3")] if x)
+        obs = []
+        if filt.get("compensado"):
+            obs.append(str(d.get("observacion_compensado", "") or ""))
+        if filt.get("estatus_cirugia"):
+            obs.append(str(d.get("observacion_estatus", "") or ""))
+        if not obs:
+            obs.append(str(d.get("observacion_estatus", "") or ""))
         rows.append({
             "_id": str(rec.id),
             "No": idx,
@@ -160,7 +168,7 @@ def _report_rows(records: list[ListRecord]) -> list[dict]:
             "Housing": d.get("albergue", ""),
             "Chart": d.get("expediente", ""),
             "Referred by": d.get("nombre_medico", ""),
-            "Observación": d.get("observacion_estatus", ""),
+            "Observación": " | ".join(x for x in obs if x),
         })
     return rows
 
@@ -309,7 +317,7 @@ def generate_excel_report(
         log_audit(db, current_user, "report_generate", entity_type="report", entity_id=report_id,
                   detail=f"generó el reporte {report.name} ({len(records)} expedientes en el rango)", ip_address=client_ip(request))
         return {"message": "Reporte Excel generado", "file_path": filepath, "filename": _report_sequence_filename(db, report), "count": len(records)}
-    data = _report_rows(records)
+    data = _report_rows(records, filt)
     os.makedirs(settings.REPORTS_DIR, exist_ok=True)
     filepath = os.path.join(settings.REPORTS_DIR, f"reporte_{report.id}.xlsx")
     from app.services.excel_service import export_to_excel
@@ -354,7 +362,7 @@ def preview_report(
             "records": [{"Usuario": b["full_name"], "Expedientes creados": b["count"]} for b in breakdown],
             "record_ids": [],
         }
-    rows = _report_rows(records)
+    rows = _report_rows(records, filt)
     return {
         "name": report.name,
         "description": report.description,
