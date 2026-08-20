@@ -48,6 +48,8 @@ export function ListDetail() {
   const [especialidadFilter, setEspecialidadFilter] = useState('')
   const [catalogOpen, setCatalogOpen] = useState(false)
   const catalogRef = useRef<HTMLDivElement>(null)
+  const [compOpen, setCompOpen] = useState(false)
+  const compRef = useRef<HTMLDivElement>(null)
   const [compensadoFilter, setCompensadoFilter] = useState('')
   const [compStats, setCompStats] = useState<{ compensados: number; descompensados: number; sin_definir: number } | null>(null)
   const [savingCompensado, setSavingCompensado] = useState<string | null>(null)
@@ -194,6 +196,7 @@ export function ListDetail() {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) setCatalogOpen(false)
+      if (compRef.current && !compRef.current.contains(e.target as Node)) setCompOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -590,46 +593,45 @@ export function ListDetail() {
       )}
 
       <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1 transition-shadow duration-200 hover:shadow-md">
-        <div className="p-3 border-b border-[#E4E8EE] space-y-2.5 shrink-0 bg-[#EEF1F5]">
-        <div className="flex gap-2.5 flex-wrap">
-              <select
-                value={searchField}
-                onChange={(e) => setSearchField(e.target.value)}
-                className="px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
-              >
-                <option value="">Todos los campos</option>
-                {list?.columns_config.map((col) => (
-                  <option key={col.key} value={col.key}>{col.label}</option>
-                ))}
-              </select>
-              <div className="relative flex-1 min-w-[180px]">
-                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7A8694]" />
+        <div className="p-3 border-b border-[#E4E8EE] shrink-0 bg-[#EEF1F5]">
+        <div className="flex items-center gap-2.5 flex-wrap">
+              <div className="relative flex-1 min-w-[220px] flex items-center bg-white border border-[#E4E8EE] rounded-xl focus-within:ring-2 focus-within:ring-[#8E9AA6] transition-all duration-200">
+                <Search size={15} className="ml-3 shrink-0 text-[#7A8694]" />
                 <input
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder="Buscar expediente..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                  className="flex-1 min-w-0 px-2.5 py-2 text-sm bg-transparent outline-none"
                 />
+                <div className="flex items-center shrink-0">
+                  <span className="w-px h-4 bg-[#E4E8EE]" />
+                  <select
+                    value={searchField}
+                    onChange={(e) => setSearchField(e.target.value)}
+                    className="pl-2 pr-1.5 py-2 text-xs text-[#7A8694] bg-transparent outline-none cursor-pointer"
+                  >
+                    <option value="">Todos los campos</option>
+                    {list?.columns_config.map((col) => (
+                      <option key={col.key} value={col.key}>{col.label}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <span className="ml-auto self-center text-xs text-[#7A8694] whitespace-nowrap">
-                {total.toLocaleString()} expediente{total === 1 ? '' : 's'}
-              </span>
-            </div>
-            {list?.is_system && (
-              <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex items-center gap-2 min-w-0">
+
+              {list?.is_system && (
+                <div className="flex items-center gap-2">
                   <div ref={catalogRef} className="relative">
                     <button
                       onClick={() => setCatalogOpen((v) => !v)}
                       className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-all duration-200 ${
                         especialidadFilter
                           ? 'bg-[#0F766E] text-white border-[#0F766E]'
-                          : 'bg-white text-[#3F4D58] border-[#E4E8EE] hover:border-[#8E9AA6]'
+                          : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
                       }`}
                     >
-                      <span className="max-w-[220px] truncate">
-                        {especialidadFilter || 'Todas las especialidades'}
+                      <span className="max-w-[180px] truncate">
+                        {especialidadFilter || 'Especialidad'}
                       </span>
                       {especialidadFilter ? (
                         <span
@@ -670,61 +672,79 @@ export function ListDetail() {
                       </div>
                     )}
                   </div>
-                </div>
 
-                <span className="w-px h-7 bg-[#D5DBE3] shrink-0" />
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A8694]">Estado clínico</span>
-                  <div className="flex items-center gap-1 bg-white border border-[#E4E8EE] p-1 rounded-xl">
+                  <div ref={compRef} className="relative">
                     <button
-                      onClick={() => { setCompensadoFilter(''); setSelectedIds(new Set()) }}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                        compensadoFilter === '' ? 'bg-[#EEF1F5] text-[#1E2A32]' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                      onClick={() => setCompOpen((v) => !v)}
+                      className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-all duration-200 ${
+                        compensadoFilter
+                          ? 'bg-white border-[#E4E8EE]'
+                          : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
                       }`}
                     >
-                      Todos
-                    </button>
-                    <button
-                      onClick={() => { setCompensadoFilter(compensadoFilter === 'Sí' ? '' : 'Sí'); setSelectedIds(new Set()) }}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                        compensadoFilter === 'Sí' ? 'bg-emerald-100 text-emerald-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-                      }`}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      Compensados
-                      {compensadoFilter === 'Sí' && (
-                        <span
-                          onClick={(e) => { e.stopPropagation(); setCompensadoFilter(''); setSelectedIds(new Set()) }}
-                          className="hover:bg-emerald-200 rounded p-0.5 leading-none"
-                          title="Quitar filtro"
-                        >
-                          <X size={11} />
-                        </span>
+                      {compensadoFilter ? (
+                        <>
+                          <span className={`w-1.5 h-1.5 rounded-full ${compensadoFilter === 'Sí' ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                          <span className="text-[#3F4D58]">{compensadoFilter === 'Sí' ? 'Compensados' : 'Descompensados'}</span>
+                          <span
+                            onClick={(e) => { e.stopPropagation(); setCompensadoFilter(''); setSelectedIds(new Set()); setCompOpen(false) }}
+                            className="hover:bg-[#EEF1F5] rounded p-0.5 leading-none"
+                            title="Quitar filtro"
+                          >
+                            <X size={13} />
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D5DBE3]" />
+                          <span>Estado</span>
+                          <ChevronDown size={14} className={`text-[#8E9AA6] transition-transform duration-200 ${compOpen ? 'rotate-180' : ''}`} />
+                        </>
                       )}
                     </button>
-                    <button
-                      onClick={() => { setCompensadoFilter(compensadoFilter === 'No' ? '' : 'No'); setSelectedIds(new Set()) }}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                        compensadoFilter === 'No' ? 'bg-red-100 text-red-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-                      }`}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                      Descompensados
-                      {compensadoFilter === 'No' && (
-                        <span
-                          onClick={(e) => { e.stopPropagation(); setCompensadoFilter(''); setSelectedIds(new Set()) }}
-                          className="hover:bg-red-200 rounded p-0.5 leading-none"
-                          title="Quitar filtro"
+                    {compOpen && (
+                      <div className="absolute left-0 top-full mt-1.5 z-50 w-52 bg-white border border-[#E4E8EE] rounded-xl shadow-xl py-1.5">
+                        <button
+                          onClick={() => { setCompensadoFilter(''); setSelectedIds(new Set()); setCompOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors duration-150 ${
+                            compensadoFilter === '' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                          }`}
                         >
-                          <X size={11} />
-                        </span>
-                      )}
-                    </button>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D5DBE3]" />
+                          <span className="flex-1">Todos</span>
+                          {compensadoFilter === '' && <Check size={14} />}
+                        </button>
+                        <button
+                          onClick={() => { setCompensadoFilter(compensadoFilter === 'Sí' ? '' : 'Sí'); setSelectedIds(new Set()); setCompOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors duration-150 ${
+                            compensadoFilter === 'Sí' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                          }`}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          <span className="flex-1">Compensados</span>
+                          {compensadoFilter === 'Sí' && <Check size={14} />}
+                        </button>
+                        <button
+                          onClick={() => { setCompensadoFilter(compensadoFilter === 'No' ? '' : 'No'); setSelectedIds(new Set()); setCompOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors duration-150 ${
+                            compensadoFilter === 'No' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                          }`}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                          <span className="flex-1">Descompensados</span>
+                          {compensadoFilter === 'No' && <Check size={14} />}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
+              )}
 
-                <div className="ml-auto flex items-center gap-2 flex-wrap">
+              <span className="self-center text-xs text-[#7A8694] whitespace-nowrap">
+                {total.toLocaleString()} expediente{total === 1 ? '' : 's'}
+              </span>
+            {list?.is_system && (
+              <div className="ml-auto flex items-center gap-2 flex-wrap">
               {user?.role === 'admin' && (
                 <>
                   <button
@@ -802,8 +822,8 @@ export function ListDetail() {
                 </div>
               )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div ref={scrollRef} onScroll={handleScroll} className="flex-1 min-h-0 overflow-y-auto">
