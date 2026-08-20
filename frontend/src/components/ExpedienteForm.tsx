@@ -93,6 +93,7 @@ export const SECTIONS: Section[] = [
     fields: [
       { key: 'diagnostico', label: 'Diagnóstico (mín. 5 caracteres)', type: 'text' },
       { key: 'criticidad', label: 'Criticidad Clínica', type: 'text' },
+      { key: 'compensado', label: 'Compensado', type: 'text' },
     ],
   },
   {
@@ -147,10 +148,13 @@ const formatearTalla = (raw: string): string => {
 const criticidadEnabled = (data: Record<string, any>): boolean =>
   String(data.diagnostico || '').trim().length >= MIN_TEXT_LENGTH
 
+const clinicalDisabled = (key: string, data: Record<string, any>): boolean =>
+  (key === 'criticidad' || key === 'compensado') && !criticidadEnabled(data)
+
 function isSectionComplete(section: Section, data: Record<string, any>): boolean {
   return section.fields.every((f) => {
     if (f.optional) return true
-    if (f.key === 'criticidad' && !criticidadEnabled(data)) return true
+    if (clinicalDisabled(f.key, data)) return true
     const val = data[f.key]
     return val !== undefined && val !== null && String(val).trim() !== ''
   })
@@ -576,10 +580,10 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                   </span>
                   <span className="text-xs text-[#7A8694]">
                     {section.fields.filter((f) => {
-                      if (f.key === 'criticidad' && !criticidadEnabled(data)) return false
+                      if (clinicalDisabled(f.key, data)) return false
                       const v = data[f.key]
                       return v !== undefined && v !== null && String(v).trim() !== ''
-                    }).length}/{section.fields.filter((f) => !(f.key === 'criticidad' && !criticidadEnabled(data))).length}
+                    }).length}/{section.fields.filter((f) => !clinicalDisabled(f.key, data)).length}
                   </span>
                   {isOpen ? <ChevronDown size={16} className="text-[#7A8694]" /> : <ChevronRight size={16} className="text-[#7A8694]" />}
                 </button>
@@ -650,6 +654,22 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           ) : (
                             <div className="px-3 py-2 rounded-lg bg-[#F7F8FA] border border-dashed border-[#E4E8EE] text-xs text-[#5F6C79]">
                               Complete primero el diagnóstico (mínimo 5 caracteres) para asignar la criticidad clínica.
+                            </div>
+                          )
+                        ) : field.key === 'compensado' ? (
+                          criticidadEnabled(data) ? (
+                            <select
+                              value={data[field.key] || ''}
+                              onChange={(e) => setValue(field.key, e.target.value)}
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            >
+                              <option value="">Seleccione...</option>
+                              <option value="Sí">Sí</option>
+                              <option value="No">No</option>
+                            </select>
+                          ) : (
+                            <div className="px-3 py-2 rounded-lg bg-[#F7F8FA] border border-dashed border-[#E4E8EE] text-xs text-[#5F6C79]">
+                              Complete primero el diagnóstico (mínimo 5 caracteres) para indicar si está compensado.
                             </div>
                           )
                         ) : field.key === 'sexo' ? (
