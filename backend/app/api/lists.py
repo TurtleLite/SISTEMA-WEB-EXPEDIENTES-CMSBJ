@@ -191,16 +191,20 @@ def list_localidades(
     from sqlalchemy import text
     from app.models.catalog_item import CatalogItem
     rows = db.execute(text(
-        "SELECT data->>'localidad' AS loc, data->>'tipo_localidad' AS tipo, COUNT(*) AS n "
+        "SELECT data->>'localidad' AS loc, data->>'tipo_localidad' AS tipo, "
+        "data->>'departamento' AS dep, data->>'municipio' AS mun, COUNT(*) AS n "
         "FROM list_records "
         "WHERE list_definition_id = :lid AND deleted_at IS NULL "
         "AND data->>'localidad' IS NOT NULL AND data->>'localidad' != '' "
-        "GROUP BY loc, tipo ORDER BY loc"
+        "GROUP BY loc, tipo, dep, mun ORDER BY loc"
     ), {"lid": list_id}).all()
-    items = {r[0]: {"localidad": r[0], "tipo": r[1] or "", "count": r[2]} for r in rows}
+    items = [
+        {"localidad": r[0], "tipo": r[1] or "", "departamento": r[2] or "", "municipio": r[3] or "", "count": r[4]}
+        for r in rows
+    ]
     for item in db.query(CatalogItem).filter(CatalogItem.item_type == "localidad"):
-        items.setdefault(item.name, {"localidad": item.name, "tipo": item.locality_type or "", "count": 0})
-    return [items[name] for name in sorted(items)]
+        items.append({"localidad": item.name, "tipo": item.locality_type or "", "departamento": "", "municipio": "", "count": 0})
+    return sorted(items, key=lambda x: (x["localidad"], x["departamento"], x["municipio"]))
 
 
 @router.get("/{list_id}/field-values")

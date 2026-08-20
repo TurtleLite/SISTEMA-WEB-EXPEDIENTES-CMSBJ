@@ -271,6 +271,8 @@ const STAGE_LABELS: Record<string, string> = {
 interface LocalidadOption {
   localidad: string
   tipo: string
+  departamento: string
+  municipio: string
   count: number
 }
 
@@ -459,22 +461,6 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     }
   }
 
-  const doneBySection = useRef<Record<string, boolean>>({})
-
-  useEffect(() => {
-    if (!expanded || editingRecord) return
-    const section = sections.find((s) => s.title === expanded)
-    if (!section) return
-    const done = isSectionComplete(section, data)
-    const prev = doneBySection.current[expanded]
-    doneBySection.current[expanded] = done
-    if (done && prev === false) {
-      const i = sections.findIndex((s) => s.title === expanded)
-      if (i !== -1 && i < sections.length - 1) goToSection(i + 1)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expanded, data, editingRecord, role])
-
   useEffect(() => {
     const i = sections.findIndex((s) => s.title === expanded)
     if (i === -1) return
@@ -487,6 +473,10 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expanded, role])
 
+  const localidadesFiltradas = localidades.filter(
+    (l) => l.departamento === data.departamento && l.municipio === data.municipio
+  )
+
   const handleLocalidadChange = (value: string) => {
     const titled = titleCase(value)
     setValue('localidad', titled)
@@ -495,7 +485,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       setLocalidadMatch(null)
       return
     }
-    const match = localidades.find((l) => normalizeText(l.localidad) === normalized) || null
+    const match = localidadesFiltradas.find((l) => normalizeText(l.localidad) === normalized) || null
     setLocalidadMatch(match)
     if (match) setValue('tipo_localidad', match.tipo)
   }
@@ -619,7 +609,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
             </span>
           </div>
           <p className="text-[0.6875rem] text-[#7A8694] mt-1.5">
-            Enter avanza al siguiente campo · al completar una sección se avanza automáticamente
+            Enter avanza al siguiente campo
           </p>
         </div>
 
@@ -971,6 +961,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               setValue('departamento', v)
                               if (v && !(HONDURAS_DEPARTAMENTOS[v] || []).includes(data.municipio)) {
                                 setValue('municipio', '')
+                                setValue('localidad', '')
+                                setValue('tipo_localidad', '')
+                                setLocalidadMatch(null)
                               }
                             }}
                             options={Object.keys(HONDURAS_DEPARTAMENTOS).map((d) => ({ value: d, label: d }))}
@@ -979,7 +972,12 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                         ) : field.key === 'municipio' ? (
                           <ScrollSelect
                             value={data[field.key] || ''}
-                            onChange={(v) => setValue('municipio', v)}
+                            onChange={(v) => {
+                              setValue('municipio', v)
+                              setValue('localidad', '')
+                              setValue('tipo_localidad', '')
+                              setLocalidadMatch(null)
+                            }}
                             disabled={!data.departamento}
                             options={(HONDURAS_DEPARTAMENTOS[data.departamento] || []).map((m) => ({ value: m, label: m }))}
                             placeholder={data.departamento ? 'Seleccione el municipio...' : 'Seleccione primero un departamento'}
@@ -999,14 +997,17 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <div>
                             <input
                               type="text"
-                              list="localidades-sugeridas"
+                              list={data.departamento && data.municipio ? 'localidades-sugeridas' : undefined}
                               value={data[field.key] || ''}
                               onChange={(e) => handleLocalidadChange(e.target.value)}
-                              placeholder="Escriba la localidad o seleccione una existente"
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                              disabled={!data.departamento || !data.municipio}
+                              placeholder={data.departamento && data.municipio
+                                ? 'Escriba o seleccione la localidad'
+                                : 'Seleccione primero departamento y municipio'}
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] disabled:bg-[#F7F8FA] disabled:text-[#7A8694] disabled:cursor-not-allowed"
                             />
                             <datalist id="localidades-sugeridas">
-                              {localidades.map((l) => (
+                              {localidadesFiltradas.map((l) => (
                                 <option key={`${l.localidad}-${l.tipo}`} value={l.localidad}>
                                   {l.localidad}{l.tipo ? ` (${l.tipo})` : ''}
                                 </option>
