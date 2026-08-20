@@ -165,11 +165,19 @@ function isSectionComplete(section: Section, data: Record<string, any>): boolean
 }
 
 function totalFieldsFrom(sections: Section[]): number {
-  return sections.reduce((acc, s) => acc + s.fields.length, 0)
+  return sections.reduce((acc, s) => acc + s.fields.filter((f) => !f.optional).length, 0)
 }
 
-function filledFields(data: Record<string, any>): number {
-  return Object.values(data).filter((v) => v !== undefined && v !== null && String(v).trim() !== '').length
+function filledFields(sections: Section[], data: Record<string, any>): number {
+  return sections.reduce((acc, s) => {
+    for (const f of s.fields) {
+      if (f.optional) continue
+      if (clinicalDisabled(f.key, data)) continue
+      const v = data[f.key]
+      if (v !== undefined && v !== null && String(v).trim() !== '') acc++
+    }
+    return acc
+  }, 0)
 }
 
 interface DraftData {
@@ -561,7 +569,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   }
 
   const total = totalFieldsFrom(sections)
-  const filled = filledFields(data)
+  const filled = filledFields(sections, data)
   const pct = total > 0 ? Math.round((filled / total) * 100) : 0
 
   return (
