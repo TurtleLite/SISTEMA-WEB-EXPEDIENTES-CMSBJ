@@ -11,6 +11,7 @@ import { areSimilarNames, normalizeText, shortName } from '../utils/format'
 import { TIPO_LOCALIDAD_OPTIONS } from '../constants'
 import { ConfirmDangerModal } from '../components/ConfirmDangerModal'
 import { TrashModal } from '../components/TrashModal'
+import ScrollSelect from '../components/ScrollSelect'
 
 const RECORD_COLUMNS = ['nombre', 'edad', 'diagnostico', 'perfil', 'domicilio', 'telefono', 'albergue', 'nombre_medico']
 const COLUMN_WIDTHS: Record<string, string> = {
@@ -660,16 +661,15 @@ export function ListDetail() {
                 />
                 <div className="flex items-center shrink-0">
                   <span className="w-px h-4 bg-[#E4E8EE]" />
-                  <select
+                  <ScrollSelect
                     value={searchField}
-                    onChange={(e) => setSearchField(e.target.value)}
-                    className="pl-2 pr-1.5 py-2 text-xs text-[#7A8694] bg-transparent outline-none cursor-pointer"
-                  >
-                    <option value="">Todos los campos</option>
-                    {list?.columns_config.map((col) => (
-                      <option key={col.key} value={col.key}>{col.label}</option>
-                    ))}
-                  </select>
+                    onChange={setSearchField}
+                    allowEmpty
+                    options={(list?.columns_config || []).map((col) => ({ value: col.key, label: col.label }))}
+                    placeholder="Todos los campos"
+                    buttonClassName="px-2 py-2 text-xs text-[#7A8694] border-0 bg-transparent rounded-none hover:text-[#3F4D58]"
+                    panelClassName="rounded-lg shadow-xl"
+                  />
                 </div>
               </div>
 

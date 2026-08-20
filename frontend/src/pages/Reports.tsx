@@ -4,6 +4,7 @@ import { Report, ListDefinition } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
 import { Plus, FileSpreadsheet, Download, Trash2, Eye, X, RefreshCw } from 'lucide-react'
+import ScrollSelect from '../components/ScrollSelect'
 
 const STATUS_OPTIONS = ['En espera', 'Reprogramar', 'Cancelado', 'Fuera de perfil San Benito', 'Operado', 'No apto para cirugía', 'No se presentó']
 
@@ -531,17 +532,16 @@ export function Reports() {
 
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Especialidad</label>
-                    <select
+                    <ScrollSelect
                       value={form.especialidad}
-                      onChange={(e) => setFilter({ especialidad: e.target.value })}
+                      onChange={(v) => setFilter({ especialidad: v })}
+                      allowEmpty
                       disabled={!form.list_definition_id}
-                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
-                    >
-                      <option value="">Todas</option>
-                      {especialidades.map((esp) => (
-                        <option key={esp} value={esp}>{esp}</option>
-                      ))}
-                    </select>
+                      options={especialidades.map((esp) => ({ value: esp, label: esp }))}
+                      placeholder="Todas"
+                      buttonClassName="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm"
+                      panelClassName="rounded-xl"
+                    />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Estatus de cirugía</label>

@@ -3,6 +3,7 @@ import { listsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
 import { ListRecord } from '../types'
 import { HONDURAS_DEPARTAMENTOS, TIPO_LOCALIDAD_OPTIONS } from '../constants'
+import ScrollSelect from './ScrollSelect'
 import { normalizeText, titleCase } from '../utils/format'
 import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle } from 'lucide-react'
 
@@ -571,11 +572,11 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                     <span className="flex-1 h-px bg-[#E4E8EE]" />
                   </div>
                 )}
-                <div className={`bg-white border rounded-xl overflow-hidden transition-all duration-200 ${isOpen ? 'shadow-sm border-[#C9D2DB] border-l-[3px] border-l-[#0F766E]' : 'border-[#E4E8EE] border-l-[3px] border-l-transparent hover:border-l-[#0F766E]'}`}>
+                <div className={`bg-white border rounded-xl transition-all duration-200 ${isOpen ? 'shadow-sm border-[#C9D2DB] border-l-[3px] border-l-[#0F766E]' : 'border-[#E4E8EE] border-l-[3px] border-l-transparent hover:border-l-[#0F766E]'}`}>
                   <button
                     type="button"
                     onClick={() => toggleSection(section.title)}
-                    className={`w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors ${isOpen ? 'bg-[#F7F8FA] border-b border-[#E4E8EE]' : 'bg-white hover:bg-[#F7F8FA]'}`}
+                    className={`w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors rounded-t-xl ${isOpen ? 'bg-[#F7F8FA] border-b border-[#E4E8EE]' : 'bg-white hover:bg-[#F7F8FA]'}`}
                   >
                     <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${done ? 'bg-[#0F766E] text-white' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
                       {done ? <CheckCircle2 size={15} /> : <span className="text-xs font-bold">{String(sIdx + 1).padStart(2, '0')}</span>}
@@ -658,24 +659,21 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               </button>
                             </div>
                           ) : (
-                            <select
+                            <ScrollSelect
                               value={data[field.key] || ''}
-                              onChange={(e) => {
-                                const v = e.target.value
+                              onChange={(v) => {
                                 if (v === '__otro__') {
                                   setCustomEspecialidad(true)
                                 } else {
                                   setValue(field.key, v)
                                 }
                               }}
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                            >
-                              <option value="">Seleccione una especialidad...</option>
-                              {especialidades.map((esp) => (
-                                <option key={esp} value={esp}>{esp}</option>
-                              ))}
-                              <option value="__otro__">Otro (escribir manualmente)...</option>
-                            </select>
+                              options={[
+                                ...especialidades.map((esp) => ({ value: esp, label: esp })),
+                                { value: '__otro__', label: 'Otro (escribir manualmente)...' },
+                              ]}
+                              placeholder="Seleccione una especialidad..."
+                            />
                           )
                         ) : field.key === 'criticidad' ? (
                           criticidadEnabled(data) ? (
@@ -900,34 +898,25 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none"
                           />
                         ) : field.key === 'departamento' ? (
-                          <select
+                          <ScrollSelect
                             value={data[field.key] || ''}
-                            onChange={(e) => {
-                              const v = e.target.value
+                            onChange={(v) => {
                               setValue('departamento', v)
                               if (v && !(HONDURAS_DEPARTAMENTOS[v] || []).includes(data.municipio)) {
                                 setValue('municipio', '')
                               }
                             }}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                          >
-                            <option value="">Seleccione el departamento...</option>
-                            {Object.keys(HONDURAS_DEPARTAMENTOS).map((d) => (
-                              <option key={d} value={d}>{d}</option>
-                            ))}
-                          </select>
+                            options={Object.keys(HONDURAS_DEPARTAMENTOS).map((d) => ({ value: d, label: d }))}
+                            placeholder="Seleccione el departamento..."
+                          />
                         ) : field.key === 'municipio' ? (
-                          <select
+                          <ScrollSelect
                             value={data[field.key] || ''}
-                            onChange={(e) => setValue('municipio', e.target.value)}
+                            onChange={(v) => setValue('municipio', v)}
                             disabled={!data.departamento}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] disabled:bg-[#F7F8FA] disabled:text-[#7A8694]"
-                          >
-                            <option value="">{data.departamento ? 'Seleccione el municipio...' : 'Seleccione primero un departamento'}</option>
-                            {(HONDURAS_DEPARTAMENTOS[data.departamento] || []).map((m) => (
-                              <option key={m} value={m}>{m}</option>
-                            ))}
-                          </select>
+                            options={(HONDURAS_DEPARTAMENTOS[data.departamento] || []).map((m) => ({ value: m, label: m }))}
+                            placeholder={data.departamento ? 'Seleccione el municipio...' : 'Seleccione primero un departamento'}
+                          />
                         ) : field.key === 'tipo_localidad' ? (
                           <select
                             value={data[field.key] || ''}
