@@ -105,7 +105,6 @@ fields: [
     icon: <UserCircle size={18} />,
     fields: [
       { key: 'nombre_medico', label: 'Nombre del Médico', type: 'text' },
-      { key: 'fecha_elaboracion', label: 'Fecha de Elaboración', type: 'date', optional: true },
     ],
   },
 ]
