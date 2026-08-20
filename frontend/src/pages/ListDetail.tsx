@@ -46,6 +46,10 @@ export function ListDetail() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [especialidades, setEspecialidades] = useState<string[]>([])
   const [especialidadFilter, setEspecialidadFilter] = useState('')
+  const [compensadoFilter, setCompensadoFilter] = useState('')
+  const [compStats, setCompStats] = useState<{ compensados: number; descompensados: number; sin_definir: number } | null>(null)
+  const [savingCompensado, setSavingCompensado] = useState<string | null>(null)
+  const canEditCompensado = user?.role === 'medico' || user?.role === 'direccion' || user?.role === 'direccion_medica'
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(false)
@@ -100,6 +104,32 @@ export function ListDetail() {
     } catch { /* ignore */ }
   }
 
+  const loadCompStats = async () => {
+    try {
+      const res = await listsApi.compensadoStats(id)
+      setCompStats(res.data)
+    } catch { /* ignore */ }
+  }
+
+  const handleSetCompensado = async (recordId: string, value: string) => {
+    setSavingCompensado(recordId)
+    try {
+      await listsApi.setCompensado(id, recordId, value || null)
+      setRecords((prev) => prev.map((r) => {
+        if (r.id !== recordId) return r
+        const data = { ...r.data }
+        if (value) data.compensado = value
+        else delete data.compensado
+        return { ...r, data }
+      }))
+      loadCompStats()
+    } catch (err: any) {
+      toast(err.response?.data?.detail || 'Error al actualizar el estado', 'error')
+    } finally {
+      setSavingCompensado(null)
+    }
+  }
+
   const loadList = async () => {
     try {
       const res = await listsApi.get(id)
@@ -123,6 +153,7 @@ export function ListDetail() {
         params.search = search
         if (searchField) params.search_field = searchField
       }
+      if (compensadoFilter) params.compensado = compensadoFilter
       const res = await listsApi.getRecords(id, params)
       const data = res.data
       setPage(data.page)
@@ -135,7 +166,7 @@ export function ListDetail() {
       }
     } catch (err) { console.error(err) }
     finally { setLoadingMore(false) }
-  }, [id, page, search, searchField, especialidadFilter])
+  }, [id, page, search, searchField, especialidadFilter, compensadoFilter])
 
   const handleScroll = () => {
     const el = scrollRef.current
@@ -151,10 +182,11 @@ export function ListDetail() {
 
   useEffect(() => {
     if (id) loadRecords(true)
-  }, [id, search, searchField, especialidadFilter])
+  }, [id, search, searchField, especialidadFilter, compensadoFilter])
 
   useEffect(() => {
     if (id && list?.is_system) loadEspecialidades()
+    if (id) loadCompStats()
   }, [id, list?.is_system])
 
   const toggleSelect = (recordId: string) => {
@@ -586,6 +618,34 @@ export function ListDetail() {
                   <option key={esp} value={esp}>{esp}</option>
                 ))}
               </select>
+              <div className="flex items-center gap-1 bg-white border border-[#E4E8EE] p-1 rounded-xl">
+                <button
+                  onClick={() => { setCompensadoFilter(''); setSelectedIds(new Set()) }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                    compensadoFilter === '' ? 'bg-[#EEF1F5] text-[#1E2A32]' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                  }`}
+                >
+                  Todos{compStats ? ` (${compStats.compensados + compStats.descompensados + compStats.sin_definir})` : ''}
+                </button>
+                <button
+                  onClick={() => { setCompensadoFilter('Sí'); setSelectedIds(new Set()) }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                    compensadoFilter === 'Sí' ? 'bg-emerald-100 text-emerald-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  Compensados{compStats ? ` (${compStats.compensados})` : ''}
+                </button>
+                <button
+                  onClick={() => { setCompensadoFilter('No'); setSelectedIds(new Set()) }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                    compensadoFilter === 'No' ? 'bg-red-100 text-red-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  Descompensados{compStats ? ` (${compStats.descompensados})` : ''}
+                </button>
+              </div>
               {user?.role === 'admin' && (
                 <>
                   <button
@@ -684,6 +744,11 @@ export function ListDetail() {
                     {col.label}
                   </th>
                 ))}
+                {list?.is_system && (
+                  <th className="w-24 px-3 py-4 text-left text-xs font-bold text-[#7A8694] uppercase tracking-wider">
+                    Compensado
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -714,6 +779,37 @@ export function ListDetail() {
                       }
                     </td>
                   ))}
+                  {list?.is_system && (
+                    <td className="w-24 px-3 py-4">
+                      {canEditCompensado ? (
+                        <select
+                          value={record.data.compensado || ''}
+                          disabled={savingCompensado === record.id}
+                          onChange={(e) => void handleSetCompensado(record.id, e.target.value)}
+                          className={`w-full px-2 py-1.5 rounded-lg border text-xs font-medium focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50 ${
+                            record.data.compensado === 'Sí'
+                              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                              : record.data.compensado === 'No'
+                                ? 'border-red-200 bg-red-50 text-red-700'
+                                : 'border-[#E4E8EE] bg-white text-[#7A8694]'
+                          }`}
+                        >
+                          <option value="">—</option>
+                          <option value="Sí">Sí</option>
+                          <option value="No">No</option>
+                        </select>
+                      ) : record.data.compensado ? (
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${
+                          record.data.compensado === 'Sí' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${record.data.compensado === 'Sí' ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                          {record.data.compensado}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-[#8E9AA6]">—</span>
+                      )}
+                    </td>
+                  )}
                 </tr>
               ))}
               {records.length === 0 && (

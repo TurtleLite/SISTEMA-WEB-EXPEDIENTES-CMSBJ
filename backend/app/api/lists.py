@@ -329,6 +329,65 @@ def count_records(
     return {"count": count_records(db, list_id)}
 
 
+@router.get("/{list_id}/records/compensado-stats")
+def compensado_stats(
+    list_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    from app.services.record_service import _not_deleted
+    from app.models.list_definition import ListRecord
+    base = _not_deleted(db.query(ListRecord).filter(ListRecord.list_definition_id == list_id))
+    comp = base.filter(ListRecord.data.op("->>")("compensado") == "Sí").count()
+    descomp = base.filter(ListRecord.data.op("->>")("compensado") == "No").count()
+    return {
+        "compensados": comp,
+        "descompensados": descomp,
+        "sin_definir": base.count() - comp - descomp,
+    }
+
+
+@router.put("/{list_id}/records/{record_id}/compensado")
+def update_record_compensado(
+    list_id: int,
+    record_id: int,
+    payload: dict,
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    from fastapi import HTTPException
+    from sqlalchemy.orm.attributes import flag_modified
+    from app.models.list_definition import ListRecord
+
+    if current_user.role not in ("medico", "direccion", "direccion_medica"):
+        raise HTTPException(status_code=403, detail="No tienes permiso para editar el estado de compensación")
+
+    valor = payload.get("compensado")
+    if valor not in (None, "Sí", "No"):
+        raise HTTPException(status_code=400, detail="El valor debe ser «Sí», «No» o vacío")
+
+    record = db.query(ListRecord).filter(
+        ListRecord.id == record_id,
+        ListRecord.list_definition_id == list_id,
+        ListRecord.deleted_at.is_(None),
+    ).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="Registro no encontrado")
+
+    data = dict(record.data or {})
+    if valor is None:
+        data.pop("compensado", None)
+    else:
+        data["compensado"] = valor
+    record.data = data
+    flag_modified(record, "data")
+    db.commit()
+    log_audit(db, current_user, "record_compensado", entity_type="record", entity_id=record_id,
+              detail=f"cambió el estado de compensación a {valor or 'sin definir'}", ip_address=client_ip(request))
+    return {"message": "Estado de compensación actualizado", "compensado": valor}
+
+
 @router.get("/{list_id}/records/copy-number")
 def copy_number(
     list_id: int,
@@ -448,6 +507,7 @@ def list_records(
     exclude_statuses: str = None,
     waiting_only: bool = False,
     estatus_cirugia: str = None,
+    compensado: str = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -459,6 +519,7 @@ def list_records(
             db, list_id, search, search_field, page, page_size,
             exclude_statuses=excluded or None, waiting_only=waiting_only,
             estatus_cirugia=estatus_cirugia or None,
+            compensado=compensado or None,
         )
 
         def ser(r):

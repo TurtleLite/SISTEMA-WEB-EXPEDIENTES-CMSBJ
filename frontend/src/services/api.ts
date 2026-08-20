@@ -119,6 +119,9 @@ export const listsApi = {
   update: (id: string | number, data: any) => api.put(`/lists/${id}`, data),
   delete: (id: string | number) => api.delete(`/lists/${id}`),
   getRecords: (id: string | number, params?: any) => api.get(`/lists/${id}/records`, { params }),
+  compensadoStats: (id: string | number) => api.get(`/lists/${id}/records/compensado-stats`),
+  setCompensado: (id: string | number, recordId: string | number, compensado: string | null) =>
+    api.put(`/lists/${id}/records/${recordId}/compensado`, { compensado }),
   getRecordsByIds: (id: string | number, ids: string[]) =>
     api.get(`/lists/${id}/records/by-ids`, { params: { ids: ids.join(',') } }),
   getRecordsCount: (id: string | number) => api.get(`/lists/${id}/records/count`),
