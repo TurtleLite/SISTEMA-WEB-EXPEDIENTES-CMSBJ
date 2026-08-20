@@ -98,7 +98,7 @@ fields: [
       { key: 'diagnostico', label: 'Diagnóstico (mín. 5 caracteres)', type: 'text' },
       { key: 'criticidad', label: 'Criticidad Clínica', type: 'text' },
       { key: 'compensado', label: 'Compensado (Sí, No)', type: 'text' },
-      { key: 'observacion_compensado', label: 'Observación (obligatoria si NO compensado)', type: 'text' },
+      { key: 'observacion_compensado', label: 'Observación (Obligatorio si no está compensado)', type: 'text' },
     ],
   },
   {
@@ -722,7 +722,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                       }
                       return (
                       <div key={field.key} className={FULL_WIDTH_KEYS.has(field.key) ? 'lg:col-span-2' : ''}>
-                        <label className="block text-sm font-medium text-[#2B3A45] mb-1">
+                        <label className={`block text-sm font-medium mb-1 ${field.key === 'compensado' && compensadoObsMissing(data) ? 'text-red-700' : 'text-[#2B3A45]'}`}>
                           {field.label}
                         </label>
                         {field.key === 'especialidad' ? (
@@ -786,24 +786,19 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           )
                         ) : field.key === 'compensado' ? (
                           criticidadEnabled(data) ? (
-                            <div className="space-y-3">
-                              <div>
-                                <label className="block text-sm font-medium text-[#2B3A45] mb-1">
-                                  {field.label}
-                                </label>
-                                <select
-                                  value={data[field.key] || ''}
-                                  onChange={(e) => setValue(field.key, e.target.value)}
-                                  className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                                >
-                                  <option value="">Seleccione...</option>
-                                  <option value="Sí">Sí</option>
-                                  <option value="No">No</option>
-                                </select>
-                              </div>
-                              <div>
-                                <label className={`block text-sm font-medium mb-1 ${compensadoObsRequired(data) ? 'text-red-700' : 'text-[#2B3A45]'}`}>
-                                  {section.fields.find((f) => f.key === OBS_COMPENSADO_KEY)?.label || 'Observación (obligatoria si NO compensado)'}
+                            <div className={`rounded-lg border overflow-hidden transition-colors ${compensadoObsMissing(data) ? 'border-red-400' : 'border-[#E4E8EE]'} focus-within:ring-2 focus-within:ring-[#8E9AA6] focus-within:border-[#5F6C79]`}>
+                              <select
+                                value={data[field.key] || ''}
+                                onChange={(e) => setValue(field.key, e.target.value)}
+                                className={`w-full px-3 py-2 text-sm bg-white outline-none ${compensadoObsRequired(data) ? 'text-red-700 font-semibold' : 'text-[#2B3A45]'}`}
+                              >
+                                <option value="">Seleccione...</option>
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                              </select>
+                              <div className={`border-t ${compensadoObsMissing(data) ? 'border-red-300' : 'border-[#E4E8EE]'}`}>
+                                <label className="block px-3 pt-2 text-xs font-medium text-[#5F6C79]">
+                                  Observación (Obligatorio si no está compensado)
                                 </label>
                                 <textarea
                                   rows={2}
@@ -811,11 +806,11 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                   value={data[OBS_COMPENSADO_KEY] || ''}
                                   onChange={(e) => setValue(OBS_COMPENSADO_KEY, capitalizeFirst(e.target.value))}
                                   placeholder={compensadoObsRequired(data) ? 'Escriba el motivo por el cual no está compensado...' : 'Opcional'}
-                                  className={`w-full px-3 py-2 border rounded-lg text-sm resize-none focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] ${compensadoObsMissing(data) ? 'border-red-400 bg-red-50/40' : 'border-[#E4E8EE]'}`}
+                                  className={`w-full px-3 py-2 text-sm resize-none outline-none bg-white ${compensadoObsMissing(data) ? 'bg-red-50/40' : ''}`}
                                 />
                                 {compensadoObsMissing(data) && (
-                                  <p className="mt-1 text-xs text-red-600 font-medium">
-                                    Debe escribir la observación porque el paciente no está compensado.
+                                  <p className="px-3 pb-2 text-xs text-red-600 font-medium">
+                                    Escriba el motivo porque el paciente no está compensado.
                                   </p>
                                 )}
                               </div>
