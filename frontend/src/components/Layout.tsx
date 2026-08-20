@@ -154,6 +154,31 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
           ))}
         </nav>
+        <div className="p-3 border-t border-[#E4E8EE]">
+          <button
+            onClick={() => navigate('/perfil')}
+            className="w-full flex items-center gap-3 mb-2 text-left group"
+          >
+            <div>
+              <RoleAvatar role={user?.role} size="sm" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[#1E2A32] truncate">
+                {displayName}
+              </p>
+              <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
+                {roleLabels[user?.role || '']}
+              </span>
+            </div>
+          </button>
+          <button
+            onClick={logout}
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#5F6C79] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
+          >
+            <LogOut size={15} />
+            Cerrar sesión
+          </button>
+        </div>
       </aside>
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header className="bg-gradient-to-r from-[#0B2A26] via-[#0F3832] to-[#115E59] px-12 py-2 flex items-center">
@@ -166,7 +191,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </span>
           </div>
         </header>
-        <main className="flex-1 p-6 pr-52 flex flex-col overflow-y-auto min-h-0 relative">
+        <main className="flex-1 p-6 flex flex-col overflow-y-auto min-h-0 relative">
           <div className="flex-1 min-h-0">{children}</div>
         </main>
         <footer className="pt-[7px] text-center text-xs text-[#8794A1]">
