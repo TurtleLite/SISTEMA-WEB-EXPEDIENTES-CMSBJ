@@ -130,7 +130,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <nav className="flex-1 px-3 py-2 flex flex-col justify-between overflow-y-auto">
           {visibleSections.map((section) => (
             <div key={section.title} className="mb-1">
-              <p className="px-3 pt-1 pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8794A1]">
+              <p className="px-3 pt-1 pb-1 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-[#8794A1]">
                 {section.title}
               </p>
               {section.items.map((item) => {
@@ -166,7 +166,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <p className="text-sm font-semibold text-[#1E2A32] truncate">
                 {displayName}
               </p>
-              <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
+              <span className={`inline-block px-2 py-0.5 rounded-full text-[0.625rem] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
                 {roleLabels[user?.role || '']}
               </span>
             </div>
@@ -183,10 +183,10 @@ export function Layout({ children }: { children: ReactNode }) {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header className="bg-gradient-to-r from-[#0B2A26] via-[#0F3832] to-[#115E59] px-12 py-2 flex items-center">
           <div className="flex-1 flex items-center justify-center gap-3">
-            <span className="font-serif font-bold text-[15px] tracking-[0.08em] text-white">CENTRO MÉDICO SAN BENITO JOSÉ</span>
+            <span className="font-serif font-bold text-[0.9375rem] tracking-[0.08em] text-white">CENTRO MÉDICO SAN BENITO JOSÉ</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
+            <span className={`px-2.5 py-0.5 rounded-full text-[0.625rem] font-medium border ${ROLE_META[user?.role || '']?.badge || ''}`}>
               {roleLabels[user?.role || '']}
             </span>
           </div>
@@ -197,7 +197,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <footer className="pt-[7px] text-center text-xs text-[#8794A1]">
           © {new Date().getFullYear()} TurtleLite · Centro Médico San Benito José
         </footer>
-        <div className="fixed bottom-1.5 right-3 z-[1] text-[11px] font-medium text-[#8E9AA6] select-none pointer-events-none tracking-wide">
+        <div className="fixed bottom-1.5 right-3 z-[1] text-[0.6875rem] font-medium text-[#8E9AA6] select-none pointer-events-none tracking-wide">
           Versión 1.0
         </div>
       </div>
@@ -209,7 +209,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <div className="flex items-start gap-3">
                 <Bell size={18} className="text-[#99F6E4] mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#99F6E4]">
+                  <p className="text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-[#99F6E4]">
                     Mensaje del centro médico
                   </p>
                   <h2 className="text-white font-bold leading-snug mt-0.5">{activeMessage.title}</h2>
@@ -226,7 +226,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="px-6 py-5">
               <p className="text-sm text-[#2B3A45] whitespace-pre-wrap leading-relaxed">{activeMessage.message}</p>
               <div className="flex items-center justify-between mt-5 pt-4 border-t border-[#EEF1F5]">
-                <p className="text-[11px] text-[#8794A1]">
+                <p className="text-[0.6875rem] text-[#8794A1]">
                   {activeMessage.sender_username || 'Administración'} ·{' '}
                   {new Date(activeMessage.created_at).toLocaleString('es-HN', {
                     day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',

@@ -140,7 +140,7 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
         </div>
       </div>
 
-      <div className="shrink-0 flex items-center gap-2 text-[11px] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
+      <div className="shrink-0 flex items-center gap-2 text-[0.6875rem] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
         <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
         Los respaldos se generan automáticamente a las 3:00 a. m. y se conservan los últimos 14.
       </div>
@@ -197,12 +197,12 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
           </table>
         </div>
         <div className="shrink-0 border-t border-[#E4E8EE] px-6 py-1.5 flex items-center justify-between">
-          <p className="text-[10px] text-[#7A8694]">
+          <p className="text-[0.625rem] text-[#7A8694]">
             {items.length} respaldo(s) · {(totalKb / 1024).toFixed(1)} MB en total
           </p>
           <button
             onClick={load}
-            className="text-[10px] font-medium text-[#5F6C79] hover:text-[#0F766E] flex items-center gap-1"
+            className="text-[0.625rem] font-medium text-[#5F6C79] hover:text-[#0F766E] flex items-center gap-1"
           >
             <RefreshCw size={11} /> Actualizar
           </button>

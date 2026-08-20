@@ -156,7 +156,7 @@ export function Dashboard() {
               <div className={`w-11 h-11 rounded-lg ${opt.color} text-white flex items-center justify-center shadow-sm transition-transform duration-150 group-hover:translate-y-[-2px]`}>
                 {opt.icon}
               </div>
-              <span className="text-[15px] font-semibold text-[#2B3A45]">{opt.label}</span>
+              <span className="text-[0.9375rem] font-semibold text-[#2B3A45]">{opt.label}</span>
             </button>
           ))}
         </div>

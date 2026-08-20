@@ -618,7 +618,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
               {pct}%
             </span>
           </div>
-          <p className="text-[11px] text-[#7A8694] mt-1.5">
+          <p className="text-[0.6875rem] text-[#7A8694] mt-1.5">
             Enter avanza al siguiente campo · al completar una sección se avanza automáticamente
           </p>
         </div>
@@ -632,7 +632,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
               <Fragment key={section.title}>
                 {stageLabel && (
                   <div className="flex items-center gap-3 pt-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#7A8694] shrink-0">
+                    <span className="text-[0.625rem] font-bold uppercase tracking-widest text-[#7A8694] shrink-0">
                       {stageLabel}
                     </span>
                     <span className="flex-1 h-px bg-[#E4E8EE]" />

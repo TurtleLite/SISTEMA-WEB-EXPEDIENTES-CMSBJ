@@ -145,10 +145,10 @@ export function Notifications() {
                       <p className={`${n.is_read ? 'text-[#3F4D58] font-medium' : 'text-[#1E2A32] font-bold'}`}>
                         {n.title}
                       </p>
-                      <span className="text-[11px] text-[#8E9AA6] shrink-0">{fmtDate(n.created_at)}</span>
+                      <span className="text-[0.6875rem] text-[#8E9AA6] shrink-0">{fmtDate(n.created_at)}</span>
                     </div>
                     <p className="text-sm text-[#5F6C79] mt-1 whitespace-pre-wrap">{n.message}</p>
-                    <p className="text-[11px] text-[#8794A1] mt-2">
+                    <p className="text-[0.6875rem] text-[#8794A1] mt-2">
                       De: {n.sender_username || 'Administración'}
                       {' · '}{targetLabel(n)}
                       {n.read_at && <span className="text-[#0F766E]"> · Leído</span>}

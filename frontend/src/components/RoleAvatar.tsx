@@ -16,7 +16,7 @@ const ROLE_COLORS: Record<string, string> = {
 }
 
 const SIZES = {
-  sm: 'w-8 h-8 text-[11px] rounded-lg',
+  sm: 'w-8 h-8 text-[0.6875rem] rounded-lg',
   md: 'w-11 h-11 text-sm rounded-xl',
   lg: 'w-16 h-16 text-2xl rounded-2xl',
 }

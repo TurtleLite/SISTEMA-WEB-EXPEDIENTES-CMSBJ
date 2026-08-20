@@ -230,7 +230,7 @@ export function Sessions() {
                 <tr key={s.id} className={`border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] ${s.is_current ? 'bg-emerald-50/60' : ''} ${s.device_status === 'pending' ? 'bg-amber-50/40' : s.device_status === 'blocked' ? 'bg-rose-50/40' : ''}`}>
                   <td className="px-6 py-4 text-sm">
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${s.is_current ? 'bg-emerald-100 text-emerald-700' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[0.625rem] font-semibold uppercase ${s.is_current ? 'bg-emerald-100 text-emerald-700' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
                         {s.is_current ? 'Esta sesión' : 'Otra'}
                       </span>
                       <div>
@@ -254,12 +254,12 @@ export function Sessions() {
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-mono text-[#2B3A45]">{s.device_id || '—'}</span>
                       {deviceMeta && (
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${deviceMeta.badge}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[0.625rem] font-semibold ${deviceMeta.badge}`}>
                           {deviceMeta.label}
                         </span>
                       )}
                       {s.device_shared && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700" title="Equipo usado por más de un usuario">
+                        <span className="px-2 py-0.5 rounded-full text-[0.625rem] font-semibold bg-violet-100 text-violet-700" title="Equipo usado por más de un usuario">
                           Compartido
                         </span>
                       )}

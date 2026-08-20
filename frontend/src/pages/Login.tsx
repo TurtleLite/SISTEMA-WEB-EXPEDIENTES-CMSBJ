@@ -39,7 +39,7 @@ export function Login() {
             <img src="/logo_sbj.png" alt="Logo San Benito José" className="w-72 h-auto" />
           </div>
           <div className="w-12 h-px bg-white/25 mt-12" />
-          <p className="mt-6 text-[11px] font-semibold text-[#B7F4EC] uppercase tracking-[0.3em]">
+          <p className="mt-6 text-[0.6875rem] font-semibold text-[#B7F4EC] uppercase tracking-[0.3em]">
             Centro Médico San Benito José
           </p>
           <h1 className="font-serif font-bold text-5xl text-white mt-5 leading-tight tracking-tight">

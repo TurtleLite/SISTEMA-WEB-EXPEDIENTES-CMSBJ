@@ -175,10 +175,10 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
       {pending.length > 0 && (
         <div className="shrink-0 flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 text-amber-800">
           <AlertTriangle size={13} className="shrink-0" />
-          <p className="text-[11px] font-medium flex-1">
+          <p className="text-[0.6875rem] font-medium flex-1">
             {pending.length} equipo(s) nuevo(s) pendiente(s) de aprobación.
           </p>
-          <button onClick={() => setFilter('pending')} className="text-[11px] font-semibold text-amber-700 hover:underline shrink-0">
+          <button onClick={() => setFilter('pending')} className="text-[0.6875rem] font-semibold text-amber-700 hover:underline shrink-0">
             Ver pendientes →
           </button>
         </div>
@@ -190,7 +190,7 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
             <button
               key={o.key}
               onClick={() => setFilter(o.key)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-all duration-200 ${filter === o.key ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'}`}
+              className={`px-2.5 py-1 rounded-md text-[0.6875rem] font-medium transition-all duration-200 ${filter === o.key ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'}`}
             >
               {o.label} <span className="opacity-60">{o.value}</span>
             </button>
@@ -213,13 +213,13 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
-                <th className="w-[21%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Equipo</th>
-                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
-                <th className="w-[14%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Usuarios</th>
-                <th className="w-[11%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Actividad</th>
-                <th className="w-[7%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Eventos</th>
-                <th className="w-[12%] text-left px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Nota</th>
-                <th className="w-[23%] text-right px-3 py-2.5 text-[10px] font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
+                <th className="w-[21%] text-left px-3 py-2.5 text-[0.625rem] font-bold text-[#7A8694] uppercase tracking-wider">Equipo</th>
+                <th className="w-[12%] text-left px-3 py-2.5 text-[0.625rem] font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
+                <th className="w-[14%] text-left px-3 py-2.5 text-[0.625rem] font-bold text-[#7A8694] uppercase tracking-wider">Usuarios</th>
+                <th className="w-[11%] text-left px-3 py-2.5 text-[0.625rem] font-bold text-[#7A8694] uppercase tracking-wider">Actividad</th>
+                <th className="w-[7%] text-left px-3 py-2.5 text-[0.625rem] font-bold text-[#7A8694] uppercase tracking-wider">Eventos</th>
+                <th className="w-[12%] text-left px-3 py-2.5 text-[0.625rem] font-bold text-[#7A8694] uppercase tracking-wider">Nota</th>
+                <th className="w-[23%] text-right px-3 py-2.5 text-[0.625rem] font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
               </tr>
             </thead>
             <tbody>
@@ -252,10 +252,10 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                           </span>
                         )}
                       </div>
-                      {d.note && <p className="text-[10px] text-[#7A8694] mt-0.5 truncate" title={d.note}>{d.note}</p>}
+                      {d.note && <p className="text-[0.625rem] text-[#7A8694] mt-0.5 truncate" title={d.note}>{d.note}</p>}
                     </td>
                     <td className="px-3 py-2.5">
-                      <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium inline-flex items-center gap-1 ${meta.badge}`} title={
+                      <span className={`px-1.5 py-0.5 rounded-full text-[0.625rem] font-medium inline-flex items-center gap-1 ${meta.badge}`} title={
                         d.status === 'approved' && d.approved_by ? `Aprobado por ${d.approved_by} · ${fmt(d.approved_at)}`
                         : d.status === 'blocked' && d.blocked_by ? `Bloqueado por ${d.blocked_by} · ${fmt(d.blocked_at)}`
                         : meta.label
@@ -271,10 +271,10 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                           <span className="text-xs text-[#7A8694]">—</span>
                         ) : (
                           shownUsers.map((u) => (
-                            <span key={u} className="px-1 py-0.5 rounded bg-[#EEF1F5] text-[10px] text-[#2B3A45] truncate max-w-full" title={`Primer uso: ${fmt(d.first_seen_at)}`}>{u}</span>
+                            <span key={u} className="px-1 py-0.5 rounded bg-[#EEF1F5] text-[0.625rem] text-[#2B3A45] truncate max-w-full" title={`Primer uso: ${fmt(d.first_seen_at)}`}>{u}</span>
                           ))
                         )}
-                        {extraUsers > 0 && <span className="text-[10px] text-[#7A8694]" title={`${d.users.join(', ')}`}>+{extraUsers}</span>}
+                        {extraUsers > 0 && <span className="text-[0.625rem] text-[#7A8694]" title={`${d.users.join(', ')}`}>+{extraUsers}</span>}
                       </div>
                     </td>
                     <td className="px-3 py-2.5 text-xs text-[#3F4D58] min-w-0">
@@ -288,7 +288,7 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                           value={notes[d.device_id] ?? d.note ?? ''}
                           onChange={(e) => setNotes((p) => ({ ...p, [d.device_id]: e.target.value }))}
                           placeholder="Ej. Recepción PC1"
-                          className="w-full min-w-0 px-1.5 py-1 border border-[#E4E8EE] rounded text-[10px] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                          className="w-full min-w-0 px-1.5 py-1 border border-[#E4E8EE] rounded text-[0.625rem] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                         />
                         <button
                           onClick={() => saveNote(d)}
@@ -310,13 +310,13 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                               onChange={(e) => setBlockReason(e.target.value)}
                               placeholder="Motivo (obligatorio)"
                               autoFocus
-                              className="w-28 px-1.5 py-1 border border-rose-300 rounded text-[10px] focus:ring-2 focus:ring-rose-300/30"
+                              className="w-28 px-1.5 py-1 border border-rose-300 rounded text-[0.625rem] focus:ring-2 focus:ring-rose-300/30"
                             />
                           )}
                           <button
                             onClick={() => d.status === 'approved' ? handleBlock(d) : handleApprove(d)}
                             disabled={saving === d.device_id}
-                            className={`px-2 py-1 text-[11px] font-medium rounded text-white transition-all duration-200 disabled:opacity-50 ${d.status === 'approved' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
+                            className={`px-2 py-1 text-[0.6875rem] font-medium rounded text-white transition-all duration-200 disabled:opacity-50 ${d.status === 'approved' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
                           >
                             {saving === d.device_id ? '...' : 'Sí'}
                           </button>
@@ -332,14 +332,14 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                         d.status === 'approved' ? (
                           <button
                             onClick={() => { setConfirming(d.device_id); setBlockReason('') }}
-                            className="px-2 py-1 text-[11px] font-medium bg-rose-600 text-white rounded hover:bg-rose-700 transition-all duration-200"
+                            className="px-2 py-1 text-[0.6875rem] font-medium bg-rose-600 text-white rounded hover:bg-rose-700 transition-all duration-200"
                           >
                             Bloquear
                           </button>
                         ) : (
                           <button
                             onClick={() => { setConfirming(d.device_id); setBlockReason('') }}
-                            className="px-2 py-1 text-[11px] font-medium bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-all duration-200"
+                            className="px-2 py-1 text-[0.6875rem] font-medium bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-all duration-200"
                           >
                             Aprobar
                           </button>
@@ -353,10 +353,10 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
           </table>
         </div>
         <div className="shrink-0 border-t border-[#E4E8EE] px-3 py-1.5 flex items-center justify-between">
-          <p className="text-[10px] text-[#7A8694]">
+          <p className="text-[0.625rem] text-[#7A8694]">
             {counts.approved} aprobado(s) · {counts.pending} pendiente(s) · {counts.blocked} bloqueado(s) · {visible.length} mostrado(s)
           </p>
-          <p className="text-[10px] text-[#7A8694] hidden sm:block">
+          <p className="text-[0.625rem] text-[#7A8694] hidden sm:block">
             <Check size={10} className="inline mr-0.5 text-emerald-500" />
             Bloquear cierra sesiones activas del equipo
           </p>

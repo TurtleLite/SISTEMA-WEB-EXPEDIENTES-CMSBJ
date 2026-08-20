@@ -437,7 +437,7 @@ export function DayList() {
                   <div key={sec.esp}>
                     <div className="flex items-center gap-2 px-4 py-2 bg-[#F7F8FA] border-y border-[#E4E8EE]">
                       <span className="text-xs font-bold uppercase tracking-wider text-[#115E59]">{sec.esp}</span>
-                      <span className="px-1.5 py-0.5 rounded-full bg-[#0F766E] text-white text-[10px] font-semibold">{sec.items.length}</span>
+                      <span className="px-1.5 py-0.5 rounded-full bg-[#0F766E] text-white text-[0.625rem] font-semibold">{sec.items.length}</span>
                     </div>
                     <ul className="divide-y divide-[#E4E8EE]">
                       {sec.items.map(({ r }, localIdx) => (
@@ -505,7 +505,7 @@ function StatusBadge({ status }: { status?: string }) {
     'No se presentó': 'bg-violet-100 text-violet-600 border-violet-200',
   }
   return (
-    <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border whitespace-nowrap ${styles[status || ''] || 'bg-white text-[#7A8694] border-[#E4E8EE]'}`}>
+    <span className={`inline-block px-2 py-0.5 rounded-full text-[0.625rem] font-medium border whitespace-nowrap ${styles[status || ''] || 'bg-white text-[#7A8694] border-[#E4E8EE]'}`}>
       {status || 'Sin estatus'}
     </span>
   )

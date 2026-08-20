@@ -26,7 +26,7 @@ const parseName = (fullName: string) => {
 const inputClass =
   'w-full px-3.5 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200'
 const labelClass =
-  'block text-[11px] font-semibold uppercase tracking-wider text-[#5F6C79] mb-1'
+  'block text-[0.6875rem] font-semibold uppercase tracking-wider text-[#5F6C79] mb-1'
 
 export function Profile() {
   const { user, updateUser } = useAuth()
@@ -83,7 +83,7 @@ export function Profile() {
         <div className="min-w-0">
           <h1 className="font-serif text-xl font-bold text-[#1E2A32] truncate">{user.full_name}</h1>
           <div className="mt-1.5 flex items-center gap-2.5">
-            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${meta.badge}`}>
+            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[0.6875rem] font-semibold border ${meta.badge}`}>
               {meta.label}
             </span>
             <span className="text-xs text-[#7A8694]">@{user.username}</span>

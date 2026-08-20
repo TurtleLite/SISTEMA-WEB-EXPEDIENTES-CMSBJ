@@ -372,7 +372,7 @@ export function Reports() {
             </div>
             {report.created_by_breakdown && report.created_by_breakdown.length > 0 && (
               <div className="mt-3 pt-3 border-t border-[#E4E8EE]">
-                <p className="text-[11px] font-semibold text-[#7A8694] uppercase tracking-wider mb-1.5">Expedientes por usuario</p>
+                <p className="text-[0.6875rem] font-semibold text-[#7A8694] uppercase tracking-wider mb-1.5">Expedientes por usuario</p>
                 <div className="space-y-1">
                   {report.created_by_breakdown.map((b) => (
                     <div key={b.full_name} className="flex items-center justify-between gap-2 text-xs">
@@ -409,7 +409,7 @@ export function Reports() {
               )}
             </div>
             <div className="flex justify-between items-end mt-4 pt-2 border-t border-[#E4E8EE]">
-              <span className="text-[11px] text-[#7A8694]">
+              <span className="text-[0.6875rem] text-[#7A8694]">
                 Creado el {new Date(report.created_at).toLocaleDateString('es-ES')}
               </span>
         {(user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica') && (
@@ -483,7 +483,7 @@ export function Reports() {
                   {anyFilter(form) && (
                     <button
                       onClick={clearFilters}
-                      className="text-[11px] font-medium text-[#5F6C79] hover:text-red-600 transition-colors duration-200"
+                      className="text-[0.6875rem] font-medium text-[#5F6C79] hover:text-red-600 transition-colors duration-200"
                     >
                       Limpiar filtros
                     </button>
@@ -497,13 +497,13 @@ export function Reports() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => applyDateShortcut('hoy')}
-                          className="text-[11px] font-medium text-[#0F766E] hover:bg-[#EEF1F5] rounded-lg px-2 py-0.5 transition-colors duration-200"
+                          className="text-[0.6875rem] font-medium text-[#0F766E] hover:bg-[#EEF1F5] rounded-lg px-2 py-0.5 transition-colors duration-200"
                         >
                           Hoy
                         </button>
                         <button
                           onClick={() => applyDateShortcut('mes')}
-                          className="text-[11px] font-medium text-[#0F766E] hover:bg-[#EEF1F5] rounded-lg px-2 py-0.5 transition-colors duration-200"
+                          className="text-[0.6875rem] font-medium text-[#0F766E] hover:bg-[#EEF1F5] rounded-lg px-2 py-0.5 transition-colors duration-200"
                         >
                           Este mes
                         </button>
@@ -525,7 +525,7 @@ export function Reports() {
                         className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
                       />
                     </div>
-                    <p className="text-[11px] text-[#7A8694] mt-1">
+                    <p className="text-[0.6875rem] text-[#7A8694] mt-1">
                       Sin fechas = todos los expedientes, sin importar cuándo se crearon.
                     </p>
                   </div>

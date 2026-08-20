@@ -1228,7 +1228,7 @@ export function ListDetail() {
                     <p className="text-xs font-semibold text-amber-800 uppercase tracking-wider">Advertencia</p>
                     <button
                       onClick={markAsRead}
-                      className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 hover:text-amber-900 transition-colors duration-200 shrink-0"
+                      className="flex items-center gap-1 text-[0.6875rem] font-semibold text-amber-700 hover:text-amber-900 transition-colors duration-200 shrink-0"
                     >
                       <Check size={12} />
                       Marcar como leída
@@ -1395,7 +1395,7 @@ export function ListDetail() {
                       }
                       return (
                         <div key={f.key} className={['localidad', 'diagnostico', 'historia_enfermedad', 'examen_fisico', 'domicilio'].includes(f.key) ? 'sm:col-span-2' : ''}>
-                          <p className="text-[11px] font-medium text-[#7A8694] uppercase tracking-wider">{f.label}</p>
+                          <p className="text-[0.6875rem] font-medium text-[#7A8694] uppercase tracking-wider">{f.label}</p>
                           <p className="text-sm text-[#1E2A32] mt-0.5 break-words whitespace-pre-wrap">
                             {value || <span className="text-[#8E9AA6]">—</span>}
                           </p>

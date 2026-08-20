@@ -391,12 +391,12 @@ export function AuditLog() {
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="font-mono truncate min-w-0" title={e.ip_address || ''}>{e.ip_address || '—'}</span>
                       {deviceMeta && (
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold shrink-0 ${deviceMeta.badge}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[0.625rem] font-semibold shrink-0 ${deviceMeta.badge}`}>
                           {deviceMeta.label}
                         </span>
                       )}
                       {e.device_shared && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-violet-100 text-violet-700 shrink-0" title="Equipo usado por más de un usuario">
+                        <span className="px-2 py-0.5 rounded-full text-[0.625rem] font-semibold bg-violet-100 text-violet-700 shrink-0" title="Equipo usado por más de un usuario">
                           Compartido
                         </span>
                       )}
@@ -444,11 +444,11 @@ export function AuditLog() {
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-3 text-sm">
             <div>
-              <p className="text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Fecha y hora</p>
+              <p className="text-[0.625rem] font-semibold text-[#7A8694] uppercase tracking-wider">Fecha y hora</p>
               <p className="text-[#1E2A32]">{fmt(selected.created_at)}</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold text-[#7A8694] uppercase tracking-wider">Detalle</p>
+              <p className="text-[0.625rem] font-semibold text-[#7A8694] uppercase tracking-wider">Detalle</p>
               <p className="text-[#2B3A45] break-words whitespace-pre-wrap bg-[#F7F8FA] rounded-lg px-3 py-2 text-xs">{selected.detail || '—'}</p>
             </div>
           </div>
