@@ -93,7 +93,7 @@ export const SECTIONS: Section[] = [
     fields: [
       { key: 'diagnostico', label: 'Diagnóstico (mín. 5 caracteres)', type: 'text' },
       { key: 'criticidad', label: 'Criticidad Clínica', type: 'text' },
-      { key: 'compensado', label: 'Compensado', type: 'text' },
+      { key: 'compensado', label: 'Compensado (Sí, No)', type: 'text' },
     ],
   },
   {

@@ -585,7 +585,7 @@ export function Reports() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Compensado</label>
+                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Compensado (Sí, No)</label>
                     <select
                       value={form.compensado}
                       onChange={(e) => setFilter({ compensado: e.target.value })}
