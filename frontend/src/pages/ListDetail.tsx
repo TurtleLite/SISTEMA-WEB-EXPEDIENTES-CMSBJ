@@ -607,45 +607,94 @@ export function ListDetail() {
               </span>
             </div>
             {list?.is_system && (
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <select
-                  value={especialidadFilter}
-                  onChange={(e) => { setEspecialidadFilter(e.target.value); setSelectedIds(new Set()) }}
-                  className="px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
-                >
-                <option value="">Todas las especialidades</option>
-                {especialidades.map((esp) => (
-                  <option key={esp} value={esp}>{esp}</option>
-                ))}
-              </select>
-              <div className="flex items-center gap-1 bg-white border border-[#E4E8EE] p-1 rounded-xl">
-                <button
-                  onClick={() => { setCompensadoFilter(''); setSelectedIds(new Set()) }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                    compensadoFilter === '' ? 'bg-[#EEF1F5] text-[#1E2A32]' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-                  }`}
-                >
-                  Todos
-                </button>
-                <button
-                  onClick={() => { setCompensadoFilter('Sí'); setSelectedIds(new Set()) }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                    compensadoFilter === 'Sí' ? 'bg-emerald-100 text-emerald-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-                  }`}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Compensados
-                </button>
-                <button
-                  onClick={() => { setCompensadoFilter('No'); setSelectedIds(new Set()) }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                    compensadoFilter === 'No' ? 'bg-red-100 text-red-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-                  }`}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                  Descompensados
-                </button>
-              </div>
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A8694] shrink-0">Catálogo</span>
+                  <div className="flex items-center gap-1 bg-white border border-[#E4E8EE] p-1 rounded-xl overflow-x-auto max-w-[45vw]">
+                    <button
+                      onClick={() => { setEspecialidadFilter(''); setSelectedIds(new Set()) }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 ${
+                        especialidadFilter === '' ? 'bg-[#EEF1F5] text-[#1E2A32]' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                      }`}
+                    >
+                      Todas
+                    </button>
+                    {especialidades.map((esp) => (
+                      <button
+                        key={esp}
+                        onClick={() => { setEspecialidadFilter(esp === especialidadFilter ? '' : esp); setSelectedIds(new Set()) }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap flex items-center gap-1 transition-all duration-200 ${
+                          especialidadFilter === esp ? 'bg-[#0F766E] text-white' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                        }`}
+                      >
+                        {esp}
+                        {especialidadFilter === esp && (
+                          <span
+                            onClick={(e) => { e.stopPropagation(); setEspecialidadFilter(''); setSelectedIds(new Set()) }}
+                            className="hover:bg-white/20 rounded p-0.5 leading-none"
+                            title="Quitar filtro"
+                          >
+                            <X size={11} />
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <span className="w-px h-7 bg-[#D5DBE3] shrink-0" />
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A8694]">Estado clínico</span>
+                  <div className="flex items-center gap-1 bg-white border border-[#E4E8EE] p-1 rounded-xl">
+                    <button
+                      onClick={() => { setCompensadoFilter(''); setSelectedIds(new Set()) }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                        compensadoFilter === '' ? 'bg-[#EEF1F5] text-[#1E2A32]' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                      }`}
+                    >
+                      Todos
+                    </button>
+                    <button
+                      onClick={() => { setCompensadoFilter(compensadoFilter === 'Sí' ? '' : 'Sí'); setSelectedIds(new Set()) }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                        compensadoFilter === 'Sí' ? 'bg-emerald-100 text-emerald-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                      }`}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      Compensados
+                      {compensadoFilter === 'Sí' && (
+                        <span
+                          onClick={(e) => { e.stopPropagation(); setCompensadoFilter(''); setSelectedIds(new Set()) }}
+                          className="hover:bg-emerald-200 rounded p-0.5 leading-none"
+                          title="Quitar filtro"
+                        >
+                          <X size={11} />
+                        </span>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => { setCompensadoFilter(compensadoFilter === 'No' ? '' : 'No'); setSelectedIds(new Set()) }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                        compensadoFilter === 'No' ? 'bg-red-100 text-red-700' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                      }`}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                      Descompensados
+                      {compensadoFilter === 'No' && (
+                        <span
+                          onClick={(e) => { e.stopPropagation(); setCompensadoFilter(''); setSelectedIds(new Set()) }}
+                          className="hover:bg-red-200 rounded p-0.5 leading-none"
+                          title="Quitar filtro"
+                        >
+                          <X size={11} />
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="ml-auto flex items-center gap-2 flex-wrap">
               {user?.role === 'admin' && (
                 <>
                   <button
@@ -722,6 +771,7 @@ export function ListDetail() {
                   ) : null}
                 </div>
               )}
+              </div>
             </div>
           )}
         </div>
