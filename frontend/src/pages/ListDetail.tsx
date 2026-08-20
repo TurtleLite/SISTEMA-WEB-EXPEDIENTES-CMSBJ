@@ -4,7 +4,7 @@ import { listsApi, default as api } from '../services/api'
 import { ListDefinition, ListRecord } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
-import { Plus, Upload, Search, Pencil, Trash2, Download, Stethoscope, CheckSquare, Square, Settings2, Eye, MapPin, X, Info, Check } from 'lucide-react'
+import { Plus, Upload, Search, Pencil, Trash2, Download, Stethoscope, CheckSquare, Square, Settings2, Eye, MapPin, X, Info, Check, ChevronDown } from 'lucide-react'
 import { ExpedienteForm, SECTIONS } from '../components/ExpedienteForm'
 import { specialtiesApi, localitiesApi } from '../services/api'
 import { areSimilarNames, normalizeText, shortName } from '../utils/format'
@@ -46,6 +46,8 @@ export function ListDetail() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [especialidades, setEspecialidades] = useState<string[]>([])
   const [especialidadFilter, setEspecialidadFilter] = useState('')
+  const [catalogOpen, setCatalogOpen] = useState(false)
+  const catalogRef = useRef<HTMLDivElement>(null)
   const [compensadoFilter, setCompensadoFilter] = useState('')
   const [compStats, setCompStats] = useState<{ compensados: number; descompensados: number; sin_definir: number } | null>(null)
   const [savingCompensado, setSavingCompensado] = useState<string | null>(null)
@@ -188,6 +190,14 @@ export function ListDetail() {
     if (id && list?.is_system) loadEspecialidades()
     if (id) loadCompStats()
   }, [id, list?.is_system])
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) setCatalogOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   const toggleSelect = (recordId: string) => {
     setSelectedIds((prev) => {
@@ -610,35 +620,56 @@ export function ListDetail() {
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A8694] shrink-0">Catálogo</span>
-                  <div className="flex items-center gap-1 bg-white border border-[#E4E8EE] p-1 rounded-xl overflow-x-auto max-w-[45vw]">
+                  <div ref={catalogRef} className="relative">
                     <button
-                      onClick={() => { setEspecialidadFilter(''); setSelectedIds(new Set()) }}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 ${
-                        especialidadFilter === '' ? 'bg-[#EEF1F5] text-[#1E2A32]' : 'text-[#5F6C79] hover:text-[#1E2A32]'
+                      onClick={() => setCatalogOpen((v) => !v)}
+                      className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-all duration-200 ${
+                        especialidadFilter
+                          ? 'bg-[#0F766E] text-white border-[#0F766E]'
+                          : 'bg-white text-[#3F4D58] border-[#E4E8EE] hover:border-[#8E9AA6]'
                       }`}
                     >
-                      Todas
+                      <span className="max-w-[220px] truncate">
+                        {especialidadFilter || 'Todas las especialidades'}
+                      </span>
+                      {especialidadFilter ? (
+                        <span
+                          onClick={(e) => { e.stopPropagation(); setEspecialidadFilter(''); setSelectedIds(new Set()); setCatalogOpen(false) }}
+                          className="hover:bg-white/20 rounded p-0.5 leading-none"
+                          title="Quitar filtro"
+                        >
+                          <X size={13} />
+                        </span>
+                      ) : (
+                        <ChevronDown size={14} className={`text-[#8E9AA6] transition-transform duration-200 ${catalogOpen ? 'rotate-180' : ''}`} />
+                      )}
                     </button>
-                    {especialidades.map((esp) => (
-                      <button
-                        key={esp}
-                        onClick={() => { setEspecialidadFilter(esp === especialidadFilter ? '' : esp); setSelectedIds(new Set()) }}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap flex items-center gap-1 transition-all duration-200 ${
-                          especialidadFilter === esp ? 'bg-[#0F766E] text-white' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-                        }`}
-                      >
-                        {esp}
-                        {especialidadFilter === esp && (
-                          <span
-                            onClick={(e) => { e.stopPropagation(); setEspecialidadFilter(''); setSelectedIds(new Set()) }}
-                            className="hover:bg-white/20 rounded p-0.5 leading-none"
-                            title="Quitar filtro"
+                    {catalogOpen && (
+                      <div className="absolute left-0 top-full mt-1.5 z-50 w-64 max-h-72 overflow-y-auto bg-white border border-[#E4E8EE] rounded-xl shadow-xl py-1.5">
+                        <button
+                          onClick={() => { setEspecialidadFilter(''); setSelectedIds(new Set()); setCatalogOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                            especialidadFilter === '' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                          }`}
+                        >
+                          Todas las especialidades
+                          {especialidadFilter === '' && <Check size={14} />}
+                        </button>
+                        <div className="mx-3 my-1 border-t border-[#E4E8EE]" />
+                        {especialidades.map((esp) => (
+                          <button
+                            key={esp}
+                            onClick={() => { setEspecialidadFilter(esp === especialidadFilter ? '' : esp); setSelectedIds(new Set()); setCatalogOpen(false) }}
+                            className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                              especialidadFilter === esp ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                            }`}
                           >
-                            <X size={11} />
-                          </span>
-                        )}
-                      </button>
-                    ))}
+                            <span className="truncate">{esp}</span>
+                            {especialidadFilter === esp && <Check size={14} />}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -777,11 +808,11 @@ export function ListDetail() {
         </div>
 
         <div ref={scrollRef} onScroll={handleScroll} className="flex-1 min-h-0 overflow-y-auto">
-          <table className="w-full table-fixed">
+          <table className="w-full table-fixed border-collapse">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
                 {list?.is_system && (
-                  <th className="w-10 px-3 py-4">
+                  <th className="w-10 px-3 py-4 border-r border-[#E4E8EE]">
                     <button onClick={toggleSelectAll} className="text-[#7A8694] hover:text-[#3F4D58] transition-colors duration-200">
                       {selectedIds.size === records.length && records.length > 0
                         ? <CheckSquare size={16} className="text-[#3F4D58]" />
@@ -789,8 +820,8 @@ export function ListDetail() {
                     </button>
                   </th>
                 )}
-                {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col) => (
-                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''}`}>
+                {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col, ci, arr) => (
+                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''} ${ci < arr.length - 1 ? 'border-r border-[#E4E8EE]' : ''}`}>
                     {col.label}
                   </th>
                 ))}
@@ -800,17 +831,17 @@ export function ListDetail() {
               {records.map((record, idx) => (
                 <tr key={record.id} className={`border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] ${selectedIds.has(record.id) ? 'bg-[#EEF1F5]' : idx % 2 === 0 ? 'bg-white' : 'bg-[#EEF1F5]'}`}>
                   {list?.is_system && (
-                    <td className="w-10 px-3 py-4">
+                    <td className="w-10 px-3 py-4 border-r border-[#EEF1F5]">
                       <button onClick={() => toggleSelect(record.id)} className="text-[#8E9AA6] hover:text-[#5F6C79] transition-colors duration-200">
                         {selectedIds.has(record.id) ? <CheckSquare size={16} className="text-[#5F6C79]" /> : <Square size={16} />}
                       </button>
                     </td>
                   )}
-                  {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col) => (
+                  {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col, ci, arr) => (
                     <td
                       key={col.key}
                       title={String(col.key === 'domicilio' ? domicilioPreview(record.data) : (record.data[col.key] ?? ''))}
-                      className={`px-3 py-4 text-sm text-[#2B3A45] truncate ${COLUMN_WIDTHS[col.key] || ''}`}
+                      className={`px-3 py-4 text-sm text-[#2B3A45] truncate ${COLUMN_WIDTHS[col.key] || ''} ${ci < arr.length - 1 ? 'border-r border-[#EEF1F5]' : ''}`}
                     >
                       {col.key === 'telefono'
                         ? [record.data.telefono, record.data.telefono2, record.data.telefono3]
