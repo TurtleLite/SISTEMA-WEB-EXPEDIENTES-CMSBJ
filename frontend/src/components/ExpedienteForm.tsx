@@ -17,26 +17,26 @@ interface Section {
   title: string
   icon: React.ReactNode
   fields: ColumnDef[]
+  compact?: boolean
 }
 
 export const SECTIONS: Section[] = [
   {
     title: 'Datos Personales',
     icon: <User size={18} />,
-    fields: [
-      { key: 'especialidad', label: 'Especialidad', type: 'text' },
+fields: [
       { key: 'nombre', label: 'Nombre / First Name', type: 'text' },
-      { key: 'apellido', label: 'Apellido / Last Name', type: 'text' },
+      { key: 'expediente', label: 'Nº Expediente', type: 'text' },
+      { key: 'identidad', label: 'Nº Identidad', type: 'text' },
       { key: 'sexo', label: 'Sexo / Sex', type: 'text' },
       { key: 'edad', label: 'Age / Edad', type: 'number' },
-      { key: 'identidad', label: 'Nº Identidad', type: 'text' },
-      { key: 'expediente', label: 'Nº Expediente', type: 'text' },
-      { key: 'persona_responsable', label: 'Persona Responsable', type: 'text' },
-      { key: 'albergue', label: 'Albergue', type: 'text' },
+      { key: 'especialidad', label: 'Especialidad', type: 'text' },
       { key: 'perfil', label: 'Perfil', type: 'text' },
       { key: 'telefono', label: 'Teléfono', type: 'text' },
       { key: 'telefono2', label: 'Teléfono 2', type: 'text' },
       { key: 'telefono3', label: 'Teléfono 3', type: 'text' },
+      { key: 'persona_responsable', label: 'Persona Responsable', type: 'text' },
+      { key: 'albergue', label: 'Albergue', type: 'text' },
     ],
   },
   {
@@ -69,6 +69,7 @@ export const SECTIONS: Section[] = [
   {
     title: 'Signos Vitales',
     icon: <Activity size={18} />,
+    compact: true,
     fields: [
       { key: 'presion_arterial', label: 'P.A. / B.P. (mmHg)', type: 'text' },
       { key: 'fc', label: 'F.C. (lpm)', type: 'text' },
@@ -101,6 +102,7 @@ export const SECTIONS: Section[] = [
     icon: <UserCircle size={18} />,
     fields: [
       { key: 'nombre_medico', label: 'Nombre del Médico', type: 'text' },
+      { key: 'fecha_elaboracion', label: 'Fecha de Elaboración', type: 'date', optional: true },
     ],
   },
 ]
@@ -256,7 +258,7 @@ function filterSections(role?: string): Section[] {
   return SECTIONS
 }
 
-const FULL_WIDTH_KEYS = new Set(['historia_enfermedad', 'examen_fisico', 'diagnostico'])
+const FULL_WIDTH_KEYS = new Set(['nombre', 'historia_enfermedad', 'examen_fisico', 'diagnostico'])
 
 interface LocalidadOption {
   localidad: string
@@ -467,7 +469,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     setSaving(true)
     try {
       const payload = { ...data }
-      if (!editingRecord) payload.fecha_elaboracion = todayHonduras()
+      if (!editingRecord && !payload.fecha_elaboracion) payload.fecha_elaboracion = todayHonduras()
       if (!payload.nombre_medico && medicoName) payload.nombre_medico = medicoName
       if (editingRecord) {
         const body: any = { data: payload }
@@ -580,16 +582,48 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                   </span>
                   <span className="text-xs text-[#7A8694]">
                     {section.fields.filter((f) => {
+                      if (f.optional) return false
                       if (clinicalDisabled(f.key, data)) return false
                       const v = data[f.key]
                       return v !== undefined && v !== null && String(v).trim() !== ''
-                    }).length}/{section.fields.filter((f) => !clinicalDisabled(f.key, data)).length}
+                    }).length}/{section.fields.filter((f) => !f.optional && !clinicalDisabled(f.key, data)).length}
                   </span>
                   {isOpen ? <ChevronDown size={16} className="text-[#7A8694]" /> : <ChevronRight size={16} className="text-[#7A8694]" />}
                 </button>
                 {isOpen && (
-                  <div className="px-4 py-3 grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-3 bg-white">
-                    {section.fields.map((field) => (
+                  <div className={`px-4 py-3 grid gap-x-4 gap-y-3 bg-white ${section.compact ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2'}`}>
+                    {section.fields.map((field) => {
+                      if (field.key === 'telefono2' || field.key === 'telefono3') return null
+                      if (field.key === 'telefono') {
+                        const phones = section.fields.filter((f) => f.key.startsWith('telefono'))
+                        return (
+                          <div key="telefonos" className={section.compact ? '' : 'lg:col-span-2'}>
+                            <div className="grid grid-cols-3 gap-x-4 gap-y-3">
+                              {phones.map((p) => (
+                                <div key={p.key}>
+                                  <label className="block text-sm font-medium text-[#2B3A45] mb-1">
+                                    {p.label}
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={data[p.key] || ''}
+                                    onChange={(e) => {
+                                      const digits = e.target.value.replace(/\D/g, '').slice(0, 8)
+                                      let formatted = ''
+                                      if (digits.length > 0) formatted = digits.slice(0, 4)
+                                      if (digits.length > 4) formatted += '-' + digits.slice(4, 8)
+                                      setValue(p.key, formatted)
+                                    }}
+                                    placeholder="0000-0000"
+                                    className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      }
+                      return (
                       <div key={field.key} className={FULL_WIDTH_KEYS.has(field.key) ? 'lg:col-span-2' : ''}>
                         <label className="block text-sm font-medium text-[#2B3A45] mb-1">
                           {field.label}
@@ -980,7 +1014,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           />
                         )}
                       </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 )}
               </div>
