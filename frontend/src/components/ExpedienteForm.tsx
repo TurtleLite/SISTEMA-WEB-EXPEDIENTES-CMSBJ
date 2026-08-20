@@ -421,8 +421,71 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   }
 
   const toggleSection = (title: string) => {
-    setExpanded((prev) => (prev === title ? '' : title))
+    const next = expanded === title ? '' : title
+    setExpanded(next)
+    if (next) {
+      const i = sections.findIndex((s) => s.title === next)
+      requestAnimationFrame(() => {
+        document.getElementById(`form-section-${i}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
   }
+
+  const goToSection = (i: number) => {
+    const s = sections[i]
+    if (!s) return
+    setExpanded(s.title)
+    requestAnimationFrame(() => {
+      document.getElementById(`form-section-${i}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
+  const onSectionBodyKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Enter') return
+    const t = e.target as HTMLElement
+    if (t.tagName !== 'INPUT' && t.tagName !== 'SELECT') return
+    if (t.tagName === 'INPUT' && t.hasAttribute('readonly')) return
+    e.preventDefault()
+    const body = t.closest('[data-section-body]') as HTMLElement | null
+    if (!body) return
+    const fields = Array.from(body.querySelectorAll<HTMLElement>('input:not(:disabled):not([readonly]), select:not(:disabled)'))
+    const idx = fields.indexOf(t)
+    const next = fields[idx + 1]
+    if (next) {
+      next.focus()
+    } else {
+      const i = sections.findIndex((s) => s.title === expanded)
+      if (i !== -1 && i < sections.length - 1) goToSection(i + 1)
+    }
+  }
+
+  const doneBySection = useRef<Record<string, boolean>>({})
+
+  useEffect(() => {
+    if (!expanded || editingRecord) return
+    const section = sections.find((s) => s.title === expanded)
+    if (!section) return
+    const done = isSectionComplete(section, data)
+    const prev = doneBySection.current[expanded]
+    doneBySection.current[expanded] = done
+    if (done && prev === false) {
+      const i = sections.findIndex((s) => s.title === expanded)
+      if (i !== -1 && i < sections.length - 1) goToSection(i + 1)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expanded, data, editingRecord, role])
+
+  useEffect(() => {
+    const i = sections.findIndex((s) => s.title === expanded)
+    if (i === -1) return
+    const t = setTimeout(() => {
+      const el = document.getElementById(`form-section-${i}`)
+      const first = el?.querySelector<HTMLElement>('input:not(:disabled):not([readonly]), select:not(:disabled)')
+      first?.focus()
+    }, 60)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expanded, role])
 
   const handleLocalidadChange = (value: string) => {
     const titled = titleCase(value)
@@ -555,6 +618,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
               {pct}%
             </span>
           </div>
+          <p className="text-[11px] text-[#7A8694] mt-1.5">
+            Enter avanza al siguiente campo · al completar una sección se avanza automáticamente
+          </p>
         </div>
 
         <div className="flex-1 overflow-y-auto min-h-0 h-0 px-6 py-3 space-y-2.5">
@@ -572,7 +638,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                     <span className="flex-1 h-px bg-[#E4E8EE]" />
                   </div>
                 )}
-                <div className={`bg-white border rounded-xl transition-all duration-200 ${isOpen ? 'shadow-sm border-[#C9D2DB] border-l-[3px] border-l-[#0F766E]' : 'border-[#E4E8EE] border-l-[3px] border-l-transparent hover:border-l-[#0F766E]'}`}>
+                <div id={`form-section-${sIdx}`} className={`bg-white border rounded-xl transition-all duration-200 ${isOpen ? 'shadow-sm border-[#C9D2DB] border-l-[3px] border-l-[#0F766E]' : 'border-[#E4E8EE] border-l-[3px] border-l-transparent hover:border-l-[#0F766E]'}`}>
                   <button
                     type="button"
                     onClick={() => toggleSection(section.title)}
@@ -596,7 +662,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                   {isOpen ? <ChevronDown size={16} className="text-[#7A8694]" /> : <ChevronRight size={16} className="text-[#7A8694]" />}
                 </button>
                 {isOpen && (
-                  <div className={`px-4 py-3 grid gap-x-4 gap-y-3 bg-white ${section.compact ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2'}`}>
+                  <Fragment>
+                  <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-4 py-3 grid gap-x-4 gap-y-3 bg-white ${section.compact ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2'}`}>
                     {section.fields.map((field) => {
                       if (field.key === 'telefono2' || field.key === 'telefono3') return null
                       if (field.key === 'telefono') {
@@ -1002,6 +1069,33 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                       )
                     })}
                   </div>
+                  <div className="px-4 pb-4 flex items-center justify-between gap-3">
+                    {sIdx > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => goToSection(sIdx - 1)}
+                        className="px-3.5 py-2 text-sm text-[#3F4D58] hover:bg-[#EEF1F5] rounded-lg border border-[#E4E8EE] transition-colors"
+                      >
+                        ← Anterior
+                      </button>
+                    ) : (
+                      <span />
+                    )}
+                    {sIdx < sections.length - 1 ? (
+                      <button
+                        type="button"
+                        onClick={() => goToSection(sIdx + 1)}
+                        className="px-4 py-2 text-sm font-medium text-white bg-[#0F766E] hover:bg-[#115E59] rounded-lg transition-colors"
+                      >
+                        Siguiente sección →
+                      </button>
+                    ) : (
+                      <span className="text-xs text-[#7A8694] text-right">
+                        Última sección · guarde al terminar
+                      </span>
+                    )}
+                  </div>
+                  </Fragment>
                 )}
               </div>
             </Fragment>
