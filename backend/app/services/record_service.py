@@ -18,9 +18,9 @@ def _validate_dates(data: dict):
     """Rechaza fechas imposibles en el expediente: elaboración futura o demasiado antigua,
     y edades fuera de rango (0-120 años)."""
     from fastapi import HTTPException
-    from datetime import date, datetime, timezone
+    from datetime import date, datetime, timezone, timedelta
 
-    hoy = date.today()
+    hoy = datetime.now(timezone(timedelta(hours=-6))).date()
 
     fecha_raw = str(data.get("fecha_elaboracion", "") or "").strip()
     if fecha_raw:

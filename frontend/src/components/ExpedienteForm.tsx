@@ -212,7 +212,7 @@ const formatAgo = (iso: string): string => {
 }
 
 const validateDates = (data: Record<string, any>): string | null => {
-  const hoy = new Date(todayHonduras())
+  const hoy = new Date(todayHonduras() + 'T00:00:00')
   const fechaRaw = String(data.fecha_elaboracion || '').trim()
   if (fechaRaw) {
     const f = new Date(fechaRaw + 'T00:00:00')
