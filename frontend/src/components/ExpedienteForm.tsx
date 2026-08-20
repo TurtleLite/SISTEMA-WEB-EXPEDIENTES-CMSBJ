@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, Fragment } from 'react'
 import { listsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
 import { ListRecord } from '../types'
@@ -259,6 +259,12 @@ function filterSections(role?: string): Section[] {
 }
 
 const FULL_WIDTH_KEYS = new Set(['nombre', 'historia_enfermedad', 'examen_fisico', 'diagnostico'])
+
+const STAGE_LABELS: Record<string, string> = {
+  'Datos Personales': 'Identificación',
+  'Historia de Enfermedad Actual': 'Evaluación clínica',
+  'Diagnóstico': 'Diagnóstico y cierre',
+}
 
 interface LocalidadOption {
   localidad: string
@@ -569,17 +575,27 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           {sections.map((section, sIdx) => {
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
+            const stageLabel = STAGE_LABELS[section.title]
             return (
-              <div key={section.title} className={`bg-white border rounded-xl overflow-hidden transition-all duration-200 ${isOpen ? 'shadow-sm border-[#D5DBE3]' : 'border-[#E4E8EE] hover:border-[#C9D2DB]'}`}>
-                <button
-                  type="button"
-                  onClick={() => toggleSection(section.title)}
-                  className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[#F7F8FA]"
-                >
-                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${done ? 'bg-[#0F766E] text-white' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
-                    {done ? <CheckCircle2 size={15} /> : <span className="text-xs font-bold">{String(sIdx + 1).padStart(2, '0')}</span>}
-                  </span>
-                  <span className="text-[#5F6C79] shrink-0">{section.icon}</span>
+              <Fragment key={section.title}>
+                {stageLabel && (
+                  <div className="flex items-center gap-3 pt-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#7A8694] shrink-0">
+                      {stageLabel}
+                    </span>
+                    <span className="flex-1 h-px bg-[#E4E8EE]" />
+                  </div>
+                )}
+                <div className={`bg-white border rounded-xl overflow-hidden transition-all duration-200 ${isOpen ? 'shadow-sm border-[#C9D2DB] border-l-[3px] border-l-[#0F766E]' : 'border-[#E4E8EE] border-l-[3px] border-l-transparent hover:border-l-[#0F766E]'}`}>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection(section.title)}
+                    className={`w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors ${isOpen ? 'bg-[#F7F8FA] border-b border-[#E4E8EE]' : 'bg-white hover:bg-[#F7F8FA]'}`}
+                  >
+                    <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${done ? 'bg-[#0F766E] text-white' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
+                      {done ? <CheckCircle2 size={15} /> : <span className="text-xs font-bold">{String(sIdx + 1).padStart(2, '0')}</span>}
+                    </span>
+                    <span className="text-[#5F6C79] shrink-0">{section.icon}</span>
                   <span className={`flex-1 font-medium text-sm ${done ? 'text-[#2B3A45]' : 'text-[#2B3A45]'}`}>
                     {section.title}
                   </span>
@@ -1022,8 +1038,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                   </div>
                 )}
               </div>
-            )
-          })}
+            </Fragment>
+          )})}
         </div>
 
         <div className="px-6 py-3.5 border-t border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
