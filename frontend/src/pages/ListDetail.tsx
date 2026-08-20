@@ -619,7 +619,6 @@ export function ListDetail() {
             {list?.is_system && (
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A8694] shrink-0">Catálogo</span>
                   <div ref={catalogRef} className="relative">
                     <button
                       onClick={() => setCatalogOpen((v) => !v)}
