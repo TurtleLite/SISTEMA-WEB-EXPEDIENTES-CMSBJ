@@ -563,7 +563,7 @@ export function ListDetail() {
               {!list?.is_system || user?.role !== 'admin' ? (
                 <button
                   onClick={handleExportSelected}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-colors duration-150 text-sm font-medium"
                 >
                   <Download size={15} />
                   Exportar
@@ -572,7 +572,7 @@ export function ListDetail() {
               {selectedIds.size === 1 && canEditSelected && (
                 <button
                   onClick={handleEditSelected}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-colors duration-150 text-sm font-medium"
                 >
                   <Pencil size={15} />
                   Editar
@@ -581,7 +581,7 @@ export function ListDetail() {
               {selectedIds.size === 1 && (
                 <button
                   onClick={handlePreviewSelected}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-white text-[#3F4D58] border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200 text-sm font-medium"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white text-[#3F4D58] border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-colors duration-150 text-sm font-medium"
                 >
                   <Eye size={15} />
                   Vista previa
@@ -593,7 +593,7 @@ export function ListDetail() {
               ) ? (
                 <button
                   onClick={handleDeleteSelected}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors duration-150 text-sm font-medium"
                 >
                   <Trash2 size={15} />
                   Eliminar
@@ -649,7 +649,7 @@ export function ListDetail() {
       <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1 transition-shadow duration-200 hover:shadow-md">
         <div className="p-3 border-b border-[#E4E8EE] shrink-0 bg-[#EEF1F5]">
         <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="relative flex-1 min-w-[220px] flex items-center bg-white border border-[#E4E8EE] rounded-xl focus-within:ring-2 focus-within:ring-[#8E9AA6] transition-all duration-200">
+              <div className="relative flex-1 min-w-[220px] flex items-center bg-white border border-[#E4E8EE] rounded-xl focus-within:ring-2 focus-within:ring-[#8E9AA6] transition-colors duration-150">
                 <Search size={15} className="ml-3 shrink-0 text-[#7A8694]" />
                 <input
                   type="text"
@@ -678,7 +678,7 @@ export function ListDetail() {
                   <div ref={catalogRef} className="relative">
                     <button
                       onClick={() => setCatalogOpen((v) => !v)}
-                      className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-all duration-200 ${
+                      className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-colors duration-150 ${
                         especialidadFilter
                           ? 'bg-[#0F766E] text-white border-[#0F766E]'
                           : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
@@ -730,7 +730,7 @@ export function ListDetail() {
                   <div ref={compRef} className="relative">
                     <button
                       onClick={() => setCompOpen((v) => !v)}
-                      className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-all duration-200 ${
+                      className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-colors duration-150 ${
                         compensadoFilter
                           ? 'bg-white border-[#E4E8EE]'
                           : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
@@ -750,7 +750,6 @@ export function ListDetail() {
                         </>
                       ) : (
                         <>
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#D5DBE3]" />
                           <span>Estado</span>
                           <ChevronDown size={14} className={`text-[#8E9AA6] transition-transform duration-200 ${compOpen ? 'rotate-180' : ''}`} />
                         </>
@@ -764,7 +763,6 @@ export function ListDetail() {
                             compensadoFilter === '' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
                           }`}
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#D5DBE3]" />
                           <span className="flex-1">Todos</span>
                           {compensadoFilter === '' && <Check size={14} />}
                         </button>
@@ -803,7 +801,7 @@ export function ListDetail() {
                 <>
                   <button
                     onClick={openEspModal}
-                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3F4D58] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200"
+                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3F4D58] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-colors duration-150"
                     title="Administrar especialidades"
                   >
                     <Settings2 size={15} />
@@ -811,7 +809,7 @@ export function ListDetail() {
                   </button>
                   <button
                     onClick={openLocModal}
-                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3F4D58] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200"
+                    className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3F4D58] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-colors duration-150"
                     title="Administrar localidades"
                   >
                     <MapPin size={15} />
@@ -825,7 +823,7 @@ export function ListDetail() {
               ) && (
                 <button
                   onClick={() => setShowTrash(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3F4D58] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200"
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3F4D58] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-colors duration-150"
                   title="Expedientes eliminados (restaurables por 15 días)"
                 >
                   <Trash2 size={15} />
