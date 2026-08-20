@@ -7,3 +7,4 @@ from app.models.surgery_day_list import SurgeryDayList
 from app.models.catalog_item import CatalogItem
 from app.models.device_registration import DeviceRegistration
 from app.models.notification import Notification
+from app.models.backup import Backup

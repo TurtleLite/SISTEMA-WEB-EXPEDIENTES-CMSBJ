@@ -51,6 +51,14 @@ async def lifespan(app: FastAPI):
         logger.warning(f"Error creando tablas: {e}")
 
     try:
+        from app.services.backup_service import migrate_legacy_backups, ensure_todays_auto_backup
+        migrate_legacy_backups()
+        ensure_todays_auto_backup()
+        logger.info("Respaldo automático del día asegurado")
+    except Exception as e:
+        logger.warning(f"No se pudo asegurar el respaldo automático: {e}")
+
+    try:
         inspector = inspect(engine)
         if "list_definitions" in inspector.get_table_names():
             columns = [c["name"] for c in inspector.get_columns("list_definitions")]
@@ -164,7 +172,44 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Startup error: {e}")
 
+    try:
+        from app.services.backup_service import ensure_todays_auto_backup
+        ensure_todays_auto_backup()
+        logger.info("Respaldo automático del día asegurado")
+    except Exception as e:
+        logger.warning(f"No se pudo asegurar el respaldo automático: {e}")
+
+    task = None
+    try:
+        import asyncio
+        from datetime import datetime, timedelta, timezone
+
+        async def _backup_scheduler():
+            while True:
+                try:
+                    now = datetime.now(timezone(timedelta(hours=-6)))
+                    target = now.replace(hour=3, minute=0, second=0, microsecond=0)
+                    if now >= target:
+                        target += timedelta(days=1)
+                    await asyncio.sleep((target - now).total_seconds())
+                    ensure_todays_auto_backup()
+                except asyncio.CancelledError:
+                    break
+                except Exception:
+                    await asyncio.sleep(3600)
+
+        task = asyncio.create_task(_backup_scheduler())
+        logger.info("Programador de respaldo diario (3:00 a. m. Honduras) iniciado")
+    except Exception as e:
+        logger.warning(f"No se pudo iniciar el programador de respaldos: {e}")
+
     yield
+
+    if task is not None:
+        try:
+            task.cancel()
+        except Exception:
+            pass
 
 app = FastAPI(
     title="SISTEMA DE EXPEDIENTES SBJ",

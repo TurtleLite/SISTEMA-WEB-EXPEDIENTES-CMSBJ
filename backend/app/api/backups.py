@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from app.services.auth_service import require_role
 from app.services.audit_service import log_audit, client_ip
-from app.services.backup_service import list_backups, generate_backup, get_backup_path, delete_backup, restore_backup
+from app.services.backup_service import list_backups, generate_backup, get_backup_blob, delete_backup, restore_backup
 from app.core.database import get_db
 from app.models.user import User
 
@@ -45,10 +45,14 @@ async def backups_restore(
 
 @router.get("/{name}/download")
 def backups_download(name: str, current_user: User = Depends(require_role("admin"))):
-    path = get_backup_path(name)
-    if not path:
+    blob = get_backup_blob(name)
+    if not blob:
         raise HTTPException(status_code=404, detail="Respaldo no encontrado")
-    return FileResponse(str(path), media_type="application/gzip", filename=name)
+    return Response(
+        content=blob[1],
+        media_type="application/gzip",
+        headers={"Content-Disposition": f'attachment; filename="{blob[0]}"'},
+    )
 
 
 @router.delete("/{name}")
