@@ -778,53 +778,66 @@ export function ListDetail() {
                   Papelera
                 </button>
               )}
-              {selectedIds.size > 0 && (
-                <div className="flex items-center gap-2 flex-wrap">
-                  {!list?.is_system || user?.role !== 'admin' ? (
-                    <button
-                      onClick={handleExportSelected}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
-                    >
-                      <Download size={16} />
-                      Exportar {selectedIds.size} seleccionados
-                    </button>
-                  ) : null}
-                  {selectedIds.size === 1 && canEditSelected && (
-                    <button
-                      onClick={handleEditSelected}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
-                    >
-                      <Pencil size={16} />
-                      Editar
-                    </button>
-                  )}
-                  {selectedIds.size === 1 && (
-                    <button
-                      onClick={handlePreviewSelected}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
-                    >
-                      <Eye size={16} />
-                      Vista previa
-                    </button>
-                  )}
-                  {(list?.is_system
-                    ? (user?.role === 'direccion' || user?.role === 'direccion_medica')
-                    : (user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica')
-                  ) ? (
-                    <button
-                      onClick={handleDeleteSelected}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
-                    >
-                      <Trash2 size={16} />
-                      Eliminar
-                    </button>
-                  ) : null}
-                </div>
-              )}
               </div>
             )}
           </div>
         </div>
+
+        {selectedIds.size > 0 && (
+          <div className="shrink-0 bg-white border-b border-[#E4E8EE] px-4 py-2 flex items-center gap-3">
+            <span className="flex items-center gap-2 text-sm font-medium text-[#3F4D58] whitespace-nowrap">
+              <CheckSquare size={16} className="text-[#0F766E]" />
+              {selectedIds.size} seleccionado{selectedIds.size === 1 ? '' : 's'}
+            </span>
+            <button
+              onClick={() => setSelectedIds(new Set())}
+              className="text-xs text-[#7A8694] hover:text-[#3F4D58] underline underline-offset-2 whitespace-nowrap"
+            >
+              Limpiar selección
+            </button>
+            <div className="ml-auto flex items-center gap-2">
+              {!list?.is_system || user?.role !== 'admin' ? (
+                <button
+                  onClick={handleExportSelected}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                >
+                  <Download size={16} />
+                  Exportar {selectedIds.size === 1 ? 'seleccionado' : 'seleccionados'}
+                </button>
+              ) : null}
+              {selectedIds.size === 1 && canEditSelected && (
+                <button
+                  onClick={handleEditSelected}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                >
+                  <Pencil size={16} />
+                  Editar
+                </button>
+              )}
+              {selectedIds.size === 1 && (
+                <button
+                  onClick={handlePreviewSelected}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-white text-[#3F4D58] border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200 text-sm font-medium"
+                >
+                  <Eye size={16} />
+                  Vista previa
+                </button>
+              )}
+              {(list?.is_system
+                ? (user?.role === 'direccion' || user?.role === 'direccion_medica')
+                : (user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica')
+              ) ? (
+                <button
+                  onClick={handleDeleteSelected}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                >
+                  <Trash2 size={16} />
+                  Eliminar
+                </button>
+              ) : null}
+            </div>
+          </div>
+        )}
 
         <div ref={scrollRef} onScroll={handleScroll} className="flex-1 min-h-0 overflow-y-auto">
           <table className="w-full table-fixed border-collapse">
