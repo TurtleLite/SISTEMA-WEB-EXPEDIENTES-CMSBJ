@@ -541,13 +541,67 @@ export function ListDetail() {
     || (user?.role === 'medico' && !!selectedRecord?.created_by && String(selectedRecord.created_by) === String(user.id))
 
   return (
-    <div className="h-full flex flex-col gap-4">
+    <div className="h-full flex flex-col gap-4 overflow-hidden">
       <div className="flex items-center justify-between shrink-0">
         <div>
           <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">{list?.name || 'Cargando...'}</h1>
           {list?.description && <p className="text-sm text-[#3F4D58] mt-1">{list.description}</p>}
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          {selectedIds.size > 0 && (
+            <>
+              <span className="flex items-center gap-1.5 text-xs text-[#7A8694] whitespace-nowrap">
+                {selectedIds.size} seleccionado{selectedIds.size === 1 ? '' : 's'}
+                <button
+                  onClick={() => setSelectedIds(new Set())}
+                  className="p-0.5 rounded hover:bg-[#EEF1F5] text-[#8E9AA6] hover:text-[#3F4D58] transition-colors duration-150"
+                  title="Limpiar selección"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+              {!list?.is_system || user?.role !== 'admin' ? (
+                <button
+                  onClick={handleExportSelected}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                >
+                  <Download size={15} />
+                  Exportar
+                </button>
+              ) : null}
+              {selectedIds.size === 1 && canEditSelected && (
+                <button
+                  onClick={handleEditSelected}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                >
+                  <Pencil size={15} />
+                  Editar
+                </button>
+              )}
+              {selectedIds.size === 1 && (
+                <button
+                  onClick={handlePreviewSelected}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white text-[#3F4D58] border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200 text-sm font-medium"
+                >
+                  <Eye size={15} />
+                  Vista previa
+                </button>
+              )}
+              {(list?.is_system
+                ? (user?.role === 'direccion' || user?.role === 'direccion_medica')
+                : (user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica')
+              ) ? (
+                <button
+                  onClick={handleDeleteSelected}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+                >
+                  <Trash2 size={15} />
+                  Eliminar
+                </button>
+              ) : null}
+              <span className="w-px h-6 bg-[#D5DBE3]" />
+            </>
+          )}
           {list?.is_system ? (
             user?.role !== 'admin' && (
             <button
@@ -782,62 +836,6 @@ export function ListDetail() {
             )}
           </div>
         </div>
-
-        {selectedIds.size > 0 && (
-          <div className="shrink-0 bg-white border-b border-[#E4E8EE] px-4 py-2 flex items-center gap-3">
-            <span className="flex items-center gap-2 text-sm font-medium text-[#3F4D58] whitespace-nowrap">
-              <CheckSquare size={16} className="text-[#0F766E]" />
-              {selectedIds.size} seleccionado{selectedIds.size === 1 ? '' : 's'}
-            </span>
-            <button
-              onClick={() => setSelectedIds(new Set())}
-              className="text-xs text-[#7A8694] hover:text-[#3F4D58] underline underline-offset-2 whitespace-nowrap"
-            >
-              Limpiar selección
-            </button>
-            <div className="ml-auto flex items-center gap-2">
-              {!list?.is_system || user?.role !== 'admin' ? (
-                <button
-                  onClick={handleExportSelected}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
-                >
-                  <Download size={16} />
-                  Exportar {selectedIds.size === 1 ? 'seleccionado' : 'seleccionados'}
-                </button>
-              ) : null}
-              {selectedIds.size === 1 && canEditSelected && (
-                <button
-                  onClick={handleEditSelected}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
-                >
-                  <Pencil size={16} />
-                  Editar
-                </button>
-              )}
-              {selectedIds.size === 1 && (
-                <button
-                  onClick={handlePreviewSelected}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-white text-[#3F4D58] border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200 text-sm font-medium"
-                >
-                  <Eye size={16} />
-                  Vista previa
-                </button>
-              )}
-              {(list?.is_system
-                ? (user?.role === 'direccion' || user?.role === 'direccion_medica')
-                : (user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica')
-              ) ? (
-                <button
-                  onClick={handleDeleteSelected}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
-                >
-                  <Trash2 size={16} />
-                  Eliminar
-                </button>
-              ) : null}
-            </div>
-          </div>
-        )}
 
         <div ref={scrollRef} onScroll={handleScroll} className="flex-1 min-h-0 overflow-y-auto">
           <table className="w-full table-fixed border-collapse">
