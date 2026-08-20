@@ -4,6 +4,7 @@ import { useNotification } from '../contexts/NotificationContext'
 import { ListRecord } from '../types'
 import { HONDURAS_DEPARTAMENTOS, TIPO_LOCALIDAD_OPTIONS } from '../constants'
 import ScrollSelect from './ScrollSelect'
+import LocalidadInput from './LocalidadInput'
 import { normalizeText, titleCase } from '../utils/format'
 import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle } from 'lucide-react'
 
@@ -995,24 +996,15 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           </select>
                         ) : field.key === 'localidad' ? (
                           <div>
-                            <input
-                              type="text"
-                              list={data.departamento && data.municipio ? 'localidades-sugeridas' : undefined}
+                            <LocalidadInput
                               value={data[field.key] || ''}
-                              onChange={(e) => handleLocalidadChange(e.target.value)}
+                              onChange={handleLocalidadChange}
+                              options={localidadesFiltradas}
                               disabled={!data.departamento || !data.municipio}
                               placeholder={data.departamento && data.municipio
                                 ? 'Escriba o seleccione la localidad'
                                 : 'Seleccione primero departamento y municipio'}
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] disabled:bg-[#F7F8FA] disabled:text-[#7A8694] disabled:cursor-not-allowed"
                             />
-                            <datalist id="localidades-sugeridas">
-                              {localidadesFiltradas.map((l) => (
-                                <option key={`${l.localidad}-${l.tipo}`} value={l.localidad}>
-                                  {l.localidad}{l.tipo ? ` (${l.tipo})` : ''}
-                                </option>
-                              ))}
-                            </datalist>
                             {localidadMatch && (
                               <div className="mt-1.5 flex items-center gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5">
                                 <span>
