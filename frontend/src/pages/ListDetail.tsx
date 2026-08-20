@@ -840,9 +840,9 @@ export function ListDetail() {
         <div ref={scrollRef} onScroll={handleScroll} className="flex-1 min-h-0 overflow-y-auto">
           <table className="w-full table-fixed border-collapse">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#EEF1F5] border-b border-[#D5DBE3]">
+              <tr className="bg-[#EEF1F5] border-b border-[#C9D2DB]">
                 {list?.is_system && (
-                  <th className="w-10 px-3 py-4 border-r border-[#D5DBE3]">
+                  <th className="w-10 px-3 py-4 border-r border-[#E4E8EE]">
                     <button onClick={toggleSelectAll} className="text-[#7A8694] hover:text-[#3F4D58] transition-colors duration-200">
                       {selectedIds.size === records.length && records.length > 0
                         ? <CheckSquare size={16} className="text-[#3F4D58]" />
@@ -851,7 +851,7 @@ export function ListDetail() {
                   </th>
                 )}
                 {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col, ci, arr) => (
-                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''} ${ci < arr.length - 1 ? 'border-r border-[#D5DBE3]' : ''}`}>
+                  <th key={col.key} className={`text-left px-3 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''} ${ci < arr.length - 1 ? 'border-r border-[#E4E8EE]' : ''}`}>
                     {col.label}
                   </th>
                 ))}
@@ -859,9 +859,9 @@ export function ListDetail() {
             </thead>
             <tbody>
               {records.map((record, idx) => (
-                <tr key={record.id} className={`border-b border-[#D5DBE3] transition-all duration-150 hover:bg-[#EEF1F5] ${selectedIds.has(record.id) ? 'bg-[#EEF1F5]' : idx % 2 === 0 ? 'bg-white' : 'bg-[#EEF1F5]'}`}>
+                <tr key={record.id} className={`border-b border-[#E4E8EE] transition-all duration-150 hover:bg-[#EEF1F5] ${selectedIds.has(record.id) ? 'bg-[#EEF1F5]' : idx % 2 === 0 ? 'bg-white' : 'bg-[#EEF1F5]'}`}>
                   {list?.is_system && (
-                    <td className="w-10 px-3 py-4 border-r border-[#D5DBE3]">
+                    <td className="w-10 px-3 py-4 border-r border-[#E4E8EE]">
                       <button onClick={() => toggleSelect(record.id)} className="text-[#8E9AA6] hover:text-[#5F6C79] transition-colors duration-200">
                         {selectedIds.has(record.id) ? <CheckSquare size={16} className="text-[#5F6C79]" /> : <Square size={16} />}
                       </button>
@@ -871,7 +871,7 @@ export function ListDetail() {
                     <td
                       key={col.key}
                       title={String(col.key === 'domicilio' ? domicilioPreview(record.data) : (record.data[col.key] ?? ''))}
-                      className={`px-3 py-4 text-sm text-[#2B3A45] truncate ${COLUMN_WIDTHS[col.key] || ''} ${ci < arr.length - 1 ? 'border-r border-[#D5DBE3]' : ''}`}
+                      className={`px-3 py-4 text-sm text-[#2B3A45] truncate ${COLUMN_WIDTHS[col.key] || ''} ${ci < arr.length - 1 ? 'border-r border-[#E4E8EE]' : ''}`}
                     >
                       {col.key === 'telefono'
                         ? [record.data.telefono, record.data.telefono2, record.data.telefono3]
