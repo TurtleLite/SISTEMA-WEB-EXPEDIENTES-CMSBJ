@@ -26,6 +26,7 @@ export const SECTIONS: Section[] = [
     icon: <User size={18} />,
 fields: [
       { key: 'nombre', label: 'Nombre / First Name', type: 'text' },
+      { key: 'apellido', label: 'Apellido / Last Name', type: 'text' },
       { key: 'expediente', label: 'Nº Expediente', type: 'text' },
       { key: 'identidad', label: 'Nº Identidad', type: 'text' },
       { key: 'sexo', label: 'Sexo / Sex', type: 'text' },
@@ -258,7 +259,7 @@ function filterSections(role?: string): Section[] {
   return SECTIONS
 }
 
-const FULL_WIDTH_KEYS = new Set(['nombre', 'historia_enfermedad', 'examen_fisico', 'diagnostico'])
+const FULL_WIDTH_KEYS = new Set(['historia_enfermedad', 'examen_fisico', 'diagnostico'])
 
 const STAGE_LABELS: Record<string, string> = {
   'Datos Personales': 'Identificación',
@@ -541,8 +542,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           </div>
         </div>
 
-        <div className="px-6 pt-3 shrink-0 bg-white">
-          <div className="flex items-center gap-3 mb-2">
+        <div className="px-6 pt-3 pb-3 shrink-0 bg-white border-b border-[#E4E8EE]">
+          <div className="flex items-center gap-3">
             <div className="flex-1 h-1.5 bg-[#EEF1F5] rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#0F766E] rounded-full transition-all duration-500"
@@ -550,24 +551,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
               />
             </div>
             <span className="text-xs font-semibold text-[#3F4D58] min-w-[3rem] text-right">
-              {pct}% · {filled}/{total}
+              {pct}%
             </span>
-          </div>
-          <div className="flex flex-wrap gap-1.5 pb-2.5">
-            {sections.map((s, i) => {
-              const done = isSectionComplete(s, data)
-              return (
-                <span
-                  key={s.title}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors border ${
-                    done ? 'bg-[#EEF1F5] text-[#3F4D58] border-[#E4E8EE]' : 'bg-white text-[#7A8694] border-[#E4E8EE]'
-                  }`}
-                >
-                  {done ? <CheckCircle2 size={12} className="text-[#0F766E]" /> : <span className="w-3 h-3 rounded-full border-2 border-[#C9D2DB]" />}
-                  {i + 1}. {s.title}
-                </span>
-              )
-            })}
           </div>
         </div>
 
@@ -810,11 +795,6 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               placeholder="Solo números"
                               className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             />
-                            <p className="mt-1 text-[11px] text-[#7A8694]">
-                              {editingRecord
-                                ? 'No se puede modificar al editar.'
-                                : 'Llene el número manualmente (solo números). Si ya existe, el sistema agrega la copia (1), (2)... como nueva intervención.'}
-                            </p>
                           </div>
                         ) : field.key === 'identidad' ? (
                           <input
@@ -892,9 +872,6 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               className="w-full px-3 py-2 pr-10 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                             />
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A8694] text-sm pointer-events-none">mts</span>
-                            <p className="mt-1 text-[11px] text-[#7A8694]">
-                              El punto decimal se coloca automáticamente (ej. escribir 184 → 1.84)
-                            </p>
                           </div>
                         ) : field.key === 'bmi' ? (
                           <div className="relative">
