@@ -4,7 +4,7 @@ import { useNotification } from '../contexts/NotificationContext'
 import { ListRecord } from '../types'
 import { HONDURAS_DEPARTAMENTOS, TIPO_LOCALIDAD_OPTIONS } from '../constants'
 import { normalizeText, titleCase } from '../utils/format'
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle } from 'lucide-react'
+import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle } from 'lucide-react'
 
 interface ColumnDef {
   key: string
@@ -504,20 +504,25 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const pct = total > 0 ? Math.round((filled / total) * 100) : 0
 
   return (
-    <div className="fixed inset-0 bg-[#0F172A]/20 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white w-screen h-screen flex flex-col overflow-hidden">
-        <div className="px-5 py-3 border-b border-[#E4E8EE] flex items-center justify-between shrink-0">
-          <div>
-            <h2 className="text-xl font-bold text-[#1E2A32]">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
-            <p className="text-sm text-[#5F6C79] mt-1">
-              {editingRecord
-                ? editingRecord.updated_at
-                  ? `Modifique los campos necesarios · Editado ${formatAgo(editingRecord.updated_at)}`
-                  : 'Modifique los campos necesarios'
-                : 'Complete todas las secciones para crear el registro'}
-            </p>
+    <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-[#F7F8FA] w-full h-full flex flex-col overflow-hidden">
+        <div className="px-6 py-4 border-b border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-[#0F766E]/10 text-[#0F766E] flex items-center justify-center shrink-0">
+              <Stethoscope size={20} />
+            </div>
+            <div className="min-w-0">
+              <h2 className="text-lg font-bold text-[#1E2A32] truncate">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
+              <p className="text-xs text-[#5F6C79] mt-0.5 truncate">
+                {editingRecord
+                  ? editingRecord.updated_at
+                    ? `Modifique los campos necesarios · Editado ${formatAgo(editingRecord.updated_at)}`
+                    : 'Modifique los campos necesarios'
+                  : 'Complete todas las secciones para crear el registro'}
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             {dirty && (
               <span className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-3 py-1">
                 <CheckCircle2 size={13} />
@@ -530,53 +535,51 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           </div>
         </div>
 
-        <div className="px-5 pt-2 shrink-0">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="flex-1 h-2 bg-[#EEF1F5] rounded-full overflow-hidden">
+        <div className="px-6 pt-3 shrink-0 bg-white">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="flex-1 h-1.5 bg-[#EEF1F5] rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#0F766E] rounded-full transition-all duration-500"
                 style={{ width: `${pct}%` }}
               />
             </div>
-            <span className="text-sm font-medium text-[#3F4D58] min-w-[4rem] text-right">
-              {filled}/{total}
+            <span className="text-xs font-semibold text-[#3F4D58] min-w-[3rem] text-right">
+              {pct}% · {filled}/{total}
             </span>
           </div>
-          <div className="flex flex-wrap gap-1.5 mb-2">
-            {sections.map((s) => {
+          <div className="flex flex-wrap gap-1.5 pb-2.5">
+            {sections.map((s, i) => {
               const done = isSectionComplete(s, data)
               return (
                 <span
                   key={s.title}
-                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium transition-colors ${
-                    done ? 'bg-[#EEF1F5] text-[#3F4D58]' : 'bg-[#EEF1F5] text-[#7A8694]'
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors border ${
+                    done ? 'bg-[#EEF1F5] text-[#3F4D58] border-[#E4E8EE]' : 'bg-white text-[#7A8694] border-[#E4E8EE]'
                   }`}
                 >
-                  {done ? <CheckCircle2 size={12} /> : <Circle size={12} />}
-                  {s.title}
+                  {done ? <CheckCircle2 size={12} className="text-[#0F766E]" /> : <span className="w-3 h-3 rounded-full border-2 border-[#C9D2DB]" />}
+                  {i + 1}. {s.title}
                 </span>
               )
             })}
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto min-h-0 h-0 px-5 pb-3 space-y-2">
-          {sections.map((section) => {
+        <div className="flex-1 overflow-y-auto min-h-0 h-0 px-6 py-3 space-y-2.5">
+          {sections.map((section, sIdx) => {
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
             return (
-              <div key={section.title} className="border border-[#E4E8EE] rounded-xl overflow-hidden">
+              <div key={section.title} className={`bg-white border rounded-xl overflow-hidden transition-all duration-200 ${isOpen ? 'shadow-sm border-[#D5DBE3]' : 'border-[#E4E8EE] hover:border-[#C9D2DB]'}`}>
                 <button
                   type="button"
                   onClick={() => toggleSection(section.title)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
-                    done ? 'bg-[#F7F8FA]' : 'bg-[#F7F8FA]'
-                  } hover:brightness-95`}
+                  className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[#F7F8FA]"
                 >
-                  <span className={done ? 'text-[#5F6C79]' : 'text-[#7A8694]'}>
-                    {done ? <CheckCircle2 size={20} /> : <Circle size={20} />}
+                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${done ? 'bg-[#0F766E] text-white' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
+                    {done ? <CheckCircle2 size={15} /> : <span className="text-xs font-bold">{String(sIdx + 1).padStart(2, '0')}</span>}
                   </span>
-                  <span className="text-[#5F6C79]">{section.icon}</span>
+                  <span className="text-[#5F6C79] shrink-0">{section.icon}</span>
                   <span className={`flex-1 font-medium text-sm ${done ? 'text-[#2B3A45]' : 'text-[#2B3A45]'}`}>
                     {section.title}
                   </span>
@@ -1023,17 +1026,17 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           })}
         </div>
 
-        <div className="px-5 py-3 border-t border-[#E4E8EE] flex items-center justify-between shrink-0">
+        <div className="px-6 py-3.5 border-t border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
           <button
             onClick={() => void handleClose()}
-            className="px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#EEF1F5] rounded-lg"
+            className="px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#EEF1F5] rounded-lg border border-[#E4E8EE]"
           >
             Cancelar
           </button>
           <button
             onClick={handleSubmit}
             disabled={!allComplete || saving}
-            className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
+            className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all ${
               allComplete && !saving
                 ? 'bg-[#0F766E] text-white hover:bg-[#115E59] shadow-sm'
                 : 'bg-[#EEF1F5] text-[#8E9AA6] cursor-not-allowed'
