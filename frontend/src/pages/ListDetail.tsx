@@ -10,6 +10,7 @@ import { specialtiesApi, localitiesApi } from '../services/api'
 import { areSimilarNames, normalizeText, shortName } from '../utils/format'
 import { TIPO_LOCALIDAD_OPTIONS } from '../constants'
 import { ConfirmDangerModal } from '../components/ConfirmDangerModal'
+import { TrashModal } from '../components/TrashModal'
 
 const RECORD_COLUMNS = ['nombre', 'edad', 'diagnostico', 'perfil', 'domicilio', 'telefono', 'albergue', 'nombre_medico']
 const COLUMN_WIDTHS: Record<string, string> = {
@@ -51,6 +52,7 @@ export function ListDetail() {
   const [loadingMore, setLoadingMore] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showEspModal, setShowEspModal] = useState(false)
+  const [showTrash, setShowTrash] = useState(false)
   const [specialties, setSpecialties] = useState<Specialty[]>([])
   const [editingEsp, setEditingEsp] = useState<Specialty | null>(null)
   const [newEspName, setNewEspName] = useState('')
@@ -604,6 +606,19 @@ export function ListDetail() {
                   </button>
                 </>
               )}
+              {(list?.is_system
+                ? (user?.role === 'direccion' || user?.role === 'direccion_medica')
+                : (user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica')
+              ) && (
+                <button
+                  onClick={() => setShowTrash(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-[#3F4D58] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-all duration-200"
+                  title="Expedientes eliminados (restaurables por 15 días)"
+                >
+                  <Trash2 size={15} />
+                  Papelera
+                </button>
+              )}
               {selectedIds.size > 0 && (
                 <div className="flex items-center gap-2 flex-wrap">
                   {!list?.is_system || user?.role !== 'admin' ? (
@@ -797,6 +812,15 @@ export function ListDetail() {
           loading={deletingRecords}
           onCancel={() => setDeleteRecordsTarget(null)}
           onConfirm={() => void confirmDeleteRecords()}
+        />
+      )}
+
+      {showTrash && (
+        <TrashModal
+          open={showTrash}
+          onClose={() => setShowTrash(false)}
+          listId={id}
+          title="Papelera (15 días)"
         />
       )}
 
