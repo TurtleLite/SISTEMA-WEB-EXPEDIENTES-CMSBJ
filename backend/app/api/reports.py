@@ -63,6 +63,11 @@ def _records_for_report(db: Session, report: Report):
         conds.append("data->>'criticidad' = :crit")
         params["crit"] = criticidad
 
+    compensado = filt.get("compensado")
+    if compensado:
+        conds.append("data->>'compensado' = :comp")
+        params["comp"] = compensado
+
     estatus = filt.get("estatus_cirugia")
     if estatus:
         conds.append("data->>'estatus_cirugia' = :estat")
