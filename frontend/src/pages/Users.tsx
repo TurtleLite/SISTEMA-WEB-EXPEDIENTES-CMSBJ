@@ -152,18 +152,19 @@ export function Users() {
   }
 
   return (
-    <div className="h-full flex flex-col gap-4">
+    <div className="h-full flex flex-col gap-5">
       <div className="flex items-center justify-between shrink-0">
         <div>
-          <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Usuarios</h1>
+          <h1 className="font-serif text-[26px] font-bold text-[#1E2A32] tracking-tight">Usuarios</h1>
+          <p className="text-[13px] text-[#7A8694] mt-0.5">{users.length} usuarios — {users.filter(u=>u.is_active).length} activos · {users.filter(u=>!u.is_active).length} inactivos</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={handleRefresh}
             title="Actualizar lista"
-            className="flex items-center justify-center bg-white border border-[#E4E8EE] text-[#0F766E] px-3 py-2 rounded-xl hover:bg-[#F7F8FA] hover:border-[#D5DBE3] shadow-sm transition-all duration-200"
+            className="flex items-center justify-center bg-white border border-[#E4E8EE] text-[#0F766E] px-3.5 py-2.5 rounded-xl hover:bg-[#F7F8FA] hover:border-[#D5DBE3] shadow-sm transition-all duration-200"
           >
-            <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
+            <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
           </button>
           {currentUser?.role === 'admin' && (
             <button
@@ -172,9 +173,9 @@ export function Users() {
                 setForm(emptyForm())
                 setShowModal(true)
               }}
-              className="flex items-center gap-1.5 bg-[#0F766E] text-white px-4 py-2 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
+              className="flex items-center gap-2 bg-[#0F766E] text-white px-5 py-2.5 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200 text-[15px] font-semibold"
             >
-              <UserPlus size={16} />
+              <UserPlus size={18} />
               Nuevo Usuario
             </button>
           )}
@@ -185,70 +186,70 @@ export function Users() {
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-auto">
         <table className="w-full table-fixed">
           <colgroup>
-            <col style={{ width: '240px' }} />
+            <col style={{ width: '280px' }} />
+            <col style={{ width: '150px' }} />
+            <col style={{ width: '150px' }} />
+            <col style={{ width: '140px' }} />
             <col style={{ width: '130px' }} />
-            <col style={{ width: '130px' }} />
-            <col style={{ width: '110px' }} />
-            <col style={{ width: '110px' }} />
-            <col style={{ width: '160px' }} />
+            <col style={{ width: '180px' }} />
           </colgroup>
           <thead className="sticky top-0 z-10">
-            <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
-              <th className="text-left px-4 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Nombre</th>
-              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Usuario</th>
-              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Teléfono</th>
-              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Rol</th>
-              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
-              <th className="text-right px-4 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Acciones</th>
+            <tr className="bg-[#F8FAFC] border-b-2 border-[#E4E8EE]">
+              <th className="text-left px-5 py-3.5 text-xs font-bold text-[#64748B] uppercase tracking-wider">Nombre</th>
+              <th className="text-left px-3 py-3.5 text-xs font-bold text-[#64748B] uppercase tracking-wider">Usuario</th>
+              <th className="text-left px-3 py-3.5 text-xs font-bold text-[#64748B] uppercase tracking-wider">Teléfono</th>
+              <th className="text-left px-4 py-3.5 text-xs font-bold text-[#64748B] uppercase tracking-wider">Rol</th>
+              <th className="text-left px-4 py-3.5 text-xs font-bold text-[#64748B] uppercase tracking-wider">Estado</th>
+              <th className="text-right px-5 py-3.5 text-xs font-bold text-[#64748B] uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {users.map((u) => (
-              <tr key={u.id} className="border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] h-[56px]">
-                <td className="px-4 py-3 text-[13px] font-medium text-[#1E2A32] truncate">
-                  <div className="flex items-center gap-2.5">
-                    <RoleAvatar role={u.role} size="sm" />
-                    <span className="truncate">{u.full_name}</span>
+              <tr key={u.id} className="border-b border-[#F1F5F9] transition-all duration-150 hover:bg-[#F8FAFC] h-[68px] group">
+                <td className="px-5 py-4 text-[15px] font-semibold text-[#1E2A32] truncate">
+                  <div className="flex items-center gap-3">
+                    <RoleAvatar role={u.role} size="md" />
+                    <span className="truncate leading-tight">{u.full_name}</span>
                   </div>
                 </td>
-                <td className="px-3 py-3 text-[13px] text-[#3F4D58] font-mono truncate">{u.username}</td>
-                <td className="px-3 py-3 text-[13px] text-[#3F4D58] truncate">{u.telefono}</td>
-                <td className="px-3 py-3">
-                  <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-[#EEF1F5] text-[#3F4D58] whitespace-nowrap">
+                <td className="px-3 py-4 text-[14px] text-[#334155] font-mono truncate">{u.username}</td>
+                <td className="px-3 py-4 text-[14px] text-[#334155] truncate font-medium">{u.telefono}</td>
+                <td className="px-4 py-4">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#F1F5F9] text-[#475569] whitespace-nowrap border border-[#E2E8F0]">
                     {roleLabels[u.role] || u.role}
                   </span>
                 </td>
-                <td className="px-3 py-3">
+                <td className="px-4 py-4">
                   {!u.is_active ? (
-                    <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-red-50 text-red-700 whitespace-nowrap">Inactivo</span>
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 whitespace-nowrap border border-red-200">Inactivo</span>
                   ) : isLocked(u) ? (
-                    <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-amber-100 text-amber-700 whitespace-nowrap">Bloqueado</span>
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 whitespace-nowrap border border-amber-200">Bloqueado</span>
                   ) : (
-                    <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 whitespace-nowrap">Activo</span>
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 whitespace-nowrap border border-emerald-200">Activo</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-5 py-4 text-right">
                   {currentUser?.role === 'admin' && (
-                    <div className="flex items-center justify-end gap-0.5">
+                    <div className="flex items-center justify-end gap-1 opacity-90 group-hover:opacity-100">
                       {isLocked(u) && (
-                        <button onClick={() => handleUnlock(u)} title="Desbloquear" className="p-1.5 hover:bg-amber-100 rounded-lg transition-all duration-200">
-                          <Unlock size={14} className="text-amber-500" />
+                        <button onClick={() => handleUnlock(u)} title="Desbloquear" className="p-2 hover:bg-amber-100 rounded-xl transition-all duration-200 border border-transparent hover:border-amber-200">
+                          <Unlock size={16} className="text-amber-600" />
                         </button>
                       )}
                       {!u.is_active ? (
-                        <button onClick={() => handleActivate(u)} title="Reactivar usuario" className="p-1.5 hover:bg-emerald-100 rounded-lg transition-all duration-200">
-                          <UserCheck size={14} className="text-emerald-600" />
+                        <button onClick={() => handleActivate(u)} title="Reactivar usuario" className="p-2 hover:bg-emerald-100 rounded-xl transition-all duration-200 border border-transparent hover:border-emerald-200">
+                          <UserCheck size={16} className="text-emerald-600" />
                         </button>
                       ) : u.id !== currentUser?.id && (
-                        <button onClick={() => handleDeactivate(u)} title="Desactivar (médico se fue del centro)" className="p-1.5 hover:bg-orange-100 rounded-lg transition-all duration-200">
-                          <UserX size={14} className="text-orange-500" />
+                        <button onClick={() => handleDeactivate(u)} title="Desactivar (médico se fue del centro)" className="p-2 hover:bg-orange-100 rounded-xl transition-all duration-200 border border-transparent hover:border-orange-200">
+                          <UserX size={16} className="text-orange-600" />
                         </button>
                       )}
-                      <button onClick={() => openEdit(u)} className="p-1.5 hover:bg-[#EEF1F5] rounded-lg transition-all duration-200" title="Editar">
-                        <Pencil size={14} className="text-[#5F6C79]" />
+                      <button onClick={() => openEdit(u)} className="p-2 hover:bg-[#EEF1F5] rounded-xl transition-all duration-200 border border-transparent hover:border-[#E4E8EE]" title="Editar">
+                        <Pencil size={16} className="text-[#475569]" />
                       </button>
-                      <button onClick={() => handleDelete(u.id)} className="p-1.5 hover:bg-red-100 rounded-lg transition-all duration-200" title="Eliminar">
-                        <Trash2 size={14} className="text-red-400" />
+                      <button onClick={() => handleDelete(u.id)} className="p-2 hover:bg-red-50 rounded-xl transition-all duration-200 border border-transparent hover:border-red-200" title="Eliminar">
+                        <Trash2 size={16} className="text-red-500" />
                       </button>
                     </div>
                   )}
