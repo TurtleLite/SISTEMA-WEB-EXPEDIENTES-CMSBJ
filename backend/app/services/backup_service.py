@@ -13,7 +13,10 @@ from app.core.database import SessionLocal
 from app.models.backup import Backup
 
 BACKUP_RE = re.compile(r"^backup_\d{8}_\d{6}\.sql\.gz$")
+EXCEL_BACKUP_RE = re.compile(r"^tabla_general_\d{8}_\d{6}\.xlsx$")
+BACKUP_ANY_RE = re.compile(r"^(backup_\d{8}_\d{6}\.sql\.gz|tabla_general_\d{8}_\d{6}\.xlsx)$")
 KEEP_BACKUPS = 14
+KEEP_EXCEL_BACKUPS = 14
 
 
 def _dsn() -> str:
@@ -154,7 +157,21 @@ def _dump_db() -> tuple:
 
 
 def _prune(db, keep: int = KEEP_BACKUPS) -> int:
-    old = db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).offset(keep).all()
+    old = db.query(Backup).filter(Backup.name.op("~")(r"^backup_")).order_by(Backup.created_at.desc(), Backup.id.desc()).offset(keep).all()
+    # Fallback si el operador ~ no está disponible (CockroachDB lo soporta, pero por si acaso filtramos en Python)
+    if not old:
+        all_sql = [b for b in db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all() if BACKUP_RE.match(b.name)]
+        old = all_sql[keep:]
+    ids = [b.id for b in old]
+    if ids:
+        db.query(Backup).filter(Backup.id.in_(ids)).delete(synchronize_session=False)
+        db.commit()
+    return len(ids)
+
+
+def _prune_excel(db, keep: int = KEEP_EXCEL_BACKUPS) -> int:
+    all_excel = [b for b in db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all() if EXCEL_BACKUP_RE.match(b.name)]
+    old = all_excel[keep:]
     ids = [b.id for b in old]
     if ids:
         db.query(Backup).filter(Backup.id.in_(ids)).delete(synchronize_session=False)
@@ -181,6 +198,69 @@ def generate_backup() -> dict:
         db.close()
 
 
+def _generate_excel_bytes() -> tuple:
+    """Genera un Excel con la tabla general de expedientes (todos los registros).
+    Devuelve (bytes, count, columns)."""
+    import tempfile
+    import os
+    from app.models.list_definition import ListDefinition, ListRecord
+    from app.services.excel_service import export_to_excel
+
+    db = SessionLocal()
+    try:
+        ld = db.query(ListDefinition).filter(ListDefinition.name == "Expediente Médico", ListDefinition.deleted_at.is_(None)).first()
+        if not ld:
+            ld = db.query(ListDefinition).filter(ListDefinition.deleted_at.is_(None)).first()
+        if not ld:
+            raise ValueError("No hay listas para respaldar")
+        columns = [c["label"] for c in (ld.columns_config or [])]
+        # Mapeo label -> key para extraer datos en el orden correcto
+        label_to_key = {c["label"]: c["key"] for c in (ld.columns_config or [])}
+        records = db.query(ListRecord).filter(ListRecord.list_definition_id == ld.id, ListRecord.deleted_at.is_(None)).order_by(ListRecord.id.asc()).all()
+        data = []
+        for r in records:
+            row = {}
+            for label in columns:
+                key = label_to_key.get(label, label)
+                row[label] = r.data.get(key, "") if isinstance(r.data, dict) else ""
+            data.append(row)
+        # Usar archivo temporal porque export_to_excel espera filepath
+        fd, tmp_path = tempfile.mkstemp(suffix=".xlsx")
+        os.close(fd)
+        try:
+            export_to_excel(data, columns, tmp_path, title=f"Tabla General — {ld.name}", count=len(data))
+            with open(tmp_path, "rb") as f:
+                blob = f.read()
+        finally:
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                pass
+        return blob, len(data), columns
+    finally:
+        db.close()
+
+
+def generate_excel_backup() -> dict:
+    """Genera un respaldo en Excel (tabla general) y lo guarda en la tabla backups."""
+    blob, count, columns = _generate_excel_bytes()
+    name = "tabla_general_%s.xlsx" % datetime.now().strftime("%Y%m%d_%H%M%S")
+    size_kb = round(len(blob) / 1024, 1)
+    db = SessionLocal()
+    try:
+        existing = db.query(Backup).filter(Backup.name == name).first()
+        if not existing:
+            db.add(Backup(name=name, size_kb=size_kb, data=blob))
+            db.commit()
+        removed = _prune_excel(db)
+        message = "Tabla general generada: %s (%d registros, %d columnas, %.1f KB)" % (name, count, len(columns), size_kb)
+        if removed:
+            message += " / se eliminaron %d tabla(s) antigua(s)" % removed
+        return {"ok": True, "message": message, "name": name, "count": count}
+    finally:
+        db.close()
+
+
 def list_backups() -> list:
     db = SessionLocal()
     try:
@@ -198,7 +278,7 @@ def list_backups() -> list:
 
 
 def get_backup_blob(name: str):
-    if not BACKUP_RE.match(name or ""):
+    if not BACKUP_ANY_RE.match(name or ""):
         return None
     db = SessionLocal()
     try:
@@ -209,7 +289,7 @@ def get_backup_blob(name: str):
 
 
 def delete_backup(name: str) -> bool:
-    if not BACKUP_RE.match(name or ""):
+    if not BACKUP_ANY_RE.match(name or ""):
         return False
     db = SessionLocal()
     try:
@@ -230,7 +310,18 @@ def has_backup_today() -> bool:
     db = SessionLocal()
     try:
         start = _today_honduras_aware().replace(hour=0, minute=0, second=0, microsecond=0)
-        return db.query(Backup).filter(Backup.created_at >= start).count() > 0
+        rows = db.query(Backup).filter(Backup.created_at >= start).all()
+        return any(BACKUP_RE.match(b.name) for b in rows)
+    finally:
+        db.close()
+
+
+def has_excel_backup_today() -> bool:
+    db = SessionLocal()
+    try:
+        start = _today_honduras_aware().replace(hour=0, minute=0, second=0, microsecond=0)
+        rows = db.query(Backup).filter(Backup.created_at >= start).all()
+        return any(EXCEL_BACKUP_RE.match(b.name) for b in rows)
     finally:
         db.close()
 
@@ -240,6 +331,19 @@ def ensure_todays_auto_backup() -> None:
     if not has_backup_today():
         try:
             generate_backup()
+        except Exception:
+            pass
+    if not has_excel_backup_today():
+        try:
+            generate_excel_backup()
+        except Exception:
+            pass
+
+
+def ensure_todays_excel_backup() -> None:
+    if not has_excel_backup_today():
+        try:
+            generate_excel_backup()
         except Exception:
             pass
 

@@ -220,6 +220,7 @@ export const notificationsApi = {
 export const backupsApi = {
   list: () => api.get('/backups/'),
   generate: () => api.post('/backups/generate'),
+  generateExcel: () => api.post('/backups/generate-excel'),
   restore: (file: File) => {
     const fd = new FormData()
     fd.append('file', file)

@@ -3,7 +3,7 @@ from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from app.services.auth_service import require_role
 from app.services.audit_service import log_audit, client_ip
-from app.services.backup_service import list_backups, generate_backup, get_backup_blob, delete_backup, restore_backup
+from app.services.backup_service import list_backups, generate_backup, generate_excel_backup, get_backup_blob, delete_backup, restore_backup
 from app.core.database import get_db
 from app.models.user import User
 
@@ -12,7 +12,15 @@ router = APIRouter(prefix="/backups", tags=["Respaldos"])
 
 @router.get("/")
 def backups_list(current_user: User = Depends(require_role("admin"))):
-    return {"items": list_backups()}
+    items = list_backups()
+    # Añadir tipo para que el frontend distinga SQL vs Excel (tabla general)
+    for it in items:
+        name = it.get("name", "")
+        if name.endswith(".xlsx"):
+            it["type"] = "excel"
+        else:
+            it["type"] = "sql"
+    return {"items": items}
 
 
 @router.post("/generate")
@@ -20,6 +28,14 @@ def backups_generate(current_user: User = Depends(require_role("admin"))):
     result = generate_backup()
     if not result.get("ok"):
         raise HTTPException(status_code=500, detail=result.get("error", "No se pudo generar el respaldo"))
+    return result
+
+
+@router.post("/generate-excel")
+def backups_generate_excel(current_user: User = Depends(require_role("admin"))):
+    result = generate_excel_backup()
+    if not result.get("ok"):
+        raise HTTPException(status_code=500, detail=result.get("error", "No se pudo generar la tabla general"))
     return result
 
 
@@ -48,10 +64,15 @@ def backups_download(name: str, current_user: User = Depends(require_role("admin
     blob = get_backup_blob(name)
     if not blob:
         raise HTTPException(status_code=404, detail="Respaldo no encontrado")
+    filename, data = blob
+    if filename.endswith(".xlsx"):
+        media = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    else:
+        media = "application/gzip"
     return Response(
-        content=blob[1],
-        media_type="application/gzip",
-        headers={"Content-Disposition": f'attachment; filename="{blob[0]}"'},
+        content=data,
+        media_type=media,
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
 
