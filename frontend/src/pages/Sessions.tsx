@@ -3,7 +3,6 @@ import { authApi, usersApi, notificationsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
 import { useMessages } from '../contexts/MessagesContext'
 import { LogOut, ShieldCheck, Smartphone, Monitor, Lock, Send, X } from 'lucide-react'
-import { Devices } from './Devices'
 
 interface SessionItem {
   id: string
@@ -59,7 +58,6 @@ const deviceFromAgent = (agent: string) => {
 }
 
 export function Sessions() {
-  const [tab, setTab] = useState<'sesiones' | 'equipos'>('sesiones')
   const [sessions, setSessions] = useState<SessionItem[]>([])
   const [users, setUsers] = useState<{ id: string; username: string; full_name: string }[]>([])
   const [filterUser, setFilterUser] = useState('')
@@ -157,30 +155,11 @@ export function Sessions() {
         </button>
       </div>
 
-      <div className="shrink-0 flex items-center gap-1 bg-[#EEF1F5] p-1 rounded-xl w-fit">
-        <button
-          onClick={() => setTab('sesiones')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-            tab === 'sesiones' ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-          }`}
-        >
-          <ShieldCheck size={15} />
-          Sesiones activas
-        </button>
-        <button
-          onClick={() => setTab('equipos')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-            tab === 'equipos' ? 'bg-white text-[#1E2A32] shadow-sm' : 'text-[#5F6C79] hover:text-[#1E2A32]'
-          }`}
-        >
-          <Monitor size={15} />
-          Equipos
-        </button>
+      <div className="shrink-0 flex items-center gap-2 text-sm text-[#64748B] bg-[#F8FAFC] border border-[#E4E8EE] rounded-xl px-3 py-2">
+        <ShieldCheck size={14} className="text-emerald-500" />
+        Sesiones activas — se muestran solo las activas en los últimos 10 minutos
       </div>
 
-      {tab === 'equipos' && <Devices embedded />}
-
-      {tab === 'sesiones' && (<>
       <div className="flex items-center justify-between shrink-0 flex-wrap gap-3">
         <div className="flex items-center gap-2">
           <select
@@ -300,7 +279,6 @@ export function Sessions() {
         <Lock size={14} className="ml-2 text-[#8E9AA6]" />
         La sesión actual no puede cerrarse a menos que sea deliberadamente.
       </div>
-      </>)}
 
       {showMessage && (
         <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-[200]">
