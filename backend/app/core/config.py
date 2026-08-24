@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     # Optimización a escala: límites configurables por variable de entorno
     EXPORT_MAX_RECORDS: int = 200          # máx. expedientes por archivo Excel (una hoja por expediente)
     REPORT_MAX_RECORDS: int = 50000        # máx. filas al generar/previsualizar un reporte
-    AUDIT_RETENTION_DAYS: int = 90         # días que se conservan los registros de auditoría (0 = conservar todo)
+    AUDIT_RETENTION_DAYS: int = 30         # días que se conservan los registros de auditoría (0 = conservar todo) — 1 mes
     # Usuarios de confianza (separados por coma): sus equipos se aprueban automáticamente al iniciar sesión
     AUTO_APPROVE_DEVICE_USERS: str = "kmejia,paola suazo,krios,ng,caportillo01"
 

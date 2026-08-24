@@ -110,6 +110,8 @@ export const usersApi = {
   update: (id: string | number, data: any) => api.put(`/users/${id}`, data),
   delete: (id: string | number) => api.delete(`/users/${id}`),
   unlock: (id: string | number) => api.post(`/users/${id}/unlock`),
+  deactivate: (id: string | number) => api.post(`/users/${id}/deactivate`),
+  activate: (id: string | number) => api.post(`/users/${id}/activate`),
 }
 
 export const listsApi = {

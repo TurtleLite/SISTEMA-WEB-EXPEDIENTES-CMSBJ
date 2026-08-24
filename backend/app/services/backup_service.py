@@ -15,8 +15,8 @@ from app.models.backup import Backup
 BACKUP_RE = re.compile(r"^backup_\d{8}_\d{6}\.sql\.gz$")
 EXCEL_BACKUP_RE = re.compile(r"^tabla_general_\d{8}_\d{6}\.xlsx$")
 BACKUP_ANY_RE = re.compile(r"^(backup_\d{8}_\d{6}\.sql\.gz|tabla_general_\d{8}_\d{6}\.xlsx)$")
-KEEP_BACKUPS = 14
-KEEP_EXCEL_BACKUPS = 14
+KEEP_BACKUPS = 20
+KEEP_EXCEL_BACKUPS = 20
 
 
 def _dsn() -> str:

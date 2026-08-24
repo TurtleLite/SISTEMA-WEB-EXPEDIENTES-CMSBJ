@@ -17,7 +17,6 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> list[User]:
 def get_user(db: Session, user_id: int) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return user
 
@@ -27,7 +26,6 @@ def create_user(db: Session, data: UserCreate) -> User:
         (User.username == data.username) | (User.telefono == data.telefono)
     ).first()
     if existing:
-        from fastapi import HTTPException
         raise HTTPException(status_code=400, detail="Usuario o teléfono ya existe")
     user = User(
         username=data.username,
@@ -49,7 +47,6 @@ def create_user(db: Session, data: UserCreate) -> User:
 def update_user(db: Session, user_id: int, data) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     update_data = data.model_dump(exclude_unset=True)
     if "password" in update_data:
@@ -96,7 +93,6 @@ def update_own_profile(db: Session, user: User, data) -> User:
 def delete_user(db: Session, user_id: int):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     db.delete(user)
     db.commit()
@@ -105,10 +101,30 @@ def delete_user(db: Session, user_id: int):
 def unlock_user(db: Session, user_id: int) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     user.failed_attempts = 0
     user.locked_until = None
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+def set_user_active(db: Session, user_id: int, active: bool) -> User:
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    # No permitir desactivar al único admin activo
+    if not active and user.role == "admin":
+        admins = db.query(User).filter(User.role == "admin", User.is_active == True).count()
+        if admins <= 1 and user.is_active:
+            raise HTTPException(status_code=400, detail="No se puede desactivar al único administrador activo")
+    user.is_active = active
+    if not active:
+        # Al desactivar, limpiar bloqueos y cerrar sesiones
+        user.failed_attempts = 0
+        user.locked_until = None
+        from app.models.user_session import UserSession
+        db.query(UserSession).filter(UserSession.user_id == user_id).delete(synchronize_session=False)
     db.commit()
     db.refresh(user)
     return user

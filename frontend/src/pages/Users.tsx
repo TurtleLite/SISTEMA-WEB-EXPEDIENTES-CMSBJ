@@ -3,7 +3,7 @@ import { usersApi } from '../services/api'
 import { User } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
-import { Pencil, Trash2, UserPlus, Unlock, RefreshCw } from 'lucide-react'
+import { Pencil, Trash2, UserPlus, Unlock, RefreshCw, UserX, UserCheck } from 'lucide-react'
 import { RoleAvatar } from '../components/RoleAvatar'
 import { PasswordInput } from '../components/PasswordInput'
 import { formatPhone, isValidPhone } from '../utils/format'
@@ -112,6 +112,28 @@ export function Users() {
     }
   }
 
+  const handleDeactivate = async (u: User) => {
+    if (!await confirm(`¿Desactivar a ${u.full_name} (${u.username})? El médico ya no podrá iniciar sesión y se cerrarán sus sesiones activas. Podrá reactivarlo después.`)) return
+    try {
+      await usersApi.deactivate(u.id)
+      loadUsers()
+      toast(`Usuario ${u.username} desactivado`, 'success')
+    } catch (err: any) {
+      toast(err.response?.data?.detail || 'Error al desactivar usuario', 'error')
+    }
+  }
+
+  const handleActivate = async (u: User) => {
+    if (!await confirm(`¿Reactivar a ${u.full_name} (${u.username})? Podrá iniciar sesión de nuevo.`)) return
+    try {
+      await usersApi.activate(u.id)
+      loadUsers()
+      toast(`Usuario ${u.username} activado`, 'success')
+    } catch (err: any) {
+      toast(err.response?.data?.detail || 'Error al activar usuario', 'error')
+    }
+  }
+
   const openEdit = (user: User) => {
     const match = user.full_name.match(TITLE_RE)
     const name = (match ? match[2] : user.full_name).trim().split(/\s+/).filter(Boolean)
@@ -203,19 +225,28 @@ export function Users() {
                 </td>
                 <td className="px-6 py-4 text-right">
                   {currentUser?.role === 'admin' && (
-                    <>
+                    <div className="flex items-center justify-end gap-1">
                       {isLocked(u) && (
                         <button onClick={() => handleUnlock(u)} title="Desbloquear" className="p-1.5 hover:bg-amber-100 rounded-lg transition-all duration-200">
                           <Unlock size={15} className="text-amber-500" />
                         </button>
                       )}
+                      {!u.is_active ? (
+                        <button onClick={() => handleActivate(u)} title="Reactivar usuario" className="p-1.5 hover:bg-emerald-100 rounded-lg transition-all duration-200">
+                          <UserCheck size={15} className="text-emerald-600" />
+                        </button>
+                      ) : u.id !== currentUser?.id && (
+                        <button onClick={() => handleDeactivate(u)} title="Desactivar (médico se fue del centro)" className="p-1.5 hover:bg-orange-100 rounded-lg transition-all duration-200">
+                          <UserX size={15} className="text-orange-500" />
+                        </button>
+                      )}
                       <button onClick={() => openEdit(u)} className="p-1.5 hover:bg-[#EEF1F5] rounded-lg transition-all duration-200">
                         <Pencil size={15} className="text-[#5F6C79]" />
                       </button>
-                      <button onClick={() => handleDelete(u.id)} className="p-1.5 hover:bg-red-100 rounded-lg transition-all duration-200 ml-1">
+                      <button onClick={() => handleDelete(u.id)} className="p-1.5 hover:bg-red-100 rounded-lg transition-all duration-200">
                         <Trash2 size={15} className="text-red-400" />
                       </button>
-                    </>
+                    </div>
                   )}
                 </td>
               </tr>

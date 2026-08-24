@@ -114,3 +114,34 @@ def unlock_user_endpoint(
     log_audit(db, current_user, "user_unlock", entity_type="user", entity_id=user.id,
               detail=f"desbloqueó usuario {user.username}", ip_address=client_ip(request))
     return {"message": f"Usuario {user.username} desbloqueado"}
+
+
+@router.post("/{user_id}/deactivate")
+def deactivate_user_endpoint(
+    user_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("admin")),
+):
+    from app.services.user_service import set_user_active
+    if current_user.id == user_id:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="No puedes desactivar tu propia cuenta")
+    user = set_user_active(db, user_id, False)
+    log_audit(db, current_user, "user_deactivate", entity_type="user", entity_id=user.id,
+              detail=f"desactivó usuario {user.username} (médico se fue del centro)", ip_address=client_ip(request))
+    return {"message": f"Usuario {user.username} desactivado — no podrá iniciar sesión", "user": user}
+
+
+@router.post("/{user_id}/activate")
+def activate_user_endpoint(
+    user_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("admin")),
+):
+    from app.services.user_service import set_user_active
+    user = set_user_active(db, user_id, True)
+    log_audit(db, current_user, "user_activate", entity_type="user", entity_id=user.id,
+              detail=f"reactivó usuario {user.username}", ip_address=client_ip(request))
+    return {"message": f"Usuario {user.username} activado", "user": user}
