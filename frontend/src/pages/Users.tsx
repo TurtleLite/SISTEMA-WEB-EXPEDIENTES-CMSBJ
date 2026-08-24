@@ -181,70 +181,74 @@ export function Users() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1">
-        <div className="flex-1 min-h-0 overflow-y-auto">
-        <table className="w-full">
+      <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-auto">
+        <table className="w-full table-fixed">
+          <colgroup>
+            <col style={{ width: '240px' }} />
+            <col style={{ width: '130px' }} />
+            <col style={{ width: '130px' }} />
+            <col style={{ width: '110px' }} />
+            <col style={{ width: '110px' }} />
+            <col style={{ width: '160px' }} />
+          </colgroup>
           <thead className="sticky top-0 z-10">
             <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
-              <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Nombre</th>
-              <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Usuario</th>
-              <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Teléfono</th>
-              <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Rol</th>
-              <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
-              <th className="text-right px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Acciones</th>
+              <th className="text-left px-4 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Nombre</th>
+              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Usuario</th>
+              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Teléfono</th>
+              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Rol</th>
+              <th className="text-left px-3 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
+              <th className="text-right px-4 py-3 text-[11px] font-bold text-[#7A8694] uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {users.map((u) => (
-              <tr key={u.id} className="border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5]">
-                <td className="px-6 py-4 text-sm font-medium text-[#1E2A32]">
-                  <div className="flex items-center gap-3">
+              <tr key={u.id} className="border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] h-[56px]">
+                <td className="px-4 py-3 text-[13px] font-medium text-[#1E2A32] truncate">
+                  <div className="flex items-center gap-2.5">
                     <RoleAvatar role={u.role} size="sm" />
-                    {u.full_name}
+                    <span className="truncate">{u.full_name}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-[#3F4D58]">{u.username}</td>
-                <td className="px-6 py-4 text-sm text-[#3F4D58]">{u.telefono}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    u.role === 'admin' ? 'bg-[#EEF1F5] text-[#3F4D58]' :
-                    u.role === 'direccion' ? 'bg-[#EEF1F5] text-[#3F4D58]' :
-                    'bg-[#EEF1F5] text-[#3F4D58]'
-                  }`}>
+                <td className="px-3 py-3 text-[13px] text-[#3F4D58] font-mono truncate">{u.username}</td>
+                <td className="px-3 py-3 text-[13px] text-[#3F4D58] truncate">{u.telefono}</td>
+                <td className="px-3 py-3">
+                  <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-[#EEF1F5] text-[#3F4D58] whitespace-nowrap">
                     {roleLabels[u.role] || u.role}
                   </span>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3">
                   {!u.is_active ? (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#EEF1F5] text-[#3F4D58]">Inactivo</span>
+                    <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-red-50 text-red-700 whitespace-nowrap">Inactivo</span>
                   ) : isLocked(u) ? (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Bloqueado</span>
+                    <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-amber-100 text-amber-700 whitespace-nowrap">Bloqueado</span>
                   ) : (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#EEF1F5] text-[#3F4D58]">Activo</span>
+                    <span className="px-2 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 whitespace-nowrap">Activo</span>
                   )}
                 </td>
-                <td className="px-6 py-4 text-right">
+                <td className="px-4 py-3 text-right">
                   {currentUser?.role === 'admin' && (
-                    <div className="flex items-center justify-end gap-1">
+                    <div className="flex items-center justify-end gap-0.5">
                       {isLocked(u) && (
                         <button onClick={() => handleUnlock(u)} title="Desbloquear" className="p-1.5 hover:bg-amber-100 rounded-lg transition-all duration-200">
-                          <Unlock size={15} className="text-amber-500" />
+                          <Unlock size={14} className="text-amber-500" />
                         </button>
                       )}
                       {!u.is_active ? (
                         <button onClick={() => handleActivate(u)} title="Reactivar usuario" className="p-1.5 hover:bg-emerald-100 rounded-lg transition-all duration-200">
-                          <UserCheck size={15} className="text-emerald-600" />
+                          <UserCheck size={14} className="text-emerald-600" />
                         </button>
                       ) : u.id !== currentUser?.id && (
                         <button onClick={() => handleDeactivate(u)} title="Desactivar (médico se fue del centro)" className="p-1.5 hover:bg-orange-100 rounded-lg transition-all duration-200">
-                          <UserX size={15} className="text-orange-500" />
+                          <UserX size={14} className="text-orange-500" />
                         </button>
                       )}
-                      <button onClick={() => openEdit(u)} className="p-1.5 hover:bg-[#EEF1F5] rounded-lg transition-all duration-200">
-                        <Pencil size={15} className="text-[#5F6C79]" />
+                      <button onClick={() => openEdit(u)} className="p-1.5 hover:bg-[#EEF1F5] rounded-lg transition-all duration-200" title="Editar">
+                        <Pencil size={14} className="text-[#5F6C79]" />
                       </button>
-                      <button onClick={() => handleDelete(u.id)} className="p-1.5 hover:bg-red-100 rounded-lg transition-all duration-200">
-                        <Trash2 size={15} className="text-red-400" />
+                      <button onClick={() => handleDelete(u.id)} className="p-1.5 hover:bg-red-100 rounded-lg transition-all duration-200" title="Eliminar">
+                        <Trash2 size={14} className="text-red-400" />
                       </button>
                     </div>
                   )}
