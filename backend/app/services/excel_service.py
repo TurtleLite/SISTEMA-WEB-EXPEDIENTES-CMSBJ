@@ -274,6 +274,8 @@ def export_to_excel(
     filters: Optional[dict] = None,
     count: Optional[int] = None,
     institution: str = "Centro Médico San Benito José",
+    fit_to_page: bool = True,
+    auto_width: bool = False,
 ):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -294,20 +296,25 @@ def export_to_excel(
     header_row = row
 
     widths = _content_widths(records, columns)
-    total_cols = len(widths) + (1 if title else 0)
-    col_a_units = 3 if title else 0
-    target_units = ((11.0 - 0.8) * 96 - 3 * total_cols) / 7.0
-    factor = (target_units - col_a_units) / (sum(widths) or 1)
-    widths = [round(w * factor, 2) for w in widths]
-    if title:
-        missing = target_units - col_a_units - sum(widths)
-        if missing > 0.5 and widths:
-            base = sum(widths)
-            widths = [round(w + missing * w / base, 2) for w in widths]
+    if auto_width:
+        # Ajuste al contenido sin escalar a página: usa anchos de contenido + fijo para legibilidad
+        pass
+    elif fit_to_page:
+        total_cols = len(widths) + (1 if title else 0)
+        col_a_units = 3 if title else 0
+        target_units = ((11.0 - 0.8) * 96 - 3 * total_cols) / 7.0
+        factor = (target_units - col_a_units) / (sum(widths) or 1)
+        widths = [round(w * factor, 2) for w in widths]
+        if title:
+            missing = target_units - col_a_units - sum(widths)
+            if missing > 0.5 and widths:
+                base = sum(widths)
+                widths = [round(w + missing * w / base, 2) for w in widths]
     for i, w in enumerate(widths, data_col0):
         ws.column_dimensions[get_column_letter(i)].width = w
 
-    _apply_fixed_widths(ws, columns, widths, data_col0)
+    if not auto_width:
+        _apply_fixed_widths(ws, columns, widths, data_col0)
 
     for col_idx, col_name in enumerate(columns, 1):
         col = col_idx + (1 if title else 0)

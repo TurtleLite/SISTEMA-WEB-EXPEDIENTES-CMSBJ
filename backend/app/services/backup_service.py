@@ -228,7 +228,7 @@ def _generate_excel_bytes() -> tuple:
         fd, tmp_path = tempfile.mkstemp(suffix=".xlsx")
         os.close(fd)
         try:
-            export_to_excel(data, columns, tmp_path, title=f"Tabla General — {ld.name}", count=len(data))
+            export_to_excel(data, columns, tmp_path, title=f"Tabla General — {ld.name}", count=len(data), auto_width=True, fit_to_page=False)
             with open(tmp_path, "rb") as f:
                 blob = f.read()
         finally:
