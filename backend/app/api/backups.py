@@ -25,7 +25,8 @@ def backups_list(current_user: User = Depends(require_role("admin"))):
 
 @router.post("/generate")
 def backups_generate(current_user: User = Depends(require_role("admin"))):
-    result = generate_backup()
+    # Solo Excel (legacy endpoint ahora genera tabla general)
+    result = generate_excel_backup()
     if not result.get("ok"):
         raise HTTPException(status_code=500, detail=result.get("error", "No se pudo generar el respaldo"))
     return result

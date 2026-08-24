@@ -265,6 +265,25 @@ def list_backups() -> list:
     db = SessionLocal()
     try:
         rows = db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all()
+        # Solo Excel tabla_general
+        rows = [b for b in rows if EXCEL_BACKUP_RE.match(b.name)]
+        return [
+            {
+                "name": b.name,
+                "size_kb": b.size_kb,
+                "created_at": b.created_at.isoformat(timespec="seconds") if b.created_at else None,
+            }
+            for b in rows
+        ]
+    finally:
+        db.close()
+
+
+def list_backups_all() -> list:
+    """Lista todos los respaldos (SQL + Excel) — uso interno/legacy."""
+    db = SessionLocal()
+    try:
+        rows = db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all()
         return [
             {
                 "name": b.name,
@@ -327,12 +346,7 @@ def has_excel_backup_today() -> bool:
 
 
 def ensure_todays_auto_backup() -> None:
-    """Genera un respaldo si hoy (hora de Honduras) aún no existe uno."""
-    if not has_backup_today():
-        try:
-            generate_backup()
-        except Exception:
-            pass
+    """Genera respaldo diario solo en Excel tabla general (12am Honduras)."""
     if not has_excel_backup_today():
         try:
             generate_excel_backup()

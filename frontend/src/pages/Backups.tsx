@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { backupsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { DatabaseBackup, RefreshCw, Download, Trash2, CheckCircle2, Upload, FileSpreadsheet } from 'lucide-react'
+import { RefreshCw, Download, Trash2, CheckCircle2, Upload, FileSpreadsheet } from 'lucide-react'
 
 interface BackupItem {
   name: string
@@ -23,10 +23,8 @@ const fmt = (iso: string | null) => {
 export function Backups({ embedded = false }: { embedded?: boolean }) {
   const [items, setItems] = useState<BackupItem[]>([])
   const [generating, setGenerating] = useState(false)
-  const [generatingExcel, setGeneratingExcel] = useState(false)
   const [restoring, setRestoring] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
-  const [filter, setFilter] = useState<'all' | 'sql' | 'excel'>('all')
   const fileRef = useRef<HTMLInputElement>(null)
   const { toast, confirm } = useNotification()
 
@@ -47,27 +45,13 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
     if (generating) return
     setGenerating(true)
     try {
-      const res = await backupsApi.generate()
-      toast(res.data?.message || 'Respaldo generado correctamente', 'success')
+      const res = await backupsApi.generateExcel()
+      toast(res.data?.message || 'Respaldo Excel generado correctamente', 'success')
       await load()
     } catch (err: any) {
       toast(err.response?.data?.detail || 'No se pudo generar el respaldo', 'error')
     } finally {
       setGenerating(false)
-    }
-  }
-
-  const handleGenerateExcel = async () => {
-    if (generatingExcel) return
-    setGeneratingExcel(true)
-    try {
-      const res = await backupsApi.generateExcel()
-      toast(res.data?.message || 'Tabla general en Excel generada correctamente', 'success')
-      await load()
-    } catch (err: any) {
-      toast(err.response?.data?.detail || 'No se pudo generar la tabla general', 'error')
-    } finally {
-      setGeneratingExcel(false)
     }
   }
 
@@ -87,22 +71,18 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
 
   const handleRestore = async (file: File | null) => {
     if (!file) return
-    const isExcel = file.name.toLowerCase().endsWith('.xlsx')
-    const isSql = file.name.endsWith('.sql.gz')
-    if (!isExcel && !isSql) {
-      toast('El archivo debe ser un respaldo .sql.gz o tabla general .xlsx', 'error')
+    if (!file.name.toLowerCase().endsWith('.xlsx')) {
+      toast('El respaldo debe ser un archivo Excel .xlsx (tabla general)', 'error')
       return
     }
     const ok = await confirm(
-      isExcel
-        ? 'Se importarán los expedientes desde la tabla general Excel. Los registros se añadirán (expedientes duplicados se guardan como copia). ¿Deseas continuar?'
-        : 'IMPORTANTE: Al importar este respaldo SQL se reemplazará TODA la base de datos actual (se perderán los datos nuevos). ¿Deseas continuar?'
+      'Se importarán los expedientes desde la tabla general Excel. Los registros se añadirán (expedientes duplicados se guardan como copia). ¿Deseas continuar?'
     )
     if (!ok) return
     setRestoring(true)
     try {
       const res = await backupsApi.restore(file)
-      toast(res.data?.message || 'Base de datos restaurada correctamente', 'success')
+      toast(res.data?.message || 'Respaldo importado correctamente', 'success')
       await load()
     } catch (err: any) {
       toast(err.response?.data?.detail || 'No se pudo importar el respaldo', 'error')
@@ -126,14 +106,7 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
     }
   }
 
-  const filtered = items.filter(b => {
-    const t = b.name.endsWith('.xlsx') ? 'excel' : 'sql'
-    if (filter === 'all') return true
-    return t === filter
-  })
   const totalKb = items.reduce((acc, b) => acc + b.size_kb, 0)
-  const excelCount = items.filter(b => b.name.endsWith('.xlsx')).length
-  const sqlCount = items.length - excelCount
 
   return (
     <div className="h-full flex flex-col gap-4">
@@ -147,7 +120,7 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
           <input
             ref={fileRef}
             type="file"
-            accept=".sql.gz,.xlsx,application/gzip,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             className="hidden"
             onChange={(e) => handleRestore(e.target.files?.[0] ?? null)}
           />
@@ -156,32 +129,21 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
             disabled={restoring}
             className="flex items-center gap-1.5 px-3 py-2 bg-white text-[#0F766E] border border-[#0F766E] rounded-xl hover:bg-[#F7F8FA] text-sm font-medium transition-all duration-200 disabled:opacity-50"
           >
-            <Upload size={14} /> {restoring ? 'Importando...' : 'Importar respaldo'}
+            <Upload size={14} /> {restoring ? 'Importando...' : 'Importar Excel'}
           </button>
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="flex items-center gap-1.5 px-3 py-2 bg-white text-[#0F766E] border border-[#0F766E] rounded-xl hover:bg-[#F7F8FA] text-sm font-medium transition-all duration-200 disabled:opacity-50"
-          >
-            <DatabaseBackup size={14} /> {generating ? 'Generando...' : 'Respaldo SQL'}
-          </button>
-          <button
-            onClick={handleGenerateExcel}
-            disabled={generatingExcel}
             className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] text-sm font-medium transition-all duration-200 disabled:opacity-50"
           >
-            <FileSpreadsheet size={14} /> {generatingExcel ? 'Generando...' : 'Tabla general Excel'}
+            <FileSpreadsheet size={14} /> {generating ? 'Generando...' : 'Generar respaldo Excel'}
           </button>
         </div>
       </div>
 
-      <div className="shrink-0 flex flex-col gap-1 text-[0.6875rem] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
-        <div className="flex items-center gap-2"><CheckCircle2 size={13} className="text-emerald-500 shrink-0" />Respaldo SQL (.sql.gz) y Tabla general Excel (.xlsx) se generan automáticamente a las 12:00 a. m. Honduras — se conservan los últimos 14 de cada tipo.</div>
-        <div className="flex items-center gap-2 ml-5">
-          <button onClick={() => setFilter('all')} className={`px-2 py-0.5 rounded text-xs ${filter==='all' ? 'bg-[#0F766E] text-white' : 'bg-white border'}`}>Todos ({items.length})</button>
-          <button onClick={() => setFilter('sql')} className={`px-2 py-0.5 rounded text-xs ${filter==='sql' ? 'bg-[#0F766E] text-white' : 'bg-white border'}`}>SQL ({sqlCount})</button>
-          <button onClick={() => setFilter('excel')} className={`px-2 py-0.5 rounded text-xs ${filter==='excel' ? 'bg-emerald-600 text-white' : 'bg-white border'}`}>Excel ({excelCount})</button>
-        </div>
+      <div className="shrink-0 flex items-center gap-2 text-[0.6875rem] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
+        <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+        Respaldos en Excel (.xlsx) — tabla general con todos los expedientes. Se generan automáticamente a las 12:00 a. m. Honduras y se conservan los últimos 14.
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1">
@@ -189,30 +151,26 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
           <table className="w-full">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
-                <th className="w-[35%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Archivo</th>
-                <th className="w-[12%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Tipo</th>
-                <th className="w-[18%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Tamaño</th>
+                <th className="w-[45%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Archivo</th>
+                <th className="w-[20%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Tamaño</th>
                 <th className="w-[20%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Generado</th>
                 <th className="w-[15%] text-right px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 && (
+              {items.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center">
-                    <DatabaseBackup size={26} className="mx-auto mb-2 text-[#D5DBE3]" />
+                  <td colSpan={4} className="px-6 py-12 text-center">
+                    <FileSpreadsheet size={26} className="mx-auto mb-2 text-[#D5DBE3]" />
                     <p className="text-sm text-[#7A8694]">
-                      {generating || generatingExcel ? 'Generando...' : filter==='excel' ? 'No hay tablas generales en Excel. Genera una con el botón superior.' : filter==='sql' ? 'No hay respaldos SQL.' : 'No hay respaldos todavía. Genera uno con el botón superior.'}
+                      {generating ? 'Generando respaldo...' : 'No hay respaldos en Excel. Genera uno con el botón superior.'}
                     </p>
                   </td>
                 </tr>
               )}
-              {filtered.map((b) => {
-                const isExcel = b.name.endsWith('.xlsx')
-                return (
+              {items.map((b) => (
                 <tr key={b.name} className="border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5]">
-                  <td className="px-6 py-4 text-sm font-mono text-[#1E2A32] flex items-center gap-2">{isExcel ? <FileSpreadsheet size={14} className="text-emerald-600 shrink-0"/> : <DatabaseBackup size={14} className="text-[#5F6C79] shrink-0"/>}{b.name}</td>
-                  <td className="px-6 py-4 text-xs"><span className={`px-2 py-0.5 rounded font-medium ${isExcel ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>{isExcel ? 'Excel' : 'SQL'}</span></td>
+                  <td className="px-6 py-4 text-sm font-mono text-[#1E2A32] flex items-center gap-2"><FileSpreadsheet size={14} className="text-emerald-600 shrink-0"/>{b.name}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{b.size_kb >= 1024 ? `${(b.size_kb / 1024).toFixed(1)} MB` : `${b.size_kb.toFixed(1)} KB`}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(b.created_at)}</td>
                   <td className="px-6 py-4 text-right">
@@ -235,13 +193,13 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
                     </div>
                   </td>
                 </tr>
-              )})}
+              ))}
             </tbody>
           </table>
         </div>
         <div className="shrink-0 border-t border-[#E4E8EE] px-6 py-1.5 flex items-center justify-between">
           <p className="text-[0.625rem] text-[#7A8694]">
-            {items.length} respaldo(s) · {(totalKb / 1024).toFixed(1)} MB en total
+            {items.length} respaldo(s) Excel · {(totalKb / 1024).toFixed(1)} MB en total
           </p>
           <button
             onClick={load}
