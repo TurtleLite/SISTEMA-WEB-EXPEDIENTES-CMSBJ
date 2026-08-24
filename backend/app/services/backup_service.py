@@ -216,6 +216,21 @@ def _generate_excel_bytes() -> tuple:
         columns = [c["label"] for c in (ld.columns_config or [])]
         # Mapeo label -> key para extraer datos en el orden correcto
         label_to_key = {c["label"]: c["key"] for c in (ld.columns_config or [])}
+        # Campos extra que se guardan en data pero no están en columns_config — incluirlos para no perder datos
+        extra_fields = {
+            "compensado": "Compensado",
+            "observacion_compensado": "Observación Compensado",
+            "observacion_estatus": "Observación Estatus",
+            "departamento": "Departamento",
+            "municipio": "Municipio",
+            "localidad": "Localidad",
+            "tipo_localidad": "Tipo Localidad",
+        }
+        # Añadir al final si no están ya
+        for key, label in extra_fields.items():
+            if label not in columns:
+                columns.append(label)
+                label_to_key[label] = key
         records = db.query(ListRecord).filter(ListRecord.list_definition_id == ld.id, ListRecord.deleted_at.is_(None)).order_by(ListRecord.id.asc()).all()
         data = []
         for r in records:
@@ -412,8 +427,20 @@ def restore_excel_backup(data: bytes) -> dict:
             ld = db.query(ListDefinition).filter(ListDefinition.deleted_at.is_(None)).first()
         if not ld:
             return {"ok": False, "error": "No hay lista de expedientes para importar"}
-        # Mapa label -> key
+        # Mapa label -> key (incluye campos extra de respaldo completo)
         label_to_key = {c["label"]: c["key"] for c in (ld.columns_config or [])}
+        extra_fields = {
+            "compensado": "Compensado",
+            "observacion_compensado": "Observación Compensado",
+            "observacion_estatus": "Observación Estatus",
+            "departamento": "Departamento",
+            "municipio": "Municipio",
+            "localidad": "Localidad",
+            "tipo_localidad": "Tipo Localidad",
+        }
+        for k, lbl in extra_fields.items():
+            if lbl not in label_to_key:
+                label_to_key[lbl] = k
         # Normalizar labels para búsqueda insensible a mayúsculas/espacios
         norm_label = {k.lower().strip(): k for k in label_to_key.keys()}
         # También mapear key -> label inverso para detectar header por key
