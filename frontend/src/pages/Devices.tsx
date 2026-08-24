@@ -118,33 +118,33 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
   }, [items, q])
 
   return (
-    <div className="h-full flex flex-col gap-3 min-h-0">
+    <div className="h-full flex flex-col gap-4 min-h-0">
       {!embedded && (
         <div className="flex items-center justify-between shrink-0">
-          <h1 className="font-serif text-xl font-bold text-[#1E2A32]">Equipos</h1>
+          <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Equipos</h1>
         </div>
       )}
 
       <div className="shrink-0 relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9AA4B2]" />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7A8694]" />
         <input
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar equipo, usuario o nota..."
-          className="w-full pl-9 pr-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+          className="w-full pl-9 pr-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
         />
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1">
-        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+        <div className="flex-1 min-h-0 overflow-auto">
           <table className="w-full">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#F8FAFC] border-b border-[#E4E8EE]">
-                <th className="w-[40%] text-left px-4 py-3 text-xs font-semibold text-[#64748B] uppercase tracking-wider">Equipo</th>
-                <th className="w-[18%] text-left px-3 py-3 text-xs font-semibold text-[#64748B] uppercase tracking-wider">Estado</th>
-                <th className="w-[22%] text-left px-3 py-3 text-xs font-semibold text-[#64748B] uppercase tracking-wider">Usuarios</th>
-                <th className="w-[20%] text-right px-4 py-3 text-xs font-semibold text-[#64748B] uppercase tracking-wider">Acción</th>
+              <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
+                <th className="w-[40%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Equipo</th>
+                <th className="w-[18%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
+                <th className="w-[22%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Usuarios</th>
+                <th className="w-[20%] text-right px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
               </tr>
             </thead>
             <tbody>
@@ -163,31 +163,31 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                 const isOpen = expanded === d.device_id
                 return (
                   <>
-                    <tr key={d.id} onClick={() => setExpanded(isOpen ? null : d.device_id)} className={`border-b border-l-4 ${meta.border} hover:bg-[#F8FAFC] cursor-pointer transition-colors ${isOpen ? 'bg-[#F8FAFC]' : ''}`}>
-                      <td className="px-4 py-3.5">
+                    <tr key={d.id} onClick={() => setExpanded(isOpen ? null : d.device_id)} className={`border-b border-l-4 border-[#EEF1F5] ${meta.border} hover:bg-[#EEF1F5] cursor-pointer transition-colors ${isOpen ? 'bg-[#EEF1F5]' : ''}`}>
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <Monitor size={14} className="text-[#94A3B8] shrink-0" />
+                          <Monitor size={15} className="text-[#7A8694] shrink-0" />
                           <span className="text-sm font-mono text-[#1E2A32] truncate">{d.device_id}</span>
-                          {d.shared && <span className="px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-violet-100 text-violet-700">Compartido</span>}
+                          {d.shared && <span className="px-2 py-0.5 rounded-full text-[0.625rem] font-semibold bg-violet-100 text-violet-700">Compartido</span>}
                         </div>
-                        {d.note && <p className="text-xs text-[#64748B] truncate mt-0.5">{d.note}</p>}
+                        {d.note && <p className="text-xs text-[#7A8694] truncate mt-1">{d.note}</p>}
                       </td>
-                      <td className="px-3 py-3.5">
+                      <td className="px-6 py-4">
                         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${meta.badge}`}>
                           <StatusIcon size={12} />{meta.label}
                         </span>
                       </td>
-                      <td className="px-3 py-3.5">
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-1 flex-wrap">
-                          {d.users.length === 0 ? <span className="text-sm text-[#94A3B8]">—</span> : (
+                          {d.users.length === 0 ? <span className="text-sm text-[#7A8694]">—</span> : (
                             <>
-                              <span className="text-sm text-[#334155] truncate max-w-[110px]">{d.users[0]}</span>
-                              {d.users.length > 1 && <span className="text-xs text-[#64748B]">+{d.users.length - 1}</span>}
+                              <span className="text-sm text-[#3F4D58] truncate max-w-[140px]">{d.users[0]}</span>
+                              {d.users.length > 1 && <span className="text-xs text-[#7A8694]">+{d.users.length - 1}</span>}
                             </>
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3.5 text-right" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
                         {inConfirm ? (
                           <div className="flex items-center justify-end gap-1">
                             {d.status === 'approved' && (
@@ -197,37 +197,37 @@ export function Devices({ embedded = false }: { embedded?: boolean }) {
                                 onChange={(e) => setBlockReason(e.target.value)}
                                 placeholder="Motivo"
                                 autoFocus
-                                className="w-24 px-2 py-1.5 border border-rose-300 rounded-lg text-xs focus:ring-2 focus:ring-rose-200"
+                                className="w-28 px-2 py-1.5 border border-rose-300 rounded-lg text-xs focus:ring-2 focus:ring-rose-200"
                               />
                             )}
                             <button
                               onClick={() => d.status === 'approved' ? handleBlock(d) : handleApprove(d)}
                               disabled={saving === d.device_id}
-                              className={`px-3 py-1.5 text-xs font-medium rounded-lg text-white ${d.status === 'approved' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
+                              className={`px-3 py-1.5 text-sm font-medium rounded-lg text-white ${d.status === 'approved' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
                             >
                               {saving === d.device_id ? '...' : 'Sí'}
                             </button>
-                            <button onClick={() => { setConfirming(null); setBlockReason('') }} className="p-1.5 hover:bg-[#F1F5F9] rounded-lg">
+                            <button onClick={() => { setConfirming(null); setBlockReason('') }} className="p-1.5 hover:bg-[#EEF1F5] rounded-lg">
                               <XIcon size={14} />
                             </button>
                           </div>
                         ) : (
                           d.status === 'approved' ? (
-                            <button onClick={() => { setConfirming(d.device_id); setBlockReason('') }} className="px-3 py-1.5 text-xs font-medium bg-white border border-rose-200 text-rose-600 rounded-lg hover:bg-rose-50">Bloquear</button>
+                            <button onClick={() => { setConfirming(d.device_id); setBlockReason('') }} className="px-3 py-1.5 text-sm font-medium bg-white border border-rose-200 text-rose-600 rounded-lg hover:bg-rose-50">Bloquear</button>
                           ) : (
-                            <button onClick={() => { setConfirming(d.device_id); setBlockReason('') }} className="px-3 py-1.5 text-xs font-medium bg-[#0F766E] text-white rounded-lg hover:bg-[#115E59]">Aprobar</button>
+                            <button onClick={() => { setConfirming(d.device_id); setBlockReason('') }} className="px-3 py-1.5 text-sm font-medium bg-[#0F766E] text-white rounded-lg hover:bg-[#115E59]">Aprobar</button>
                           )
                         )}
                       </td>
                     </tr>
                     {isOpen && (
                       <tr className="bg-[#F8FAFC] border-b border-[#E4E8EE]">
-                        <td colSpan={4} className="px-4 py-3">
-                          <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-[#64748B]">
-                            <span>Actividad: <b className="text-[#334155] font-medium">{timeAgo(d.last_event_at || d.last_seen_at)}</b></span>
-                            <span>Eventos: <b className="text-[#334155]">{d.events}</b></span>
-                            <span>Usuarios: <b className="text-[#334155]">{d.users.join(', ') || '—'}</b></span>
-                            {d.note && <span>Nota: <b className="text-[#334155]">{d.note}</b></span>}
+                        <td colSpan={4} className="px-6 py-3">
+                          <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-[#7A8694]">
+                            <span>Actividad: <b className="text-[#3F4D58] font-medium">{timeAgo(d.last_event_at || d.last_seen_at)}</b></span>
+                            <span>Eventos: <b className="text-[#3F4D58]">{d.events}</b></span>
+                            <span>Usuarios: <b className="text-[#3F4D58]">{d.users.join(', ') || '—'}</b></span>
+                            {d.note && <span>Nota: <b className="text-[#3F4D58]">{d.note}</b></span>}
                           </div>
                         </td>
                       </tr>
