@@ -188,7 +188,7 @@ async def lifespan(app: FastAPI):
             while True:
                 try:
                     now = datetime.now(timezone(timedelta(hours=-6)))
-                    target = now.replace(hour=3, minute=0, second=0, microsecond=0)
+                    target = now.replace(hour=0, minute=0, second=0, microsecond=0)
                     if now >= target:
                         target += timedelta(days=1)
                     await asyncio.sleep((target - now).total_seconds())
@@ -199,7 +199,7 @@ async def lifespan(app: FastAPI):
                     await asyncio.sleep(3600)
 
         task = asyncio.create_task(_backup_scheduler())
-        logger.info("Programador de respaldo diario (3:00 a. m. Honduras) iniciado")
+        logger.info("Programador de respaldo diario (12:00 a. m. Honduras) iniciado")
     except Exception as e:
         logger.warning(f"No se pudo iniciar el programador de respaldos: {e}")
 

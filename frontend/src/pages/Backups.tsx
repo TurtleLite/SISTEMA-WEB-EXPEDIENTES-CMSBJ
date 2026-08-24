@@ -172,7 +172,7 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
       </div>
 
       <div className="shrink-0 flex flex-col gap-1 text-[0.6875rem] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
-        <div className="flex items-center gap-2"><CheckCircle2 size={13} className="text-emerald-500 shrink-0" />Respaldo SQL (.sql.gz) y Tabla general Excel (.xlsx) se generan automáticamente a las 3:00 a. m. Honduras — se conservan los últimos 14 de cada tipo.</div>
+        <div className="flex items-center gap-2"><CheckCircle2 size={13} className="text-emerald-500 shrink-0" />Respaldo SQL (.sql.gz) y Tabla general Excel (.xlsx) se generan automáticamente a las 12:00 a. m. Honduras — se conservan los últimos 14 de cada tipo.</div>
         <div className="flex items-center gap-2 ml-5">
           <button onClick={() => setFilter('all')} className={`px-2 py-0.5 rounded text-xs ${filter==='all' ? 'bg-[#0F766E] text-white' : 'bg-white border'}`}>Todos ({items.length})</button>
           <button onClick={() => setFilter('sql')} className={`px-2 py-0.5 rounded text-xs ${filter==='sql' ? 'bg-[#0F766E] text-white' : 'bg-white border'}`}>SQL ({sqlCount})</button>

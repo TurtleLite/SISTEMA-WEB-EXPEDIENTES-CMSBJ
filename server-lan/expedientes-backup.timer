@@ -1,8 +1,8 @@
 [Unit]
-Description=Ejecuta el respaldo diario de la base de datos (03:00)
+Description=Ejecuta el respaldo diario de la base de datos (00:00)
 
 [Timer]
-OnCalendar=*-*-* 03:00:00
+OnCalendar=*-*-* 00:00:00
 Persistent=true
 
 [Install]
