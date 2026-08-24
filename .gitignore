@@ -14,3 +14,4 @@ reports/
 !docs_v17/*.pdf
 gestion.db
 backups/
+backend/test_debug.db

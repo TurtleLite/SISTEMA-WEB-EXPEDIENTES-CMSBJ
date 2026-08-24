@@ -315,5 +315,23 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/health/db")
+def health_db():
+    from app.core.database import SessionLocal
+    from sqlalchemy import inspect, text
+    info = {"status": "ok"}
+    try:
+        db = SessionLocal()
+        result = db.execute(text("SELECT 1")).scalar()
+        info["ping"] = result == 1
+        insp = inspect(db.get_bind())
+        info["tables"] = insp.get_table_names()
+        db.close()
+    except Exception as e:
+        info["status"] = "error"
+        info["error"] = str(e)
+    return info
+
+
 if _HAS_FRONTEND:
     app.mount("/", StaticFiles(directory=str(_FRONTEND_DIST), html=True), name="frontend")
