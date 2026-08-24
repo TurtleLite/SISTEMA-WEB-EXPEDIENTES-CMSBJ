@@ -237,11 +237,11 @@ export function Users() {
                         </button>
                       )}
                       {!u.is_active ? (
-                        <button onClick={() => handleActivate(u)} title="Reactivar usuario" className="p-2 hover:bg-emerald-100 rounded-xl transition-all duration-200 border border-transparent hover:border-emerald-200">
+                        <button onClick={() => handleActivate(u)} title="Activar" className="p-2 hover:bg-emerald-100 rounded-xl transition-all duration-200 border border-transparent hover:border-emerald-200">
                           <UserCheck size={16} className="text-emerald-600" />
                         </button>
                       ) : u.id !== currentUser?.id && (
-                        <button onClick={() => handleDeactivate(u)} title="Desactivar (médico se fue del centro)" className="p-2 hover:bg-orange-100 rounded-xl transition-all duration-200 border border-transparent hover:border-orange-200">
+                        <button onClick={() => handleDeactivate(u)} title="Desactivar" className="p-2 hover:bg-orange-100 rounded-xl transition-all duration-200 border border-transparent hover:border-orange-200">
                           <UserX size={16} className="text-orange-600" />
                         </button>
                       )}
