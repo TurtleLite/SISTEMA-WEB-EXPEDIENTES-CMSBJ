@@ -156,7 +156,6 @@ export function Users() {
       <div className="flex items-center justify-between shrink-0">
         <div>
           <h1 className="font-serif text-[26px] font-bold text-[#1E2A32] tracking-tight">Usuarios</h1>
-          <p className="text-[13px] text-[#7A8694] mt-0.5">{users.length} usuarios — {users.filter(u=>u.is_active).length} activos · {users.filter(u=>!u.is_active).length} inactivos</p>
         </div>
         <div className="flex items-center gap-2.5">
           <button
