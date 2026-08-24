@@ -47,11 +47,14 @@ async def backups_restore(
     current_user: User = Depends(require_role("admin")),
 ):
     data = await file.read()
+    filename = file.filename or ""
+    is_excel = filename.lower().endswith(".xlsx") or data.startswith(b"PK")
     result = restore_backup(data)
+    detail = result.get("message") or ("importó %d expediente(s) desde Excel tabla general" % result.get("count", 0) if is_excel else "importó un respaldo en la base de datos")
     log_audit(
         db, current_user, "backup_restore", entity_type="backup",
-        entity_id=file.filename or "restore.sql.gz",
-        detail="importó un respaldo en la base de datos",
+        entity_id=filename or ("restore.xlsx" if is_excel else "restore.sql.gz"),
+        detail=detail,
         ip_address=client_ip(request),
     )
     if not result.get("ok"):

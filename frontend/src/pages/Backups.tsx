@@ -87,12 +87,16 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
 
   const handleRestore = async (file: File | null) => {
     if (!file) return
-    if (!file.name.endsWith('.sql.gz')) {
-      toast('El archivo debe ser un respaldo .sql.gz', 'error')
+    const isExcel = file.name.toLowerCase().endsWith('.xlsx')
+    const isSql = file.name.endsWith('.sql.gz')
+    if (!isExcel && !isSql) {
+      toast('El archivo debe ser un respaldo .sql.gz o tabla general .xlsx', 'error')
       return
     }
     const ok = await confirm(
-      'IMPORTANTE: Al importar este respaldo se reemplazará TODA la base de datos actual (se perderán los datos nuevos). ¿Deseas continuar?'
+      isExcel
+        ? 'Se importarán los expedientes desde la tabla general Excel. Los registros se añadirán (expedientes duplicados se guardan como copia). ¿Deseas continuar?'
+        : 'IMPORTANTE: Al importar este respaldo SQL se reemplazará TODA la base de datos actual (se perderán los datos nuevos). ¿Deseas continuar?'
     )
     if (!ok) return
     setRestoring(true)
@@ -143,7 +147,7 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
           <input
             ref={fileRef}
             type="file"
-            accept=".sql.gz,application/gzip"
+            accept=".sql.gz,.xlsx,application/gzip,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             className="hidden"
             onChange={(e) => handleRestore(e.target.files?.[0] ?? null)}
           />

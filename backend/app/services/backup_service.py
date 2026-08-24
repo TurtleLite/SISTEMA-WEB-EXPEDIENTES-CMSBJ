@@ -372,14 +372,145 @@ def migrate_legacy_backups() -> None:
         db.close()
 
 
-def restore_backup(data: bytes) -> dict:
-    """Restaura la base de datos a partir de un respaldo .sql.gz subido por el usuario.
+def restore_excel_backup(data: bytes) -> dict:
+    """Restaura/importa expedientes desde un Excel tabla_general (*.xlsx).
+    Lee el Excel generado por generate_excel_backup (con cabecera en fila 7, datos desde fila 8)
+    o un Excel simple con cabecera en fila 1, y crea registros en Expediente Médico.
+    Devuelve {ok, message, count, errors}."""
+    if not data.startswith(b"PK"):
+        return {"ok": False, "error": "El archivo no es un Excel válido (.xlsx)"}
+    import io
+    import openpyxl
+    from app.models.list_definition import ListDefinition, ListRecord
+    from app.services.record_service import add_record
 
-    Vuelca todas las tablas existentes (CASCADE), ejecuta el script SQL del respaldo
-    dentro de una transacción y ajusta las secuencias de las columnas 'id'.
-    """
+    # Cargar workbook desde bytes
+    try:
+        wb = openpyxl.load_workbook(io.BytesIO(data), read_only=True, data_only=True)
+        ws = wb.active
+    except Exception as e:
+        return {"ok": False, "error": f"No se pudo abrir el Excel: {e}"}
+
+    db = SessionLocal()
+    try:
+        ld = db.query(ListDefinition).filter(ListDefinition.name == "Expediente Médico", ListDefinition.deleted_at.is_(None)).first()
+        if not ld:
+            ld = db.query(ListDefinition).filter(ListDefinition.deleted_at.is_(None)).first()
+        if not ld:
+            return {"ok": False, "error": "No hay lista de expedientes para importar"}
+        # Mapa label -> key
+        label_to_key = {c["label"]: c["key"] for c in (ld.columns_config or [])}
+        # Normalizar labels para búsqueda insensible a mayúsculas/espacios
+        norm_label = {k.lower().strip(): k for k in label_to_key.keys()}
+        # También mapear key -> label inverso para detectar header por key
+        # Buscar fila de cabecera: debe contener al menos 3 labels conocidos
+        header_idx = None
+        header_map = {}  # col_idx -> key
+        expected_labels = set(label_to_key.keys())
+        # También aceptar keys como header (por compatibilidad)
+        expected_keys = set(label_to_key.values())
+        max_scan = min(10, ws.max_row)
+        for r_idx, row in enumerate(ws.iter_rows(values_only=True), start=1):
+            if r_idx > max_scan:
+                break
+            if not row:
+                continue
+            vals = [str(v).strip() if v is not None else "" for v in row]
+            # ¿Cuántos valores coinciden con labels?
+            matches = sum(1 for v in vals if v in expected_labels)
+            matches_key = sum(1 for v in vals if v.lower().strip() in norm_label or v in expected_keys)
+            if matches >= 3 or matches_key >= 3:
+                header_idx = r_idx
+                # Construir mapa col -> key
+                for c_idx, val in enumerate(vals):
+                    if not val:
+                        continue
+                    # Probar label exacto
+                    if val in label_to_key:
+                        header_map[c_idx] = label_to_key[val]
+                    elif val.lower().strip() in norm_label:
+                        key = norm_label[val.lower().strip()]
+                        header_map[c_idx] = label_to_key[key]
+                    elif val in expected_keys:
+                        header_map[c_idx] = val
+                    elif val.lower().strip() in expected_keys:
+                        header_map[c_idx] = val.lower().strip()
+                break
+        if header_idx is None:
+            return {"ok": False, "error": "No se encontró la fila de cabecera en el Excel (¿formato incorrecto?)"}
+        if not header_map:
+            return {"ok": False, "error": "Cabecera sin columnas reconocibles"}
+
+        count = 0
+        errors = []
+        # Iterar filas de datos después de la cabecera
+        for r_idx, row in enumerate(ws.iter_rows(values_only=True, min_row=header_idx + 1), start=header_idx + 1):
+            if not row or all(v is None or str(v).strip() == "" for v in row):
+                continue
+            data_row = {}
+            for c_idx, cell_val in enumerate(row):
+                key = header_map.get(c_idx)
+                if not key:
+                    continue
+                if cell_val is None:
+                    continue
+                # Limpiar valor: si es datetime, convertir a ISO
+                import datetime as dt
+                if isinstance(cell_val, dt.datetime):
+                    cell_val = cell_val.date().isoformat()
+                elif isinstance(cell_val, dt.date):
+                    cell_val = cell_val.isoformat()
+                else:
+                    cell_val = str(cell_val).strip()
+                    if cell_val == "":
+                        continue
+                data_row[key] = cell_val
+            if not data_row:
+                continue
+            # Validar mínimo: debe tener al menos nombre o expediente
+            if not data_row.get("expediente") and not data_row.get("nombre") and not data_row.get("identidad"):
+                errors.append(f"Fila {r_idx}: sin datos identificables, omitida")
+                continue
+            try:
+                # add_record maneja expediente duplicado, validaciones, domicilio, etc.
+                # Si no hay expediente, add_record lo exigirá; intentar generar uno si falta
+                # Para importación masiva, si falta expediente, omitir fila
+                if not str(data_row.get("expediente", "")).strip():
+                    # Intentar usar fila como expediente si no existe -> error controlado
+                    raise ValueError("Falta número de expediente")
+                add_record(db, ld.id, data_row, user_id=None)
+                count += 1
+            except Exception as e:
+                # Extraer mensaje limpio
+                msg = str(e)
+                # Si es HTTPException, tomar detail
+                try:
+                    from fastapi import HTTPException
+                    if isinstance(e, HTTPException):
+                        msg = e.detail if isinstance(e.detail, str) else str(e.detail)
+                except Exception:
+                    pass
+                errors.append(f"Fila {r_idx}: {msg}")
+                # Continuar con siguientes filas
+                continue
+        wb.close()
+        if count == 0 and errors:
+            return {"ok": False, "error": f"No se importó ningún registro. Errores: {'; '.join(errors[:3])}", "count": 0, "errors": errors}
+        msg = f"Importados {count} expediente(s) desde Excel"
+        if errors:
+            msg += f" ({len(errors)} fila(s) con errores)"
+        return {"ok": True, "message": msg, "count": count, "errors": errors}
+    finally:
+        db.close()
+
+
+def restore_backup(data: bytes) -> dict:
+    """Restaura la base de datos a partir de un respaldo .sql.gz o importa desde .xlsx tabla general.
+    Detecta por magic bytes: PK -> Excel, 1f8b -> gzip SQL."""
+    if data.startswith(b"PK"):
+        return restore_excel_backup(data)
     if not data.startswith(b"\x1f\x8b"):
-        return {"ok": False, "error": "El archivo no es un respaldo comprimido válido (.sql.gz)"}
+        return {"ok": False, "error": "El archivo no es un respaldo válido (.sql.gz o .xlsx tabla general)"}
     try:
         sql_text = gzip.decompress(data).decode("utf-8")
     except Exception:
