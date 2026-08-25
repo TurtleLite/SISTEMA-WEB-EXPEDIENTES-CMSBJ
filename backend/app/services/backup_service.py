@@ -411,7 +411,7 @@ def restore_excel_backup(data: bytes) -> dict:
     import io
     import openpyxl
     from app.models.list_definition import ListDefinition, ListRecord
-    from app.services.record_service import add_record
+    from app.services.record_service import add_record, copias_de_numero
 
     # Cargar workbook desde bytes
     try:
@@ -516,9 +516,15 @@ def restore_excel_backup(data: bytes) -> dict:
                 # add_record maneja expediente duplicado, validaciones, domicilio, etc.
                 # Si no hay expediente, add_record lo exigirá; intentar generar uno si falta
                 # Para importación masiva, si falta expediente, omitir fila
-                if not str(data_row.get("expediente", "")).strip():
+                numero_exp = str(data_row.get("expediente", "")).strip()
+                if not numero_exp:
                     # Intentar usar fila como expediente si no existe -> error controlado
                     raise ValueError("Falta número de expediente")
+                # Evitar duplicados: si el número de expediente ya existe, omitir la fila
+                base_num = "".join(ch for ch in numero_exp if ch.isdigit())
+                if base_num and copias_de_numero(db, base_num) > 0:
+                    errors.append(f"Fila {r_idx}: expediente {numero_exp} ya existe, omitido (no duplicado)")
+                    continue
                 add_record(db, ld.id, data_row, user_id=None)
                 count += 1
             except Exception as e:
