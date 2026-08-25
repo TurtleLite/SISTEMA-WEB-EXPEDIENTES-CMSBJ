@@ -2,7 +2,8 @@ import gzip
 import io
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import psycopg2
 from psycopg2 import sql
@@ -10,13 +11,44 @@ from psycopg2.extensions import AsIs
 
 from app.core.config import settings
 from app.core.database import SessionLocal
-from app.models.backup import Backup
 
 BACKUP_RE = re.compile(r"^backup_\d{8}_\d{6}\.sql\.gz$")
 EXCEL_BACKUP_RE = re.compile(r"^tabla_general_\d{8}_\d{6}\.xlsx$")
 BACKUP_ANY_RE = re.compile(r"^(backup_\d{8}_\d{6}\.sql\.gz|tabla_general_\d{8}_\d{6}\.xlsx)$")
 KEEP_BACKUPS = 20
 KEEP_EXCEL_BACKUPS = 20
+
+# Los respaldos se guardan como archivos en disco (no en la BD) para no tener
+# el límite de 1 GB del tipo BYTEA ni inflar la base de datos.
+BACKUP_DIR = Path(__file__).resolve().parent.parent / settings.BACKUP_DIR
+try:
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
+
+
+def _write_backup_file(name: str, data: bytes) -> None:
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    (BACKUP_DIR / name).write_bytes(data)
+
+
+def _name_dt(name: str):
+    m = re.search(r"(\d{8})_(\d{6})", name)
+    if not m:
+        return None
+    try:
+        return datetime.strptime("%s_%s" % (m.group(1), m.group(2)), "%Y%m%d_%H%M%S")
+    except ValueError:
+        return None
+
+
+def _backup_meta(f: Path) -> dict:
+    dt = _name_dt(f.name)
+    return {
+        "name": f.name,
+        "size_kb": round(f.stat().st_size / 1024, 1),
+        "created_at": dt.isoformat(timespec="seconds") if dt else None,
+    }
 
 
 def _dsn() -> str:
@@ -156,46 +188,50 @@ def _dump_db() -> tuple:
             conn.close()
 
 
-def _prune(db, keep: int = KEEP_BACKUPS) -> int:
-    old = db.query(Backup).filter(Backup.name.op("~")(r"^backup_")).order_by(Backup.created_at.desc(), Backup.id.desc()).offset(keep).all()
-    # Fallback si el operador ~ no está disponible (CockroachDB lo soporta, pero por si acaso filtramos en Python)
-    if not old:
-        all_sql = [b for b in db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all() if BACKUP_RE.match(b.name)]
-        old = all_sql[keep:]
-    ids = [b.id for b in old]
-    if ids:
-        db.query(Backup).filter(Backup.id.in_(ids)).delete(synchronize_session=False)
-        db.commit()
-    return len(ids)
+def _prune(db=None, keep: int = KEEP_BACKUPS) -> int:
+    files = sorted(
+        (f for f in BACKUP_DIR.glob("backup_*.sql.gz") if BACKUP_RE.match(f.name)),
+        key=lambda f: f.name,
+        reverse=True,
+    )
+    old = files[keep:]
+    removed = 0
+    for f in old:
+        try:
+            f.unlink()
+            removed += 1
+        except OSError:
+            pass
+    return removed
 
 
-def _prune_excel(db, keep: int = KEEP_EXCEL_BACKUPS) -> int:
-    all_excel = [b for b in db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all() if EXCEL_BACKUP_RE.match(b.name)]
-    old = all_excel[keep:]
-    ids = [b.id for b in old]
-    if ids:
-        db.query(Backup).filter(Backup.id.in_(ids)).delete(synchronize_session=False)
-        db.commit()
-    return len(ids)
+def _prune_excel(db=None, keep: int = KEEP_EXCEL_BACKUPS) -> int:
+    files = sorted(
+        (f for f in BACKUP_DIR.glob("tabla_general_*.xlsx") if EXCEL_BACKUP_RE.match(f.name)),
+        key=lambda f: f.name,
+        reverse=True,
+    )
+    old = files[keep:]
+    removed = 0
+    for f in old:
+        try:
+            f.unlink()
+            removed += 1
+        except OSError:
+            pass
+    return removed
 
 
 def generate_backup() -> dict:
     blob, n_tables, n_rows, dbname, cockroach = _dump_db()
     name = "backup_%s.sql.gz" % datetime.now().strftime("%Y%m%d_%H%M%S")
     size_kb = round(len(blob) / 1024, 1)
-    db = SessionLocal()
-    try:
-        existing = db.query(Backup).filter(Backup.name == name).first()
-        if not existing:
-            db.add(Backup(name=name, size_kb=size_kb, data=blob))
-            db.commit()
-        removed = _prune(db)
-        message = "Respaldo generado: %s (%d tablas, %d filas, %.1f KB)" % (name, n_tables, n_rows, size_kb)
-        if removed:
-            message += " / se eliminaron %d respaldo(s) antiguo(s)" % removed
-        return {"ok": True, "message": message}
-    finally:
-        db.close()
+    _write_backup_file(name, blob)
+    removed = _prune()
+    message = "Respaldo generado: %s (%d tablas, %d filas, %.1f KB)" % (name, n_tables, n_rows, size_kb)
+    if removed:
+        message += " / se eliminaron %d respaldo(s) antiguo(s)" % removed
+    return {"ok": True, "message": message}
 
 
 def _generate_excel_bytes() -> tuple:
@@ -257,81 +293,55 @@ def _generate_excel_bytes() -> tuple:
 
 
 def generate_excel_backup() -> dict:
-    """Genera un respaldo en Excel (tabla general) y lo guarda en la tabla backups."""
+    """Genera un respaldo en Excel (tabla general) y lo guarda como archivo en disco."""
     blob, count, columns = _generate_excel_bytes()
     name = "tabla_general_%s.xlsx" % datetime.now().strftime("%Y%m%d_%H%M%S")
     size_kb = round(len(blob) / 1024, 1)
-    db = SessionLocal()
-    try:
-        existing = db.query(Backup).filter(Backup.name == name).first()
-        if not existing:
-            db.add(Backup(name=name, size_kb=size_kb, data=blob))
-            db.commit()
-        removed = _prune_excel(db)
-        message = "Tabla general generada: %s (%d registros, %d columnas, %.1f KB)" % (name, count, len(columns), size_kb)
-        if removed:
-            message += " / se eliminaron %d tabla(s) antigua(s)" % removed
-        return {"ok": True, "message": message, "name": name, "count": count}
-    finally:
-        db.close()
+    _write_backup_file(name, blob)
+    removed = _prune_excel()
+    message = "Tabla general generada: %s (%d registros, %d columnas, %.1f KB)" % (name, count, len(columns), size_kb)
+    if removed:
+        message += " / se eliminaron %d tabla(s) antigua(s)" % removed
+    return {"ok": True, "message": message, "name": name, "count": count}
 
 
 def list_backups() -> list:
-    db = SessionLocal()
-    try:
-        rows = db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all()
-        # Solo Excel tabla_general
-        rows = [b for b in rows if EXCEL_BACKUP_RE.match(b.name)]
-        return [
-            {
-                "name": b.name,
-                "size_kb": b.size_kb,
-                "created_at": b.created_at.isoformat(timespec="seconds") if b.created_at else None,
-            }
-            for b in rows
-        ]
-    finally:
-        db.close()
+    items = [_backup_meta(f) for f in BACKUP_DIR.glob("tabla_general_*.xlsx") if EXCEL_BACKUP_RE.match(f.name)]
+    items.sort(key=lambda x: (x["created_at"] or ""), reverse=True)
+    return items
 
 
 def list_backups_all() -> list:
-    """Lista todos los respaldos (SQL + Excel) — uso interno/legacy."""
-    db = SessionLocal()
-    try:
-        rows = db.query(Backup).order_by(Backup.created_at.desc(), Backup.id.desc()).all()
-        return [
-            {
-                "name": b.name,
-                "size_kb": b.size_kb,
-                "created_at": b.created_at.isoformat(timespec="seconds") if b.created_at else None,
-            }
-            for b in rows
-        ]
-    finally:
-        db.close()
+    """Lista todos los respaldos (SQL + Excel) desde disco."""
+    items = [_backup_meta(f) for f in BACKUP_DIR.glob("*") if BACKUP_ANY_RE.match(f.name)]
+    items.sort(key=lambda x: (x["created_at"] or ""), reverse=True)
+    return items
 
 
 def get_backup_blob(name: str):
     if not BACKUP_ANY_RE.match(name or ""):
         return None
-    db = SessionLocal()
+    path = BACKUP_DIR / name
+    if not path.is_file():
+        return None
     try:
-        b = db.query(Backup).filter(Backup.name == name).first()
-        return (b.name, b.data) if b else None
-    finally:
-        db.close()
+        data = path.read_bytes()
+    except OSError:
+        return None
+    return (name, data)
 
 
 def delete_backup(name: str) -> bool:
-    if not BACKUP_ANY_RE.match(name or ""):
+    if not BACKUP_ANY_RE_RE.match(name or ""):
         return False
-    db = SessionLocal()
-    try:
-        n = db.query(Backup).filter(Backup.name == name).delete(synchronize_session=False)
-        db.commit()
-        return n > 0
-    finally:
-        db.close()
+    path = BACKUP_DIR / name
+    if path.is_file():
+        try:
+            path.unlink()
+            return True
+        except OSError:
+            return False
+    return False
 
 
 def _today_honduras_aware() -> datetime:
@@ -340,24 +350,25 @@ def _today_honduras_aware() -> datetime:
 
 
 def has_backup_today() -> bool:
-    from datetime import timezone, timedelta
-    db = SessionLocal()
-    try:
-        start = _today_honduras_aware().replace(hour=0, minute=0, second=0, microsecond=0)
-        rows = db.query(Backup).filter(Backup.created_at >= start).all()
-        return any(BACKUP_RE.match(b.name) for b in rows)
-    finally:
-        db.close()
+    start = _today_honduras_aware().replace(hour=0, minute=0, second=0, microsecond=0)
+    for f in BACKUP_DIR.glob("backup_*.sql.gz"):
+        if not BACKUP_RE.match(f.name):
+            continue
+        dt = _name_dt(f.name)
+        if dt and dt >= start:
+            return True
+    return False
 
 
 def has_excel_backup_today() -> bool:
-    db = SessionLocal()
-    try:
-        start = _today_honduras_aware().replace(hour=0, minute=0, second=0, microsecond=0)
-        rows = db.query(Backup).filter(Backup.created_at >= start).all()
-        return any(EXCEL_BACKUP_RE.match(b.name) for b in rows)
-    finally:
-        db.close()
+    start = _today_honduras_aware().replace(hour=0, minute=0, second=0, microsecond=0)
+    for f in BACKUP_DIR.glob("tabla_general_*.xlsx"):
+        if not EXCEL_BACKUP_RE.match(f.name):
+            continue
+        dt = _name_dt(f.name)
+        if dt and dt >= start:
+            return True
+    return False
 
 
 def ensure_todays_auto_backup() -> None:
@@ -378,27 +389,30 @@ def ensure_todays_excel_backup() -> None:
 
 
 def migrate_legacy_backups() -> None:
-    """Importa los respaldos .sql.gz que hubiera en backend/backups si la tabla está vacía."""
-    from pathlib import Path
-    legacy = Path(__file__).resolve().parent.parent / "backups"
-    if not legacy.is_dir():
-        return
-    files = sorted(f for f in legacy.glob("backup_*.sql.gz") if BACKUP_RE.match(f.name))
-    if not files:
-        return
-    db = SessionLocal()
+    """Exporta a disco los respaldos que aún existan en la tabla backups (si los hay)
+    y asegura que el directorio de respaldos exista. Ya no se usa la BD para almacenarlos."""
     try:
-        if db.query(Backup).count() > 0:
-            return
-        for f in files:
-            try:
-                data = f.read_bytes()
-            except OSError:
-                continue
-            db.add(Backup(name=f.name, size_kb=round(len(data) / 1024, 1), data=data))
-        db.commit()
-    finally:
-        db.close()
+        BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        pass
+    try:
+        from app.models.backup import Backup
+        db = SessionLocal()
+        try:
+            rows = db.query(Backup).all()
+            for b in rows:
+                if not BACKUP_ANY_RE.match(b.name or ""):
+                    continue
+                dst = BACKUP_DIR / b.name
+                if not dst.exists() and b.data:
+                    try:
+                        dst.write_bytes(b.data)
+                    except OSError:
+                        pass
+        finally:
+            db.close()
+    except Exception:
+        pass
 
 
 def restore_excel_backup(data: bytes) -> dict:
