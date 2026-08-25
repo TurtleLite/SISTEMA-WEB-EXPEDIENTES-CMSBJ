@@ -4,15 +4,18 @@ Aplicación web para el registro y administración de expedientes de pacientes d
 
 ## Requisitos de Infraestructura
 
-**No necesitas ningún servidor físico.** Todo corre en la nube de forma gratuita:
+El sistema corre en una **mini PC local (Linux) siempre encendida** que aloja la base de datos y el backend, y se expone a internet mediante **Tailscale Funnel** (URL fija y TLS automático, sin abrir puertos). El frontend se despliega como sitio estático en Render y se comunica con el backend por esa URL. Los datos de pacientes **no salen de la mini PC**.
 
 | Componente | Dónde corre | Costo |
 |------------|-------------|-------|
 | Frontend (React) | Render (Static Site) | Gratis |
-| Backend (FastAPI) | Render (Web Service) | Gratis |
-| Base de datos | CockroachLabs Cloud | Gratis (500MB) |
+| Backend (FastAPI) | Mini PC local (servicio `systemd`, puerto 8000) | — (equipo propio) |
+| Base de datos | PostgreSQL local en la mini PC | — (equipo propio) |
+| Exposición externa | Tailscale Funnel (URL fija HTTPS) | Gratis |
 
-## Stack Tecnológico (100% gratuito)
+Ventajas de esta arquitectura: los datos clínicos quedan en el equipo local (privacidad y cumplimiento), no hay dependencia de una base de datos en la nube, y la URL de acceso es estable aunque cambie la IP pública.
+
+## Stack Tecnológico
 
 | Componente | Tecnología | Licencia |
 |------------|-----------|----------|
@@ -22,7 +25,7 @@ Aplicación web para el registro y administración de expedientes de pacientes d
 | Cliente HTTP | Axios | MIT |
 | Backend | Python + FastAPI | MIT |
 | ORM | SQLAlchemy | MIT |
-| Base de Datos | CockroachDB (CockroachLabs Cloud) | BSL (gratuito en la nube) |
+| Base de Datos | PostgreSQL 16 (local) | PostgreSQL License |
 | Autenticación | JWT (python-jose) + passlib/bcrypt | MIT/BSD |
 | Excel | openpyxl | MIT |
 | PDF (manuales) | ReportLab | BSD |
@@ -32,7 +35,7 @@ Aplicación web para el registro y administración de expedientes de pacientes d
 - **Expedientes médicos:** registro con número de expediente **numérico escrito manualmente**; si el número ya existe, se guarda como copia identificada (ej.: `23455 (1)`) previa confirmación de que es una nueva intervención del paciente.
 - **IMC automático:** en la sección Signos Vitales, al escribir el peso (kg) y la talla (mts), el sistema calcula el **B.M.I.** en tiempo real (`peso / talla²`) en un campo de solo lectura. El punto decimal de la talla se inserta automáticamente (ej.: escribir `184` se muestra como `1.84 mts`).
 - **Criticidad clínica** (Baja, Media o Alta) y **domicilio desglosado** por departamento, municipio y localidad (Aldea, Barrio, Colonia o Caserío).
-- **Búsqueda automática sin distinción de mayúsculas ni tildes** en nombre, apellido, identidad, número de expediente, diagnóstico, especialidad y perfil; lista paginada de 50 en 50.
+- **Búsqueda en tiempo real, sin distinción de mayúsculas ni tildes**, sobre nombre, apellido, identidad, número de expediente, diagnóstico, especialidad y perfil (y sobre cualquier campo al buscar por campo específico). Utiliza **índices trigram (GIN + `pg_trgm`)** sobre `data->>'campo'` y un **índice GIN sobre el JSONB `data`**, por lo que escala a cientos de miles de expedientes sin degradarse. Al elegir el campo en el desplegable **o** al escribir en la barra, la tabla se filtra al instante (el cliente aplica un *debounce* de 300 ms para no disparar una petición por tecla). El desplegable de búsqueda excluye los campos `cirujano`, `fecha_cirugia` y `estatus_cirugia`.
 - **Reportes** en Excel (`REPORTE_<nombre>.xlsx`) con filtros por especialidad, perfil, criticidad y estatus, vista previa con reordenamiento de filas por arrastre (la columna No se renumera según el orden) y la columna "Observación" solo en reportes.
 - **Listado Diario de Cirugías:** armado por fecha, filtro por estatus, reordenamiento por arrastre dentro de cada especialidad y exportación a Excel (`LISTADO_fecha.xlsx`).
 - **Estatus quirúrgico** con 7 estados (En espera, Reprogramar, Cancelado, Fuera de perfil San Benito, Operado, No apto para cirugía, No se presentó) y observaciones que quedan en el expediente.
@@ -61,7 +64,7 @@ Cuatro roles: **Administrador**, **Dirección**, **Dirección Médica** y **Méd
 | Especialidades y localidades (crear, editar, eliminar) | Sí | No | No | No |
 | Mi Perfil (datos y contraseña) | Sí | Sí | Sí | Sí |
 
-El Administrador **no crea, edita, elimina ni exporta expedientes**; únicamente los consulta y administra la seguridad del sistema. El Médico crea expedientes y **solo edita los que él mismo creó** (no puede eliminarlos ni cambiar el estatus de cirugía).
+El Administrador **no crea, edita, elimina ni exporta expedientes**; únicamente los consulta y administra la seguridad del sistema. El Médico crea expedientes y **solo edita los que él mismo creó** (no puede eliminarlos ni cambiar el estatus de cirugía). La eliminación de expedientes queda reservada a los roles **Dirección** y **Dirección Médica**.
 
 ## Usuarios por defecto
 
@@ -74,7 +77,7 @@ Creados por `python run_seed.py` (solo si la tabla de usuarios está vacía):
 | direccionmedica | direccionmedica123 | Dirección Médica |
 | medico | medico123 | Médico |
 
-> **Importante:** en producción estas contraseñas por defecto deben cambiarse desde **Mi Perfil** (o por el administrador desde **Usuarios → Restablecer**). Si el administrador pierde su acceso, se recupera con `python reset_users.py` (restablece los usuarios por defecto) o modificando el hash en la base de datos. El usuario administrador de la instalación actual es `administrador`.
+> **Importante:** en producción estas contraseñas por defecto deben cambiarse desde **Mi Perfil** (o por el administrador desde **Usuarios → Restablecer**). La instalación actual del Centro Médico usa sus propios usuarios migrados; el usuario administrador de esa instalación es `administrador`. Si el administrador pierde su acceso, se recupera con `python reset_users.py` o modificando el hash en la base de datos.
 
 ## Estructura del Proyecto
 
@@ -86,32 +89,38 @@ SISTEMA-WEB-EXPEDIENTES-CMSBJ/
 │   │   ├── core/         # Config, DB, seguridad (JWT)
 │   │   ├── models/       # Modelos SQLAlchemy
 │   │   ├── schemas/      # Schemas Pydantic
-│   │   ├── services/     # Lógica de negocio (auth, usuarios, expedientes, auditoría)
-│   │   └── main.py       # Punto de entrada (CORS, HTTPS, cabeceras de seguridad, /health)
+│   │   ├── services/     # Lógica de negocio (auth, usuarios, expedientes, auditoría, índices de rendimiento)
+│   │   └── main.py       # Punto de entrada (CORS, cabeceras de seguridad, /health, creación de índices)
 │   ├── exports/          # Excel de expedientes exportados
 │   ├── reports/          # Reportes generados
-│   ├── backups/          # Respaldos de la base de datos (.sql.gz, en .gitignore)
+│   ├── backups/          # Respaldos de la base de datos (archivos .sql.gz / .xlsx, en .gitignore)
 │   ├── generate_docs.py  # Genera los manuales de usuario y el Acuerdo Marco (PDF)
-│   ├── backup_db.py      # Respaldo diario de la base de datos
+│   ├── backup_db.py      # Respaldo de PostgreSQL a archivo
+│   ├── migrate_cockroach_to_postgres.py  # Migración desde la nube (CockroachLabs → PostgreSQL local)
 │   ├── run_seed.py       # Crea los usuarios por defecto
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/   # Componentes reutilizables (Layout, ExpedienteForm, etc.)
+│   │   ├── components/   # Componentes reutilizables (Layout, ExpedienteForm, ScrollSelect, etc.)
 │   │   ├── contexts/     # Contextos (Auth, Notificaciones)
 │   │   ├── pages/        # Páginas (Login, Dashboard, ListDetail, Reports, DayList, EstadoCirugia, Users, Sessions, AuditLog, Profile)
-│   │   ├── services/     # Cliente de API
+│   │   ├── services/      # Cliente de API
 │   │   ├── types/        # Tipos TypeScript
 │   │   ├── utils/        # Utilidades (formato de teléfono, normalización de texto)
 │   │   └── constants.ts  # Constantes (roles, tipos de localidad, departamentos)
 │   └── package.json
 ├── docs_v17/             # Manuales de usuario y Acuerdo Marco (PDF)
-└── .github/workflows/    # Keep-alive del backend en Render
+└── .github/workflows/    # (Obsoleto) keep-alive del backend en Render; ya no se usa
 ```
 
 ## Instalación y Ejecución (desarrollo local)
 
-La base de datos ya está en la nube (ver [Despliegue](#despliegue-100-en-la-nube)); localmente solo configuras `backend/.env` con `DATABASE_URL` apuntando al cluster de CockroachLabs.
+La base de datos es **PostgreSQL local**. Configura `backend/.env` con `DATABASE_URL`
+apuntando a tu instancia de PostgreSQL:
+
+```
+DATABASE_URL=postgresql://usuario:password@localhost:5432/CMSBJ_SERVER
+```
 
 ### 1. Backend
 
@@ -124,6 +133,10 @@ python run_seed.py
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
+Al arrancar, el backend crea/actualiza automáticamente los índices de rendimiento
+(`ensure_performance_indexes`: extensión `pg_trgm`, índices trigram por campo y GIN
+sobre `data`).
+
 ### 2. Frontend
 
 ```bash
@@ -132,68 +145,70 @@ npm install
 npm run dev
 ```
 
+Configura la URL del backend en `frontend/.env` (desarrollo):
+
+```
+VITE_API_URL=http://localhost:8000
+```
+
 ### 3. Acceso
 
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8000
 - Documentación API: http://localhost:8000/docs
 
-## Despliegue (100% en la nube)
+## Despliegue (arquitectura actual: miniPC + Render + Tailscale Funnel)
 
-### 1. Base de Datos (CockroachDB en CockroachLabs Cloud)
+El sistema ya **no usa CockroachLabs ni un backend en Render**. La guía paso a paso de
+la mini PC está en [`deploy/INSTALL_MINIPC.md`](deploy/INSTALL_MINIPC.md).
 
-La base de datos está alojada en la nube de **CockroachLabs** (SQL distribuido, compatible con PostgreSQL). No requiere instalación ni servidor local.
+### 1. Mini PC (base de datos + backend)
 
-- **Cluster:** `sanbenitojose-bancodepacientes-30660` (región `aws-us-east-1`)
-- **Host:** `sanbenitojose-bancodepacientes-30660.j77.aws-us-east-1.cockroachlabs.cloud:26257`
-- **Base de datos:** `defaultdb`
-- **Credenciales:** se configuran como variable de entorno `DATABASE_URL` con formato `cockroachdb://usuario:password@host:26257/defaultdb`
-- **Nota (Render):** en `DATABASE_URL` usa `?sslmode=require`. El contenedor de Render no tiene el certificado CA de CockroachCloud y con `sslmode=verify-full` la conexión falla.
+- **PostgreSQL 16** aloja la base de datos localmente.
+- El **backend FastAPI** corre como servicio `systemd` (`expedientes-backend.service`,
+  con `Restart=always`, arranca solo con la mini PC) en el puerto `8000`.
+- Se expone a internet con **Tailscale Funnel** mediante el servicio `tailscale-funnel.service`,
+  que levanta el túnel en `https://cmsbjserver.tailf34429.ts.net` (HTTPS con certificado
+  gestionado por Tailscale, sin abrir puertos en el router).
+- Al iniciar, el backend aplica las migraciones de esquema y los índices de rendimiento.
 
-### 2. Backend (Render — Web Service)
+### 2. Frontend (Render — Static Site)
 
-1. Crea cuenta en https://render.com (con GitHub)
-2. New + → **Web Service**
-3. Conecta el repositorio `SISTEMA-WEB-EXPEDIENTES-CMSBJ`
-4. Configura:
-   - **Root Directory:** `backend`
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Agrega variables de entorno:
-   - `DATABASE_URL` → la URL de CockroachLabs (formato `cockroachdb://...`)
-   - `SECRET_KEY` → una clave secreta aleatoria (mínimo 32 caracteres)
-   - Opcionales (optimización a escala):
-     - `EXPORT_MAX_RECORDS` → máx. expedientes por archivo Excel (default `200`; una hoja por expediente)
-     - `REPORT_MAX_RECORDS` → máx. filas por reporte/previsualización (default `50000`)
-     - `AUDIT_RETENTION_DAYS` → días de retención de auditoría (default `90`; `0` = conservar todo)
-6. Deploy. La API quedará en `https://<tu-servicio>.onrender.com` (docs en `/docs`, salud en `/health`)
-
-### 3. Frontend (Render — Static Site)
-
-1. New + → **Static Site**
-2. Conecta el repositorio `SISTEMA-WEB-EXPEDIENTES-CMSBJ`
-3. Configura:
+1. New + → **Static Site**, conecta el repositorio `SISTEMA-WEB-EXPEDIENTES-CMSBJ`.
+2. Configura:
    - **Root Directory:** `frontend`
    - **Build Command:** `npm install && npm run build`
    - **Publish Directory:** `dist`
-4. Agrega variable de entorno:
-   - `VITE_API_URL` → `https://<tu-servicio-backend>.onrender.com`
-5. Deploy. El sitio queda en `https://<tu-sitio>.onrender.com`
+3. Variable de entorno:
+   - `VITE_API_URL` → `https://cmsbjserver.tailf34429.ts.net` (la URL del Funnel del backend)
+4. Deploy. Servicio Render: `srv-d9nqs47lk1mc738ldgng`.
 
-### Mantener el backend despierto
-
-El workflow `.github/workflows/keep-alive.yml` hace ping a `https://expedientes-api-2dje.onrender.com/health` cada 10 minutos para evitar que el servicio gratuito de Render se duerma.
-
-### URLs actuales del sistema
+### 3. URLs del sistema
 
 | Servicio | URL |
 |----------|-----|
-| Frontend | https://sistema-web-expedientes-cmsbj.onrender.com |
-| Backend API | https://expedientes-api-2dje.onrender.com |
-| Docs API | https://expedientes-api-2dje.onrender.com/docs |
-| Health | https://expedientes-api-2dje.onrender.com/health |
+| API (backend vía Funnel) | https://cmsbjserver.tailf34429.ts.net |
+| Docs API | https://cmsbjserver.tailf34429.ts.net/docs |
+| Health | https://cmsbjserver.tailf34429.ts.net/health |
+| Frontend (Render) | https://srv-d9nqs47lk1mc738ldgng.onrender.com |
 
-> **Nota:** el backend acepta peticiones CORS solo desde los orígenes listados en `ALLOWED_ORIGINS` (backend/app/main.py). Si cambias la URL del frontend o del backend, actualízala allí.
+> El backend acepta peticiones CORS solo desde los orígenes listados en `ALLOWED_ORIGINS`
+> (`backend/app/main.py`). Si cambias la URL del frontend, añádela allí.
+
+### Mantener el backend activo
+
+El backend corre en la mini PC como servicio `systemd` y **siempre está disponible**
+(no se "duerme" como los servicios gratuitos de Render). Por eso el workflow
+`.github/workflows/keep-alive.yml` **ya no es necesario** y puede eliminarse.
+
+### Actualizar el sistema
+
+- **Backend:** en la mini PC, tras hacer `git pull` del repositorio:
+  ```bash
+  sudo systemctl restart expedientes-backend
+  ```
+  Los índices de rendimiento se recrean/actualizan solos al arrancar.
+- **Frontend:** basta con empujar a `main`; Render reconstruye el sitio automáticamente.
 
 ## Documentación de usuario
 
@@ -212,20 +227,23 @@ python generate_docs.py --out ../docs_v17
 | `Manual_Usuario_Medico.pdf` | Manual del rol Médico |
 | `Acuerdo_Marco_Sistema_Expedientes_SBJ.pdf` | Contrato de desarrollo, titularidad y Anexo de Protección de Datos Personales de Salud |
 
-## Respaldo de la base de datos (Art. 15 del Acuerdo Marco)
+## Respaldo de la base de datos
 
-El respaldo se realiza con el script `backend/backup_db.py` (Python puro, funciona en Windows, Linux y Render; no requiere binarios adicionales).
+Los respaldos se guardan como **archivos** en `backend/backups/` (ya no dentro de la
+base de datos, lo que eliminó el límite de 1 GB que existía antes). Se generan desde
+la interfaz (**Respaldos**) o con el script `backend/backup_db.py` (PostgreSQL):
 
 ```bash
 cd backend
-python backup_db.py              # respaldo completo comprimido
+python backup_db.py              # respaldo completo comprimido (.sql.gz) + tabla general (.xlsx)
 python backup_db.py --keep 14    # conservar los últimos 14 respaldos (default: 7)
 ```
 
-- **Salida:** `backend/backups/backup_YYYYMMDD_HHMMSS.sql.gz` (esquema + datos de todas las tablas, con `BEGIN;...COMMIT;`).
+- **Salida:** `backend/backups/backup_YYYYMMDD_HHMMSS.sql.gz` (esquema + datos) y
+  `backend/backups/tabla_general_YYYYMMDD_HHMMSS.xlsx`.
 - **Conexión:** lee `DATABASE_URL` de la variable de entorno o de `backend/.env`.
 - **Retención:** elimina automáticamente los respaldos más antiguos que los `--keep` últimos.
-- **Restaurar** (por ejemplo en un cluster nuevo):
+- **Restaurar:**
 
   ```bash
   gunzip -k backups/backup_20260101_000000.sql.gz
@@ -234,18 +252,16 @@ python backup_db.py --keep 14    # conservar los últimos 14 respaldos (default:
 
 ### Programar el respaldo diario
 
-**Windows (Task Scheduler):**
-1. `Win+R` → `taskschd.msc` → Crear tarea básica.
-2. Nombre: `Respaldo SBJ` → Diaria → hora deseada (ej. 03:00).
-3. Acción: Iniciar programa → `python.exe` (el de `backend\venv\Scripts\python.exe`) con argumentos `"C:\ruta\SISTEMA-WEB-EXPEDIENTES-CMSBJ\backend\backup_db.py"` y "Iniciar en" el directorio `backend`.
-
-**Linux/Render (cron):**
+**Linux (cron en la mini PC):**
 
 ```cron
-0 3 * * * cd /ruta/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend && python3 backup_db.py
+0 3 * * * cd /opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend && ./venv/bin/python backup_db.py
 ```
 
-> **Nota:** `backups/` está en `.gitignore`; los respaldos contienen datos de pacientes y no deben subirse al repositorio. Para protección adicional, copia el respaldo diario a un almacenamiento externo (Google Drive, OneDrive, disco USB, etc.).
+> `backups/` está en `.gitignore`; los respaldos contienen datos de pacientes y no deben
+> subirse al repositorio. Por protección adicional, copia el respaldo diario a un
+> almacenamiento externo (USB, Drive, etc.). Como los datos viven en la mini PC, esta
+> copia externa es la única salida de información del sistema.
 
 ## Seguridad
 
@@ -255,15 +271,16 @@ python backup_db.py --keep 14    # conservar los últimos 14 respaldos (default:
 - **Límite de intentos por IP:** máximo 20 intentos de inicio de sesión fallidos por IP en 15 minutos; se responde `429`.
 - **Control de sesiones:** cada inicio de sesión crea una sesión rastreable (IP, navegador, dispositivo). Desde **Seguridad → Sesiones** se pueden ver todas las sesiones activas y cerrarlas remotamente. El cierre de sesión revoca el token de inmediato.
 - **Registro de auditoría:** **Seguridad → Auditoría** muestra quién creó, modificó, exportó o descargó expedientes, reportes, listados y usuarios, con fecha, acción, detalle e IP.
-- **Permisos por rol:** el menú es uniforme para todos los usuarios; el sistema valida el permiso de la sección al seleccionarla y muestra "No tienes acceso" si el rol no está autorizado.
+- **Permisos por rol:** el menú es uniforme para todos los usuarios; el sistema valida el permiso de la sección al seleccionarla y muestra "No tienes acceso" si el rol no está autorizado. La eliminación de expedientes está reservada a Dirección y Dirección Médica.
 
 ### Configuración requerida en producción
 
 - `SECRET_KEY`: obligatoria en la variable de entorno con **mínimo 32 caracteres**. El backend **no arranca** si falta o es la clave por defecto.
-- `ALLOWED_ORIGINS`: opcional, lista de orígenes extra permitidos por CORS separados por comas (por ejemplo una URL exacta de túnel como `https://mi-tunel.trycloudflare.com`). Los wildcards (`*.trycloudflare.com`) ya no están permitidos por seguridad.
+- `ALLOWED_ORIGINS`: opcional, lista de orígenes extra permitidos por CORS separados por comas.
 
 ### Transporte
 
-- Redirección automática HTTP → HTTPS y cabecera `Strict-Transport-Security` (HSTS) cuando la petición llega por proxy con `X-Forwarded-Proto: https`.
+- El acceso externo se realiza vía **Tailscale Funnel**, que termina TLS (HTTPS) con un certificado válido y no expone puertos del router.
+- En el backend, cuando la petición llega por proxy con `X-Forwarded-Proto: https`, se aplican `Strict-Transport-Security` (HSTS) y redirección HTTP→HTTPS.
 - Cabeceras de seguridad en todas las respuestas: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`.
 - Los errores internos ya no exponen detalles al cliente; se responde un mensaje genérico y el detalle queda en los logs del servidor.
