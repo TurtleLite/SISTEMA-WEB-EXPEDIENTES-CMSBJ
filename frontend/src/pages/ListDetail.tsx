@@ -186,7 +186,9 @@ export function ListDetail() {
   }, [id])
 
   useEffect(() => {
-    if (id) loadRecords(true)
+    if (!id) return
+    const t = setTimeout(() => loadRecords(true), 300)
+    return () => clearTimeout(t)
   }, [id, search, searchField, especialidadFilter, compensadoFilter])
 
   useEffect(() => {
