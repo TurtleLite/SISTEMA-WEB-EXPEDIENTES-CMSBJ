@@ -154,8 +154,8 @@ export function ListDetail() {
       if (especialidadFilter) {
         params.search = especialidadFilter
         params.search_field = 'especialidad'
-      } else if (search) {
-        params.search = search
+      } else if (search || searchField) {
+        if (search) params.search = search
         if (searchField) params.search_field = searchField
       }
       if (compensadoFilter) params.compensado = compensadoFilter
