@@ -47,7 +47,9 @@ TRIGRAM_INDEXES = [
 LIST_ID_INDEX = "CREATE INDEX IF NOT EXISTS idx_list_records_list_id ON list_records (list_definition_id, id DESC)"
 
 # Búsqueda general sobre el JSON completo (p. ej. operadores de contenido).
-INVERTED_INDEX = "CREATE INVERTED INDEX IF NOT EXISTS idx_list_records_data ON list_records (data)"
+# Índice GIN sobre el JSONB completo: habilita búsquedas de contención (@>) y
+# acelera filtros genéricos sobre cualquier campo sin índice expression individual.
+GIN_INDEX = "CREATE INDEX IF NOT EXISTS idx_list_records_data_gin ON list_records USING GIN (data)"
 
 
 def ensure_performance_indexes(engine) -> None:
@@ -58,7 +60,7 @@ def ensure_performance_indexes(engine) -> None:
                 logger.info(f"Índice anterior reemplazado: {name}")
             except Exception as e:
                 logger.warning(f"No se pudo reemplazar índice {name}: {e}")
-        for sql in EXPRESSION_INDEXES + TRIGRAM_INDEXES + [LIST_ID_INDEX, INVERTED_INDEX]:
+        for sql in EXPRESSION_INDEXES + TRIGRAM_INDEXES + [LIST_ID_INDEX, GIN_INDEX]:
             try:
                 conn.execute(text(sql))
                 logger.info(f"Índice listo: {sql.split(' ON ')[1][:80]}")

@@ -74,6 +74,17 @@ async def lifespan(app: FastAPI):
                     conn.execute(text("ALTER TABLE list_records ADD COLUMN created_by INTEGER REFERENCES users(id)"))
                     conn.commit()
                 logger.info("Added created_by column to list_records")
+            # Migración única: json -> jsonb (si aún no lo es) para permitir índice GIN
+            cols = inspector.get_columns("list_records")
+            data_type = next((str(c["type"]).lower() for c in cols if c["name"] == "data"), "")
+            if data_type and "jsonb" not in data_type:
+                try:
+                    with engine.connect() as conn:
+                        conn.execute(text("ALTER TABLE list_records ALTER COLUMN data TYPE jsonb USING data::jsonb"))
+                        conn.commit()
+                    logger.info("Migrated list_records.data de json a jsonb")
+                except Exception as e:
+                    logger.warning(f"No se pudo migrar data a jsonb: {e}")
             from app.services.db_indexes import ensure_performance_indexes
             ensure_performance_indexes(engine)
             logger.info("Índices de rendimiento asegurados")
