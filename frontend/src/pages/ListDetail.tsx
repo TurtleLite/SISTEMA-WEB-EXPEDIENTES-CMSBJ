@@ -665,7 +665,7 @@ export function ListDetail() {
                     value={searchField}
                     onChange={setSearchField}
                     allowEmpty
-                    options={(list?.columns_config || []).map((col) => ({ value: col.key, label: col.label }))}
+                    options={(list?.columns_config || []).filter((col) => !["cirujano", "fecha_cirugia", "estatus_cirugia"].includes(col.key)).map((col) => ({ value: col.key, label: col.label }))}
                     placeholder="Todos los campos"
                     buttonClassName="px-2 py-2 text-xs text-[#7A8694] border-0 bg-transparent rounded-none hover:text-[#3F4D58]"
                     panelClassName="rounded-lg shadow-xl"
