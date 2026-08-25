@@ -2,14 +2,19 @@
 #
 # update_system.sh — Actualiza el sistema en la mini PC al último commit del repositorio.
 #
-# Qué hace (y para qué sirve):
-#   1. Trae el último código desde GitHub (git fetch + reset --hard origin/main).
-#      Esto deja el backend, el frontend y los índices de BD al día.
-#   2. Instala las dependencias de Python del backend (por si requirements.txt cambió).
-#   3. Reconstruye el frontend (npm run build -> frontend/dist).
-#      El backend SIRVE este SPA a través del Tailscale Funnel, así que reconstruirlo
-#      es lo que actualiza la app que ven los usuarios en la URL del funnel.
-#   4. Reinicia el servicio del backend y el del funnel para aplicar los cambios.
+# Qué hace y para qué sirve:
+#   - Trae el último código desde GitHub (git fetch + reset --hard origin/main).
+#   - Si cambió el BACKEND: instala dependencias (si requirements cambió) y reinicia
+#     el servicio del backend. El backend además crea/actualiza los índices de BD al arrancar.
+#   - Si cambió el FRONTEND: lo reconstruye (npm run build -> frontend/dist). El backend
+#     SIRVE este SPA a través del Tailscale Funnel, así que reconstruirlo es lo que actualiza
+#     la app que ven los usuarios en la URL del funnel. Como se sirve desde disco, NO hace
+#     falta reiniciar el backend para reflejar el nuevo frontend.
+#   - El TÚNEL (servicio tailscale-funnel) NO se reinicia: no necesita reinicio para cambios
+#     de código; simplemente sigue exponiendo el backend (y su SPA) por la misma URL.
+#
+# Optimización de tiempo: solo reconstruye/reinicia lo que realmente cambió en el commit,
+# y omite el reinicio innecesario del túnel.
 #
 # Uso:  sudo bash deploy/update_system.sh
 #
@@ -19,35 +24,58 @@ REPO_DIR="/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ"
 BACKEND_DIR="$REPO_DIR/backend"
 FRONTEND_DIR="$REPO_DIR/frontend"
 SERVICE_BACKEND="expedientes-backend"
-SERVICE_FUNNEL="tailscale-funnel"
 
 # Evita el error "detected dubious ownership" de git cuando el repo es de otro usuario.
 git config --global --add safe.directory "$REPO_DIR" 2>/dev/null || true
 
-echo "==> [1/4] Actualizando código desde GitHub..."
 cd "$REPO_DIR"
+OLD_HEAD=$(git rev-parse HEAD)
+echo "==> Actualizando código desde GitHub..."
 git fetch origin
 git reset --hard origin/main
-echo "    Commit actual: $(git rev-parse --short HEAD)"
+NEW_HEAD=$(git rev-parse HEAD)
 
-echo "==> [2/4] Dependencias del backend..."
-cd "$BACKEND_DIR"
-if [ -x ./venv/bin/pip ]; then
-  ./venv/bin/pip install -q -r requirements.txt
-else
-  echo "    (no se encontró venv/; omitido pip install)"
+if [ "$OLD_HEAD" = "$NEW_HEAD" ]; then
+  echo "Ya estás en el último commit ($NEW_HEAD). Nada que actualizar."
+  exit 0
 fi
 
-echo "==> [3/4] Reconstruyendo frontend (SPA servida por el funnel)..."
-cd "$FRONTEND_DIR"
-npm install
-npm run build
+CHANGED=$(git diff --name-only "$OLD_HEAD" "$NEW_HEAD")
+echo "==> Cambios en este update: $(echo "$CHANGED" | wc -l) archivo(s)"
 
-echo "==> [4/4] Reiniciando servicios..."
-sudo systemctl restart "$SERVICE_BACKEND"
-sudo systemctl restart "$SERVICE_FUNNEL" || true
+# --- BACKEND ---
+if echo "$CHANGED" | grep -qE '^backend/'; then
+  echo "==> Backend cambió: dependencias + reinicio de $SERVICE_BACKEND"
+  cd "$BACKEND_DIR"
+  if echo "$CHANGED" | grep -qE '^backend/requirements\.txt$'; then
+    ./venv/bin/pip install -q -r requirements.txt
+  fi
+  sudo systemctl restart "$SERVICE_BACKEND"
+  # Espera a que el backend responda (la 1ª vez crea índices y puede tardar).
+  for i in $(seq 1 60); do
+    if curl -s -o /dev/null -m 2 "https://cmsbjserver.tailf34429.ts.net/health"; then
+      echo "    Backend listo (intento $i)."
+      break
+    fi
+    sleep 1
+  done
+else
+  echo "==> Backend sin cambios: no se reinicia."
+fi
+
+# --- FRONTEND (lo que sirve el funnel) ---
+if echo "$CHANGED" | grep -qE '^frontend/'; then
+  echo "==> Frontend cambió: reconstruyendo SPA (se refleja en el funnel sin reiniciar backend)"
+  cd "$FRONTEND_DIR"
+  npm install
+  npm run build
+else
+  echo "==> Frontend sin cambios: no se reconstruye."
+fi
+
+# --- TÚNEL (funnel) ---
+echo "==> Túnel (funnel): sin acción necesaria; ya sirve el SPA actualizado."
 
 echo
-echo "Listo. Backend y túnel (funnel) actualizados al último commit."
-echo "Verifica:  curl -s https://cmsbjserver.tailf34429.ts.net/health"
-echo "App:       https://cmsbjserver.tailf34429.ts.net/#/dashboard"
+echo "Listo. Backend y SPA (funnel) actualizados al último commit ($NEW_HEAD)."
+echo "App:  https://cmsbjserver.tailf34429.ts.net/#/dashboard"
