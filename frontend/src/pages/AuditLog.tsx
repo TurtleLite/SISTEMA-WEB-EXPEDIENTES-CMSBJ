@@ -387,20 +387,8 @@ export function AuditLog() {
                       {genericDetail(e.action, e.detail)}
                     </span>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-[#5F6C79] min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-mono truncate min-w-0" title={e.ip_address || ''}>{e.ip_address || '—'}</span>
-                      {deviceMeta && (
-                        <span className={`px-2 py-0.5 rounded-full text-[0.625rem] font-semibold shrink-0 ${deviceMeta.badge}`}>
-                          {deviceMeta.label}
-                        </span>
-                      )}
-                      {e.device_shared && (
-                        <span className="px-2 py-0.5 rounded-full text-[0.625rem] font-semibold bg-violet-100 text-violet-700 shrink-0" title="Equipo usado por más de un usuario">
-                          Compartido
-                        </span>
-                      )}
-                    </div>
+                  <td className="px-6 py-3.5 text-sm text-[#5F4D58] min-w-0">
+                    <span className="font-mono truncate" title={e.ip_address || ''}>{e.ip_address || '—'}</span>
                   </td>
                 </tr>
                 )
