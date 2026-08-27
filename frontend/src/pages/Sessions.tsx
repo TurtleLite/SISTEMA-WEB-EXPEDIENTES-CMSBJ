@@ -180,7 +180,6 @@ export function Sessions() {
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Dispositivo</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Creada</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Última actividad</th>
-                <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Expira</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Estado</th>
                 <th className="text-right px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
               </tr>
@@ -188,7 +187,7 @@ export function Sessions() {
             <tbody>
               {sessions.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones activas en este momento.</td>
+                  <td colSpan={6} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones activas en este momento.</td>
                 </tr>
               )}
               {sessions.map((s) => {
@@ -218,7 +217,6 @@ export function Sessions() {
                   </td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.created_at)}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.last_seen_at)}</td>
-                  <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.expires_at)}</td>
                   <td className="px-6 py-4">
                     {s.active ? (
                       <span className="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Activa</span>
