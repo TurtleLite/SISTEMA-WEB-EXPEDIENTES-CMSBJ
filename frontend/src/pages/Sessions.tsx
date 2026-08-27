@@ -22,12 +22,6 @@ interface SessionItem {
   active: boolean
 }
 
-const DEVICE_META: Record<string, { label: string; badge: string }> = {
-  pending: { label: 'Pendiente', badge: 'bg-amber-100 text-amber-700' },
-  approved: { label: 'Aprobado', badge: 'bg-emerald-100 text-emerald-700' },
-  blocked: { label: 'Bloqueado', badge: 'bg-rose-100 text-rose-700' },
-}
-
 const fmt = (value: string | null) => {
   if (!value) return '—'
   const d = new Date(value)
@@ -204,7 +198,6 @@ export function Sessions() {
                 </tr>
               )}
               {sessions.map((s) => {
-                const deviceMeta = s.device_status ? DEVICE_META[s.device_status] : null
                 return (
                 <tr key={s.id} className={`border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] ${s.is_current ? 'bg-emerald-50/60' : ''} ${s.device_status === 'pending' ? 'bg-amber-50/40' : s.device_status === 'blocked' ? 'bg-rose-50/40' : ''}`}>
                   <td className="px-6 py-4 text-sm">
@@ -230,19 +223,7 @@ export function Sessions() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-mono text-[#2B3A45]">{s.device_id || '—'}</span>
-                      {deviceMeta && (
-                        <span className={`px-2 py-0.5 rounded-full text-[0.625rem] font-semibold ${deviceMeta.badge}`}>
-                          {deviceMeta.label}
-                        </span>
-                      )}
-                      {s.device_shared && (
-                        <span className="px-2 py-0.5 rounded-full text-[0.625rem] font-semibold bg-violet-100 text-violet-700" title="Equipo usado por más de un usuario">
-                          Compartido
-                        </span>
-                      )}
-                    </div>
+                    <span className="font-mono text-[#2B3A45]">{s.device_id || '—'}</span>
                   </td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{s.ip_address || '—'}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.created_at)}</td>
