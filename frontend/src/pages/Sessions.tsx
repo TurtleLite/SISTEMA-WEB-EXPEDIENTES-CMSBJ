@@ -9,7 +9,6 @@ interface SessionItem {
   user_id: string
   username: string
   full_name: string
-  ip_address: string
   user_agent: string
   created_at: string
   expires_at: string | null
@@ -179,7 +178,6 @@ export function Sessions() {
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Usuario</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Dispositivo</th>
-                <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">IP</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Creada</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Última actividad</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Expira</th>
@@ -190,7 +188,7 @@ export function Sessions() {
             <tbody>
               {sessions.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones activas en este momento.</td>
+                  <td colSpan={7} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones activas en este momento.</td>
                 </tr>
               )}
               {sessions.map((s) => {
@@ -218,7 +216,6 @@ export function Sessions() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-[#3F4D58]">{s.ip_address || '—'}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.created_at)}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.last_seen_at)}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.expires_at)}</td>
