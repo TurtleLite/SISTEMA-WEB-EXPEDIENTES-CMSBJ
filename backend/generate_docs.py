@@ -220,7 +220,7 @@ PERMISSION_MATRIX = [
     ["Editar expedientes propios", "No", "Sí", "Sí", "Sí", "Sí"],
     ["Editar expedientes de otros", "No", "Sí", "Sí", "No", "No"],
     ["Eliminar expedientes", "No", "Sí", "Sí", "No", "No"],
-    ["Exportar expedientes a Excel", "No", "Sí", "Sí", "Sí", "No"],
+    ["Exportar expedientes a Excel", "Sí", "Sí", "Sí", "Sí", "No"],
     ["Vista previa del expediente", "Sí", "Sí", "Sí", "Sí", "Sí"],
     ["Reportes (crear, generar, descargar, eliminar)", "No", "Sí", "Sí", "No", "No"],
     ["Listado diario de cirugías (armar y guardar)", "No", "Sí", "Sí", "No", "No"],

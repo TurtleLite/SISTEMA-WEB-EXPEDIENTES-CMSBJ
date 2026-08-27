@@ -53,7 +53,7 @@ Cinco roles: **Administrador**, **Dirección**, **Dirección Médica**, **Médic
 | Editar expedientes propios | No | Sí | Sí | Sí | Sí |
 | Editar expedientes de otros | No | Sí | Sí | No | No |
 | Eliminar expedientes | No | Sí | Sí | No | No |
-| Exportar expedientes a Excel | No | Sí | Sí | Sí | No |
+| Exportar expedientes a Excel | Sí | Sí | Sí | Sí | No |
 | Vista previa del expediente | Sí | Sí | Sí | Sí | Sí |
 | Reportes (crear, generar, descargar, eliminar) | No | Sí | Sí | No | No |
 | Listado diario de cirugías (armar y guardar) | No | Sí | Sí | No | No |
@@ -64,7 +64,7 @@ Cinco roles: **Administrador**, **Dirección**, **Dirección Médica**, **Médic
 | Especialidades y localidades (crear, editar, eliminar) | Sí | No | No | No | No |
 | Mi Perfil (datos y contraseña) | Sí | Sí | Sí | Sí | Sí |
 
-El Administrador **no crea, edita, elimina ni exporta expedientes**; únicamente los consulta y administra la seguridad del sistema. El Médico crea expedientes y **solo edita los que él mismo creó** (no puede eliminarlos ni cambiar el estatus de cirugía). La eliminación de expedientes queda reservada a los roles **Dirección** y **Dirección Médica**. El rol **Carga Px** es de captura de datos: crea expedientes y escribe el **Nombre del Médico a mano** (campo libre, sin autocompletar con el usuario), pero solo edita los expedientes que él mismo creó y no puede eliminar, exportar ni cambiar el estatus de cirugía.
+El Administrador **no crea, edita ni elimina expedientes**, pero **sí los exporta a Excel**; además consulta y administra la seguridad del sistema. El Médico crea expedientes y **solo edita los que él mismo creó** (no puede eliminarlos ni cambiar el estatus de cirugía). La eliminación de expedientes queda reservada a los roles **Dirección** y **Dirección Médica**. El rol **Carga Px** es de captura de datos: crea expedientes y escribe el **Nombre del Médico a mano** (campo libre, sin autocompletar con el usuario), pero solo edita los expedientes que él mismo creó y no puede eliminar, exportar ni cambiar el estatus de cirugía.
 
 ## Usuarios por defecto
 

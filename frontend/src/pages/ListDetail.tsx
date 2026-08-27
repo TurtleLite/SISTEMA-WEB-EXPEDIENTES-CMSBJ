@@ -563,7 +563,7 @@ export function ListDetail() {
                   <X size={12} />
                 </button>
               </span>
-              {!list?.is_system || user?.role !== 'admin' ? (
+              {['admin', 'direccion', 'direccion_medica', 'medico'].includes(user?.role || '') ? (
                 <button
                   onClick={handleExportSelected}
                   className="flex items-center gap-1.5 px-3 py-2 bg-[#0F766E] text-white rounded-xl hover:bg-[#115E59] transition-colors duration-150 text-sm font-medium"

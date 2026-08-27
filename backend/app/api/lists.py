@@ -137,11 +137,11 @@ def delete_list(
 
 
 @router.get("/{list_id}/export-expediente")
-def export_expediente(
+def export_expediente_excel(
     list_id: int,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("direccion", "direccion_medica", "medico")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "medico")),
 ):
     from app.services.list_service import get_list_definition
     from app.services.record_service import get_records, count_records
@@ -221,10 +221,10 @@ def list_field_values(
 @router.post("/{list_id}/export-expediente-selected")
 def export_expediente_selected(
     list_id: int,
-    data: dict,
+    payload: dict,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("direccion", "direccion_medica", "medico")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "medico")),
 ):
     from app.services.list_service import get_list_definition
     from app.services.record_service import get_records_by_ids
