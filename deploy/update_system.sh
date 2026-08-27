@@ -28,10 +28,41 @@ SERVICE_BACKEND="expedientes-backend"
 # Evita el error "detected dubious ownership" de git cuando el repo es de otro usuario.
 git config --global --add safe.directory "$REPO_DIR" 2>/dev/null || true
 
+# --- Autenticación sin token (SSH + Deploy Key de solo lectura) ---
+# El script corre con sudo, así que la llave vive en /root/.ssh.
+# Si no existe, se genera. El remote se convierte a SSH (nunca usa token personal).
+ensure_ssh() {
+  local key="/root/.ssh/id_ed25519"
+  mkdir -p /root/.ssh && chmod 700 /root/.ssh
+  if [ ! -f "$key" ]; then
+    ssh-keygen -t ed25519 -C "mini-pc-cmsbj" -N "" -f "$key"
+  fi
+  ssh-keyscan -t ed25519,rsa github.com >> /root/.ssh/known_hosts 2>/dev/null || true
+  local url
+  url=$(git remote get-url origin 2>/dev/null || true)
+  if [[ "$url" == https://* ]]; then
+    git remote set-url origin git@github.com:TurtleLite/SISTEMA-WEB-EXPEDIENTES-CMSBJ.git
+  fi
+}
+
 cd "$REPO_DIR"
 OLD_HEAD=$(git rev-parse HEAD)
-echo "==> Actualizando código desde GitHub..."
-git fetch origin
+echo "==> Actualizando código desde GitHub (SSH, sin token)..."
+ensure_ssh
+if ! git fetch origin 2>/tmp/cmsbj_fetch.err; then
+  echo
+  echo "----------------------------------------------------------------------"
+  echo "Falta registrar la llave de esta mini PC en GitHub (una sola vez):"
+  echo "1) Copia la llave pública de abajo."
+  echo "2) En GitHub: repo -> Settings -> Deploy keys -> Add deploy key."
+  echo "   Pega la llave, título 'Mini PC CMSBJ', SIN marcar 'Allow write access'."
+  echo "3) Vuelve a ejecutar:  sudo bash deploy/update_system.sh"
+  echo "----------------------------------------------------------------------"
+  echo
+  cat /root/.ssh/id_ed25519.pub
+  echo
+  exit 1
+fi
 git reset --hard origin/main
 NEW_HEAD=$(git rev-parse HEAD)
 
