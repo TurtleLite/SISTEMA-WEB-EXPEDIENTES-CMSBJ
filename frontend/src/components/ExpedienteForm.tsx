@@ -1102,7 +1102,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                 onChange={(e) => {
                                   const title = parseMedico(data[field.key] || '').title
                                   const raw = e.target.value
-                                  const capped = raw.charAt(0).toUpperCase() + raw.slice(1)
+                                  const capped = raw.replace(/\b\w/g, (c) => c.toUpperCase())
                                   setValue(field.key, `${title} ${capped}`.trim())
                                 }}
                                 placeholder="Nombre del médico"
