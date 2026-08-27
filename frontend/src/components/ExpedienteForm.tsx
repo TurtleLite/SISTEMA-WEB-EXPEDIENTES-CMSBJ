@@ -1069,14 +1069,24 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             )}
                           </div>
                         ) : field.key === 'nombre_medico' ? (
-                          <input
-                            type="text"
-                            value={data[field.key] || medicoName || ''}
-                            readOnly
-                            disabled
-                            title="El nombre del médico se asigna automáticamente según el usuario"
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
-                          />
+                          role === 'medico' ? (
+                            <input
+                              type="text"
+                              value={data[field.key] || medicoName || ''}
+                              readOnly
+                              disabled
+                              title="El nombre del médico se asigna automáticamente según el usuario"
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              value={data[field.key] || ''}
+                              onChange={(e) => setValue(field.key, e.target.value)}
+                              placeholder="Nombre del médico (escriba manualmente)"
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            />
+                          )
                         ) : FIELD_UNITS[field.key] ? (
                           <div className="relative">
                             <input
