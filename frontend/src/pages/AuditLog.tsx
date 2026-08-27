@@ -13,15 +13,7 @@ interface AuditEntry {
   entity_id: string | null
   detail: string | null
   ip_address: string | null
-  device_status: 'pending' | 'approved' | 'blocked' | null
-  device_shared: boolean
   created_at: string
-}
-
-const DEVICE_META: Record<string, { label: string; badge: string }> = {
-  pending: { label: 'Pendiente', badge: 'bg-amber-100 text-amber-700' },
-  approved: { label: 'Aprobado', badge: 'bg-emerald-100 text-emerald-700' },
-  blocked: { label: 'Bloqueado', badge: 'bg-rose-100 text-rose-700' },
 }
 
 const ACTION_LABELS: Record<string, string> = {
@@ -343,22 +335,20 @@ export function AuditLog() {
                 <th className="w-[15%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Acción</th>
                 <th className="w-[10%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Tipo</th>
                 <th className="w-[22%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Detalle</th>
-                <th className="w-[26%] text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Equipo</th>
               </tr>
             </thead>
             <tbody>
               {entries.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-10 text-center text-sm text-[#7A8694]">
+                  <td colSpan={5} className="px-6 py-10 text-center text-sm text-[#7A8694]">
                     <ScrollText size={28} className="mx-auto mb-2 text-[#D5DBE3]" />
                     No hay actividades registradas con esos filtros.
                   </td>
                 </tr>
               )}
               {entries.map((e) => {
-                const deviceMeta = e.device_status ? DEVICE_META[e.device_status] : null
                 return (
-                <tr key={e.id} onClick={() => setSelected(e)} className={`border-b border-l-4 border-l-transparent border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] cursor-pointer ${e.device_status === 'pending' ? 'bg-amber-50/40 border-l-amber-400' : e.device_status === 'blocked' ? 'bg-rose-50/40 border-l-rose-500' : ''} ${selected?.id === e.id ? 'bg-[#0F766E]/10 border-l-[#0F766E]' : ''}`}>
+                <tr key={e.id} onClick={() => setSelected(e)} className={`border-b border-l-4 border-l-transparent border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] cursor-pointer ${selected?.id === e.id ? 'bg-[#0F766E]/10 border-l-[#0F766E]' : ''}`}>
                   <td className="px-6 py-3.5 text-sm text-[#3F4D58] whitespace-nowrap overflow-hidden text-ellipsis" title={`Fecha exacta: ${fmt(e.created_at)}`}>{timeAgo(e.created_at)}</td>
                   <td className="px-6 py-3.5 text-sm font-medium text-[#1E2A32] min-w-0">
                     <span className="block truncate" title={e.username || ''}>
@@ -386,9 +376,6 @@ export function AuditLog() {
                     <span className="block truncate" title={e.detail || ''}>
                       {genericDetail(e.action, e.detail)}
                     </span>
-                  </td>
-                  <td className="px-6 py-3.5 text-sm text-[#5F4D58] min-w-0">
-                    <span className="font-mono truncate" title={e.ip_address || ''}>{e.ip_address || '—'}</span>
                   </td>
                 </tr>
                 )
