@@ -70,13 +70,6 @@ export function Dashboard() {
       onClick: goExpedientes,
     },
     {
-      label: 'Reportes',
-      icon: <FileText size={22} />,
-      color: 'bg-[#10322C]',
-      allowed: canReports,
-      onClick: () => navigate('/reports'),
-    },
-    {
       label: 'Listados',
       icon: <ClipboardList size={22} />,
       color: 'bg-indigo-500',
@@ -89,6 +82,13 @@ export function Dashboard() {
       color: 'bg-rose-500',
       allowed: canReports,
       onClick: () => navigate('/estado-cirugia'),
+    },
+    {
+      label: 'Reportes',
+      icon: <FileText size={22} />,
+      color: 'bg-[#10322C]',
+      allowed: canReports,
+      onClick: () => navigate('/reports'),
     },
     {
       label: 'Usuarios',
