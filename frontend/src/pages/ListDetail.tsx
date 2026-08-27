@@ -917,7 +917,7 @@ export function ListDetail() {
         <ExpedienteForm
           listId={id}
           role={user?.role}
-          medicoName={user?.role === 'medico' ? user?.full_name : undefined}
+          medicoName={user?.role === 'medico' || user?.role === 'direccion_medica' ? user?.full_name : undefined}
           editingRecord={editingRecord || undefined}
           expectedUpdatedAt={editingRecord?.updated_at || null}
           onClose={() => { setShowExpedienteForm(false); setEditingRecord(null) }}

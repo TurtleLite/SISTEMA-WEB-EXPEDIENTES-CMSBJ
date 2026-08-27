@@ -1074,7 +1074,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             )}
                           </div>
                         ) : field.key === 'nombre_medico' ? (
-                          role === 'medico' ? (
+                          (role === 'medico' || role === 'direccion_medica') ? (
                             <input
                               type="text"
                               value={data[field.key] || medicoName || ''}
@@ -1083,7 +1083,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               title="El nombre del médico se asigna automáticamente según el usuario"
                               className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
                             />
-                          ) : (
+                          ) : (role === 'carga_px' || role === 'direccion') ? (
                             <div className="flex gap-2">
                               <select
                                 value={parseMedico(data[field.key] || '').title}
@@ -1107,6 +1107,15 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                 className="flex-1 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                               />
                             </div>
+                          ) : (
+                            <input
+                              type="text"
+                              value={data[field.key] || ''}
+                              readOnly
+                              disabled
+                              title="Sin permiso para editar el nombre del médico"
+                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
+                            />
                           )
                         ) : FIELD_UNITS[field.key] ? (
                           <div className="relative">
