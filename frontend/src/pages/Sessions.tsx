@@ -10,9 +10,6 @@ interface SessionItem {
   username: string
   full_name: string
   ip_address: string
-  device_id: string | null
-  device_status: 'pending' | 'approved' | 'blocked' | null
-  device_shared: boolean
   user_agent: string
   created_at: string
   expires_at: string | null
@@ -182,7 +179,6 @@ export function Sessions() {
               <tr className="bg-[#EEF1F5] border-b border-[#E4E8EE]">
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Usuario</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Dispositivo</th>
-                <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Equipo</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">IP</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Creada</th>
                 <th className="text-left px-6 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider">Última actividad</th>
@@ -194,12 +190,12 @@ export function Sessions() {
             <tbody>
               {sessions.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones activas en este momento.</td>
+                  <td colSpan={8} className="px-6 py-10 text-center text-sm text-[#7A8694]">No hay sesiones activas en este momento.</td>
                 </tr>
               )}
               {sessions.map((s) => {
                 return (
-                <tr key={s.id} className={`border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] ${s.is_current ? 'bg-emerald-50/60' : ''} ${s.device_status === 'pending' ? 'bg-amber-50/40' : s.device_status === 'blocked' ? 'bg-rose-50/40' : ''}`}>
+                <tr key={s.id} className={`border-b border-[#EEF1F5] transition-all duration-150 hover:bg-[#EEF1F5] ${s.is_current ? 'bg-emerald-50/60' : ''}`}>
                   <td className="px-6 py-4 text-sm">
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-0.5 rounded-full text-[0.625rem] font-semibold uppercase ${s.is_current ? 'bg-emerald-100 text-emerald-700' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
@@ -221,9 +217,6 @@ export function Sessions() {
                         <p className="text-xs text-[#7A8694]">{deviceFromAgent(s.user_agent)}</p>
                       </div>
                     </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span className="font-mono text-[#2B3A45]">{s.device_id || '—'}</span>
                   </td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{s.ip_address || '—'}</td>
                   <td className="px-6 py-4 text-sm text-[#3F4D58]">{fmt(s.created_at)}</td>
