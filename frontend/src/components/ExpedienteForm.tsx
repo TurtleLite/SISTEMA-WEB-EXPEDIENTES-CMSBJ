@@ -136,6 +136,11 @@ const parseNumber = (val: any): number | null => {
   return Number.isFinite(n) ? n : null
 }
 
+const parseMedico = (raw: string): { title: string; name: string } => {
+  const m = (raw || '').match(/^(Dr\.|Dra\.)\s*(.*)$/)
+  return m ? { title: m[1], name: m[2] } : { title: 'Dr.', name: raw || '' }
+}
+
 const calcularBMI = (peso: any, talla: any): string => {
   const kg = parseNumber(peso)
   const m = parseNumber(talla)
@@ -1079,13 +1084,29 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
                             />
                           ) : (
-                            <input
-                              type="text"
-                              value={data[field.key] || ''}
-                              onChange={(e) => setValue(field.key, e.target.value)}
-                              placeholder="Nombre del médico (escriba manualmente)"
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                            />
+                            <div className="flex gap-2">
+                              <select
+                                value={parseMedico(data[field.key] || '').title}
+                                onChange={(e) => {
+                                  const name = parseMedico(data[field.key] || '').name
+                                  setValue(field.key, `${e.target.value} ${name}`.trim())
+                                }}
+                                className="w-24 px-2 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] bg-white"
+                              >
+                                <option value="Dr.">Dr.</option>
+                                <option value="Dra.">Dra.</option>
+                              </select>
+                              <input
+                                type="text"
+                                value={parseMedico(data[field.key] || '').name}
+                                onChange={(e) => {
+                                  const title = parseMedico(data[field.key] || '').title
+                                  setValue(field.key, `${title} ${e.target.value}`.trim())
+                                }}
+                                placeholder="Nombre del médico"
+                                className="flex-1 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                              />
+                            </div>
                           )
                         ) : FIELD_UNITS[field.key] ? (
                           <div className="relative">
