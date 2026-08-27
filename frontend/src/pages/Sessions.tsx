@@ -325,6 +325,7 @@ export function Sessions() {
                     <option value="medico">Médicos</option>
                     <option value="direccion_medica">Dirección Médica</option>
                     <option value="direccion">Dirección</option>
+                    <option value="carga_px">Carga Px</option>
                     <option value="admin">Administradores</option>
                   </select>
                 )}

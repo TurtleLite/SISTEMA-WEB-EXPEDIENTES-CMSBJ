@@ -13,6 +13,7 @@ const ROLE_LABELS: Record<string, string> = {
   direccion: 'Dirección',
   direccion_medica: 'Dirección Médica',
   medico: 'Médicos',
+  carga_px: 'Carga Px',
 }
 
 const targetLabel = (n: Notification) => {

@@ -10,6 +10,7 @@ class UserRole(str, enum.Enum):
     DIRECCION = "direccion"
     DIRECCION_MEDICA = "direccion_medica"
     MEDICO = "medico"
+    CARGA_PX = "carga_px"
 
 
 class User(Base):

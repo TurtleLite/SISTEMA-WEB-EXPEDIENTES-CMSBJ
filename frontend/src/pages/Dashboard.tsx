@@ -12,6 +12,7 @@ const roleLabels: Record<string, string> = {
   direccion: 'Dirección',
   direccion_medica: 'Dirección Médica',
   medico: 'Médico',
+  carga_px: 'Carga Px',
 }
 
 export function Dashboard() {

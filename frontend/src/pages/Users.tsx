@@ -13,6 +13,7 @@ const roleLabels: Record<string, string> = {
   direccion: 'Dirección',
   direccion_medica: 'Dirección Médica',
   medico: 'Médico',
+  carga_px: 'Carga Px',
 }
 
 const capitalizeName = (value: string) =>
@@ -318,6 +319,7 @@ export function Users() {
                 <option value="medico">Médico</option>
                 <option value="direccion_medica">Dirección Médica</option>
                 <option value="direccion">Dirección</option>
+                <option value="carga_px">Carga Px</option>
                 <option value="admin">Administrador</option>
               </select>
             </div>

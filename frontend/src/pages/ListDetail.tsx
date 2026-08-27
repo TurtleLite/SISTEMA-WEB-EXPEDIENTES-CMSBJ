@@ -54,7 +54,7 @@ export function ListDetail() {
   const [compensadoFilter, setCompensadoFilter] = useState('')
   const [compStats, setCompStats] = useState<{ compensados: number; descompensados: number; sin_definir: number } | null>(null)
   const [savingCompensado, setSavingCompensado] = useState<string | null>(null)
-  const canEditCompensado = user?.role === 'medico' || user?.role === 'direccion' || user?.role === 'direccion_medica'
+  const canEditCompensado = user?.role === 'medico' || user?.role === 'direccion' || user?.role === 'direccion_medica' || user?.role === 'carga_px'
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(false)
@@ -308,7 +308,7 @@ export function ListDetail() {
   const handleEditSelected = () => {
     const record = records.find(r => selectedIds.has(r.id))
     if (!record) return
-    if (user?.role === 'medico' && record.created_by && String(record.created_by) !== String(user.id)) {
+    if ((user?.role === 'medico' || user?.role === 'carga_px') && record.created_by && String(record.created_by) !== String(user.id)) {
       toast('Solo puedes editar expedientes creados por ti', 'error')
       return
     }
@@ -541,7 +541,7 @@ export function ListDetail() {
 
   const selectedRecord = records.find((r) => selectedIds.has(r.id))
   const canEditSelected = user?.role === 'direccion' || user?.role === 'direccion_medica'
-    || (user?.role === 'medico' && !!selectedRecord?.created_by && String(selectedRecord.created_by) === String(user.id))
+    || ((user?.role === 'medico' || user?.role === 'carga_px') && !!selectedRecord?.created_by && String(selectedRecord.created_by) === String(user.id))
 
   return (
     <div className="h-full flex flex-col gap-4 overflow-hidden">
@@ -917,7 +917,7 @@ export function ListDetail() {
         <ExpedienteForm
           listId={id}
           role={user?.role}
-          medicoName={user?.full_name}
+          medicoName={user?.role === 'medico' ? user?.full_name : undefined}
           editingRecord={editingRecord || undefined}
           expectedUpdatedAt={editingRecord?.updated_at || null}
           onClose={() => { setShowExpedienteForm(false); setEditingRecord(null) }}

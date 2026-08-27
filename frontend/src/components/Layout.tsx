@@ -15,6 +15,7 @@ const roleLabels: Record<string, string> = {
   direccion: 'Dirección',
   direccion_medica: 'Dirección Médica',
   medico: 'Médico',
+  carga_px: 'Carga Px',
 }
 
 interface NavItem {
@@ -33,9 +34,9 @@ const navSections: NavSection[] = [
   {
     title: 'Principal',
     items: [
-      { label: 'Inicio', path: '/dashboard', icon: <LayoutDashboard size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico'] },
-      { label: 'Mi Perfil', path: '/perfil', icon: <UserCircle2 size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico'] },
-      { label: 'Expedientes', path: '/lists', icon: <FolderOpen size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico'] },
+      { label: 'Inicio', path: '/dashboard', icon: <LayoutDashboard size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px'] },
+      { label: 'Mi Perfil', path: '/perfil', icon: <UserCircle2 size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px'] },
+      { label: 'Expedientes', path: '/lists', icon: <FolderOpen size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px'] },
     ],
   },
   {

@@ -301,6 +301,17 @@ def update_record(db: Session, record_id: int, data: dict, user_id: int = None, 
             from fastapi import HTTPException
             raise HTTPException(status_code=403, detail="No puedes cambiar el estatus de cirugía ni su observación")
         data["estatus_cirugia"] = old_status
+    elif user_role == "carga_px":
+        if record.created_by != user_id:
+            from fastapi import HTTPException
+            raise HTTPException(status_code=403, detail="No puedes editar un expediente creado por otro usuario")
+        data = dict(data)
+        old_status = record.data.get("estatus_cirugia", "En espera")
+        old_obs = record.data.get("observacion_estatus", "")
+        if data.get("estatus_cirugia") not in (None, old_status) or data.get("observacion_estatus") not in (None, old_obs):
+            from fastapi import HTTPException
+            raise HTTPException(status_code=403, detail="No puedes cambiar el estatus de cirugía ni su observación")
+        data["estatus_cirugia"] = old_status
     else:
         from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="Acción no permitida")
@@ -331,7 +342,7 @@ def delete_record(db: Session, record_id: int, user_id: int = None, user_role: s
     if user_role in ("direccion", "direccion_medica"):
         pass
     else:
-        role_name = {"admin": "Administrador", "direccion": "Dirección", "direccion_medica": "Dirección Médica", "medico": "Médico"}
+        role_name = {"admin": "Administrador", "direccion": "Dirección", "direccion_medica": "Dirección Médica", "medico": "Médico", "carga_px": "Carga Px"}
         raise HTTPException(status_code=403, detail=f"{role_name.get(user_role, 'Usuario')} no puede eliminar este registro")
     if not record.deleted_at:
         record.deleted_at = datetime.now(timezone.utc)

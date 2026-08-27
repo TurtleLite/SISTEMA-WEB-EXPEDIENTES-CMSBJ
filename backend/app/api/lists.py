@@ -364,7 +364,7 @@ def update_record_compensado(
     from sqlalchemy.orm.attributes import flag_modified
     from app.models.list_definition import ListRecord
 
-    if current_user.role not in ("medico", "direccion", "direccion_medica"):
+    if current_user.role not in ("medico", "direccion", "direccion_medica", "carga_px"):
         raise HTTPException(status_code=403, detail="No tienes permiso para editar el estado de compensación")
 
     valor = payload.get("compensado")
@@ -574,7 +574,7 @@ def create_record(
 ):
     from fastapi import HTTPException
     from app.services.record_service import add_record
-    if current_user.role not in ("direccion", "direccion_medica", "medico"):
+    if current_user.role not in ("direccion", "direccion_medica", "medico", "carga_px"):
         raise HTTPException(status_code=403, detail="No tienes permisos para crear expedientes")
     record = add_record(db, list_id, data.get("data", data), user_id=current_user.id)
     det = (record.data or {}).get("expediente") if isinstance(record.data, dict) else None
@@ -593,7 +593,7 @@ def update_record_endpoint(
     current_user: User = Depends(get_current_user),
 ):
     from app.services.record_service import update_record
-    if current_user.role not in ("direccion", "direccion_medica", "medico"):
+    if current_user.role not in ("direccion", "direccion_medica", "medico", "carga_px"):
         from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="No tienes permisos para esta acción")
     update_record(db, record_id, data.get("data", data), user_id=current_user.id, user_role=current_user.role,

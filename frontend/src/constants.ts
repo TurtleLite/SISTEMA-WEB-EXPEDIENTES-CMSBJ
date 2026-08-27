@@ -45,6 +45,16 @@ export const ROLE_META: Record<string, RoleMeta> = {
       'Exportar expedientes',
     ],
   },
+  carga_px: {
+    label: 'Carga Px',
+    badge: 'bg-amber-100 text-amber-800 border-amber-200',
+    gradient: 'from-amber-500 to-amber-700',
+    permissions: [
+      'Expedientes (ver, crear)',
+      'Editar solo expedientes propios',
+      'Nombre del médico a mano (libre)',
+    ],
+  },
 }
 
 export const roleLabel = (role?: string) => ROLE_META[role || '']?.label || 'Usuario'

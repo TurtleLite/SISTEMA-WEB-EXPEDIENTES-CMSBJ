@@ -1,4 +1,4 @@
-import { ShieldCheck, Building2, Stethoscope, HeartPulse, UserCircle2 } from 'lucide-react'
+import { ShieldCheck, Building2, Stethoscope, HeartPulse, UserCircle2, ClipboardPlus } from 'lucide-react'
 import { ROLE_META } from '../constants'
 
 const ROLE_ICONS: Record<string, React.ReactNode> = {
@@ -6,6 +6,7 @@ const ROLE_ICONS: Record<string, React.ReactNode> = {
   direccion: <Building2 />,
   direccion_medica: <Stethoscope />,
   medico: <HeartPulse />,
+  carga_px: <ClipboardPlus />,
 }
 
 const ROLE_COLORS: Record<string, string> = {
@@ -13,6 +14,7 @@ const ROLE_COLORS: Record<string, string> = {
   direccion: 'from-[#0F766E] to-[#115E59]',
   direccion_medica: 'from-sky-600 to-sky-800',
   medico: 'from-emerald-600 to-emerald-800',
+  carga_px: 'from-amber-500 to-amber-700',
 }
 
 const SIZES = {

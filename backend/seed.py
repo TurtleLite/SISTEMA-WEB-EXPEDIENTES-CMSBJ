@@ -53,12 +53,23 @@ def seed():
         )
         db.add(medico)
 
+        carga_px = User(
+            username="cargapx",
+            telefono="2201-1104",
+            full_name="Carga Px",
+            hashed_password=hash_password("cargapx123"),
+            role="carga_px",
+            is_active=True,
+        )
+        db.add(carga_px)
+
         db.commit()
         print("Usuarios creados correctamente:")
         print("  admin / admin123")
         print("  direccion / direccion123")
         print("  direccionmedica / direccionmedica123")
         print("  medico / medico123")
+        print("  cargapx / cargapx123")
     except Exception as e:
         print(f"Error: {e}")
         db.rollback()

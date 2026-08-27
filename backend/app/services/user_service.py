@@ -140,6 +140,8 @@ def reset_default_users(db: Session, only_if_empty: bool = False):
              hashed_password=hash_password("direccionmedica123"), role="direccion_medica", is_active=True),
         User(username="medico", telefono="2201-1103", full_name="Dr. Médico",
              hashed_password=hash_password("medico123"), role="medico", is_active=True),
+        User(username="cargapx", telefono="2201-1104", full_name="Carga Px",
+             hashed_password=hash_password("cargapx123"), role="carga_px", is_active=True),
     ]
     if only_if_empty and db.query(User).count() > 0:
         return
