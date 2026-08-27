@@ -1101,7 +1101,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                 value={parseMedico(data[field.key] || '').name}
                                 onChange={(e) => {
                                   const title = parseMedico(data[field.key] || '').title
-                                  setValue(field.key, `${title} ${e.target.value}`.trim())
+                                  const raw = e.target.value
+                                  const capped = raw.charAt(0).toUpperCase() + raw.slice(1)
+                                  setValue(field.key, `${title} ${capped}`.trim())
                                 }}
                                 placeholder="Nombre del médico"
                                 className="flex-1 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
