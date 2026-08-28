@@ -1,20 +1,8 @@
-import sys, os, re, csv, json, argparse, unicodedata
+import sys, os, re, json, argparse, unicodedata
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-CSV_PATH = "/home/turtlelite/Documentos/Banco de Pacientes/SIN OPERAR/__expedientes_completos.csv"
 JSON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "domicilios_sin_operar.json")
-
-phone_re = re.compile(r"\d[\d\s,\-]{5,}\d")
-sep_re = re.compile(r"[,\s;/]+")
-
-
-def clean_domicilio(s):
-    if not s:
-        return ""
-    s = phone_re.sub(" ", s)
-    s = sep_re.sub(" ", s).strip()
-    return s
 
 
 def base_exp(s):
@@ -24,7 +12,11 @@ def base_exp(s):
     return m.group(1) if m else None
 
 
-def norm(s):
+def norm_ident(s):
+    return re.sub(r"\D", "", str(s or ""))
+
+
+def norm_name(s):
     if not s:
         return ""
     s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode()
@@ -33,39 +25,42 @@ def norm(s):
 
 
 def full_name(data):
-    # El sistema guarda nombre (pila) + apellido por separado;重建 nombre completo.
-    return norm(f"{data.get('nombre', '')} {data.get('apellido', '')}") or norm(data.get("nombre", ""))
+    return norm_name(f"{data.get('nombre', '')} {data.get('apellido', '')}") or norm_name(data.get("nombre", ""))
 
 
-def load_maps(path, is_csv):
-    by_key, by_base, warnings = {}, {}, []
-    opener = open(path, newline="", encoding="utf-8", errors="replace") if is_csv else open(path, encoding="utf-8")
-    with opener:
-        rows = csv.DictReader(opener) if is_csv else json.load(opener)
-        for row in rows:
-            exp = row.get("expediente", "")
-            nom = row.get("nombre", "")
-            dom = clean_domicilio(row.get("domicilio")) if is_csv else row.get("domicilio", "")
-            b = base_exp(exp)
-            n = norm(nom)
-            if not b or not n:
-                continue
-            by_key.setdefault((b, n), dom)
-            by_base.setdefault(b, []).append((n, dom))
-    return by_key, by_base, warnings
+def load_map(path):
+    by_base, by_ident = {}, {}
+    with open(path, encoding="utf-8") as f:
+        for r in json.load(f):
+            dom = r.get("domicilio", "")
+            b = base_exp(r.get("expediente"))
+            i = norm_ident(r.get("identidad"))
+            nm = norm_name(f"{r.get('nombre', '')} {r.get('apellido', '')}") or norm_name(r.get("nombre", ""))
+            if b:
+                by_base.setdefault(b, []).append({"name": nm, "dom": dom})
+            if i:
+                by_ident.setdefault(i, []).append({"name": nm, "dom": dom})
+    return by_base, by_ident
+
+
+def choose(cands, sys_name):
+    if not cands:
+        return None
+    same = [c for c in cands if c["name"] and c["name"] == sys_name]
+    if same:
+        return same[0]["dom"]
+    if len(cands) == 1:
+        return cands[0]["dom"]
+    return None  # ambiguo: no sobreescribir para evitar colisión
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", help="Usa este CSV en lugar del JSON embebido")
     ap.add_argument("--apply", action="store_true", help="Escribe en la BD (si no, solo diagnostica)")
     args = ap.parse_args()
 
-    is_csv = bool(args.csv)
-    by_key, by_base, warns = load_maps(args.csv if is_csv else JSON_PATH, is_csv)
-    print(f"Domicilios en fuente: {len(by_key)} (por nombre) / {len(by_base)} (por expediente)")
-    for w in warns:
-        print("  !", w)
+    by_base, by_ident = load_map(JSON_PATH)
+    print(f"Fuentes: {len(by_base)} por expediente, {len(by_ident)} por identidad")
 
     os.environ.setdefault("SECRET_KEY", "x")
     os.environ.setdefault("JWT_SECRET_KEY", "x")
@@ -75,50 +70,33 @@ def main():
     db = SessionLocal()
     try:
         recs = db.query(ListRecord).filter(ListRecord.deleted_at.is_(None)).all()
-        by_base_rec = {}
+        matched = overwritten = kept = notfound = 0
+        sample_kept = []
         for r in recs:
             d = r.data or {}
             b = base_exp(d.get("expediente"))
-            if not b:
-                continue
-            by_base_rec.setdefault(b, []).append(r)
-
-        matched = overwrite = only_fill_empty = notfound = ambiguous = 0
-        for b, recs_b in by_base_rec.items():
-            entries = by_base.get(b)
-            if not entries:
-                continue
-            # 1) coincide nombre completo
-            target = None
-            for r in recs_b:
-                if full_name(r.data or {}) in {n for n, _ in entries}:
-                    target = r
-                    break
-            if target is None and len(recs_b) == 1:
-                target = recs_b[0]  # solo 1 registro con ese expediente -> seguro
-            if target is None and len(recs_b) > 1:
-                # duplicado: solo rellenar los que NO tienen domicilio, sin pisar los demas
-                for r in recs_b:
-                    cur = (r.data or {}).get("domicilio")
-                    if not (cur and str(cur).strip()):
-                        dom = entries[0][1]
-                        if args.apply:
-                            r.data = dict(r.data or {})
-                            r.data["domicilio"] = dom
-                        only_fill_empty += 1
-                ambiguous += 1
-                continue
-            if target is None:
+            i = norm_ident(d.get("identidad"))
+            cands = []
+            if b and b in by_base:
+                cands += by_base[b]
+            if i and i in by_ident:
+                cands += by_ident[i]
+            if not cands:
                 notfound += 1
                 continue
-            dom = entries[0][1]
-            cur = (target.data or {}).get("domicilio")
+            dom = choose(cands, full_name(d))
+            if dom is None:
+                kept += 1
+                if len(sample_kept) < 10:
+                    sample_kept.append(f"{b or i}: nombre={d.get('nombre')} {d.get('apellido')}")
+                continue
+            cur = d.get("domicilio")
             if args.apply:
-                target.data = dict(target.data or {})
-                target.data["domicilio"] = dom
+                r.data = dict(d)
+                r.data["domicilio"] = dom
             matched += 1
             if cur and str(cur).strip():
-                overwrite += 1
+                overwritten += 1
 
         if args.apply:
             db.commit()
@@ -126,11 +104,15 @@ def main():
         else:
             print(">>> DRY-RUN (no se escribió nada).")
         print(
-            f"Registros actualizados             : {matched}\n"
-            f"  de ellos sobreescribieron previo : {overwrite}\n"
-            f"Duplicados: rellenados solo vacíos : {only_fill_empty} (expedientes: {ambiguous})\n"
-            f"Expediente no encontrado en BD     : {notfound}"
+            f"Registros actualizados (domicilio puesto) : {matched}\n"
+            f"  de ellos sobreescribieron previo        : {overwritten}\n"
+            f"Ambiguos (no tocados, solo nombre no cuadra): {kept}\n"
+            f"Sin coincidencia en fuente                : {notfound}"
         )
+        if sample_kept:
+            print("Muestra de ambiguos:")
+            for s in sample_kept:
+                print("  -", s)
     finally:
         db.close()
 

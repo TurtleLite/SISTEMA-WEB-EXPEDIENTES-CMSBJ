@@ -1,2612 +1,3733 @@
 [
  {
-  "expediente": "499",
-  "nombre": "Francisca Buezo Mejia",
-  "domicilio": "Aldea Las Guamas Esquías Comayagua."
- },
- {
-  "expediente": "538",
-  "nombre": "Ada Belen Silva",
-  "domicilio": "Aldea de Proteccion Villa de San Antonio Comayagua( )"
- },
- {
-  "expediente": "1946",
-  "nombre": "Gumersinda Sanchez",
-  "domicilio": "Aldea San Jose de las Moras Comayagua"
- },
- {
-  "expediente": "2327",
-  "nombre": "Enma Esther Lorenzo",
-  "domicilio": "La Sampedrana Comayagua Comayagua"
- },
- {
-  "expediente": "2624",
-  "nombre": "Jeyson Ernesto Nuñez Redondo",
-  "domicilio": "El Volcan Comayagua"
- },
- {
-  "expediente": "2763",
-  "nombre": "Josselin Margarita Obando Garcia",
-  "domicilio": "Aldea San Miguel del Eden Comayagua"
- },
- {
-  "expediente": "2928",
-  "nombre": "Dominga Garcia Lopez",
-  "domicilio": "Fondo ganadero Comayagua"
- },
- {
-  "expediente": "4995",
-  "nombre": "Lizeth Karina Osorio Villatoro",
-  "domicilio": "Barrio Santa Lucía Comayaua"
- },
- {
-  "expediente": "5670",
-  "nombre": "Santos Domingo Nuñez Munguia",
-  "domicilio": "Comayagua Comayagua"
- },
- {
-  "expediente": "5958",
-  "nombre": "Maria de los Santos Garcia Reyes",
-  "domicilio": "Comayagua Comayagua col 10 de mayo ( )"
- },
- {
-  "expediente": "6596",
-  "nombre": "Hemerlinda Moreno",
-  "domicilio": "Comayagua Comayagua la san pedrana."
- },
- {
-  "expediente": "7311",
-  "nombre": "ANDREA NOLASCO VASQUEZ",
-  "domicilio": "Canton San Atonio La libertad."
- },
- {
-  "expediente": "7826",
-  "nombre": "Rogelio Turcios Ulloa",
-  "domicilio": "La trinidad Comayagua"
- },
- {
-  "expediente": "7954",
-  "nombre": "Maria Paula Benitez Molina",
-  "domicilio": "Colonia Ivan Betancourt Comayagua Comayagua"
- },
- {
-  "expediente": "8159",
-  "nombre": "Oscar Orlando Romero  Izaguirre",
-  "domicilio": "Comayagua mata de platano"
- },
- {
-  "expediente": "8524",
-  "nombre": "Julissa Nahomi Sanchez Garcia",
-  "domicilio": "Buena Vista El volcan Comayagua"
- },
- {
-  "expediente": "8867",
-  "nombre": "Maria del Roario Joya",
-  "domicilio": "Comayagua Meambar Aldea Concepción."
- },
- {
-  "expediente": "9042",
-  "nombre": "Carmen Alvarado",
-  "domicilio": "Comayagua Comayagua Aldea Palmerola 1 ( )"
- },
- {
-  "expediente": "9955",
-  "nombre": "Adrian Centeno Padilla",
-  "domicilio": "Comayagua Comatagua Aldea Ojos de Agua ( )"
- },
- {
-  "expediente": "10573",
-  "nombre": "Cristina Lopez Ulloa",
-  "domicilio": "Agua Blanca Minas de oro Comayagua"
- },
- {
-  "expediente": "11064",
-  "nombre": "Cindy Daniela Gavarrete Maradiaga",
-  "domicilio": "Colonia San Miguel #1 Comayagua Comayagua"
- },
- {
-  "expediente": "11970",
-  "nombre": "Noemi Guadalupe Torres Varela",
-  "domicilio": "Zambrano Francisco Morazan"
- },
- {
-  "expediente": "12182",
-  "nombre": "Concepcion Buezo Velasquez",
-  "domicilio": "Piedras Bonitas media cuadra de la inglesia sagrada familia Comayagua"
- },
- {
-  "expediente": "13150",
-  "nombre": "Maria Santos Cruz",
-  "domicilio": "Comayagua San Jeronimo Aldea las Crucitas"
- },
- {
-  "expediente": "13880",
-  "nombre": "Maria Floricia Hernandez Marquez",
-  "domicilio": "Comayagua Villa de San Antonio Aldea el Cimiento"
- },
- {
-  "expediente": "13913",
-  "nombre": "Maria Trinidad Funes Funes",
-  "domicilio": "San Jose de la Mora Comayagua"
- },
- {
-  "expediente": "14241",
-  "nombre": "Jacobo de Jesus Gonzales Zavala",
-  "domicilio": "Aldea Plan de Alejandra La Libertad Comayagua"
- },
- {
-  "expediente": "14460",
-  "nombre": "Lucas Hernandez Ruiz",
-  "domicilio": "La paz Lauterique Aldea EL Mate."
- },
- {
-  "expediente": "16365",
-  "nombre": "Teodora Rosales Palma",
-  "domicilio": "Aldea Las flores Villa de San Antonio"
- },
- {
-  "expediente": "16471",
-  "nombre": "Liberato Funes",
-  "domicilio": "Siguatepeque Barrio Sinai"
- },
- {
-  "expediente": "16566",
-  "nombre": "Silvia Leticia Jimenez Canales",
-  "domicilio": "Aldea San Francisco La Ceibita Comayagua Comayagua"
- },
- {
-  "expediente": "18201",
-  "nombre": "David Alonzo Mayen Verde",
-  "domicilio": "Aldea El Ciruelo Comayagua Comayagua"
- },
- {
-  "expediente": "19852",
-  "nombre": "Obed Reyes Nuñez",
-  "domicilio": "Colonia Nueva Suyapa Tegucigalpa Francisco Morazán"
- },
- {
-  "expediente": "19852",
-  "nombre": "Cristina Lopez Martinez",
-  "domicilio": "Aldea Lagunitas de Esquipulas Comayagua Comayagua"
- },
- {
-  "expediente": "19932",
-  "nombre": "Maria Albertina Zavala Romero",
-  "domicilio": "Comayagua La Libertad Aldea La Soledad."
- },
- {
-  "expediente": "20119",
-  "nombre": "Digna Cruz Zavala",
-  "domicilio": "Barrio Suyapa Comayagua"
- },
- {
-  "expediente": "23357",
-  "nombre": "María Norma Galeano Sebeda",
-  "domicilio": "Colonia 3 de octubre Comayagua Comayagua"
- },
- {
-  "expediente": "23407",
-  "nombre": "Rosa Alvarado",
-  "domicilio": "Aldea San Rafael La Paz La Paz."
- },
- {
-  "expediente": "26059",
-  "nombre": "Myrian Suyapa Morales Montes",
-  "domicilio": "Piedras azules Comayagua"
- },
- {
-  "expediente": "26074",
-  "nombre": "Martha Vilma Bonilla",
-  "domicilio": "Comayagua Comayagua barrio santa lucia"
- },
- {
-  "expediente": "26104",
-  "nombre": "Selvin David Perez Giron",
-  "domicilio": "Barrio Torondon Comayagua Comayagua"
- },
- {
-  "expediente": "26956",
-  "nombre": "Adela Aida Galvez Hernandez",
-  "domicilio": "21 de abril Comayagua"
- },
- {
-  "expediente": "27692",
-  "nombre": "Orfilia Flores",
-  "domicilio": "Colonia 21 de abril Comaygua Comayagua"
- },
- {
-  "expediente": "28860",
-  "nombre": "Josselin Elizabeth Lopez Galeas",
-  "domicilio": "Comayagua Comayagua Col. Fiallos."
- },
- {
-  "expediente": "28984",
-  "nombre": "Olga Marina Gutierrez Barrera",
-  "domicilio": "Col. El Rosario Comayagua"
- },
- {
-  "expediente": "29233",
-  "nombre": "Gilma Yolani Cruz Banegas",
-  "domicilio": "Comayagua Aldea San Jose de Las Moras."
- },
- {
-  "expediente": "29351",
-  "nombre": "Mayra Aida Padilla Madrid",
-  "domicilio": "Comayagua Comayagua Co. San Miguel 2."
- },
- {
-  "expediente": "31477",
-  "nombre": "Reyna Suyapa Mejia Bonilla",
-  "domicilio": "Cane La Paz"
- },
- {
-  "expediente": "32623",
-  "nombre": "Valeska Meylin Mejia Rodriguez",
-  "domicilio": "Siguatepeque Puente en curva."
- },
- {
-  "expediente": "33168",
-  "nombre": "Maria Del Cid Jimenez",
-  "domicilio": "Aldea las Mercedez Comayagua"
- },
- {
-  "expediente": "33232",
-  "nombre": "(Px FRAY)Hilary Valeska Mejia",
-  "domicilio": "Comayagua Cerro el Nance ."
- },
- {
-  "expediente": "34439",
-  "nombre": "Pedro Villatoro Romero",
-  "domicilio": "Comayagua San Jerónimo Col. Fatima."
- },
- {
-  "expediente": "35868",
-  "nombre": "Delmis Patricia Hernandez Hernandez",
-  "domicilio": "Via de San Antonio colonia sinai."
- },
- {
-  "expediente": "36104",
-  "nombre": "Adan Canales Rodriguez",
-  "domicilio": "Barrio San blas Comayagua"
- },
- {
-  "expediente": "36713",
-  "nombre": "Alejandro Carrillo",
-  "domicilio": "Comayagua La sampedrana. ."
- },
- {
-  "expediente": "38281",
-  "nombre": "Isolina Vidail Maldona Mencia",
-  "domicilio": "La Ceibita San Jeronimo"
- },
- {
-  "expediente": "38595",
-  "nombre": "Jose Luis Maldonado Martinez",
-  "domicilio": "Comayagua Lamaní Aldea Las Mesetas."
- },
- {
-  "expediente": "39589",
-  "nombre": "Rojelia Manzanarez Euceda",
-  "domicilio": "Comayagua 1ero de Mayo."
- },
- {
-  "expediente": "39923",
-  "nombre": "Maria Dionicia Reyes",
-  "domicilio": "Lomas de Cordero Comayagua"
- },
- {
-  "expediente": "40018",
-  "nombre": "Carmen Santos Rodriguez",
-  "domicilio": "Col. 9 de noviembre Comayagua"
- },
- {
-  "expediente": "42286",
-  "nombre": "Carmen Esperanza Palacios Nuñez",
-  "domicilio": "Comayagua Aldea Valle de angeles"
- },
- {
-  "expediente": "42459",
-  "nombre": "Iris Janneth Alvarado Guevara",
-  "domicilio": "Convento Las Clarisas Comayagua"
- },
- {
-  "expediente": "42704",
-  "nombre": "Carlos Rene Martinez",
-  "domicilio": "Comayagua Comayagua Barrio San Blas."
- },
- {
-  "expediente": "43285",
-  "nombre": "Jully Iveth Rivera Bonilla",
-  "domicilio": "Aldea Playitas Ajuterique frente del centro basico Gracias A Dios"
- },
- {
-  "expediente": "44903",
-  "nombre": "Florencia Luisa Torres Varela",
-  "domicilio": "Isla del tucan Esquias"
- },
- {
-  "expediente": "44965",
-  "nombre": "Gloria Melendez Vasquez",
-  "domicilio": "Comayagua Comayagua. Colonia san miguel ."
- },
- {
-  "expediente": "45096",
-  "nombre": "Juana Morales Moreno",
-  "domicilio": "Col. Milagro de Dios Comayagua"
- },
- {
-  "expediente": "45823",
-  "nombre": "Reyna Isabel Blanco Sanchez",
-  "domicilio": "Col. Morazan Comayaguam"
- },
- {
-  "expediente": "46632",
-  "nombre": "Estevan Cruz",
-  "domicilio": "Villa de San antonio palmerola 1 Comayagua"
- },
- {
-  "expediente": "46679",
-  "nombre": "Gloria Petrona Molina Suazo",
-  "domicilio": "Barrio La Joya Comayagua"
- },
- {
-  "expediente": "46732",
-  "nombre": "Yesica Antonia Meza Manueles",
-  "domicilio": "Aldea San Pedrana Comayagua"
- },
- {
-  "expediente": "47635",
-  "nombre": "Juana María Melendez Mejía",
-  "domicilio": "Km 86 Villanueva Cortés"
- },
- {
-  "expediente": "47816",
-  "nombre": "Marleny Suyapa Mendoza Pineda",
-  "domicilio": "Aldea Nueva Valladolid Comayagua"
- },
- {
-  "expediente": "48553",
-  "nombre": "Merci Lorely Maldonado Maldonado",
-  "domicilio": "Aldea las Cañas San Antonio El Norte La Paz"
- },
- {
-  "expediente": "48756",
-  "nombre": "Victorio Mejia",
-  "domicilio": "La Villa de san antonio Comayagua"
- },
- {
-  "expediente": "48837",
-  "nombre": "Jose Antonio Lagos Juarez",
-  "domicilio": "Aldea El Volcan Comayagua Frente a la escuela Tiburcio Carias"
- },
- {
-  "expediente": "49751",
-  "nombre": "Julian Manueles Morales",
-  "domicilio": "La Laguna San jeronimo"
- },
- {
-  "expediente": "50169",
-  "nombre": "Carlos Humberto Bardaes F",
-  "domicilio": "Colonia Gustavo Boquin Comayagua Comayagua"
- },
- {
-  "expediente": "50729",
-  "nombre": "Carlos Calix Vasquez",
-  "domicilio": "Marcala La Paz"
- },
- {
-  "expediente": "52021",
-  "nombre": "Mirza Gissela Alvarez Diaz",
-  "domicilio": "Cortes Villanueva Lomas de San Carlos."
- },
- {
-  "expediente": "52434",
-  "nombre": "Maria de los Santos Ramos",
-  "domicilio": "Comayagua Comayagua Col Fiallos ( )"
- },
- {
-  "expediente": "52516",
-  "nombre": "Keyli Sofia Ramos Cardona",
-  "domicilio": "Barrio Lourdes Comayagua"
- },
- {
-  "expediente": "54166",
-  "nombre": "Alfredo Fuentes Aleman",
-  "domicilio": "Aldea Cancire Santiago de Puringla La Paz cerca de la iglesia Catolica"
- },
- {
-  "expediente": "54178",
-  "nombre": "Delmin Zulema Carranza Flores",
-  "domicilio": "Aldea Colmenas EL Rosario Comayagua"
- },
- {
-  "expediente": "54596",
-  "nombre": "Berta Ochoa Arias",
-  "domicilio": "Comayagua Comayagua Col. Milagro de Dios."
- },
- {
-  "expediente": "54636",
-  "nombre": "Venacio Munguia Garcia",
-  "domicilio": "Caserio Corralitos Aldea Victoriana Curarén Francisco Morazán"
- },
- {
-  "expediente": "54952",
-  "nombre": "Carmen Maria Delcid Flores",
-  "domicilio": "Comayagua San Jose de Comayagua ( )"
- },
- {
-  "expediente": "55357",
-  "nombre": "Anderson Natanael Banegas Maldonado",
-  "domicilio": "Comayagua Comayagua. Colonia primero de mayo 1 cuadra arriba de pulperia rachel"
- },
- {
-  "expediente": "55533",
-  "nombre": "Ana Gissel Gomez Martínez",
-  "domicilio": "Colonia Linconl Coleman Comayagua Comayagua ( )"
- },
- {
-  "expediente": "55582",
-  "nombre": "Franceli Trinidad Mejia Ponce",
-  "domicilio": "Comayagua La floria ojos de agua. ."
- },
- {
-  "expediente": "56110",
-  "nombre": "Florencio Bonilla",
-  "domicilio": "Barrio Arriba Comayagua"
- },
- {
-  "expediente": "56863",
-  "nombre": "Irene Araque Pineda",
-  "domicilio": "Barrio Arriba Comayagua"
- },
- {
-  "expediente": "57212",
-  "nombre": "Gloria Esperanza Carcamo Flores",
-  "domicilio": "Comayagua Comayagua sitramedi ."
- },
- {
-  "expediente": "58601",
-  "nombre": "Ana Maria Licona Aplicano",
-  "domicilio": "Sabana Larga El Rosario Comayagua"
- },
- {
-  "expediente": "59091",
-  "nombre": "Fanny Secilia Paz Bueso",
-  "domicilio": "Barrio La Guama Comayagua pegado a la quebradita"
- },
- {
-  "expediente": "59577",
-  "nombre": "Evelyn Estefany Canales Ruiz",
-  "domicilio": "Comayagua Comayagua Col. 21 de abril."
- },
- {
-  "expediente": "59815",
-  "nombre": "Rosa Marleny Reyes Zavala",
-  "domicilio": "El sitio Comayagua"
- },
- {
-  "expediente": "60535",
-  "nombre": "Angel Esau Torres Gonzales",
-  "domicilio": "Col. Julio Cesar Comayagua"
- },
- {
-  "expediente": "60871",
-  "nombre": "Fany Argentina Silva Silva",
-  "domicilio": "proteccion villa san antonio comayagua ( )"
- },
- {
-  "expediente": "61281",
-  "nombre": "Servelia Marroquin Rodriguez",
-  "domicilio": "San Sebastian La Peñita Comayagua"
- },
- {
-  "expediente": "61565",
-  "nombre": "María Teresa Vasquez Vasquez",
-  "domicilio": "Aldea Mata de caña Comayagua Comayagua"
- },
- {
-  "expediente": "62917",
-  "nombre": "Maxilino Zavala Espinoza",
-  "domicilio": "Santa Cruz de Yojoa Cortes"
- },
- {
-  "expediente": "63296",
-  "nombre": "Dulce Maria Santos Rodriguez",
-  "domicilio": "Barrio L a Concepcion Comayagua Comayagua"
- },
- {
-  "expediente": "63400",
-  "nombre": "Gerardo Alfonso Guillen Villatoro",
-  "domicilio": "Comayagua Comayagua Barrio Cabañas."
- },
- {
-  "expediente": "64034",
-  "nombre": "Evelin Lizzette Leiva Valladares",
-  "domicilio": "Comayagua Aldea Nueva Valladolid."
- },
- {
-  "expediente": "64088",
-  "nombre": "Keidy Rocio Cruz Velasquez",
-  "domicilio": "Comayagua Taulabe Aldea la mision ( )"
- },
- {
-  "expediente": "65125",
-  "nombre": "Irmenia Padilla Cruz",
-  "domicilio": "Comayagua Barrio independencia"
- },
- {
-  "expediente": "65799",
-  "nombre": "Berta Zavala Acosta",
-  "domicilio": "Comayagua Col. Villeda Bermudez."
- },
- {
-  "expediente": "65942",
-  "nombre": "Maria Isabel Chavarria Delcid",
-  "domicilio": "Barrio Suyapa Comayagua Comayagua"
- },
- {
-  "expediente": "66238",
-  "nombre": "Xenia Yasmin Paredes Macias",
-  "domicilio": "La Mani Comayagua"
- },
- {
-  "expediente": "66335",
-  "nombre": "Osman Nahun Zavala Acosta",
-  "domicilio": "Col. 21 de abril"
- },
- {
-  "expediente": "66621",
-  "nombre": "Olivia Nolasco Mejia",
-  "domicilio": "Comayagua Comayagua Brisas de Suyapa #1."
- },
- {
-  "expediente": "66632",
-  "nombre": "Jose Jovany Reyes",
-  "domicilio": "Comayagua Comayagua alde El Pajonal ( )"
- },
- {
-  "expediente": "67061",
-  "nombre": "Jose Obdulio Alvarado Reyes",
-  "domicilio": "Comayagua Comayagua Aldea El Sitio."
- },
- {
-  "expediente": "67213",
-  "nombre": "Manuel Antonio Paz Calix",
-  "domicilio": "Barrio Cabañas Comayagua Comayagua"
- },
- {
-  "expediente": "68242",
-  "nombre": "Alonso Martinez Gomez",
-  "domicilio": "Aldes Nueva Suyapa Guajiquiro La Paz"
- },
- {
-  "expediente": "68525",
-  "nombre": "Sady Arturo Berlioz Bardales",
-  "domicilio": "Colonia Boquin Comayagua Comayagua"
- },
- {
-  "expediente": "68901",
-  "nombre": "Dylan Gael Mazariegos Mazariegos",
-  "domicilio": "Colonia Carlos Miranda Comayagua"
- },
- {
-  "expediente": "68903",
-  "nombre": "Marta Marroquin",
-  "domicilio": "Comayagua Villa de San Antonio Aldea San Nicolas."
- },
- {
-  "expediente": "69081",
-  "nombre": "Javier Isaac Castro Guerrero",
-  "domicilio": "La Paz La Paz Barrio La Granja."
- },
- {
-  "expediente": "69235",
-  "nombre": "Noel Olivera Amador",
-  "domicilio": "Comayagua San Luis Aldea Tres Palos."
- },
- {
-  "expediente": "69478",
-  "nombre": "Lucio Vasquez Lopez",
-  "domicilio": "Santa Cruz De Yojoa Cortes"
- },
- {
-  "expediente": "69682",
-  "nombre": "Gael Eduardo Cordova Garcia",
-  "domicilio": "Comayagua Lamani Barrio Juan de la cruz"
- },
- {
-  "expediente": "69819",
-  "nombre": "Maria Arcadia Rivera Hernandez",
-  "domicilio": "Santa Lucia Comayagua"
- },
- {
-  "expediente": "71462",
-  "nombre": "Alba Aida Arguijo Duarte",
-  "domicilio": "La Unión Esquías Comayagua"
- },
- {
-  "expediente": "71672",
-  "nombre": "Raul Guevara",
-  "domicilio": "Jesus de otoro Intibuca"
- },
- {
-  "expediente": "71710",
-  "nombre": "Jose Donaldo Aquino Sosa",
-  "domicilio": "Comayagua Taulabe Aldea los Camalotales"
- },
- {
-  "expediente": "71781",
-  "nombre": "Victor Noel Mradiaga Flores",
-  "domicilio": "Comayagua Ojos de Agua Nueva Esperanza."
- },
- {
-  "expediente": "72178",
-  "nombre": "Roberto Guzman Ramirez",
-  "domicilio": "Aldea Zapote siguatepeque comayagua"
- },
- {
-  "expediente": "72219",
-  "nombre": "Fernanda Lopez Perez",
-  "domicilio": "La Paz Opatoro Barrio El Centro."
- },
- {
-  "expediente": "72401",
-  "nombre": "Lucy Margarita Romero Sanchez",
-  "domicilio": "Colonia Osorio Contrera Marcala La Paz ( )"
- },
- {
-  "expediente": "73067",
-  "nombre": "Juan Pablo Chirinos Lopez",
-  "domicilio": "El Higuito Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "73711",
-  "nombre": "Marcos Escobar Castellanos",
-  "domicilio": "Aledea Obos Santa Cruz de Yojoa Cortés ( )"
- },
- {
-  "expediente": "73723",
-  "nombre": "Mario Padilla Bardales",
-  "domicilio": "La Paz La Paz Aldea Yarumela."
- },
- {
-  "expediente": "73746",
-  "nombre": "Juana Francisca Rivera Chavarria",
-  "domicilio": "Barrio San José La Paz La Paz."
- },
- {
-  "expediente": "73969",
-  "nombre": "Beatriz Chacon Castro",
-  "domicilio": "Aldea quebrada de agua Victoria Yoro."
- },
- {
-  "expediente": "74012",
-  "nombre": "Jose Saturnino Cervantes Matute",
-  "domicilio": "Barrio Cabañas Comayagua"
- },
- {
-  "expediente": "74031",
-  "nombre": "Candida Rosa Meza García",
-  "domicilio": "Col. José Ángel Ulloa Tegucigalpa Francisco Morazán"
- },
- {
-  "expediente": "74039",
-  "nombre": "Isidro Turcios Amaya",
-  "domicilio": "Delicias Comayagua"
- },
- {
-  "expediente": "74418",
-  "nombre": "Sayra Isabel Benites Rodriguez",
-  "domicilio": "Aldea San Isidro Barrio El Rosario Comayagua"
- },
- {
-  "expediente": "74673",
-  "nombre": "Kely Lopez Chicas",
-  "domicilio": "Aldea Miravalle La Paz La Paz"
- },
- {
-  "expediente": "74811",
-  "nombre": "Santos Brizuela Enamorado",
-  "domicilio": "Aldea San Juancito Tegucigalpa Francisco Morazán"
- },
- {
-  "expediente": "75428",
-  "nombre": "Reyna  Maribel Meza Martínez",
-  "domicilio": "Colonia 21 de abril Comayagua Comayagua"
- },
- {
-  "expediente": "75586",
-  "nombre": "Pedro Nolasco Guzman",
-  "domicilio": "Comayagua Aldea Lomas del Cordero."
- },
- {
-  "expediente": "75717",
-  "nombre": "Dora Leticia Maldonado Jimenes",
-  "domicilio": "Aldea las Mesetas Lamani Comayagua."
- },
- {
-  "expediente": "75726",
-  "nombre": "Adriana Osorio",
-  "domicilio": "San Jose de Panes Comayagua."
- },
- {
-  "expediente": "75851",
-  "nombre": "Marco Antonio Henriquez Maldonado",
-  "domicilio": "Comayagua Col. 2 de mayo."
- },
- {
-  "expediente": "75979",
-  "nombre": "Mario Corea Pineda",
-  "domicilio": "Planes de Muyen Chinacla La Paz"
- },
- {
-  "expediente": "76264",
-  "nombre": "Marco Antonio Calix Gonzalez",
-  "domicilio": "Matecaña Comayagua"
- },
- {
-  "expediente": "76311",
-  "nombre": "David Alejandro Chavarria Chavarria",
-  "domicilio": "El Rosario comayagua"
- },
- {
-  "expediente": "76574",
-  "nombre": "María Mercedes Rosales Peña",
-  "domicilio": "Bo. Caraopando Amapala Valle"
- },
- {
-  "expediente": "76631",
-  "nombre": "Ilda Marina Burdet Alvarez",
-  "domicilio": "Siguatepeque Comayagua"
- },
- {
-  "expediente": "76754",
-  "nombre": "Suyapa Gonzales Elvir",
-  "domicilio": "Barrio San Antonio Siguatepeque Comayagua y"
- },
- {
-  "expediente": "76772",
-  "nombre": "Doris Aida Cordon Ramirez",
-  "domicilio": "Bo. San Antonia La Paz"
- },
- {
-  "expediente": "76819",
-  "nombre": "Norma Elizabeth Galeano Velasquez",
-  "domicilio": "Col. Satelite San Pedro Sula"
- },
- {
-  "expediente": "76893",
-  "nombre": "Martha Hernandez Aguilar",
-  "domicilio": "Aldea el Pito Siguatepeque Comayagua ( )"
- },
- {
   "expediente": "77040",
-  "nombre": "Dania Esperanza Benitez Mazariegos",
+  "identidad": "0301 2013 01036",
+  "nombre": "Dania Esperanza",
+  "apellido": "Benitez Mazariegos",
   "domicilio": "Aldea El Guarumo Comayagua"
  },
  {
-  "expediente": "77095",
-  "nombre": "Hilda Victoria Sabillon Leonardo",
-  "domicilio": "Aldea San Buena Aventura Yojoa Cortes"
+  "expediente": "80032",
+  "identidad": "1218-1957-00108",
+  "nombre": "Antonio",
+  "apellido": "Santos",
+  "domicilio": "Santa Maria La Paz"
  },
  {
-  "expediente": "77125",
-  "nombre": "Karla Patricia Quiroz Reyes",
-  "domicilio": "Aldea Paleto Baracoa Cortes"
- },
- {
-  "expediente": "77127",
-  "nombre": "Karla Maryori Mejia Rivera",
-  "domicilio": "Aldea El roblito Comayagua"
- },
- {
-  "expediente": "77161",
-  "nombre": "Luis Alonso Maldonado Reyes",
-  "domicilio": "Aldea El Ocotillo Comayagua Comayagua y"
- },
- {
-  "expediente": "77214",
-  "nombre": "Jose Antonio Gacrcía Rodríguez",
-  "domicilio": "Aldea Los Cascabeles Comayagua Comayagua ( )"
- },
- {
-  "expediente": "77217",
-  "nombre": "Florentina Mazariegos Baires",
-  "domicilio": "Sabanalarga El Rosario Comayagua"
- },
- {
-  "expediente": "77274",
-  "nombre": "Ma Rosario Ramos",
-  "domicilio": "Cuesta del neo la libertad comayagua"
- },
- {
-  "expediente": "77297",
-  "nombre": "Anibal Calixto Rodriguez Flores",
-  "domicilio": "Aldea El Varrillal Villa de San Antonio Comayagua. Frente a la escuela Amilcar rivera"
- },
- {
-  "expediente": "77316",
-  "nombre": "Medardo Maradiaga Espinal",
-  "domicilio": "Col. Fuerzas Armadas Comayagua Comayagua ( )"
- },
- {
-  "expediente": "77407",
-  "nombre": "Guillermo Giron Zelaya",
-  "domicilio": "Aldea Samaria Patuca Olancho ( )"
- },
- {
-  "expediente": "77449",
-  "nombre": "Karla Lourdes Matute",
-  "domicilio": "Barrio Las Flores Taulabe"
- },
- {
-  "expediente": "77466",
-  "nombre": "Josefina Redondo Zavala",
-  "domicilio": "La Libertad Comayagua"
- },
- {
-  "expediente": "77476",
-  "nombre": "Jose Albino Sanchez",
-  "domicilio": "Aldea los laureles Santa Barbara"
- },
- {
-  "expediente": "77481",
-  "nombre": "Santos Ramón Casco Sanchez",
-  "domicilio": "Barrio La Gloria Santa Cruz de Yojoa Cortes( )"
- },
- {
-  "expediente": "77488",
-  "nombre": "Raúl Francisco Amador Barahona",
-  "domicilio": "Aldea El Pacayal Siguatepeque Comayagua ( )"
- },
- {
-  "expediente": "77491",
-  "nombre": "Ana Rosa Castañeda Mejía",
-  "domicilio": "Aldea San Jose de las Pavas El Rosario Comaygua ( )"
- },
- {
-  "expediente": "77492",
-  "nombre": "Jose Ernan Guillen Rivera",
-  "domicilio": "Comayagua El Rosario aldea Guasistagua ( )"
- },
- {
-  "expediente": "77533",
-  "nombre": "Brenedi Manuel Aguilar Lopez",
-  "domicilio": "cortes santa Cruz de Yojoa Aldea Los Pinos ( )"
- },
- {
-  "expediente": "77545",
-  "nombre": "Franklin Geovany Villanueva Mejia",
-  "domicilio": "Colonia Valladolid Comayagua"
- },
- {
-  "expediente": "77566",
-  "nombre": "Diego Kaleth Mejia Banegas",
-  "domicilio": "Los Horocones la union San jeronimo comayagua"
- },
- {
-  "expediente": "77572",
-  "nombre": "Nery Yolanda Molina Laines",
-  "domicilio": "Los Horocones la union San jeronimo comayagua"
- },
- {
-  "expediente": "77594",
-  "nombre": "Nolvia Lopez Ramirez",
-  "domicilio": "La Vegas Santa Barbara"
- },
- {
-  "expediente": "77602",
-  "nombre": "Yasmin Gomez Chevez",
-  "domicilio": "Nueva ceibita san jeronimo"
+  "expediente": "79514",
+  "identidad": "0319 1959 00029",
+  "nombre": "Esgardo",
+  "apellido": "Rodriguez Sanchez",
+  "domicilio": "El Rodeo Villa de San Antonio Comayagua"
  },
  {
   "expediente": "77603",
-  "nombre": "Efrain Rodriguez",
+  "identidad": "1210-1949-00024",
+  "nombre": "Efrain",
+  "apellido": "Rodriguez",
   "domicilio": "Opatoro La Paz"
  },
  {
+  "expediente": "80072",
+  "identidad": "1804 1949 01125",
+  "nombre": "Felix Santos",
+  "apellido": "Herrera Montes",
+  "domicilio": "El Pacayal Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "79543",
+  "identidad": "1217-1979-00358",
+  "nombre": "Francisco",
+  "apellido": "López",
+  "domicilio": "La Paz San pedro de tutule"
+ },
+ {
+  "expediente": "79741",
+  "identidad": "0319-1955-00037",
+  "nombre": "Jose Humberto",
+  "apellido": "Moncada Maradiaga",
+  "domicilio": "Comayagua villa de san antonio"
+ },
+ {
+  "expediente": "79214",
+  "identidad": "0319-1940-00034",
+  "nombre": "Jualian",
+  "apellido": "Andino Andino",
+  "domicilio": "Villa de san antonio Proteccion. 2 cuadras arriba del salon comunal."
+ },
+ {
+  "expediente": "79960",
+  "identidad": "1217-1951-00086",
+  "nombre": "Luis Beltran",
+  "apellido": "Vasquez",
+  "domicilio": "La paz las crucitas Santa Maria."
+ },
+ {
+  "expediente": "79806",
+  "identidad": "0804-1966-00005",
+  "nombre": "Marcelino",
+  "apellido": "Jimenez",
+  "domicilio": "Aldea Jacintillos San Jerónimo Comayagua."
+ },
+ {
+  "expediente": "75851",
+  "identidad": "0107-1984-01629",
+  "nombre": "Marco Antonio",
+  "apellido": "Henriquez Maldonado",
+  "domicilio": "Comayagua Col. 2 de mayo."
+ },
+ {
+  "expediente": "79602",
+  "identidad": "1801-1985-0274",
+  "nombre": "Pedro",
+  "apellido": "Montes Armijo",
+  "domicilio": "Puerto Cortes barrio cieneguita"
+ },
+ {
+  "expediente": "72178",
+  "identidad": "0318-1958-00279",
+  "nombre": "Roberto",
+  "apellido": "Guzman Ramirez",
+  "domicilio": "Aldea Zapote siguatepeque comayagua"
+ },
+ {
+  "expediente": "79666",
+  "identidad": "0801-1939-02510",
+  "nombre": "Ramon",
+  "apellido": "Medina Herrera",
+  "domicilio": "San Francisco de soroguara"
+ },
+ {
+  "expediente": "79320",
+  "identidad": "0703-1961-00198",
+  "nombre": "Wilfredo",
+  "apellido": "Sanchez Medina",
+  "domicilio": "Colonia Las Acacias Sector 1 Danli El Paraiso"
+ },
+ {
+  "expediente": "79820",
+  "identidad": "0101-2024-00025",
+  "nombre": "Jonathan Noel",
+  "apellido": "Recarte Ruiz",
+  "domicilio": "Comayagua Comayagua Colonia fuerzas armadas"
+ },
+ {
+  "expediente": "75726",
+  "identidad": "0301-1963-00219",
+  "nombre": "Adriana",
+  "apellido": "Osorio",
+  "domicilio": "San Jose de Panes Comayagua."
+ },
+ {
+  "expediente": "78594",
+  "identidad": "0301-1960-00188",
+  "nombre": "Aida",
+  "apellido": "Mejia Reyes",
+  "domicilio": "Aldea El Socorro Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "78076",
+  "identidad": "1206-1975-00273",
+  "nombre": "Alva Lidia",
+  "apellido": "Cruz Perez",
+  "domicilio": "Aldea Santa Rosita Guajiquiro La Paz"
+ },
+ {
+  "expediente": "7311",
+  "identidad": "1218-1962-00226",
+  "nombre": "ANDREA",
+  "apellido": "NOLASCO VASQUEZ",
+  "domicilio": "Canton San Atonio La libertad."
+ },
+ {
+  "expediente": "538",
+  "identidad": "0319 1955 00043",
+  "nombre": "Ada Belen",
+  "apellido": "Silva",
+  "domicilio": "Aldea de Proteccion Villa de San Antonio Comayagua( )"
+ },
+ {
+  "expediente": "78801",
+  "identidad": "1210 1978 00211",
+  "nombre": "Alba Estela",
+  "apellido": "Lopez Martinez",
+  "domicilio": "Opatoro La Paz"
+ },
+ {
+  "expediente": "78706",
+  "identidad": "0320-1992-00389",
+  "nombre": "Ana Lilian",
+  "apellido": "Avila Redondo",
+  "domicilio": "Aldea Las Mesetias Meambar Comayagua detrás de la iglesia Alfa y Omega"
+ },
+ {
+  "expediente": "73969",
+  "identidad": "1810-1997-00273",
+  "nombre": "Beatriz",
+  "apellido": "Chacon Castro",
+  "domicilio": "Aldea quebrada de agua Victoria Yoro."
+ },
+ {
+  "expediente": "79943",
+  "identidad": "0301 1993 01666",
+  "nombre": "Belkis Lili",
+  "apellido": "Castellanos Martinez",
+  "domicilio": "Aldea el Quebracho Comayagua Comayagua"
+ },
+ {
+  "expediente": "78320",
+  "identidad": "0611-1981-02100",
+  "nombre": "Bernarda Isolina",
+  "apellido": "Zambrano Diaz",
+  "domicilio": "Barrio Abajo La Caridad Comayagua"
+ },
+ {
+  "expediente": "79943",
+  "identidad": "0301 1980 02365",
+  "nombre": "Blanca Emelda",
+  "apellido": "Moreno Vasquez",
+  "domicilio": "Colonia 3 de Octubre Comayagua Comayagua"
+ },
+ {
+  "expediente": "80001",
+  "identidad": "0303-1958-00197",
+  "nombre": "Bernanda",
+  "apellido": "Martinez Machado",
+  "domicilio": "Comayagua Comayagua Col 21 abril"
+ },
+ {
+  "expediente": "79169",
+  "identidad": "1210-1957-0003",
+  "nombre": "Marcelina",
+  "apellido": "Rodriguez Lopez",
+  "domicilio": "Aldea Valle de Angeles Opatoro La Paz"
+ },
+ {
+  "expediente": "74031",
+  "identidad": "0801-1985-08169",
+  "nombre": "Candida Rosa",
+  "apellido": "Meza García",
+  "domicilio": "Col. José Ángel Ulloa Tegucigalpa Francisco Morazán"
+ },
+ {
+  "expediente": "79093",
+  "identidad": "0318-1984-00990",
+  "nombre": "Candida",
+  "apellido": "Urquia Reyes",
+  "domicilio": "Aldea Barsovia Taulabe Comayagua a 3 cuadra de la iglesia catolica"
+ },
+ {
+  "expediente": "9042",
+  "identidad": "1201 1963 00203",
+  "nombre": "Carmen",
+  "apellido": "Alvarado",
+  "domicilio": "Comayagua Comayagua Aldea Palmerola 1 ( )"
+ },
+ {
+  "expediente": "10573",
+  "identidad": "0306 1951 00192",
+  "nombre": "Cristina",
+  "apellido": "Lopez Ulloa",
+  "domicilio": "Agua Blanca Minas de oro Comayagua"
+ },
+ {
+  "expediente": "75717",
+  "identidad": "0307-1964-00081",
+  "nombre": "Dora Leticia",
+  "apellido": "Maldonado Jimenes",
+  "domicilio": "Aldea las Mesetas Lamani Comayagua."
+ },
+ {
+  "expediente": "20119",
+  "identidad": "0301 1941 00400",
+  "nombre": "Digna",
+  "apellido": "Cruz Zavala",
+  "domicilio": "Barrio Suyapa Comayagua"
+ },
+ {
+  "expediente": "78763",
+  "identidad": "0313 1968 00012",
+  "nombre": "Dunia Esmeralda",
+  "apellido": "Suazo Banegas",
+  "domicilio": "Comayagua Comayagua Aldea la union( )"
+ },
+ {
+  "expediente": "79590",
+  "identidad": "0306-1967-00061",
+  "nombre": "Edda Regina",
+  "apellido": "Madrid Romero",
+  "domicilio": "Comayagua La libertad."
+ },
+ {
+  "expediente": "72219",
+  "identidad": "1210-1954-00010",
+  "nombre": "Fernanda",
+  "apellido": "Lopez Perez",
+  "domicilio": "La Paz Opatoro Barrio El Centro."
+ },
+ {
+  "expediente": "79108",
+  "identidad": "1202-1979-00094",
+  "nombre": "Flora Eneyda",
+  "apellido": "Lopez Rios",
+  "domicilio": "San Nicolas Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "60871",
+  "identidad": "0319 1982 00069",
+  "nombre": "Fany Argentina",
+  "apellido": "Silva Silva",
+  "domicilio": "proteccion villa san antonio comayagua ( )"
+ },
+ {
+  "expediente": "78963",
+  "identidad": "0308 1953 00070",
+  "nombre": "Faustina",
+  "apellido": "Mazariegos",
+  "domicilio": "Meambar Comayagua"
+ },
+ {
+  "expediente": "78225",
+  "identidad": "1810 1983 00455",
+  "nombre": "Flora Mercedes",
+  "apellido": "Perez Murillo",
+  "domicilio": "Las Haradas La Libertad Comayagua"
+ },
+ {
+  "expediente": "44965",
+  "identidad": "0301-1963-00813",
+  "nombre": "Gloria",
+  "apellido": "Melendez Vasquez",
+  "domicilio": "Comayagua Comayagua. Colonia san miguel ."
+ },
+ {
+  "expediente": "57212",
+  "identidad": "0301-1958-00196",
+  "nombre": "Gloria Esperanza",
+  "apellido": "Carcamo Flores",
+  "domicilio": "Comayagua Comayagua sitramedi ."
+ },
+ {
+  "expediente": "1946",
+  "identidad": "0301-1957-00180",
+  "nombre": "Gumersinda",
+  "apellido": "Sanchez",
+  "domicilio": "Aldea San Jose de las Moras Comayagua"
+ },
+ {
+  "expediente": "6596",
+  "identidad": "0301-1947-00433",
+  "nombre": "Hemerlinda",
+  "apellido": "Moreno",
+  "domicilio": "Comayagua Comayagua la san pedrana."
+ },
+ {
+  "expediente": "77095",
+  "identidad": "0508 1955 00163",
+  "nombre": "Hilda Victoria",
+  "apellido": "Sabillon Leonardo",
+  "domicilio": "Aldea San Buena Aventura Yojoa Cortes"
+ },
+ {
+  "expediente": "79540",
+  "identidad": "0306 1978 00560",
+  "nombre": "Iris Suyapa",
+  "apellido": "Martinez Ramos",
+  "domicilio": "La Pista La Libertad Comayagua"
+ },
+ {
+  "expediente": "78752",
+  "identidad": "1007-1982-00013",
+  "nombre": "Irma Yamileth",
+  "apellido": "Miranda Castro",
+  "domicilio": "Aldea San Rafael Jesus de Otoro Intibuca"
+ },
+ {
+  "expediente": "76631",
+  "identidad": "0314-1957-00080",
+  "nombre": "Ilda Marina",
+  "apellido": "Burdet Alvarez",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "78448",
+  "identidad": "0301 1959 00805",
+  "nombre": "Isolina",
+  "apellido": "Castro Zavala",
+  "domicilio": "Barrio Suyapa Comayagua Comayagua"
+ },
+ {
+  "expediente": "2763",
+  "identidad": "0301-1996-00744",
+  "nombre": "Josselin Margarita",
+  "apellido": "Obando Garcia",
+  "domicilio": "Aldea San Miguel del Eden Comayagua"
+ },
+ {
+  "expediente": "79662",
+  "identidad": "1212 1979 00099",
+  "nombre": "Juana",
+  "apellido": "Gonzales Calix",
+  "domicilio": "Aldea El Llano Grande San José La Paz"
+ },
+ {
+  "expediente": "77909",
+  "identidad": "0301-1956-00343",
+  "nombre": "Lucia",
+  "apellido": "Tejada Zavala",
+  "domicilio": "Aldea el Taladro Comayagua"
+ },
+ {
+  "expediente": "79169",
+  "identidad": "1210-1957-0003",
+  "nombre": "Marcelina",
+  "apellido": "Rodriguez Lopez",
+  "domicilio": "Aldea Valle de Angeles Opatoro La Paz"
+ },
+ {
+  "expediente": "79948",
+  "identidad": "0801 1953 02618",
+  "nombre": "Maria Aurora",
+  "apellido": "Reconco Silva",
+  "domicilio": "Aldea Soroguara M.D.C. Francisco Morazán"
+ },
+ {
+  "expediente": "13880",
+  "identidad": "1003-1969-00162",
+  "nombre": "Maria Floricia",
+  "apellido": "Hernandez Marquez",
+  "domicilio": "Comayagua Villa de San Antonio Aldea el Cimiento"
+ },
+ {
+  "expediente": "7954",
+  "identidad": "0301 1997 01022",
+  "nombre": "Maria Paula",
+  "apellido": "Benitez Molina",
+  "domicilio": "Colonia Ivan Betancourt Comayagua Comayagua"
+ },
+ {
+  "expediente": "47816",
+  "identidad": "1206 1980 00202",
+  "nombre": "Marleny Suyapa",
+  "apellido": "Mendoza Pineda",
+  "domicilio": "Aldea Nueva Valladolid Comayagua"
+ },
+ {
+  "expediente": "39923",
+  "identidad": "1503 1969 00277",
+  "nombre": "Maria Dionicia",
+  "apellido": "Reyes",
+  "domicilio": "Lomas de Cordero Comayagua"
+ },
+ {
+  "expediente": "990001",
+  "identidad": "0318 1964 00008",
+  "nombre": "María Gladiz",
+  "apellido": "Mendoza",
+  "domicilio": "Aldea ocoteque Arrancado Siguatepeque Comayagua ( )"
+ },
+ {
+  "expediente": "13150",
+  "identidad": "313194200087",
+  "nombre": "Maria Santos",
+  "apellido": "Cruz",
+  "domicilio": "Comayagua San Jeronimo Aldea las Crucitas"
+ },
+ {
+  "expediente": "79743",
+  "identidad": "1202-1967-00010",
+  "nombre": "Maria Concepción",
+  "apellido": "Gomez Medina",
+  "domicilio": "Aguanjeterique la Paz"
+ },
+ {
+  "expediente": "5958",
+  "identidad": "0611 1985 00264",
+  "nombre": "Maria de los Santos",
+  "apellido": "Garcia Reyes",
+  "domicilio": "Comayagua Comayagua col 10 de mayo ( )"
+ },
+ {
+  "expediente": "78675",
+  "identidad": "1002 1958 00067",
+  "nombre": "Maria Leonor",
+  "apellido": "Santos Castro",
+  "domicilio": "La Libertad Comayagua"
+ },
+ {
+  "expediente": "79186",
+  "identidad": "0310'1969'00006",
+  "nombre": "Marilu",
+  "apellido": "Bardales Padilla",
+  "domicilio": "Cofradia cortes. Col casa quemada"
+ },
+ {
+  "expediente": "26074",
+  "identidad": "0301 1961 00918",
+  "nombre": "Martha Vilma",
+  "apellido": "Bonilla",
+  "domicilio": "Comayagua Comayagua barrio santa lucia"
+ },
+ {
+  "expediente": "79844",
+  "identidad": "1217-1955-00016",
+  "nombre": "Maura",
+  "apellido": "Vasquez Vasquez",
+  "domicilio": "Comayagua Barrio suyapa calle al sitio ultima casa."
+ },
+ {
+  "expediente": "78832",
+  "identidad": "06 13 1972 00073",
+  "nombre": "Norma Leticia",
+  "apellido": "Diaz",
+  "domicilio": "Col. Vindel Francisco Morazan"
+ },
+ {
+  "expediente": "77572",
+  "identidad": "1501-1974-01545",
+  "nombre": "Nery Yolanda",
+  "apellido": "Molina Laines",
+  "domicilio": "Los Horocones la union San jeronimo comayagua"
+ },
+ {
+  "expediente": "28984",
+  "identidad": "0303 1966 00187",
+  "nombre": "Olga Marina",
+  "apellido": "Gutierrez Barrera",
+  "domicilio": "Col. El Rosario Comayagua"
+ },
+ {
+  "expediente": "27692",
+  "identidad": "0711 1941 00021",
+  "nombre": "Orfilia",
+  "apellido": "Flores",
+  "domicilio": "Colonia 21 de abril Comaygua Comayagua"
+ },
+ {
+  "expediente": "78554",
+  "identidad": "0313-1952-00064",
+  "nombre": "Hermenejilda",
+  "apellido": "Mejia Euceda",
+  "domicilio": "Colonia Nueva Ceibita San Jeronimo Comayagua"
+ },
+ {
+  "expediente": "68903",
+  "identidad": "0107-1948-01020",
+  "nombre": "Marta",
+  "apellido": "Marroquin",
+  "domicilio": "Comayagua Villa de San Antonio Aldea San Nicolas."
+ },
+ {
+  "expediente": "61281",
+  "identidad": "0317 1964 00044",
+  "nombre": "Servelia",
+  "apellido": "Marroquin Rodriguez",
+  "domicilio": "San Sebastian La Peñita Comayagua"
+ },
+ {
+  "expediente": "79562",
+  "identidad": "0301-1966-00549",
+  "nombre": "Paula",
+  "apellido": "Reyes Hernandez",
+  "domicilio": "Comayagua Comayagua Aldea Piedras Azules."
+ },
+ {
+  "expediente": "79445",
+  "identidad": "0508 1955 00109",
+  "nombre": "Rosa Amilta",
+  "apellido": "Enamorado Urbina",
+  "domicilio": "Aldea La Fe Peña Blanca Santa Cruz de Yojoa Cortés"
+ },
+ {
+  "expediente": "79821",
+  "identidad": "1201-1976-00214",
+  "nombre": "Sandra Leticia",
+  "apellido": "Martinez Castro",
+  "domicilio": "La Paz La Paz Barrio La Merced."
+ },
+ {
+  "expediente": "74811",
+  "identidad": "1623195600005",
+  "nombre": "Santos",
+  "apellido": "Brizuela Enamorado",
+  "domicilio": "Aldea San Juancito Tegucigalpa Francisco Morazán"
+ },
+ {
+  "expediente": "16566",
+  "identidad": "0301-1988-01811",
+  "nombre": "Silvia Leticia",
+  "apellido": "Jimenez Canales",
+  "domicilio": "Aldea San Francisco La Ceibita Comayagua Comayagua"
+ },
+ {
+  "expediente": "76754",
+  "identidad": "0301-1980-01836",
+  "nombre": "Suyapa",
+  "apellido": "Gonzales Elvir",
+  "domicilio": "Barrio San Antonio Siguatepeque Comayagua y"
+ },
+ {
+  "expediente": "79842",
+  "identidad": "0816-1975-00089",
+  "nombre": "Suyapa Yaneth",
+  "apellido": "Cruz",
+  "domicilio": "Colonia Carrizal 1 Comayaguela Francisco Morazan"
+ },
+ {
+  "expediente": "16365",
+  "identidad": "0811-1951-00144",
+  "nombre": "Teodora",
+  "apellido": "Rosales Palma",
+  "domicilio": "Aldea Las flores Villa de San Antonio"
+ },
+ {
+  "expediente": "78548",
+  "identidad": "02798680-3",
+  "nombre": "Veronica Elizabeth",
+  "apellido": "Romero de Chavez",
+  "domicilio": "Lamani Comayagua"
+ },
+ {
+  "expediente": "79057",
+  "identidad": "1602 1944 00195",
+  "nombre": "Dominga",
+  "apellido": "Hernandez Rodriguez",
+  "domicilio": "Arada Santa barbara"
+ },
+ {
+  "expediente": "77776",
+  "identidad": "0801-1980-07006",
+  "nombre": "Keidy Mandi",
+  "apellido": "Maradiaga Hernandez",
+  "domicilio": "Comayagua Villa de San Antonio El Rodeo"
+ },
+ {
+  "expediente": "78935",
+  "identidad": "301 1956 00224",
+  "nombre": "Maria Cleofes",
+  "apellido": "Amador Estrada",
+  "domicilio": "Barrio Arriba Comayagua"
+ },
+ {
+  "expediente": "76893",
+  "identidad": "0318 1971 01268",
+  "nombre": "Martha",
+  "apellido": "Hernandez Aguilar",
+  "domicilio": "Aldea el Pito Siguatepeque Comayagua ( )"
+ },
+ {
+  "expediente": "11970",
+  "identidad": "0301 1965 01092",
+  "nombre": "Noemi Guadalupe",
+  "apellido": "Torres Varela",
+  "domicilio": "Zambrano Francisco Morazan"
+ },
+ {
+  "expediente": "78542",
+  "identidad": "0815 1985 00946",
+  "nombre": "Sandra Emelina",
+  "apellido": "Cruz",
+  "domicilio": "Col Campo cielo Tegucigalpa. FM"
+ },
+ {
+  "expediente": "990002",
+  "identidad": "0715 1985 00450",
+  "nombre": "Alicia Suyapa",
+  "apellido": "Mairena",
+  "domicilio": "Aldea Buena Vista Moroseli El Paraiso"
+ },
+ {
+  "expediente": "79897",
+  "identidad": "0301-1979-02500",
+  "nombre": "Ana Cecilia",
+  "apellido": "Moreno Morales",
+  "domicilio": "Comayagua Comayagua Barrio Abajo."
+ },
+ {
+  "expediente": "80154",
+  "identidad": "0817-1987-00162",
+  "nombre": "Aracely Consuelo",
+  "apellido": "Montoya Ponce",
+  "domicilio": "Aldea Cuesta de Danta Yuscaran El Paraiso"
+ },
+ {
+  "expediente": "79749",
+  "identidad": "0301-1990-00015",
+  "nombre": "Blanca Ercilia",
+  "apellido": "Orellana Castro",
+  "domicilio": "Comayagua Comayagua Barrio La Escoto."
+ },
+ {
+  "expediente": "40018",
+  "identidad": "0321 1989 00594",
+  "nombre": "Carmen",
+  "apellido": "Santos Rodriguez",
+  "domicilio": "Col. 9 de noviembre Comayagua"
+ },
+ {
+  "expediente": "80288",
+  "identidad": "1208 1996 00517",
+  "nombre": "Eiby Anabely",
+  "apellido": "Rivera Gamez",
+  "domicilio": "Barrio San Juan Comayagua Comayagua"
+ },
+ {
+  "expediente": "2327",
+  "identidad": "0301 1977 00038",
+  "nombre": "Enma Esther",
+  "apellido": "Lorenzo",
+  "domicilio": "La Sampedrana Comayagua Comayagua"
+ },
+ {
+  "expediente": "64034",
+  "identidad": "0301-1976-01832",
+  "nombre": "Evelin Lizzette",
+  "apellido": "Leiva Valladares",
+  "domicilio": "Comayagua Aldea Nueva Valladolid."
+ },
+ {
+  "expediente": "78089",
+  "identidad": "0313 1990 00252",
+  "nombre": "Greysi Yecenia",
+  "apellido": "Buezo Osorio",
+  "domicilio": "Aldea Las Crusitas Comayagua"
+ },
+ {
+  "expediente": "42459",
+  "identidad": "0301-1989- 01875",
+  "nombre": "Iris Janneth",
+  "apellido": "Alvarado Guevara",
+  "domicilio": "Convento Las Clarisas Comayagua"
+ },
+ {
+  "expediente": "79661",
+  "identidad": "1211 1988 00042",
+  "nombre": "Jarely Migdalia",
+  "apellido": "Ventura Rodriguez",
+  "domicilio": "Barrio Arriba Comayagua Comayagua"
+ },
+ {
+  "expediente": "28860",
+  "identidad": "0301-1993-03565",
+  "nombre": "Josselin Elizabeth",
+  "apellido": "Lopez Galeas",
+  "domicilio": "Comayagua Comayagua Col. Fiallos."
+ },
+ {
+  "expediente": "79443",
+  "identidad": "0303-1979-00345",
+  "nombre": "Juana",
+  "apellido": "Gonzales",
+  "domicilio": "Comayagua Aldea Cerro blanco. ."
+ },
+ {
+  "expediente": "78772",
+  "identidad": "0301-1997-01313",
+  "nombre": "Karlen Mariely",
+  "apellido": "Zavala Portillo",
+  "domicilio": "Colonia 21 de abril Comayagua Comayagua"
+ },
+ {
+  "expediente": "74673",
+  "identidad": "1206 1983 00305",
+  "nombre": "Kely",
+  "apellido": "Lopez Chicas",
+  "domicilio": "Aldea Miravalle La Paz La Paz"
+ },
+ {
+  "expediente": "79948",
+  "identidad": "0506 1990 01235",
+  "nombre": "Kendy Esperanza",
+  "apellido": "Rivera Sabillon",
+  "domicilio": "Colonia 22 de Febrero Comayagua Comayagua"
+ },
+ {
+  "expediente": "78918",
+  "identidad": "0318-1990-01496",
+  "nombre": "Linda Francely",
+  "apellido": "Dominguez Martinez",
+  "domicilio": "Barrio Fatima Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "4995",
+  "identidad": "1623 1992 00021",
+  "nombre": "Lizeth Karina",
+  "apellido": "Osorio Villatoro",
+  "domicilio": "Barrio Santa Lucía Comayaua"
+ },
+ {
+  "expediente": "79987",
+  "identidad": "0306-1984-00064",
+  "nombre": "Lucy Nohema",
+  "apellido": "Anariba Anariba",
+  "domicilio": "Comayagua Barrio La Sabana."
+ },
+ {
+  "expediente": "79236",
+  "identidad": "0306-1984-00780",
+  "nombre": "Marcia Johanna",
+  "apellido": "Ulloa Gutierrez",
+  "domicilio": "Lajas Comayagua"
+ },
+ {
+  "expediente": "78624",
+  "identidad": "0316-1981-00183",
+  "nombre": "Maria Magdalena",
+  "apellido": "Buezo Soto",
+  "domicilio": "Barrio Abajo Colonia San Luis Comayagua"
+ },
+ {
+  "expediente": "78996",
+  "identidad": "0301 1981 01635",
+  "nombre": "Mayra Carolina",
+  "apellido": "Cantor Pineda",
+  "domicilio": "21 de abril Comayagua Comayagua"
+ },
+ {
+  "expediente": "48553",
+  "identidad": "1211-1983-00128",
+  "nombre": "Merci Lorely",
+  "apellido": "Maldonado Maldonado",
+  "domicilio": "Aldea las Cañas San Antonio El Norte La Paz"
+ },
+ {
+  "expediente": "79519",
+  "identidad": "0304-1970- 00277",
+  "nombre": "Maria Elena",
+  "apellido": "Lopes Zuniga",
+  "domicilio": "Comayagua Esquias."
+ },
+ {
+  "expediente": "78976",
+  "identidad": "0819 1981 00005",
+  "nombre": "Mary Aneida",
+  "apellido": "Rojas Calix",
+  "domicilio": "Comayagua Comayagua col lomas del rio ( )"
+ },
+ {
+  "expediente": "61565",
+  "identidad": "0312 1980 00423",
+  "nombre": "María Teresa",
+  "apellido": "Vasquez Vasquez",
+  "domicilio": "Aldea Mata de caña Comayagua Comayagua"
+ },
+ {
+  "expediente": "26059",
+  "identidad": "0301 1977 00596",
+  "nombre": "Myrian Suyapa",
+  "apellido": "Morales Montes",
+  "domicilio": "Piedras azules Comayagua"
+ },
+ {
+  "expediente": "80143",
+  "identidad": "0301-1978-00442",
+  "nombre": "Nora Lizzeth",
+  "apellido": "Carranza Izaguirre",
+  "domicilio": "Comayagua Aldea Lomas del Cordero."
+ },
+ {
+  "expediente": "79943",
+  "identidad": "0301 1985 01769",
+  "nombre": "Norma Elisa",
+  "apellido": "Gutierrez Recarte",
+  "domicilio": "Aldea La Flor Comayagua Comayagua"
+ },
+ {
+  "expediente": "77992",
+  "identidad": "0303 1979 00141",
+  "nombre": "Nelia Gracibel",
+  "apellido": "Rodriguez Garcia",
+  "domicilio": "San Isidro El Rosario Comayagua"
+ },
+ {
+  "expediente": "78636",
+  "identidad": "0812 1970 00045",
+  "nombre": "Nelli Ibeth",
+  "apellido": "Sierra",
+  "domicilio": "Lejamani Comayagua"
+ },
+ {
+  "expediente": "78921",
+  "identidad": "0306 1989 00394",
+  "nombre": "Nery Yolanda",
+  "apellido": "Suazo Ruis",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "77594",
+  "identidad": "1605 1975 00040",
+  "nombre": "Nolvia",
+  "apellido": "Lopez Ramirez",
+  "domicilio": "La Vegas Santa Barbara"
+ },
+ {
+  "expediente": "66621",
+  "identidad": "0301-1978-01288",
+  "nombre": "Olivia",
+  "apellido": "Nolasco Mejia",
+  "domicilio": "Comayagua Comayagua Brisas de Suyapa #1."
+ },
+ {
+  "expediente": "79142",
+  "identidad": "1811-1969-00107",
+  "nombre": "Modesta",
+  "apellido": "Chavarria Montes",
+  "domicilio": "Colonia Los Tulines El Progreso Yoro"
+ },
+ {
+  "expediente": "78852",
+  "identidad": "0301-1977-00978",
+  "nombre": "Sonia Adalinda",
+  "apellido": "Maldonado Hernandez",
+  "domicilio": "Barrio Lourdes Comayagua. Comayagua"
+ },
+ {
+  "expediente": "33232",
+  "identidad": "",
+  "nombre": "(Px FRAY)Hilary Valeska",
+  "apellido": "Mejia",
+  "domicilio": "Comayagua Cerro el Nance ."
+ },
+ {
+  "expediente": "79709",
+  "identidad": "0821-1948-00052",
+  "nombre": "Paula",
+  "apellido": "Cruz Andino",
+  "domicilio": "Francisco Morazán San Miguelito Malalaja."
+ },
+ {
+  "expediente": "45823",
+  "identidad": "0301 1988 02504",
+  "nombre": "Reyna Isabel",
+  "apellido": "Blanco Sanchez",
+  "domicilio": "Col. Morazan Comayaguam"
+ },
+ {
+  "expediente": "79032",
+  "identidad": "1219-1975-00036",
+  "nombre": "Ritza Herminia",
+  "apellido": "Perez Bautista",
+  "domicilio": "Aldea Los Planes Cabañas La Paz"
+ },
+ {
+  "expediente": "79916",
+  "identidad": "0510-1962-00059",
+  "nombre": "Rosa Elida",
+  "apellido": "Portillo Mendoza",
+  "domicilio": "San Buena Ventura Cortes."
+ },
+ {
+  "expediente": "75428",
+  "identidad": "0301 1976 00882",
+  "nombre": "Reyna  Maribel",
+  "apellido": "Meza Martínez",
+  "domicilio": "Colonia 21 de abril Comayagua Comayagua"
+ },
+ {
+  "expediente": "78997",
+  "identidad": "1205-1986-00073",
+  "nombre": "Sara Elizabeth",
+  "apellido": "Vasquez Vasquez",
+  "domicilio": "Planes de Muyen Chinacla La Paz"
+ },
+ {
+  "expediente": "78467",
+  "identidad": "301198301601",
+  "nombre": "Sandra Patricia",
+  "apellido": "Mejia Castillo",
+  "domicilio": "Comayagua Comayagua Barrio san Jose ( )"
+ },
+ {
+  "expediente": "77602",
+  "identidad": "1808-1995-01108",
+  "nombre": "Yasmin",
+  "apellido": "Gomez Chevez",
+  "domicilio": "Nueva ceibita san jeronimo"
+ },
+ {
+  "expediente": "55582",
+  "identidad": "0306'1988'00765",
+  "nombre": "Franceli Trinidad",
+  "apellido": "Mejia Ponce",
+  "domicilio": "Comayagua La floria ojos de agua. ."
+ },
+ {
+  "expediente": "78553",
+  "identidad": "0301 1976 00091",
+  "nombre": "Gloria Argentina",
+  "apellido": "Cruz Mejia",
+  "domicilio": "Barrio Abajo Comayagua"
+ },
+ {
+  "expediente": "38281",
+  "identidad": "0313 1980 00363",
+  "nombre": "Isolina Vidail",
+  "apellido": "Maldona Mencia",
+  "domicilio": "La Ceibita San Jeronimo"
+ },
+ {
+  "expediente": "79025",
+  "identidad": "0301 1982 01530",
+  "nombre": "Martha Lidia",
+  "apellido": "Funez",
+  "domicilio": "Rancho de Jesus La Paz"
+ },
+ {
+  "expediente": "66238",
+  "identidad": "0307 1979 00150",
+  "nombre": "Xenia Yasmin",
+  "apellido": "Paredes Macias",
+  "domicilio": "La Mani Comayagua"
+ },
+ {
+  "expediente": "80260",
+  "identidad": "0306-1952-00033",
+  "nombre": "Adrian",
+  "apellido": "Manzanares Arguijo",
+  "domicilio": "Comayagua La Libertad Caserío los Derramaderos."
+ },
+ {
+  "expediente": "79545",
+  "identidad": "0301-1975-00839",
+  "nombre": "Aida Margarita",
+  "apellido": "Mejia Maldonado",
+  "domicilio": "Comayagua Aldea El Sauce."
+ },
+ {
+  "expediente": "9955",
+  "identidad": "0303 1962 00174",
+  "nombre": "Adrian",
+  "apellido": "Centeno Padilla",
+  "domicilio": "Comayagua Comatagua Aldea Ojos de Agua ( )"
+ },
+ {
+  "expediente": "78694",
+  "identidad": "0318 2022 01645",
+  "nombre": "Alessandra Isabella",
+  "apellido": "Funes Pineda",
+  "domicilio": "Comayagua Siguatepeque Barrio El Parasno ( )"
+ },
+ {
+  "expediente": "77699",
+  "identidad": "0413-1967-00051",
+  "nombre": "Alfaro",
+  "apellido": "Orellana",
+  "domicilio": "Villa Universitaria Comayagua Comayagua"
+ },
+ {
+  "expediente": "54166",
+  "identidad": "1218194300074",
+  "nombre": "Alfredo",
+  "apellido": "Fuentes Aleman",
+  "domicilio": "Aldea Cancire Santiago de Puringla La Paz cerca de la iglesia Catolica"
+ },
+ {
+  "expediente": "54166",
+  "identidad": "1218194300074",
+  "nombre": "Alfredo",
+  "apellido": "Fuentes Aleman",
+  "domicilio": "Aldea Cancire Santiago de Puringla La Paz cerca de la iglesia Catolica"
+ },
+ {
+  "expediente": "79544",
+  "identidad": "312201100178",
+  "nombre": "Ariana Francely",
+  "apellido": "Flores  Buezo",
+  "domicilio": "Comayagua Comayagua Col piedras bonitas"
+ },
+ {
+  "expediente": "79642",
+  "identidad": "0301-2024-02325",
+  "nombre": "Asly Valentina",
+  "apellido": "Chavarria Garcia",
+  "domicilio": "Comayagua Comayagua Col. El Rosario."
+ },
+ {
+  "expediente": "79155",
+  "identidad": "0301-1962-00172",
+  "nombre": "Bernarda",
+  "apellido": "Hernandez R.",
+  "domicilio": "Aldea el Carbonal Ajuterique Comayagua."
+ },
+ {
+  "expediente": "54596",
+  "identidad": "0313-1952-00052",
+  "nombre": "Berta",
+  "apellido": "Ochoa Arias",
+  "domicilio": "Comayagua Comayagua Col. Milagro de Dios."
+ },
+ {
+  "expediente": "80006",
+  "identidad": "1202-2007-00096",
+  "nombre": "Claudy Jisela",
+  "apellido": "Dias Ordoñez",
+  "domicilio": "La Paz Aguanqueterique Aldeas Las Mesas."
+ },
+ {
+  "expediente": "79736",
+  "identidad": "0821 1977 00110",
+  "nombre": "Clementina",
+  "apellido": "Aviles Villalta",
+  "domicilio": "Nueva Capital Tegucigalpa MDC Francisco Morazán"
+ },
+ {
+  "expediente": "42704",
+  "identidad": "0615-1959-00288",
+  "nombre": "Carlos Rene",
+  "apellido": "Martinez",
+  "domicilio": "Comayagua Comayagua Barrio San Blas."
+ },
+ {
+  "expediente": "77712",
+  "identidad": "1619 1945 00015",
+  "nombre": "Celso",
+  "apellido": "Hernandez Pineda",
+  "domicilio": "Barrio Santa Marta Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "12182",
+  "identidad": "0312-1966-00032",
+  "nombre": "Concepcion",
+  "apellido": "Buezo Velasquez",
+  "domicilio": "Piedras Bonitas media cuadra de la inglesia sagrada familia Comayagua"
+ },
+ {
+  "expediente": "79848",
+  "identidad": "0318-1951-00031",
+  "nombre": "Concepción",
+  "apellido": "Cruz",
+  "domicilio": "Comayagua Taulabe Aldea Oconan."
+ },
+ {
+  "expediente": "80185",
+  "identidad": "0716-1966-00016",
+  "nombre": "Corina",
+  "apellido": "Fernandez Migueles",
+  "domicilio": "Villa de San antonio."
+ },
+ {
+  "expediente": "79099",
+  "identidad": "0605 1972 01106",
+  "nombre": "Dalila de Jesus",
+  "apellido": "Hernandez",
+  "domicilio": "Aldea Las Mercedes Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "76772",
+  "identidad": "1201-1987-00568",
+  "nombre": "Doris Aida",
+  "apellido": "Cordon Ramirez",
+  "domicilio": "Bo. San Antonia La Paz"
+ },
+ {
+  "expediente": "79529",
+  "identidad": "0313-2022-00701",
+  "nombre": "Danna Estrella",
+  "apellido": "Caceres Giron",
+  "domicilio": "Comayagua San Jerónimo Aldea Las Dantas."
+ },
+ {
+  "expediente": "79507",
+  "identidad": "0319 1986 00353",
+  "nombre": "Eda Georgina",
+  "apellido": "Rubio Banegas",
+  "domicilio": "Aldea Flores Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "78514",
+  "identidad": "0801 1971 08479",
+  "nombre": "Elvis jeovany",
+  "apellido": "Valeriano Velasquez",
+  "domicilio": "Colonia Henry Merriam Tegucigalpa M.D.C Francisco Morazán"
+ },
+ {
   "expediente": "77608",
-  "nombre": "Erika Roxana Lopez Garcia",
+  "identidad": "1214-1981-00153",
+  "nombre": "Erika Roxana",
+  "apellido": "Lopez Garcia",
   "domicilio": "Barrio el espino San Pedro de Tutule La paz"
  },
  {
   "expediente": "77661",
-  "nombre": "Felipe Aguilar Benitez",
+  "identidad": "0301-1981-00663",
+  "nombre": "Felipe",
+  "apellido": "Aguilar Benitez",
   "domicilio": "Aldea La Tidra El Rosario Comayagua"
  },
  {
-  "expediente": "77687",
-  "nombre": "Danner Joel Palacios Hernandez",
-  "domicilio": "Barrio san blas comayagua"
+  "expediente": "77217",
+  "identidad": "0303-1976-00174",
+  "nombre": "Florentina",
+  "apellido": "Mazariegos Baires",
+  "domicilio": "Sabanalarga El Rosario Comayagua"
  },
  {
-  "expediente": "77699",
-  "nombre": "Alfaro Orellana",
-  "domicilio": "Villa Universitaria Comayagua Comayagua"
+  "expediente": "59091",
+  "identidad": "0301-1985-03096",
+  "nombre": "Fanny Secilia",
+  "apellido": "Paz Bueso",
+  "domicilio": "Barrio La Guama Comayagua pegado a la quebradita"
  },
  {
-  "expediente": "77708",
-  "nombre": "Geronimo Orellana",
-  "domicilio": "Aldea Agua Sarta Intibuca"
+  "expediente": "499",
+  "identidad": "0313-1971-00268",
+  "nombre": "Francisca",
+  "apellido": "Buezo Mejia",
+  "domicilio": "Aldea Las Guamas Esquías Comayagua."
  },
  {
-  "expediente": "77710",
-  "nombre": "Pablo Vasquez",
-  "domicilio": "La Paz Santa Elena"
+  "expediente": "80122",
+  "identidad": "0603 1974 00214",
+  "nombre": "Gladis Maribel",
+  "apellido": "Rueda Rivera",
+  "domicilio": "Barrio La Merced La Paz La Paz"
  },
  {
-  "expediente": "77710",
-  "nombre": "Hernan Diaz Diaz",
-  "domicilio": "Colonia 3 de octubre comayagua"
+  "expediente": "80167",
+  "identidad": "0318-1977-00988",
+  "nombre": "Guadalupe",
+  "apellido": "Mejia Castellanos",
+  "domicilio": "Comayagua Col. 1ero de mayo."
  },
  {
-  "expediente": "77712",
-  "nombre": "Celso Hernandez Pineda",
-  "domicilio": "Barrio Santa Marta Siguatepeque Comayagua"
+  "expediente": "80069",
+  "identidad": "1208 1992 00160",
+  "nombre": "Gustavo Adolfo",
+  "apellido": "Urquia Bautista",
+  "domicilio": "Barrio San Juan Marcala La Paz"
  },
  {
-  "expediente": "77776",
-  "nombre": "Keidy Mandi Maradiaga Hernandez",
-  "domicilio": "Comayagua Villa de San Antonio El Rodeo"
+  "expediente": "63400",
+  "identidad": "0301-1961-01024",
+  "nombre": "Gerardo Alfonso",
+  "apellido": "Guillen Villatoro",
+  "domicilio": "Comayagua Comayagua Barrio Cabañas."
  },
  {
-  "expediente": "77813",
-  "nombre": "Henry Antonio Flamenco Sanchez",
-  "domicilio": "Barrio El Carmen Siguatepeque"
- },
- {
-  "expediente": "77866",
-  "nombre": "Raimundo Rodriguez Flores",
-  "domicilio": "Colonia Nuevo Mileniun El Rosario Comayagua"
- },
- {
-  "expediente": "77909",
-  "nombre": "Lucia Tejada Zavala",
-  "domicilio": "Aldea el Taladro Comayagua"
- },
- {
-  "expediente": "77913",
-  "nombre": "Ismael Ayala Tejeda",
-  "domicilio": "Aldea El Volcan Comayagua"
- },
- {
-  "expediente": "77941",
-  "nombre": "Carlos Rene Zelaya Zelaya",
-  "domicilio": "Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "77973",
-  "nombre": "Jose Victoriano Pineda Aguilar",
-  "domicilio": "Aldea Santa Rosita Siguatepeque Comayagua"
- },
- {
-  "expediente": "77992",
-  "nombre": "Nelia Gracibel Rodriguez Garcia",
-  "domicilio": "San Isidro El Rosario Comayagua"
- },
- {
-  "expediente": "77995",
-  "nombre": "Marco Antonio Garcia Mejia",
-  "domicilio": "Centro de reclusion Comayagua"
- },
- {
-  "expediente": "78008",
-  "nombre": "Moises Alberto Gonzales Nuñez",
-  "domicilio": "Alda Planitos Santa Maria La Paz"
- },
- {
-  "expediente": "78047",
-  "nombre": "Maria Lourdes Martinez Gutierrez",
-  "domicilio": "Aldea El Rosario Comayagua"
- },
- {
-  "expediente": "78076",
-  "nombre": "Alva Lidia Cruz Perez",
-  "domicilio": "Aldea Santa Rosita Guajiquiro La Paz"
- },
- {
-  "expediente": "78089",
-  "nombre": "Greysi Yecenia Buezo Osorio",
-  "domicilio": "Aldea Las Crusitas Comayagua"
- },
- {
-  "expediente": "78140",
-  "nombre": "Mario Oswaldo Rivera Rapalo",
-  "domicilio": "El Rodeo Trinidad Santa Barbara"
- },
- {
-  "expediente": "78176",
-  "nombre": "Leonidas Machado Ulloa",
-  "domicilio": "Tierra Blanca La Trinidad Comayagua"
- },
- {
-  "expediente": "78221",
-  "nombre": "Jair Manuel de Jesus Mejia Martinez",
-  "domicilio": "Barrio Cabañas Yoro"
- },
- {
-  "expediente": "78225",
-  "nombre": "Flora Mercedes Perez Murillo",
-  "domicilio": "Las Haradas La Libertad Comayagua"
- },
- {
-  "expediente": "78226",
-  "nombre": "Pedro Buezo Orellana",
-  "domicilio": "San Jose La Libertad Comayagua"
- },
- {
-  "expediente": "78226",
-  "nombre": "Ana Maritza Ambrocio Chavez",
-  "domicilio": "El Astillero La Paz"
- },
- {
-  "expediente": "78227",
-  "nombre": "Emilia Mejía Mejía",
-  "domicilio": "Barrio Jacaranda La Esperanza Intibucá"
- },
- {
-  "expediente": "78254",
-  "nombre": "Noel Valentin Giron Diaz",
-  "domicilio": "Las Flores de Jaitique Taulabe Comayagua"
- },
- {
-  "expediente": "78320",
-  "nombre": "Bernarda Isolina Zambrano Diaz",
-  "domicilio": "Barrio Abajo La Caridad Comayagua"
- },
- {
-  "expediente": "78335",
-  "nombre": "Bilma Estela Rubio García",
-  "domicilio": "Colonia Cerro Grande Tegucigalpa Francisco Morazán"
- },
- {
-  "expediente": "78448",
-  "nombre": "Isolina Castro Zavala",
-  "domicilio": "Barrio Suyapa Comayagua Comayagua"
- },
- {
-  "expediente": "78464",
-  "nombre": "Dayana Sofia Perez Velasquez",
-  "domicilio": "Aldea El Paraiso Comayagua Comayagua"
- },
- {
-  "expediente": "78465",
-  "nombre": "Julia Yoselyn Mendoza Torres",
-  "domicilio": "Taulabe Comayagua"
- },
- {
-  "expediente": "78467",
-  "nombre": "Sandra Patricia Mejia Castillo",
-  "domicilio": "Comayagua Comayagua Barrio san Jose ( )"
- },
- {
-  "expediente": "78494",
-  "nombre": "Maria Amparo Almendares Cantor",
-  "domicilio": "Villa de san antonio"
- },
- {
-  "expediente": "78508",
-  "nombre": "Patricia Yaquelin Escobar Paguada",
-  "domicilio": "Colonia Venezuela Comayagüela Francisco Morazán"
- },
- {
-  "expediente": "78514",
-  "nombre": "Elvis jeovany Valeriano Velasquez",
-  "domicilio": "Colonia Henry Merriam Tegucigalpa M.D.C Francisco Morazán"
- },
- {
-  "expediente": "78517",
-  "nombre": "Lilian Estela Bonilla Santos",
-  "domicilio": "Colonia Ivan Betancourth Comayagua"
- },
- {
-  "expediente": "78527",
-  "nombre": "Rosa Maria Machado Guzman",
-  "domicilio": "El sauce Comayagua"
- },
- {
-  "expediente": "78535",
-  "nombre": "Briceldo Osmar Matute",
-  "domicilio": "Col. 9 de noviembre Comayagua"
- },
- {
-  "expediente": "78541",
-  "nombre": "Glenda Patricia Bustillo Vasquez",
-  "domicilio": "Flores Villa de san antonio"
- },
- {
-  "expediente": "78542",
-  "nombre": "Sandra Emelina Cruz",
-  "domicilio": "Col Campo cielo Tegucigalpa. FM"
- },
- {
-  "expediente": "78548",
-  "nombre": "Veronica Elizabeth Romero de Chavez",
-  "domicilio": "Lamani Comayagua"
- },
- {
-  "expediente": "78551",
-  "nombre": "Yennifer Hisela Tejeda Rivera",
-  "domicilio": "Barrio la Granja La Paz"
- },
- {
-  "expediente": "78553",
-  "nombre": "Gloria Argentina Cruz Mejia",
-  "domicilio": "Barrio Abajo Comayagua"
- },
- {
-  "expediente": "78554",
-  "nombre": "Hermenejilda Mejia Euceda",
-  "domicilio": "Colonia Nueva Ceibita San Jeronimo Comayagua"
- },
- {
-  "expediente": "78556",
-  "nombre": "Mayra Yamileth Martinez Estrada",
-  "domicilio": "Villa de san antonio Comayagua"
- },
- {
-  "expediente": "78558",
-  "nombre": "Zuniga Valle",
-  "domicilio": "San Francisco de Yojoa Cortes"
- },
- {
-  "expediente": "78562",
-  "nombre": "Victor Manuel Banegas Reaños",
-  "domicilio": "Barrio El Carmen Siguatepeque Comayagua"
- },
- {
-  "expediente": "78574",
-  "nombre": "Jose Francisco Guevara Ilovares",
-  "domicilio": "Barrio Los Lirios Comayagua Comayagua"
- },
- {
-  "expediente": "78579",
-  "nombre": "Maria Teresa SanchezRamirez",
-  "domicilio": "Granadilla La Paz"
- },
- {
-  "expediente": "78579",
-  "nombre": "Agustina Vasquez Dominguez",
-  "domicilio": "Siguatepeque Comayagua"
- },
- {
-  "expediente": "78594",
-  "nombre": "Aida Mejia Reyes",
-  "domicilio": "Aldea El Socorro Siguatepeque Comayagua"
- },
- {
-  "expediente": "78600",
-  "nombre": "Carlos Mauricio Contreras Soler",
-  "domicilio": "Aldea el Roblito Comayagua"
- },
- {
-  "expediente": "78607",
-  "nombre": "Juan Esteban Lopez Lopez",
-  "domicilio": "Flores Comayagua"
- },
- {
-  "expediente": "78615",
-  "nombre": "Jefry Antony Giron Ramirez",
-  "domicilio": "Barrio San Jose Masaguara Intibuca"
- },
- {
-  "expediente": "78624",
-  "nombre": "Maria Magdalena Buezo Soto",
-  "domicilio": "Barrio Abajo Colonia San Luis Comayagua"
- },
- {
-  "expediente": "78633",
-  "nombre": "Griselda Guadalupe Perez Mendez",
-  "domicilio": "Barrio los Lirios Comayagua"
- },
- {
-  "expediente": "78636",
-  "nombre": "Nelli Ibeth Sierra",
-  "domicilio": "Lejamani Comayagua"
- },
- {
-  "expediente": "78643",
-  "nombre": "María Reyna Rodrigues",
-  "domicilio": "Aldea Flores de Jaitique Taulabé Comayagua"
- },
- {
-  "expediente": "78648",
-  "nombre": "Jose Napoleo Flores Perez",
-  "domicilio": "Siguatepeque Comayagua"
- },
- {
-  "expediente": "78649",
-  "nombre": "Jose Antonio Rodriguez Meza",
-  "domicilio": "San Nicolas Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "78664",
-  "nombre": "Alfonso Hernandez Carias",
-  "domicilio": "Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "78670",
-  "nombre": "Pedro Concepcion Granados Mejia",
-  "domicilio": "Aldea el Sauce Comayagua Comayagua"
- },
- {
-  "expediente": "78671",
-  "nombre": "Suyapa Jakelyn Gomez Cortes",
-  "domicilio": "San Francisco de Yojoa"
- },
- {
-  "expediente": "78675",
-  "nombre": "Maria Leonor Santos Castro",
-  "domicilio": "La Libertad Comayagua"
- },
- {
-  "expediente": "78686",
-  "nombre": "Seydi Yanori Cerna Varela",
-  "domicilio": "Barrio Brisas Zambrano Francisco Morazan"
- },
- {
-  "expediente": "78688",
-  "nombre": "Adan Jonathan Santos Alvarado",
-  "domicilio": "Siguatepeque Comayagua"
- },
- {
-  "expediente": "78688",
-  "nombre": "Jose Uriel Hernandez Gonzales",
-  "domicilio": "Marcala La Paz"
- },
- {
-  "expediente": "78689",
-  "nombre": "Jose Catalino Mejia Reyes",
-  "domicilio": "El diviso San Jose de Comayagua"
- },
- {
-  "expediente": "78691",
-  "nombre": "Andrea Sofia Pineda Masias",
-  "domicilio": "Villa de San Antonio"
- },
- {
-  "expediente": "78694",
-  "nombre": "Alessandra Isabella Funes Pineda",
-  "domicilio": "Comayagua Siguatepeque Barrio El Parasno ( )"
- },
- {
-  "expediente": "78701",
-  "nombre": "Argelia Eledina Hernandez Gomez",
-  "domicilio": "Guajiquiro La Paz"
- },
- {
-  "expediente": "78706",
-  "nombre": "Ana Lilian Avila Redondo",
-  "domicilio": "Aldea Las Mesetias Meambar Comayagua detrás de la iglesia Alfa y Omega"
- },
- {
-  "expediente": "78707",
-  "nombre": "Guillermo Williams Bonilla",
-  "domicilio": "Siguatepeque Comayagua"
+  "expediente": "79973",
+  "identidad": "0303-1964-00328",
+  "nombre": "Gerardo",
+  "apellido": "Chavarria Padilla",
+  "domicilio": "Aldea El Rodeo El Rosario Comayagua"
  },
  {
   "expediente": "78709",
-  "nombre": "Hector Onan Lopez Calix",
+  "identidad": "0301 1981 01596",
+  "nombre": "Hector Onan",
+  "apellido": "Lopez Calix",
   "domicilio": "Jaguita Comayagua"
  },
  {
-  "expediente": "78713",
-  "nombre": "Juan Francisco Ventura Bonilla",
-  "domicilio": "Colonia Bella Vista Ajuterique Comayagua"
+  "expediente": "80066",
+  "identidad": "0310 1989 00288",
+  "nombre": "Ilsa Bernarda",
+  "apellido": "Machado Bueso",
+  "domicilio": "Potrerillos San Pedro Sula Cortés"
  },
  {
-  "expediente": "78717",
-  "nombre": "Obed Abisai Torres Acosta",
-  "domicilio": "Barrio Sagrado Corazon La Paz La Paz"
- },
- {
-  "expediente": "78732",
-  "nombre": "Isani Juliana Morales Figueroa",
-  "domicilio": "Colonia Inestroza Tegucigalpa Francisco Morazan"
- },
- {
-  "expediente": "78735",
-  "nombre": "Brenda Argentina Mancias Martinez",
-  "domicilio": "Comayagua Siguatepeque Ba las Colinas ( )"
- },
- {
-  "expediente": "78737",
-  "nombre": "Dany Gerardo Valladares Castellanos",
-  "domicilio": "Comayagua barrio arriba"
- },
- {
-  "expediente": "78752",
-  "nombre": "Irma Yamileth Miranda Castro",
-  "domicilio": "Aldea San Rafael Jesus de Otoro Intibuca"
- },
- {
-  "expediente": "78763",
-  "nombre": "Dunia Esmeralda Suazo Banegas",
-  "domicilio": "Comayagua Comayagua Aldea la union( )"
- },
- {
-  "expediente": "78764",
-  "nombre": "Guadalupe Zavala",
-  "domicilio": "Peña Blanca Cortes"
- },
- {
-  "expediente": "78766",
-  "nombre": "Mercy Petronila Lazo Cruz",
-  "domicilio": "Cortes San Pedro Sula Cofadria ( )"
- },
- {
-  "expediente": "78768",
-  "nombre": "Nora Elizabeth Palacios Mejia",
-  "domicilio": "Agua Dulce Siguatepeque Comayagua"
- },
- {
-  "expediente": "78772",
-  "nombre": "Karlen Mariely Zavala Portillo",
-  "domicilio": "Colonia 21 de abril Comayagua Comayagua"
- },
- {
-  "expediente": "78775",
-  "nombre": "Marua Elizabeth Zepeda Dominguez",
-  "domicilio": "Siguatepeque Comayagua"
- },
- {
-  "expediente": "78777",
-  "nombre": "Julio Cesar Romero",
-  "domicilio": "Barrio Suyapa El Plan San Manuel Cortes"
- },
- {
-  "expediente": "78794",
-  "nombre": "Jose Angel Martinez Amaya",
-  "domicilio": "La piramide Comayagua"
- },
- {
-  "expediente": "78795",
-  "nombre": "Yeny Lizeth Nuñez Machuca",
-  "domicilio": "Cortes santa Cruz De Yojoa Nueva Esperanza ( )"
- },
- {
-  "expediente": "78801",
-  "nombre": "Alba Estela Lopez Martinez",
-  "domicilio": "Opatoro La Paz"
- },
- {
-  "expediente": "78809",
-  "nombre": "Iris Dinora Orellana",
-  "domicilio": "Comayagua El Rosario Aldea Sabanalarga ( )"
- },
- {
-  "expediente": "78814",
-  "nombre": "Lucas Mateo Ramos",
-  "domicilio": "El tigre santa cruz de yojoa"
- },
- {
-  "expediente": "78817",
-  "nombre": "Maria de la cruz Dominguez Hernandez",
-  "domicilio": "Barrio Cabañas Comayagua"
- },
- {
-  "expediente": "78827",
-  "nombre": "Jose Alejandro Ramos Manzanares",
-  "domicilio": "Palmerona 1 Comayagua"
- },
- {
-  "expediente": "78829",
-  "nombre": "Aylin Dariela Chavarria Velasquez",
-  "domicilio": "El Carmen Lajas Comayagua"
- },
- {
-  "expediente": "78830",
-  "nombre": "Santos Tomas Martinez Buezo",
-  "domicilio": "Loma Alta La Libertad"
- },
- {
-  "expediente": "78832",
-  "nombre": "Norma Leticia Diaz",
-  "domicilio": "Col. Vindel Francisco Morazan"
- },
- {
-  "expediente": "78837",
-  "nombre": "Rito Ulloa Ponce",
-  "domicilio": "Aldea el Diviso San Jose Comayagua"
- },
- {
-  "expediente": "78848",
-  "nombre": "Jose Luis Osorio Aguilar",
-  "domicilio": "Barrio Juan de la Cruz Avelar Taulabe Comayagua"
- },
- {
-  "expediente": "78849",
-  "nombre": "Arnold Joel Chavez Garcia",
-  "domicilio": "Colonia Lomas de Teuma San Manuel Cortes"
- },
- {
-  "expediente": "78851",
-  "nombre": "Carlos Noel Velasquez Hernandez",
-  "domicilio": "Barrio San Blas Comayagua Comayagua"
- },
- {
-  "expediente": "78852",
-  "nombre": "Sonia Adalinda Maldonado Hernandez",
-  "domicilio": "Barrio Lourdes Comayagua. Comayagua"
- },
- {
-  "expediente": "78854",
-  "nombre": "Ana Francisca Portillo Manueles",
-  "domicilio": "Playon La Paz"
+  "expediente": "65125",
+  "identidad": "1201-1954-00199",
+  "nombre": "Irmenia",
+  "apellido": "Padilla Cruz",
+  "domicilio": "Comayagua Barrio independencia"
  },
  {
   "expediente": "78859",
-  "nombre": "Irrael Orelana Orellana",
+  "identidad": "1608 1974 00089",
+  "nombre": "Irrael",
+  "apellido": "Orelana Orellana",
   "domicilio": "Santa Barbara Las vegas aldea el mochito ( )"
  },
  {
+  "expediente": "78221",
+  "identidad": "1801-2021-00639",
+  "nombre": "Jair Manuel de Jesus",
+  "apellido": "Mejia Martinez",
+  "domicilio": "Barrio Cabañas Yoro"
+ },
+ {
+  "expediente": "79566",
+  "identidad": "0301 1981 02211",
+  "nombre": "Jose Edgardo",
+  "apellido": "Rivera Panchame",
+  "domicilio": "Comayagua El Roblito"
+ },
+ {
+  "expediente": "80235",
+  "identidad": "0510-1954-00053",
+  "nombre": "Jose Eduardo",
+  "apellido": "Corea Montoya",
+  "domicilio": "Comayagua Siguatepeque Barrio Elpura."
+ },
+ {
+  "expediente": "67061",
+  "identidad": "0301-",
+  "nombre": "Jose Obdulio",
+  "apellido": "Alvarado Reyes",
+  "domicilio": "Comayagua Comayagua Aldea El Sitio."
+ },
+ {
+  "expediente": "77973",
+  "identidad": "0314-1954-00014",
+  "nombre": "Jose Victoriano",
+  "apellido": "Pineda Aguilar",
+  "domicilio": "Aldea Santa Rosita Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "80052",
+  "identidad": "0501-2009-04327",
+  "nombre": "Joseph Moises",
+  "apellido": "Orellana Guerrero",
+  "domicilio": "Comayagua Centro Marista Horizontes al Futuro."
+ },
+ {
+  "expediente": "73067",
+  "identidad": "0814 2983 00195",
+  "nombre": "Juan Pablo",
+  "apellido": "Chirinos Lopez",
+  "domicilio": "El Higuito Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "79956",
+  "identidad": "0314-1986-00114",
+  "nombre": "Julia",
+  "apellido": "Delcid Castillo",
+  "domicilio": "Comayagua Taulabe Aldea Piedras de Afilar."
+ },
+ {
+  "expediente": "2624",
+  "identidad": "0314 2005 00068",
+  "nombre": "Jeyson Ernesto",
+  "apellido": "Nuñez Redondo",
+  "domicilio": "El Volcan Comayagua"
+ },
+ {
+  "expediente": "48837",
+  "identidad": "0301-1967-00349",
+  "nombre": "Jose Antonio",
+  "apellido": "Lagos Juarez",
+  "domicilio": "Aldea El Volcan Comayagua Frente a la escuela Tiburcio Carias"
+ },
+ {
+  "expediente": "77492",
+  "identidad": "0303 1955 00341",
+  "nombre": "Jose Ernan",
+  "apellido": "Guillen Rivera",
+  "domicilio": "Comayagua El Rosario aldea Guasistagua ( )"
+ },
+ {
+  "expediente": "79324",
+  "identidad": "1502-1984-00099",
+  "nombre": "Jose Nolim",
+  "apellido": "Avilez Cabrera",
+  "domicilio": "Comayagua Co. Valentin Suarez."
+ },
+ {
+  "expediente": "77466",
+  "identidad": "0306 1962 00098",
+  "nombre": "Josefina",
+  "apellido": "Redondo Zavala",
+  "domicilio": "La Libertad Comayagua"
+ },
+ {
+  "expediente": "79287",
+  "identidad": "0801-1982-15967",
+  "nombre": "Juan Raul",
+  "apellido": "Izaguirre",
+  "domicilio": "Comayagua Col. Lomas del Río."
+ },
+ {
+  "expediente": "79968",
+  "identidad": "1213-1961-00033",
+  "nombre": "Julia",
+  "apellido": "Jimenez Manzanares",
+  "domicilio": "Lamaní comayagua."
+ },
+ {
+  "expediente": "78465",
+  "identidad": "0321 1992 00221",
+  "nombre": "Julia Yoselyn",
+  "apellido": "Mendoza Torres",
+  "domicilio": "Taulabe Comayagua"
+ },
+ {
+  "expediente": "8524",
+  "identidad": "0301 2009 00486",
+  "nombre": "Julissa Nahomi",
+  "apellido": "Sanchez Garcia",
+  "domicilio": "Buena Vista El volcan Comayagua"
+ },
+ {
+  "expediente": "77125",
+  "identidad": "0502 1979 00674",
+  "nombre": "Karla Patricia",
+  "apellido": "Quiroz Reyes",
+  "domicilio": "Aldea Paleto Baracoa Cortes"
+ },
+ {
+  "expediente": "64088",
+  "identidad": "319197900553",
+  "nombre": "Keidy Rocio",
+  "apellido": "Cruz Velasquez",
+  "domicilio": "Comayagua Taulabe Aldea la mision ( )"
+ },
+ {
+  "expediente": "79625",
+  "identidad": "0313-2009- 00567",
+  "nombre": "Kevin Ernesto",
+  "apellido": "Lopez Andara",
+  "domicilio": "San jeronimo Comayagua."
+ },
+ {
+  "expediente": "78176",
+  "identidad": "0308 1962 00036",
+  "nombre": "Leonidas",
+  "apellido": "Machado Ulloa",
+  "domicilio": "Tierra Blanca La Trinidad Comayagua"
+ },
+ {
+  "expediente": "79818",
+  "identidad": "0313-1983-00152",
+  "nombre": "Lilian Ismenia",
+  "apellido": "Lazo Cruz",
+  "domicilio": "Comayagua Comayagua Col. Valentin Suarez."
+ },
+ {
+  "expediente": "77274",
+  "identidad": "1001-1964-00182",
+  "nombre": "Ma Rosario",
+  "apellido": "Ramos",
+  "domicilio": "Cuesta del neo la libertad comayagua"
+ },
+ {
+  "expediente": "79824",
+  "identidad": "0801-2008-15019",
+  "nombre": "Maria del Carmen",
+  "apellido": "Cruz Flores",
+  "domicilio": "La Paz La Paz Aldea La Granja."
+ },
+ {
+  "expediente": "79931",
+  "identidad": "1217 1981 00153",
+  "nombre": "Maria Filomena",
+  "apellido": "Martinez",
+  "domicilio": "Aldea San Francisco Santa Maria La Paz"
+ },
+ {
+  "expediente": "78047",
+  "identidad": "0303-1975-00062",
+  "nombre": "Maria Lourdes",
+  "apellido": "Martinez Gutierrez",
+  "domicilio": "Aldea El Rosario Comayagua"
+ },
+ {
+  "expediente": "76574",
+  "identidad": "1703-1972-00233",
+  "nombre": "María Mercedes",
+  "apellido": "Rosales Peña",
+  "domicilio": "Bo. Caraopando Amapala Valle"
+ },
+ {
+  "expediente": "78556",
+  "identidad": "0319 1972 00232",
+  "nombre": "Mayra Yamileth",
+  "apellido": "Martinez Estrada",
+  "domicilio": "Villa de san antonio Comayagua"
+ },
+ {
+  "expediente": "78917",
+  "identidad": "1215 1978 00071",
+  "nombre": "Ma. Antonia",
+  "apellido": "Martinez Gonzales",
+  "domicilio": "La Paz santa Ana alde san miuel( )"
+ },
+ {
+  "expediente": "33168",
+  "identidad": "0307 1966 00015",
+  "nombre": "Maria Del Cid",
+  "apellido": "Jimenez",
+  "domicilio": "Aldea las Mercedez Comayagua"
+ },
+ {
+  "expediente": "13913",
+  "identidad": "0301-2001-01578",
+  "nombre": "Maria Trinidad",
+  "apellido": "Funes Funes",
+  "domicilio": "San Jose de la Mora Comayagua"
+ },
+ {
+  "expediente": "80031",
+  "identidad": "0801-1974-12139",
+  "nombre": "Martha Estela",
+  "apellido": "Palada Hernandez",
+  "domicilio": "Amarateca frente a la iglesia pentecostal"
+ },
+ {
+  "expediente": "78643",
+  "identidad": "1315 1981 00712",
+  "nombre": "María Reyna",
+  "apellido": "Rodrigues",
+  "domicilio": "Aldea Flores de Jaitique Taulabé Comayagua"
+ },
+ {
+  "expediente": "62917",
+  "identidad": "0510 1984 00823",
+  "nombre": "Maxilino",
+  "apellido": "Zavala Espinoza",
+  "domicilio": "Santa Cruz de Yojoa Cortes"
+ },
+ {
+  "expediente": "76819",
+  "identidad": "0301-1975-01356",
+  "nombre": "Norma Elizabeth",
+  "apellido": "Galeano Velasquez",
+  "domicilio": "Col. Satelite San Pedro Sula"
+ },
+ {
+  "expediente": "79843",
+  "identidad": "0704-2006-00571",
+  "nombre": "Nubia Consuelo",
+  "apellido": "Jimenez Isidro",
+  "domicilio": "Comayagua Comayagua Aldea El Porvenir."
+ },
+ {
+  "expediente": "79432",
+  "identidad": "1218-1974-00306",
+  "nombre": "Nicolas",
+  "apellido": "Hernandez Ramos",
+  "domicilio": "Colonia Julio Cesar Pinto Comayagua frente la iglesia Dios es Amor"
+ },
+ {
+  "expediente": "78949",
+  "identidad": "0613 1996 00030",
+  "nombre": "Oscar Eduardo",
+  "apellido": "Sanchez Rodríguez",
+  "domicilio": "Colonia Tiloarque Comayagüela M.D.C Francisco Morazán"
+ },
+ {
+  "expediente": "8159",
+  "identidad": "0301-1966-01214",
+  "nombre": "Oscar Orlando",
+  "apellido": "Romero  Izaguirre",
+  "domicilio": "Comayagua mata de platano"
+ },
+ {
+  "expediente": "78670",
+  "identidad": "0301-1970-00679",
+  "nombre": "Pedro Concepcion",
+  "apellido": "Granados Mejia",
+  "domicilio": "Aldea el Sauce Comayagua Comayagua"
+ },
+ {
+  "expediente": "75586",
+  "identidad": "1209-1955-00006",
+  "nombre": "Pedro Nolasco",
+  "apellido": "Guzman",
+  "domicilio": "Comayagua Aldea Lomas del Cordero."
+ },
+ {
+  "expediente": "78713",
+  "identidad": "0302-1978-00229",
+  "nombre": "Juan Francisco",
+  "apellido": "Ventura Bonilla",
+  "domicilio": "Colonia Bella Vista Ajuterique Comayagua"
+ },
+ {
+  "expediente": "79481",
+  "identidad": "0801-1998-22560",
+  "nombre": "Jahziel Eliu",
+  "apellido": "Sierra Escobar",
+  "domicilio": "Comayagua barrio suyapa. Cuadra y media pulperia mireya."
+ },
+ {
+  "expediente": "66632",
+  "identidad": "1201 1979 00128",
+  "nombre": "Jose Jovany",
+  "apellido": "Reyes",
+  "domicilio": "Comayagua Comayagua alde El Pajonal ( )"
+ },
+ {
+  "expediente": "77995",
+  "identidad": "1214-1994-00177",
+  "nombre": "Marco Antonio",
+  "apellido": "Garcia Mejia",
+  "domicilio": "Centro de reclusion Comayagua"
+ },
+ {
+  "expediente": "78837",
+  "identidad": "0312-1993-00143",
+  "nombre": "Rito",
+  "apellido": "Ulloa Ponce",
+  "domicilio": "Aldea el Diviso San Jose Comayagua"
+ },
+ {
+  "expediente": "79744",
+  "identidad": "0613 1974 00148",
+  "nombre": "Reyna Lorena",
+  "apellido": "Baquedano Canales",
+  "domicilio": "Colonia Nueva Capital Tegucigalpa MDC Francisco Morazan"
+ },
+ {
+  "expediente": "79180",
+  "identidad": "0307 1974 00055",
+  "nombre": "Rigoberto",
+  "apellido": "Mancias argueta",
+  "domicilio": "La escalera Comayagua"
+ },
+ {
+  "expediente": "77488",
+  "identidad": "0301 1970 01018",
+  "nombre": "Raúl Francisco",
+  "apellido": "Amador Barahona",
+  "domicilio": "Aldea El Pacayal Siguatepeque Comayagua ( )"
+ },
+ {
+  "expediente": "79708",
+  "identidad": "0301-1981-0218",
+  "nombre": "Rosa Isabel",
+  "apellido": "Chavarria",
+  "domicilio": "Comayagua Comayagua Aldea Agua Salada."
+ },
+ {
+  "expediente": "79570",
+  "identidad": "1203 1966 00052",
+  "nombre": "Santos Ignacio",
+  "apellido": "Hernandez",
+  "domicilio": "Aldea el Bailadero Cabañas La Paz"
+ },
+ {
+  "expediente": "77481",
+  "identidad": "0603 1986 00212",
+  "nombre": "Santos Ramón",
+  "apellido": "Casco Sanchez",
+  "domicilio": "Barrio La Gloria Santa Cruz de Yojoa Cortes( )"
+ },
+ {
+  "expediente": "79790",
+  "identidad": "0303-1984-00019",
+  "nombre": "Saul Moises",
+  "apellido": "Carcamo Rodriguez",
+  "domicilio": "Comayagua El rosario"
+ },
+ {
+  "expediente": "26104",
+  "identidad": "0319 1972 00137",
+  "nombre": "Selvin David",
+  "apellido": "Perez Giron",
+  "domicilio": "Barrio Torondon Comayagua Comayagua"
+ },
+ {
+  "expediente": "80141",
+  "identidad": "1002 1963 00015",
+  "nombre": "Tomas",
+  "apellido": "Cantarero Diaz",
+  "domicilio": "Aldea San Lucas Camasta Intibucá"
+ },
+ {
+  "expediente": "79929",
+  "identidad": "0307-1973-00064",
+  "nombre": "Vilma Esperanza",
+  "apellido": "Caseres Chirinos",
+  "domicilio": "Comayagua Lamaní Aldea Tablazón."
+ },
+ {
+  "expediente": "78920",
+  "identidad": "1201 1983 00204",
+  "nombre": "Wendy Karina",
+  "apellido": "Padilla Chavarria",
+  "domicilio": "Paciente"
+ },
+ {
+  "expediente": "79971",
+  "identidad": "1212-1984-00099",
+  "nombre": "Yeni Jicela",
+  "apellido": "Vasquez Vasquez",
+  "domicilio": "La Paz San Jose Barrio Cabañas."
+ },
+ {
+  "expediente": "79895",
+  "identidad": "0306-1993-00823",
+  "nombre": "Yeni Sarai",
+  "apellido": "Vasquez Arguijo",
+  "domicilio": "Comayagua La Libertad Aldea Loma Alta."
+ },
+ {
+  "expediente": "46732",
+  "identidad": "0301-1997-02351",
+  "nombre": "Yesica Antonia",
+  "apellido": "Meza Manueles",
+  "domicilio": "Aldea San Pedrana Comayagua"
+ },
+ {
+  "expediente": "78688",
+  "identidad": "0318 1991 00849",
+  "nombre": "Adan Jonathan",
+  "apellido": "Santos Alvarado",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "58601",
+  "identidad": "0313 1971 00122",
+  "nombre": "Ana Maria",
+  "apellido": "Licona Aplicano",
+  "domicilio": "Sabana Larga El Rosario Comayagua"
+ },
+ {
+  "expediente": "77533",
+  "identidad": "502199703087",
+  "nombre": "Brenedi Manuel",
+  "apellido": "Aguilar Lopez",
+  "domicilio": "cortes santa Cruz de Yojoa Aldea Los Pinos ( )"
+ },
+ {
+  "expediente": "2928",
+  "identidad": "0301 1971 00563",
+  "nombre": "Dominga",
+  "apellido": "Garcia Lopez",
+  "domicilio": "Fondo ganadero Comayagua"
+ },
+ {
+  "expediente": "2928",
+  "identidad": "0301 1971 00563",
+  "nombre": "Dominga",
+  "apellido": "Garcia Lopez",
+  "domicilio": "Fondo ganadero Comayagua"
+ },
+ {
+  "expediente": "44903",
+  "identidad": "0304 1956 00073",
+  "nombre": "Florencia Luisa",
+  "apellido": "Torres Varela",
+  "domicilio": "Isla del tucan Esquias"
+ },
+ {
+  "expediente": "78541",
+  "identidad": "0319 1991 00493",
+  "nombre": "Glenda Patricia",
+  "apellido": "Bustillo Vasquez",
+  "domicilio": "Flores Villa de san antonio"
+ },
+ {
+  "expediente": "78689",
+  "identidad": "0207 1985 00034",
+  "nombre": "Jose Catalino",
+  "apellido": "Mejia Reyes",
+  "domicilio": "El diviso San Jose de Comayagua"
+ },
+ {
+  "expediente": "78648",
+  "identidad": "0318 1962 00344",
+  "nombre": "Jose Napoleo",
+  "apellido": "Flores Perez",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "78916",
+  "identidad": "0703 1999 03397",
+  "nombre": "Keydi Yulissa",
+  "apellido": "Zambrano Barahona",
+  "domicilio": "La Mercedes Villa de san antonio"
+ },
+ {
+  "expediente": "78814",
+  "identidad": "20221112156",
+  "nombre": "Lucas Mateo",
+  "apellido": "Ramos",
+  "domicilio": "El tigre santa cruz de yojoa"
+ },
+ {
+  "expediente": "76264",
+  "identidad": "0801 1962 08359",
+  "nombre": "Marco Antonio",
+  "apellido": "Calix Gonzalez",
+  "domicilio": "Matecaña Comayagua"
+ },
+ {
+  "expediente": "52434",
+  "identidad": "1202 1944 00004",
+  "nombre": "Maria de los Santos",
+  "apellido": "Ramos",
+  "domicilio": "Comayagua Comayagua Col Fiallos ( )"
+ },
+ {
+  "expediente": "78579",
+  "identidad": "1218 1973 00241",
+  "nombre": "Maria Teresa",
+  "apellido": "SanchezRamirez",
+  "domicilio": "Granadilla La Paz"
+ },
+ {
+  "expediente": "78226",
+  "identidad": "0306 1954 00083",
+  "nombre": "Pedro",
+  "apellido": "Buezo Orellana",
+  "domicilio": "San Jose La Libertad Comayagua"
+ },
+ {
+  "expediente": "78985",
+  "identidad": "0301 1956 00195",
+  "nombre": "Sagrario Antonia",
+  "apellido": "Angeles Orellana",
+  "domicilio": "Col. Sarcita Comayagua"
+ },
+ {
+  "expediente": "78854",
+  "identidad": "1623-1967-00446",
+  "nombre": "Ana Francisca",
+  "apellido": "Portillo Manueles",
+  "domicilio": "Playon La Paz"
+ },
+ {
+  "expediente": "26956",
+  "identidad": "1810 1963 00157",
+  "nombre": "Adela Aida",
+  "apellido": "Galvez Hernandez",
+  "domicilio": "21 de abril Comayagua"
+ },
+ {
+  "expediente": "55533",
+  "identidad": "0301 2017 03518",
+  "nombre": "Ana Gissel",
+  "apellido": "Gomez Martínez",
+  "domicilio": "Colonia Linconl Coleman Comayagua Comayagua ( )"
+ },
+ {
+  "expediente": "60535",
+  "identidad": "0301 2003 00425",
+  "nombre": "Angel Esau",
+  "apellido": "Torres Gonzales",
+  "domicilio": "Col. Julio Cesar Comayagua"
+ },
+ {
+  "expediente": "80042",
+  "identidad": "0301-2011-02086",
+  "nombre": "Angel Jesus",
+  "apellido": "Macias Montes",
+  "domicilio": "Colonia Lomas del Rio 1era etapa Comayagua"
+ },
+ {
+  "expediente": "78335",
+  "identidad": "0707 1960 00205",
+  "nombre": "Bilma Estela",
+  "apellido": "Rubio García",
+  "domicilio": "Colonia Cerro Grande Tegucigalpa Francisco Morazán"
+ },
+ {
+  "expediente": "79005",
+  "identidad": "0301-1966-00005",
+  "nombre": "Caridad Dolores",
+  "apellido": "Medina Recarte",
+  "domicilio": "Barrio Arriba Comayagua Comayagua"
+ },
+ {
+  "expediente": "18201",
+  "identidad": "0301 1964 01251",
+  "nombre": "David Alonzo",
+  "apellido": "Mayen Verde",
+  "domicilio": "Aldea El Ciruelo Comayagua Comayagua"
+ },
+ {
+  "expediente": "63296",
+  "identidad": "0301-1988-02954",
+  "nombre": "Dulce Maria",
+  "apellido": "Santos Rodriguez",
+  "domicilio": "Barrio L a Concepcion Comayagua Comayagua"
+ },
+ {
+  "expediente": "76311",
+  "identidad": "0303-1993-00158",
+  "nombre": "David Alejandro",
+  "apellido": "Chavarria Chavarria",
+  "domicilio": "El Rosario comayagua"
+ },
+ {
+  "expediente": "79124",
+  "identidad": "1627199900396",
+  "nombre": "Diana Maryeni",
+  "apellido": "Moreno Figueroa",
+  "domicilio": "Comayagua Comyagua Barrio tenguaquqe Hermanas clarisa."
+ },
+ {
+  "expediente": "79539",
+  "identidad": "0301 1984 01634",
+  "nombre": "Eslin Anan",
+  "apellido": "Bautista Gutierrez",
+  "domicilio": "San Antonio de la Libertad Comayagua Comayagua"
+ },
+ {
+  "expediente": "59577",
+  "identidad": "0301-2015-01740",
+  "nombre": "Evelyn Estefany",
+  "apellido": "Canales Ruiz",
+  "domicilio": "Comayagua Comayagua Col. 21 de abril."
+ },
+ {
+  "expediente": "29233",
+  "identidad": "0313-1997-00728",
+  "nombre": "Gilma Yolani",
+  "apellido": "Cruz Banegas",
+  "domicilio": "Comayagua Aldea San Jose de Las Moras."
+ },
+ {
+  "expediente": "78707",
+  "identidad": "0801 1992 03943",
+  "nombre": "Guillermo",
+  "apellido": "Williams Bonilla",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "78732",
+  "identidad": "0801-2004-03181",
+  "nombre": "Isani Juliana",
+  "apellido": "Morales Figueroa",
+  "domicilio": "Colonia Inestroza Tegucigalpa Francisco Morazan"
+ },
+ {
+  "expediente": "79029",
+  "identidad": "0318-1981-01969",
+  "nombre": "Jessica Mabel",
+  "apellido": "Meza Vasquez",
+  "domicilio": "Barrio El Carmen Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "78649",
+  "identidad": "1204-1965-00007",
+  "nombre": "Jose Antonio",
+  "apellido": "Rodriguez Meza",
+  "domicilio": "San Nicolas Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "78574",
+  "identidad": "0801-1973-00997",
+  "nombre": "Jose Francisco",
+  "apellido": "Guevara Ilovares",
+  "domicilio": "Barrio Los Lirios Comayagua Comayagua"
+ },
+ {
+  "expediente": "38595",
+  "identidad": "0307-1972-00091",
+  "nombre": "Jose Luis",
+  "apellido": "Maldonado Martinez",
+  "domicilio": "Comayagua Lamaní Aldea Las Mesetas."
+ },
+ {
+  "expediente": "78848",
+  "identidad": "0318-1981-01783",
+  "nombre": "Jose Luis",
+  "apellido": "Osorio Aguilar",
+  "domicilio": "Barrio Juan de la Cruz Avelar Taulabe Comayagua"
+ },
+ {
+  "expediente": "79511",
+  "identidad": "0512 1999 01436",
+  "nombre": "Josue Adan",
+  "apellido": "Martinez Peña",
+  "domicilio": "San Nicolas Comayagua Comayagua"
+ },
+ {
+  "expediente": "78607",
+  "identidad": "1210-1966-00002",
+  "nombre": "Juan Esteban",
+  "apellido": "Lopez Lopez",
+  "domicilio": "Flores Comayagua"
+ },
+ {
+  "expediente": "73746",
+  "identidad": "0714-1973-00157",
+  "nombre": "Juana Francisca",
+  "apellido": "Rivera Chavarria",
+  "domicilio": "Barrio San José La Paz La Paz."
+ },
+ {
+  "expediente": "79687",
+  "identidad": "0301-2009-02636",
+  "nombre": "Jafet Benjamin",
+  "apellido": "Amdor Torres",
+  "domicilio": "Comayagua Comayagua Barrio la sabana. ."
+ },
+ {
+  "expediente": "78827",
+  "identidad": "1810 1985 00265",
+  "nombre": "Jose Alejandro",
+  "apellido": "Ramos Manzanares",
+  "domicilio": "Palmerona 1 Comayagua"
+ },
+ {
+  "expediente": "990003",
+  "identidad": "1705198101379",
+  "nombre": "Juan Antonio",
+  "apellido": "Hernandez Hernandez",
+  "domicilio": "Comaygua Comayagua Colonia neuva valladolid."
+ },
+ {
+  "expediente": "45096",
+  "identidad": "0301 1959 00650",
+  "nombre": "Juana",
+  "apellido": "Morales Moreno",
+  "domicilio": "Col. Milagro de Dios Comayagua"
+ },
+ {
+  "expediente": "43285",
+  "identidad": "302198600051",
+  "nombre": "Jully Iveth",
+  "apellido": "Rivera Bonilla",
+  "domicilio": "Aldea Playitas Ajuterique frente del centro basico Gracias A Dios"
+ },
+ {
+  "expediente": "52516",
+  "identidad": "0301-2014-03609",
+  "nombre": "Keyli Sofia",
+  "apellido": "Ramos Cardona",
+  "domicilio": "Barrio Lourdes Comayagua"
+ },
+ {
+  "expediente": "78915",
+  "identidad": "0318-1974-00897",
+  "nombre": "Leonidas",
+  "apellido": "Rodriguez Cantor",
+  "domicilio": "Barrio La Ceiba Estancia Santa Ana"
+ },
+ {
+  "expediente": "78517",
+  "identidad": "0313-1996-00234",
+  "nombre": "Lilian Estela",
+  "apellido": "Bonilla Santos",
+  "domicilio": "Colonia Ivan Betancourth Comayagua"
+ },
+ {
+  "expediente": "16471",
+  "identidad": "0307-1960-00080",
+  "nombre": "Liberato",
+  "apellido": "Funes",
+  "domicilio": "Siguatepeque Barrio Sinai"
+ },
+ {
+  "expediente": "67213",
+  "identidad": "0301-1958-00532",
+  "nombre": "Manuel Antonio",
+  "apellido": "Paz Calix",
+  "domicilio": "Barrio Cabañas Comayagua Comayagua"
+ },
+ {
+  "expediente": "79786",
+  "identidad": "1606-1964-00114",
+  "nombre": "Maria Senovia",
+  "apellido": "Casaña Rivera",
+  "domicilio": "Cortés SPS Colonia Cofradía."
+ },
+ {
+  "expediente": "78494",
+  "identidad": "0319 1956 00141",
+  "nombre": "Maria Amparo",
+  "apellido": "Almendares Cantor",
+  "domicilio": "Villa de san antonio"
+ },
+ {
+  "expediente": "23357",
+  "identidad": "0301 1965 00470",
+  "nombre": "María Norma",
+  "apellido": "Galeano Sebeda",
+  "domicilio": "Colonia 3 de octubre Comayagua Comayagua"
+ },
+ {
+  "expediente": "29351",
+  "identidad": "0301-1963-00605",
+  "nombre": "Mayra Aida",
+  "apellido": "Padilla Madrid",
+  "domicilio": "Comayagua Comayagua Co. San Miguel 2."
+ },
+ {
+  "expediente": "77316",
+  "identidad": "0304 1960 00132",
+  "nombre": "Medardo",
+  "apellido": "Maradiaga Espinal",
+  "domicilio": "Col. Fuerzas Armadas Comayagua Comayagua ( )"
+ },
+ {
+  "expediente": "19852",
+  "identidad": "318298600685",
+  "nombre": "Obed",
+  "apellido": "Reyes Nuñez",
+  "domicilio": "Colonia Nueva Suyapa Tegucigalpa Francisco Morazán"
+ },
+ {
+  "expediente": "66335",
+  "identidad": "0301 1989 02836",
+  "nombre": "Osman Nahun",
+  "apellido": "Zavala Acosta",
+  "domicilio": "Col. 21 de abril"
+ },
+ {
+  "expediente": "34439",
+  "identidad": "0303-1965-00178",
+  "nombre": "Pedro",
+  "apellido": "Villatoro Romero",
+  "domicilio": "Comayagua San Jerónimo Col. Fatima."
+ },
+ {
+  "expediente": "79026",
+  "identidad": "1621-1968-00180",
+  "nombre": "Porfirio",
+  "apellido": "Sagastume",
+  "domicilio": "Aldea Agua Azul Santa Cruz de Yojoa Cortes"
+ },
+ {
+  "expediente": "78849",
+  "identidad": "0108-2002-00681",
+  "nombre": "Arnold Joel",
+  "apellido": "Chavez Garcia",
+  "domicilio": "Colonia Lomas de Teuma San Manuel Cortes"
+ },
+ {
+  "expediente": "79918",
+  "identidad": "1201-1981-00927",
+  "nombre": "Candida Rosa",
+  "apellido": "Padilla Chavez",
+  "domicilio": "Agua azul sierra santa cruz de yojoa"
+ },
+ {
+  "expediente": "78717",
+  "identidad": "1201-1995-00708",
+  "nombre": "Obed Abisai",
+  "apellido": "Torres Acosta",
+  "domicilio": "Barrio Sagrado Corazon La Paz La Paz"
+ },
+ {
+  "expediente": "71781",
+  "identidad": "0312-1980-00354",
+  "nombre": "Victor Noel",
+  "apellido": "Mradiaga Flores",
+  "domicilio": "Comayagua Ojos de Agua Nueva Esperanza."
+ },
+ {
+  "expediente": "39589",
+  "identidad": "1213-1952-00055",
+  "nombre": "Rojelia",
+  "apellido": "Manzanarez Euceda",
+  "domicilio": "Comayagua 1ero de Mayo."
+ },
+ {
+  "expediente": "59815",
+  "identidad": "0301 1975 00727",
+  "nombre": "Rosa Marleny",
+  "apellido": "Reyes Zavala",
+  "domicilio": "El sitio Comayagua"
+ },
+ {
+  "expediente": "79866",
+  "identidad": "0318-1997-01585",
+  "nombre": "Sandra Patricia",
+  "apellido": "Martinez Gonzales",
+  "domicilio": "Comayagua Taulabe Aldea El Cerrón."
+ },
+ {
+  "expediente": "78905",
+  "identidad": "1701-1965-01044",
+  "nombre": "Velma Bety",
+  "apellido": "Flores Barralaga",
+  "domicilio": "Colonia San Francisco Tegucigalpa Francisco Morazan"
+ },
+ {
+  "expediente": "71781",
+  "identidad": "0312-1980-00354",
+  "nombre": "Victor Noel",
+  "apellido": "Mradiaga Flores",
+  "domicilio": "Comayagua Ojos de Agua Nueva Esperanza."
+ },
+ {
+  "expediente": "79036",
+  "identidad": "0301 1980 02326",
+  "nombre": "Albin Gabriel",
+  "apellido": "Euseda Machado",
+  "domicilio": "Barrio la Independencia Comayagua"
+ },
+ {
+  "expediente": "79190",
+  "identidad": "0801 1984 13809",
+  "nombre": "Andre Michelle",
+  "apellido": "Miron Nieto",
+  "domicilio": "Villa Universitaria Tegucigalpa"
+ },
+ {
+  "expediente": "78615",
+  "identidad": "1009-2009-00099",
+  "nombre": "Jefry Antony",
+  "apellido": "Giron Ramirez",
+  "domicilio": "Barrio San Jose Masaguara Intibuca"
+ },
+ {
+  "expediente": "78794",
+  "identidad": "0301 2009 00157",
+  "nombre": "Jose Angel",
+  "apellido": "Martinez Amaya",
+  "domicilio": "La piramide Comayagua"
+ },
+ {
   "expediente": "78899",
-  "nombre": "Jose Isabel Portillo Zolorzano",
+  "identidad": "1616 1936 00130",
+  "nombre": "Jose Isabel",
+  "apellido": "Portillo Zolorzano",
   "domicilio": "Chamelecon Cortes"
  },
  {
   "expediente": "78902",
-  "nombre": "Junior Alexander Maradiaga Martinez",
+  "identidad": "0319 1996 00072",
+  "nombre": "Junior Alexander",
+  "apellido": "Maradiaga Martinez",
   "domicilio": "Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "78904",
-  "nombre": "Suyapa Antonia Mendoza Colindres",
-  "domicilio": "Guajiquiro La Paz"
- },
- {
-  "expediente": "78905",
-  "nombre": "Velma Bety Flores Barralaga",
-  "domicilio": "Colonia San Francisco Tegucigalpa Francisco Morazan"
- },
- {
-  "expediente": "78915",
-  "nombre": "Leonidas Rodriguez Cantor",
-  "domicilio": "Barrio La Ceiba Estancia Santa Ana"
- },
- {
-  "expediente": "78916",
-  "nombre": "Keydi Yulissa Zambrano Barahona",
-  "domicilio": "La Mercedes Villa de san antonio"
- },
- {
-  "expediente": "78917",
-  "nombre": "Ma. Antonia Martinez Gonzales",
-  "domicilio": "La Paz santa Ana alde san miuel( )"
- },
- {
-  "expediente": "78918",
-  "nombre": "Linda Francely Dominguez Martinez",
-  "domicilio": "Barrio Fatima Siguatepeque Comayagua"
- },
- {
-  "expediente": "78920",
-  "nombre": "Wendy Karina Padilla Chavarria",
-  "domicilio": "Paciente"
- },
- {
-  "expediente": "78921",
-  "nombre": "Nery Yolanda Suazo Ruis",
-  "domicilio": "Siguatepeque Comayagua"
- },
- {
-  "expediente": "78925",
-  "nombre": "German Manuel Benavides Aragon",
-  "domicilio": "Choluteca Aldea santa cruz marcovia. ."
- },
- {
-  "expediente": "78928",
-  "nombre": "Carlos Salatiel Villeda Ramos",
-  "domicilio": "Aguas de Padre Siguatepeque Comayagua"
- },
- {
-  "expediente": "78935",
-  "nombre": "Maria Cleofes Amador Estrada",
-  "domicilio": "Barrio Arriba Comayagua"
- },
- {
-  "expediente": "78949",
-  "nombre": "Oscar Eduardo Sanchez Rodríguez",
-  "domicilio": "Colonia Tiloarque Comayagüela M.D.C Francisco Morazán"
- },
- {
-  "expediente": "78963",
-  "nombre": "Faustina Mazariegos",
-  "domicilio": "Meambar Comayagua"
- },
- {
-  "expediente": "78968",
-  "nombre": "Mirna Lizzeth Garcia Delcid",
-  "domicilio": "Rio Lindo Cortes"
- },
- {
-  "expediente": "78972",
-  "nombre": "Heidy Melissa Ulloa Velasquez",
-  "domicilio": "Santa Cruz de Yojoa Cortés"
- },
- {
-  "expediente": "78973",
-  "nombre": "Rosario Beatriz Blandon Galo",
-  "domicilio": "Buenos Aires Danli"
- },
- {
-  "expediente": "78976",
-  "nombre": "Mary Aneida Rojas Calix",
-  "domicilio": "Comayagua Comayagua col lomas del rio ( )"
- },
- {
-  "expediente": "78977",
-  "nombre": "Mario Garcia Lopez",
-  "domicilio": "Barrio San Francisco Siguatepeque Comayagua"
- },
- {
-  "expediente": "78985",
-  "nombre": "Sagrario Antonia Angeles Orellana",
-  "domicilio": "Col. Sarcita Comayagua"
- },
- {
-  "expediente": "78996",
-  "nombre": "Mayra Carolina Cantor Pineda",
-  "domicilio": "21 de abril Comayagua Comayagua"
- },
- {
-  "expediente": "78997",
-  "nombre": "Sara Elizabeth Vasquez Vasquez",
-  "domicilio": "Planes de Muyen Chinacla La Paz"
- },
- {
-  "expediente": "79005",
-  "nombre": "Caridad Dolores Medina Recarte",
-  "domicilio": "Barrio Arriba Comayagua Comayagua"
- },
- {
-  "expediente": "79007",
-  "nombre": "Simeon Saul Melendez Velasquez",
-  "domicilio": "Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "79015",
-  "nombre": "Maria Elbia Herrera",
-  "domicilio": "Col. Municipal La Paz"
- },
- {
-  "expediente": "79016",
-  "nombre": "Angelica Garcia Santos",
-  "domicilio": "San Francisco de Yojoa Cortes"
- },
- {
-  "expediente": "79018",
-  "nombre": "Julia Marilu Corea Sanchez",
-  "domicilio": "San Francisco de Yojoa Cortes"
- },
- {
-  "expediente": "79025",
-  "nombre": "Martha Lidia Funez",
-  "domicilio": "Rancho de Jesus La Paz"
- },
- {
-  "expediente": "79026",
-  "nombre": "Porfirio Sagastume",
-  "domicilio": "Aldea Agua Azul Santa Cruz de Yojoa Cortes"
- },
- {
-  "expediente": "79029",
-  "nombre": "Jessica Mabel Meza Vasquez",
-  "domicilio": "Barrio El Carmen Siguatepeque Comayagua"
- },
- {
-  "expediente": "79031",
-  "nombre": "Bryan Levy Murillo Peñalva",
-  "domicilio": "Barrio Santisima Trinidad La Paz La Paz"
- },
- {
-  "expediente": "79032",
-  "nombre": "Ritza Herminia Perez Bautista",
-  "domicilio": "Aldea Los Planes Cabañas La Paz"
- },
- {
-  "expediente": "79033",
-  "nombre": "Cleymer Yariela Martinez Delcid",
-  "domicilio": "Comayagua Siguatepeque alde tres pasos ( )"
- },
- {
-  "expediente": "79036",
-  "nombre": "Albin Gabriel Euseda Machado",
-  "domicilio": "Barrio la Independencia Comayagua"
- },
- {
-  "expediente": "79045",
-  "nombre": "Felix Nelson Oseguera Lopez",
-  "domicilio": "Barrio La Zarcita Comayagua"
- },
- {
-  "expediente": "79057",
-  "nombre": "Dominga Hernandez Rodriguez",
-  "domicilio": "Arada Santa barbara"
  },
  {
   "expediente": "79071",
-  "nombre": "Levin Orlando Zepeda Orellana",
+  "identidad": "0313 1997 00400",
+  "nombre": "Levin Orlando",
+  "apellido": "Zepeda Orellana",
   "domicilio": "Aldea el Roblito Comayagua"
  },
  {
-  "expediente": "79075",
-  "nombre": "Nestor Lopez",
-  "domicilio": "Olancho Froylan Turcios Aldea Vegas"
+  "expediente": "78527",
+  "identidad": "0301 1962 00125",
+  "nombre": "Rosa Maria",
+  "apellido": "Machado Guzman",
+  "domicilio": "El sauce Comayagua"
  },
  {
-  "expediente": "79076",
-  "nombre": "Orlin Bismar Osorto Gradiz",
-  "domicilio": "Venas de Cuyamel Olancho"
+  "expediente": "71462",
+  "identidad": "0301-2021-01148",
+  "nombre": "Alba Aida",
+  "apellido": "Arguijo Duarte",
+  "domicilio": "La Unión Esquías Comayagua"
  },
  {
-  "expediente": "79084",
-  "nombre": "Oscar Urquia Aguilar",
-  "domicilio": "Barrio La Golondrina Marcala La Paz"
+  "expediente": "79707",
+  "identidad": "1206-2010-00154",
+  "nombre": "Anñy Yanily",
+  "apellido": "Corea Mendoza",
+  "domicilio": "La Paz guajiquiro Aldea Las Delicias."
+ },
+ {
+  "expediente": "78829",
+  "identidad": "0510 2021 00670",
+  "nombre": "Aylin Dariela",
+  "apellido": "Chavarria Velasquez",
+  "domicilio": "El Carmen Lajas Comayagua"
+ },
+ {
+  "expediente": "78691",
+  "identidad": "0310 2014 00159",
+  "nombre": "Andrea Sofia",
+  "apellido": "Pineda Masias",
+  "domicilio": "Villa de San Antonio"
+ },
+ {
+  "expediente": "11064",
+  "identidad": "0301-1997-00825",
+  "nombre": "Cindy Daniela",
+  "apellido": "Gavarrete Maradiaga",
+  "domicilio": "Colonia San Miguel #1 Comayagua Comayagua"
+ },
+ {
+  "expediente": "79534",
+  "identidad": "1208 1964 00226",
+  "nombre": "Cristobal",
+  "apellido": "Lazo Lazo",
+  "domicilio": "Florida Marcala La Paz"
+ },
+ {
+  "expediente": "79185",
+  "identidad": "1206 1999 00124",
+  "nombre": "Denia",
+  "apellido": "Mendoza Gomez",
+  "domicilio": "La Paz Guajiquiro Barrio San Antonio"
+ },
+ {
+  "expediente": "78688",
+  "identidad": "1203 2021 00020",
+  "nombre": "Jose Uriel",
+  "apellido": "Hernandez Gonzales",
+  "domicilio": "Marcala La Paz"
+ },
+ {
+  "expediente": "79547",
+  "identidad": "0801 2018 18164",
+  "nombre": "Kevin Samir",
+  "apellido": "Gamez Santos",
+  "domicilio": "Tutule La Paz"
+ },
+ {
+  "expediente": "72401",
+  "identidad": "0301 2023 00368",
+  "nombre": "Lucy Margarita",
+  "apellido": "Romero Sanchez",
+  "domicilio": "Colonia Osorio Contrera Marcala La Paz ( )"
+ },
+ {
+  "expediente": "79174",
+  "identidad": "1201-2020-00048",
+  "nombre": "Marcos Samuel",
+  "apellido": "Martinez Gonzales",
+  "domicilio": "Colonia Buenos Aires La Paz La Paz"
+ },
+ {
+  "expediente": "79737",
+  "identidad": "0318-1988-01408",
+  "nombre": "Maria Aracely",
+  "apellido": "Jimenez Morales",
+  "domicilio": "Aldea El Rinco Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "55357",
+  "identidad": "301201800265",
+  "nombre": "Anderson Natanael",
+  "apellido": "Banegas Maldonado",
+  "domicilio": "Comayagua Comayagua. Colonia primero de mayo 1 cuadra arriba de pulperia rachel"
+ },
+ {
+  "expediente": "79928",
+  "identidad": "0301-1990- 01713",
+  "nombre": "Maria del rosario",
+  "apellido": "Carrillo Hernandez",
+  "domicilio": "San José de Pane Comayagua."
+ },
+ {
+  "expediente": "32623",
+  "identidad": "0318-2000-01017",
+  "nombre": "Valeska Meylin",
+  "apellido": "Mejia Rodriguez",
+  "domicilio": "Siguatepeque Puente en curva."
+ },
+ {
+  "expediente": "78579",
+  "identidad": "1208 1948 00056",
+  "nombre": "Agustina",
+  "apellido": "Vasquez Dominguez",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "78817",
+  "identidad": "0301 1978 01418",
+  "nombre": "Maria de la cruz",
+  "apellido": "Dominguez Hernandez",
+  "domicilio": "Barrio Cabañas Comayagua"
+ },
+ {
+  "expediente": "79946",
+  "identidad": "0803-1993-00432",
+  "nombre": "Carla Patricia",
+  "apellido": "Turcios Flores",
+  "domicilio": "Amarateca guallabillas"
  },
  {
   "expediente": "79091",
-  "nombre": "Carmen Abilia Castro Machado",
+  "identidad": "0301-1967-00554",
+  "nombre": "Carmen Abilia",
+  "apellido": "Castro Machado",
   "domicilio": "El Roblito Comayagua Comayagua"
  },
  {
-  "expediente": "79093",
-  "nombre": "Candida Urquia Reyes",
-  "domicilio": "Aldea Barsovia Taulabe Comayagua a 3 cuadra de la iglesia catolica"
+  "expediente": "19852",
+  "identidad": "0301 1951 00549",
+  "nombre": "Cristina",
+  "apellido": "Lopez Martinez",
+  "domicilio": "Aldea Lagunitas de Esquipulas Comayagua Comayagua"
  },
  {
-  "expediente": "79099",
-  "nombre": "Dalila de Jesus Hernandez",
-  "domicilio": "Aldea Las Mercedes Villa de San Antonio Comayagua"
+  "expediente": "79914",
+  "identidad": "0301-2019-02246",
+  "nombre": "Cristopher Fabian",
+  "apellido": "Melendez Bustillo",
+  "domicilio": "Barrio la Guama Comayagua Comayagua"
+ },
+ {
+  "expediente": "78464",
+  "identidad": "0301-2023-03205",
+  "nombre": "Dayana Sofia",
+  "apellido": "Perez Velasquez",
+  "domicilio": "Aldea El Paraiso Comayagua Comayagua"
+ },
+ {
+  "expediente": "79180",
+  "identidad": "0301 2006 02 912",
+  "nombre": "Deisy Ariela",
+  "apellido": "Bautista Portillo",
+  "domicilio": "La escalera Comayagua"
+ },
+ {
+  "expediente": "78925",
+  "identidad": "",
+  "nombre": "German Manuel",
+  "apellido": "Benavides Aragon",
+  "domicilio": "Choluteca Aldea santa cruz marcovia. ."
+ },
+ {
+  "expediente": "79923",
+  "identidad": "0714-1973-00157",
+  "nombre": "Maria Betiz",
+  "apellido": "Alvarez Espinal",
+  "domicilio": "Colonia Lomas del Tizatillo Tegucigalpa MDC Francisco Morazan"
+ },
+ {
+  "expediente": "80108",
+  "identidad": "0511 1967 00508",
+  "nombre": "Miriam Licet",
+  "apellido": "Velasquez Serrano",
+  "domicilio": "colonia Gracias a Dios Villanueva Cortes"
+ },
+ {
+  "expediente": "79917",
+  "identidad": "0308-1962-00077",
+  "nombre": "Maria Celenea",
+  "apellido": "Turcios Ulloa",
+  "domicilio": "Comayagua Comayagua Col escoto."
+ },
+ {
+  "expediente": "79280",
+  "identidad": "0303-1982-00629",
+  "nombre": "Maria Magdalena",
+  "apellido": "Gutierrez Mazariegos",
+  "domicilio": "Comayagua Comayagua Colonia Betancurth 9761' ."
+ },
+ {
+  "expediente": "31477",
+  "identidad": "0301-1991-02045",
+  "nombre": "Reyna Suyapa",
+  "apellido": "Mejia Bonilla",
+  "domicilio": "Cane La Paz"
+ },
+ {
+  "expediente": "79286",
+  "identidad": "0808-1950- 00095",
+  "nombre": "Rufina",
+  "apellido": "Ordoñez",
+  "domicilio": "Comayagua Comayagua Barrio santa lucia. ."
+ },
+ {
+  "expediente": "78686",
+  "identidad": "0801-1985-14605",
+  "nombre": "Seydi Yanori",
+  "apellido": "Cerna Varela",
+  "domicilio": "Barrio Brisas Zambrano Francisco Morazan"
+ },
+ {
+  "expediente": "36104",
+  "identidad": "0309 1959 00008",
+  "nombre": "Adan",
+  "apellido": "Canales Rodriguez",
+  "domicilio": "Barrio San blas Comayagua"
+ },
+ {
+  "expediente": "79183",
+  "identidad": "0208 1962 00537",
+  "nombre": "Alirio",
+  "apellido": "Guerra Matute",
+  "domicilio": "Colonia San Buenaventura Tegucigalpa Francisco Morazán"
+ },
+ {
+  "expediente": "79512",
+  "identidad": "0319 1957 00200",
+  "nombre": "Arnulfo",
+  "apellido": "Rivera Suazo",
+  "domicilio": "Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "36713",
+  "identidad": "1214-1956-00017",
+  "nombre": "Alejandro",
+  "apellido": "Carrillo",
+  "domicilio": "Comayagua La sampedrana. ."
+ },
+ {
+  "expediente": "68242",
+  "identidad": "1206-1948-00143",
+  "nombre": "Alonso",
+  "apellido": "Martinez Gomez",
+  "domicilio": "Aldes Nueva Suyapa Guajiquiro La Paz"
+ },
+ {
+  "expediente": "77297",
+  "identidad": "1809-1975-00159",
+  "nombre": "Anibal Calixto",
+  "apellido": "Rodriguez Flores",
+  "domicilio": "Aldea El Varrillal Villa de San Antonio Comayagua. Frente a la escuela Amilcar rivera"
+ },
+ {
+  "expediente": "79806",
+  "identidad": "1218 1954 00101",
+  "nombre": "Bruno",
+  "apellido": "Martinez",
+  "domicilio": "Yarumela La Paz"
+ },
+ {
+  "expediente": "79105",
+  "identidad": "1805-1961-00031",
+  "nombre": "Carlos Enrique",
+  "apellido": "Martinez Solis",
+  "domicilio": "Barrio Adrian Bladimir Zepeda Jocon Yoro"
+ },
+ {
+  "expediente": "50169",
+  "identidad": "0310-1964-00268",
+  "nombre": "Carlos Humberto",
+  "apellido": "Bardaes F",
+  "domicilio": "Colonia Gustavo Boquin Comayagua Comayagua"
+ },
+ {
+  "expediente": "78851",
+  "identidad": "0313-1967-00059",
+  "nombre": "Carlos Noel",
+  "apellido": "Velasquez Hernandez",
+  "domicilio": "Barrio San Blas Comayagua Comayagua"
+ },
+ {
+  "expediente": "46632",
+  "identidad": "1003-1951-00220",
+  "nombre": "Estevan",
+  "apellido": "Cruz",
+  "domicilio": "Villa de San antonio palmerola 1 Comayagua"
+ },
+ {
+  "expediente": "79152",
+  "identidad": "0505-1967-00227",
+  "nombre": "Faustino",
+  "apellido": "Cabrera Pineda",
+  "domicilio": "Aldea Aguas del Padre Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "77708",
+  "identidad": "1002 1983 00083",
+  "nombre": "Geronimo",
+  "apellido": "Orellana",
+  "domicilio": "Aldea Agua Sarta Intibuca"
+ },
+ {
+  "expediente": "78764",
+  "identidad": "1007 1962 00300",
+  "nombre": "Guadalupe",
+  "apellido": "Zavala",
+  "domicilio": "Peña Blanca Cortes"
+ },
+ {
+  "expediente": "77407",
+  "identidad": "0603 1948 00016",
+  "nombre": "Guillermo",
+  "apellido": "Giron Zelaya",
+  "domicilio": "Aldea Samaria Patuca Olancho ( )"
+ },
+ {
+  "expediente": "77813",
+  "identidad": "0801-1955-01787",
+  "nombre": "Henry Antonio",
+  "apellido": "Flamenco Sanchez",
+  "domicilio": "Barrio El Carmen Siguatepeque"
+ },
+ {
+  "expediente": "56863",
+  "identidad": "0301 1971 00215",
+  "nombre": "Irene",
+  "apellido": "Araque Pineda",
+  "domicilio": "Barrio Arriba Comayagua"
+ },
+ {
+  "expediente": "14241",
+  "identidad": "0306 1986 00528",
+  "nombre": "Jacobo de Jesus",
+  "apellido": "Gonzales Zavala",
+  "domicilio": "Aldea Plan de Alejandra La Libertad Comayagua"
+ },
+ {
+  "expediente": "79487",
+  "identidad": "1514 1955 00052",
+  "nombre": "Jose Isidro",
+  "apellido": "Bardales",
+  "domicilio": "Colonia 25 de Octubre Comayagua Comayagua"
+ },
+ {
+  "expediente": "80128",
+  "identidad": "0306 2023 00888",
+  "nombre": "Jose Miguel",
+  "apellido": "Ortega Medrano",
+  "domicilio": "Aldea la Malcotosa La Libertad Comayagua"
+ },
+ {
+  "expediente": "79732",
+  "identidad": "1211 1964 00150",
+  "nombre": "Jose Nicolas",
+  "apellido": "Suazo Jimenez",
+  "domicilio": "Marcala La Paz."
+ },
+ {
+  "expediente": "79664",
+  "identidad": "1810 1960 00045",
+  "nombre": "Juan Miguel",
+  "apellido": "Cruz Lavaire",
+  "domicilio": "Colonia Lomas del Rio Comayagua Comayagua"
+ },
+ {
+  "expediente": "78777",
+  "identidad": "0303-1953-00005",
+  "nombre": "Julio Cesar",
+  "apellido": "Romero",
+  "domicilio": "Barrio Suyapa El Plan San Manuel Cortes"
+ },
+ {
+  "expediente": "79736",
+  "identidad": "1623 1984 00362",
+  "nombre": "Julio",
+  "apellido": "Ramos Lopez",
+  "domicilio": "Aldea la Virtud San Francisco de Yojoa Cortés"
+ },
+ {
+  "expediente": "79665",
+  "identidad": "0301-1959-00628",
+  "nombre": "Jose",
+  "apellido": "Cruz Melendez",
+  "domicilio": "Comayagua Comayagua Barrio La Sabana"
+ },
+ {
+  "expediente": "71710",
+  "identidad": "1811-1959-00009",
+  "nombre": "Jose Donaldo",
+  "apellido": "Aquino Sosa",
+  "domicilio": "Comayagua Taulabe Aldea los Camalotales"
+ },
+ {
+  "expediente": "79641",
+  "identidad": "0302-1955-00065",
+  "nombre": "Jose Donaldo",
+  "apellido": "Castillo Díaz",
+  "domicilio": "Comayagua Ajuterique Barrio Los Angeles."
+ },
+ {
+  "expediente": "79173",
+  "identidad": "1009'1983'00383",
+  "nombre": "Juvencio",
+  "apellido": "Rodriguez",
+  "domicilio": "Comayagua Lajas. Barrio el porvenir."
+ },
+ {
+  "expediente": "80090",
+  "identidad": "0613 1947 00095",
+  "nombre": "Leonidas",
+  "apellido": "Baquedano Canales",
+  "domicilio": "Barrio el Centro La Libertad Comayagua"
+ },
+ {
+  "expediente": "14460",
+  "identidad": "1207-1937-00060",
+  "nombre": "Lucas",
+  "apellido": "Hernandez Ruiz",
+  "domicilio": "La paz Lauterique Aldea EL Mate."
+ },
+ {
+  "expediente": "77161",
+  "identidad": "0301-1960-00720",
+  "nombre": "Luis Alonso",
+  "apellido": "Maldonado Reyes",
+  "domicilio": "Aldea El Ocotillo Comayagua Comayagua y"
+ },
+ {
+  "expediente": "80129",
+  "identidad": "1201-1956-00158",
+  "nombre": "Marcio Antonio",
+  "apellido": "Suazo Rivera",
+  "domicilio": "Comayagua Villa de San Antonio Aldea Palo Blanco."
+ },
+ {
+  "expediente": "73723",
+  "identidad": "0310-1953-00051",
+  "nombre": "Mario",
+  "apellido": "Padilla Bardales",
+  "domicilio": "La Paz La Paz Aldea Yarumela."
+ },
+ {
+  "expediente": "69235",
+  "identidad": "0603-1984-00979",
+  "nombre": "Noel",
+  "apellido": "Olivera Amador",
+  "domicilio": "Comayagua San Luis Aldea Tres Palos."
+ },
+ {
+  "expediente": "50729",
+  "identidad": "1208-1951-00159",
+  "nombre": "Carlos",
+  "apellido": "Calix Vasquez",
+  "domicilio": "Marcala La Paz"
+ },
+ {
+  "expediente": "79045",
+  "identidad": "0703-1965-00949",
+  "nombre": "Felix Nelson",
+  "apellido": "Oseguera Lopez",
+  "domicilio": "Barrio La Zarcita Comayagua"
+ },
+ {
+  "expediente": "79154",
+  "identidad": "0304-1960-00248",
+  "nombre": "Jose Guillermo",
+  "apellido": "Ramos Chacon",
+  "domicilio": "Aldea El Tule San Luis Comayagua"
+ },
+ {
+  "expediente": "77476",
+  "identidad": "1315-1948-00042",
+  "nombre": "Jose Albino",
+  "apellido": "Sanchez",
+  "domicilio": "Aldea los laureles Santa Barbara"
+ },
+ {
+  "expediente": "71672",
+  "identidad": "1007 1981 00009",
+  "nombre": "Raul",
+  "apellido": "Guevara",
+  "domicilio": "Jesus de otoro Intibuca"
+ },
+ {
+  "expediente": "5670",
+  "identidad": "0804-1979-00728",
+  "nombre": "Santos Domingo",
+  "apellido": "Nuñez Munguia",
+  "domicilio": "Comayagua Comayagua"
+ },
+ {
+  "expediente": "77710",
+  "identidad": "1216-1956-00053",
+  "nombre": "Pablo",
+  "apellido": "Vasquez",
+  "domicilio": "La Paz Santa Elena"
+ },
+ {
+  "expediente": "79712",
+  "identidad": "1623-1956-00191",
+  "nombre": "Porfirio",
+  "apellido": "Hernandez",
+  "domicilio": "FM Comayaguela Col. 14 de enero."
+ },
+ {
+  "expediente": "79512",
+  "identidad": "0310 1958 00039",
+  "nombre": "Ramiro",
+  "apellido": "Buezo Ramirez",
+  "domicilio": "Agua Fría Meambar Comayagua"
+ },
+ {
+  "expediente": "77866",
+  "identidad": "0306-1944-00025",
+  "nombre": "Raimundo",
+  "apellido": "Rodriguez Flores",
+  "domicilio": "Colonia Nuevo Mileniun El Rosario Comayagua"
+ },
+ {
+  "expediente": "7826",
+  "identidad": "0308-1960-00071",
+  "nombre": "Rogelio",
+  "apellido": "Turcios Ulloa",
+  "domicilio": "La trinidad Comayagua"
+ },
+ {
+  "expediente": "68525",
+  "identidad": "0301 1959 00481",
+  "nombre": "Sady Arturo",
+  "apellido": "Berlioz Bardales",
+  "domicilio": "Colonia Boquin Comayagua Comayagua"
+ },
+ {
+  "expediente": "79643",
+  "identidad": "1210-1952-0019",
+  "nombre": "Santos Evaristo",
+  "apellido": "Garcia Martinez",
+  "domicilio": "La Paz Opatoro Aldea San Jose."
+ },
+ {
+  "expediente": "54636",
+  "identidad": "0804 1995 00106",
+  "nombre": "Venacio",
+  "apellido": "Munguia Garcia",
+  "domicilio": "Caserio Corralitos Aldea Victoriana Curarén Francisco Morazán"
+ },
+ {
+  "expediente": "79417",
+  "identidad": "1203-1958-00047",
+  "nombre": "Vianney",
+  "apellido": "Benitez Hernandez",
+  "domicilio": "La Paz Marcala Aldea Montaña Verde."
+ },
+ {
+  "expediente": "78562",
+  "identidad": "0315-1952-00041",
+  "nombre": "Victor Manuel",
+  "apellido": "Banegas Reaños",
+  "domicilio": "Barrio El Carmen Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "56110",
+  "identidad": "3215 1985 00024",
+  "nombre": "Florencio",
+  "apellido": "Bonilla",
+  "domicilio": "Barrio Arriba Comayagua"
+ },
+ {
+  "expediente": "49751",
+  "identidad": "0313 1958 00072",
+  "nombre": "Julian",
+  "apellido": "Manueles Morales",
+  "domicilio": "La Laguna San jeronimo"
+ },
+ {
+  "expediente": "69478",
+  "identidad": "1218 1965 00114",
+  "nombre": "Lucio",
+  "apellido": "Vasquez Lopez",
+  "domicilio": "Santa Cruz De Yojoa Cortes"
+ },
+ {
+  "expediente": "79075",
+  "identidad": "0716 1951 00177",
+  "nombre": "Nestor",
+  "apellido": "Lopez",
+  "domicilio": "Olancho Froylan Turcios Aldea Vegas"
+ },
+ {
+  "expediente": "79227",
+  "identidad": "1612 1953 00086",
+  "nombre": "Ramon",
+  "apellido": "Enamorado Rios",
+  "domicilio": "Ocote Santa Barbara"
+ },
+ {
+  "expediente": "78664",
+  "identidad": "1501 1944 00414",
+  "nombre": "Alfonso",
+  "apellido": "Hernandez Carias",
+  "domicilio": "Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "78830",
+  "identidad": "0306 1959 00241",
+  "nombre": "Santos Tomas",
+  "apellido": "Martinez Buezo",
+  "domicilio": "Loma Alta La Libertad"
+ },
+ {
+  "expediente": "79007",
+  "identidad": "1215 1938 00017",
+  "nombre": "Simeon Saul",
+  "apellido": "Melendez Velasquez",
+  "domicilio": "Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "65799",
+  "identidad": "1213-1952-00052",
+  "nombre": "Berta",
+  "apellido": "Zavala Acosta",
+  "domicilio": "Comayagua Col. Villeda Bermudez."
+ },
+ {
+  "expediente": "79334",
+  "identidad": "0304-1985-00453",
+  "nombre": "Lilia Yamileth",
+  "apellido": "Buezo Zuniga",
+  "domicilio": "Comayagua Esquías Aldea Peladeritos. 984066"
+ },
+ {
+  "expediente": "52021",
+  "identidad": "0601-1984-05117",
+  "nombre": "Mirza Gissela",
+  "apellido": "Alvarez Diaz",
+  "domicilio": "Cortes Villanueva Lomas de San Carlos."
+ },
+ {
+  "expediente": "69819",
+  "identidad": "0319 1959 00042",
+  "nombre": "Maria Arcadia",
+  "apellido": "Rivera Hernandez",
+  "domicilio": "Santa Lucia Comayagua"
+ },
+ {
+  "expediente": "78904",
+  "identidad": "12011979 00370",
+  "nombre": "Suyapa Antonia",
+  "apellido": "Mendoza Colindres",
+  "domicilio": "Guajiquiro La Paz"
+ },
+ {
+  "expediente": "78664",
+  "identidad": "1501 1944 00414",
+  "nombre": "Alfonso",
+  "apellido": "Hernandez Carias",
+  "domicilio": "Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "79364",
+  "identidad": "703202301363",
+  "nombre": "Anival Gael",
+  "apellido": "Banegas Guerra",
+  "domicilio": "Aldea La Union Cedral Danli El Paraiso Ultima casa de la union"
+ },
+ {
+  "expediente": "79510",
+  "identidad": "0303-2015-00457",
+  "nombre": "Bairon Leonel",
+  "apellido": "Sanchez Palacios",
+  "domicilio": "Comayagua El Rosario Lomas Verdes."
+ },
+ {
+  "expediente": "78600",
+  "identidad": "0301-2017-00221",
+  "nombre": "Carlos Mauricio",
+  "apellido": "Contreras Soler",
+  "domicilio": "Aldea el Roblito Comayagua"
+ },
+ {
+  "expediente": "77941",
+  "identidad": "0319-1971-00125",
+  "nombre": "Carlos Rene",
+  "apellido": "Zelaya Zelaya",
+  "domicilio": "Villa de San Antonio Comayagua"
+ },
+ {
+  "expediente": "78928",
+  "identidad": "0318-1979-00744",
+  "nombre": "Carlos Salatiel",
+  "apellido": "Villeda Ramos",
+  "domicilio": "Aguas de Padre Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "80199",
+  "identidad": "0501-1974-07980",
+  "nombre": "Crescencio",
+  "apellido": "Bonilla Bustillo",
+  "domicilio": "Comayagua San Jerónimo La Cuesta."
+ },
+ {
+  "expediente": "79271",
+  "identidad": "1201 1997 00779",
+  "nombre": "Dany Onelio",
+  "apellido": "Valenzuela Suazo",
+  "domicilio": "Granja Penal"
+ },
+ {
+  "expediente": "77566",
+  "identidad": "0301-2020-00696",
+  "nombre": "Diego Kaleth",
+  "apellido": "Mejia Banegas",
+  "domicilio": "Los Horocones la union San jeronimo comayagua"
+ },
+ {
+  "expediente": "68901",
+  "identidad": "0301-2023-02899",
+  "nombre": "Dylan Gael",
+  "apellido": "Mazariegos Mazariegos",
+  "domicilio": "Colonia Carlos Miranda Comayagua"
+ },
+ {
+  "expediente": "77687",
+  "identidad": "0301-2004-00951",
+  "nombre": "Danner Joel",
+  "apellido": "Palacios Hernandez",
+  "domicilio": "Barrio san blas comayagua"
+ },
+ {
+  "expediente": "80003",
+  "identidad": "0501 2022 08516",
+  "nombre": "Ethan Aaron",
+  "apellido": "Izaguirre Zepeda",
+  "domicilio": "Colonia Suazo Cordova San Pedro Sula Cortes"
+ },
+ {
+  "expediente": "77545",
+  "identidad": "0301-1989-00352",
+  "nombre": "Franklin Geovany",
+  "apellido": "Villanueva Mejia",
+  "domicilio": "Colonia Valladolid Comayagua"
+ },
+ {
+  "expediente": "69682",
+  "identidad": "307202100101",
+  "nombre": "Gael Eduardo",
+  "apellido": "Cordova Garcia",
+  "domicilio": "Comayagua Lamani Barrio Juan de la cruz"
+ },
+ {
+  "expediente": "77710",
+  "identidad": "0715-1980-00609",
+  "nombre": "Hernan",
+  "apellido": "Diaz Diaz",
+  "domicilio": "Colonia 3 de octubre comayagua"
+ },
+ {
+  "expediente": "69081",
+  "identidad": "1201-2022-00725",
+  "nombre": "Javier Isaac",
+  "apellido": "Castro Guerrero",
+  "domicilio": "La Paz La Paz Barrio La Granja."
+ },
+ {
+  "expediente": "74012",
+  "identidad": "1009 1946 00054",
+  "nombre": "Jose Saturnino",
+  "apellido": "Cervantes Matute",
+  "domicilio": "Barrio Cabañas Comayagua"
+ },
+ {
+  "expediente": "79815",
+  "identidad": "0306-2021-00069",
+  "nombre": "Jixon Noe",
+  "apellido": "Soto Buezo",
+  "domicilio": "Comayagua Esquías Aldea El Junco"
+ },
+ {
+  "expediente": "77214",
+  "identidad": "0301 2020 02220",
+  "nombre": "Jose Antonio",
+  "apellido": "Gacrcía Rodríguez",
+  "domicilio": "Aldea Los Cascabeles Comayagua Comayagua ( )"
+ },
+ {
+  "expediente": "79957",
+  "identidad": "0319-2024-00142",
+  "nombre": "Ludis Jael",
+  "apellido": "Sandoval Vilchez",
+  "domicilio": "Villa de san antonio Palo blanco"
+ },
+ {
+  "expediente": "75979",
+  "identidad": "1205 1960 00056",
+  "nombre": "Mario",
+  "apellido": "Corea Pineda",
+  "domicilio": "Planes de Muyen Chinacla La Paz"
+ },
+ {
+  "expediente": "78008",
+  "identidad": "1217-2015-00116",
+  "nombre": "Moises Alberto",
+  "apellido": "Gonzales Nuñez",
+  "domicilio": "Alda Planitos Santa Maria La Paz"
+ },
+ {
+  "expediente": "73711",
+  "identidad": "0510 1950 00155",
+  "nombre": "Marcos",
+  "apellido": "Escobar Castellanos",
+  "domicilio": "Aledea Obos Santa Cruz de Yojoa Cortés ( )"
+ },
+ {
+  "expediente": "78140",
+  "identidad": "1626-1966-00047",
+  "nombre": "Mario Oswaldo",
+  "apellido": "Rivera Rapalo",
+  "domicilio": "El Rodeo Trinidad Santa Barbara"
+ },
+ {
+  "expediente": "79524",
+  "identidad": "1007194000100",
+  "nombre": "Miguel Angel",
+  "apellido": "Ramos Funes",
+  "domicilio": "Colonia Mara Siguatepeque Comyagua"
+ },
+ {
+  "expediente": "78254",
+  "identidad": "0321-2023-00231",
+  "nombre": "Noel Valentin",
+  "apellido": "Giron Diaz",
+  "domicilio": "Las Flores de Jaitique Taulabe Comayagua"
+ },
+ {
+  "expediente": "79449",
+  "identidad": "1207-2019-00058",
+  "nombre": "Oliver Abdiel",
+  "apellido": "Nuñez Velasquez",
+  "domicilio": ""
+ },
+ {
+  "expediente": "79031",
+  "identidad": "1214-1982-00167",
+  "nombre": "Bryan Levy",
+  "apellido": "Murillo Peñalva",
+  "domicilio": "Barrio Santisima Trinidad La Paz La Paz"
+ },
+ {
+  "expediente": "74039",
+  "identidad": "0301 1951 00017",
+  "nombre": "Isidro",
+  "apellido": "Turcios Amaya",
+  "domicilio": "Delicias Comayagua"
+ },
+ {
+  "expediente": "77913",
+  "identidad": "0302-1963-00174",
+  "nombre": "Ismael",
+  "apellido": "Ayala Tejeda",
+  "domicilio": "Aldea El Volcan Comayagua"
+ },
+ {
+  "expediente": "79526",
+  "identidad": "0301-2025-00047",
+  "nombre": "Javier Alexander",
+  "apellido": "Gomez Dubon",
+  "domicilio": "Comayagua Aldea el porvenir."
+ },
+ {
+  "expediente": "79076",
+  "identidad": "1523 2010 00918",
+  "nombre": "Orlin Bismar",
+  "apellido": "Osorto Gradiz",
+  "domicilio": "Venas de Cuyamel Olancho"
+ },
+ {
+  "expediente": "79031",
+  "identidad": "1214-1982-00167",
+  "nombre": "Bryan Levy",
+  "apellido": "Murillo Peñalva",
+  "domicilio": "Barrio Santisima Trinidad La Paz La Paz"
+ },
+ {
+  "expediente": "48756",
+  "identidad": "0319 1933 00040",
+  "nombre": "Victorio",
+  "apellido": "Mejia",
+  "domicilio": "La Villa de san antonio Comayagua"
+ },
+ {
+  "expediente": "78535",
+  "identidad": "1217 1963 00107",
+  "nombre": "Briceldo Osmar",
+  "apellido": "Matute",
+  "domicilio": "Col. 9 de noviembre Comayagua"
  },
  {
   "expediente": "79103",
-  "nombre": "Luis Fernando Castellanos Sanchez",
+  "identidad": "0303 1990 00441",
+  "nombre": "Luis Fernando",
+  "apellido": "Castellanos Sanchez",
   "domicilio": "El Rosario Comayagua"
  },
  {
   "expediente": "79104",
-  "nombre": "Miguel Francisco Guevara Romero",
+  "identidad": "0301 1023  03006",
+  "nombre": "Miguel Francisco",
+  "apellido": "Guevara Romero",
   "domicilio": "Aldea mata de platano Comayagua"
  },
  {
-  "expediente": "79105",
-  "nombre": "Carlos Enrique Martinez Solis",
-  "domicilio": "Barrio Adrian Bladimir Zepeda Jocon Yoro"
- },
- {
-  "expediente": "79108",
-  "nombre": "Flora Eneyda Lopez Rios",
-  "domicilio": "San Nicolas Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "79124",
-  "nombre": "Diana Maryeni Moreno Figueroa",
-  "domicilio": "Comayagua Comyagua Barrio tenguaquqe Hermanas clarisa."
- },
- {
-  "expediente": "79142",
-  "nombre": "Modesta Chavarria Montes",
-  "domicilio": "Colonia Los Tulines El Progreso Yoro"
- },
- {
-  "expediente": "79152",
-  "nombre": "Faustino Cabrera Pineda",
-  "domicilio": "Aldea Aguas del Padre Siguatepeque Comayagua"
- },
- {
-  "expediente": "79154",
-  "nombre": "Jose Guillermo Ramos Chacon",
-  "domicilio": "Aldea El Tule San Luis Comayagua"
- },
- {
-  "expediente": "79155",
-  "nombre": "Bernarda Hernandez R.",
-  "domicilio": "Aldea el Carbonal Ajuterique Comayagua."
- },
- {
-  "expediente": "79169",
-  "nombre": "Marcelina Rodriguez Lopez",
-  "domicilio": "Aldea Valle de Angeles Opatoro La Paz"
- },
- {
-  "expediente": "79173",
-  "nombre": "Juvencio Rodriguez",
-  "domicilio": "Comayagua Lajas. Barrio el porvenir."
- },
- {
-  "expediente": "79174",
-  "nombre": "Marcos Samuel Martinez Gonzales",
-  "domicilio": "Colonia Buenos Aires La Paz La Paz"
- },
- {
-  "expediente": "79180",
-  "nombre": "Rigoberto Mancias argueta",
-  "domicilio": "La escalera Comayagua"
- },
- {
-  "expediente": "79180",
-  "nombre": "Deisy Ariela Bautista Portillo",
-  "domicilio": "La escalera Comayagua"
- },
- {
-  "expediente": "79183",
-  "nombre": "Alirio Guerra Matute",
-  "domicilio": "Colonia San Buenaventura Tegucigalpa Francisco Morazán"
- },
- {
-  "expediente": "79185",
-  "nombre": "Denia Mendoza Gomez",
-  "domicilio": "La Paz Guajiquiro Barrio San Antonio"
- },
- {
-  "expediente": "79186",
-  "nombre": "Marilu Bardales Padilla",
-  "domicilio": "Cofradia cortes. Col casa quemada"
- },
- {
-  "expediente": "79190",
-  "nombre": "Andre Michelle Miron Nieto",
-  "domicilio": "Villa Universitaria Tegucigalpa"
- },
- {
-  "expediente": "79196",
-  "nombre": "Suyapa Vanessa Nuñez Urquia",
-  "domicilio": "Aldea El porvenir"
- },
- {
-  "expediente": "79204",
-  "nombre": "Manuel Santos Sanchez Flores",
-  "domicilio": "Los encuentros El paraiso"
- },
- {
-  "expediente": "79214",
-  "nombre": "Jualian Andino Andino",
-  "domicilio": "Villa de san antonio Proteccion. 2 cuadras arriba del salon comunal."
- },
- {
-  "expediente": "79227",
-  "nombre": "Ramon Enamorado Rios",
-  "domicilio": "Ocote Santa Barbara"
- },
- {
-  "expediente": "79236",
-  "nombre": "Marcia Johanna Ulloa Gutierrez",
-  "domicilio": "Lajas Comayagua"
- },
- {
-  "expediente": "79237",
-  "nombre": "Odalys Yamileth Maldonado Maldonado",
-  "domicilio": "Barrio La Independencia Comayagua Comayagua"
- },
- {
-  "expediente": "79271",
-  "nombre": "Dany Onelio Valenzuela Suazo",
-  "domicilio": "Granja Penal"
- },
- {
-  "expediente": "79280",
-  "nombre": "Maria Magdalena Gutierrez Mazariegos",
-  "domicilio": "Comayagua Comayagua Colonia Betancurth 9761' ."
- },
- {
-  "expediente": "79286",
-  "nombre": "Rufina Ordoñez",
-  "domicilio": "Comayagua Comayagua Barrio santa lucia. ."
- },
- {
-  "expediente": "79287",
-  "nombre": "Juan Raul Izaguirre",
-  "domicilio": "Comayagua Col. Lomas del Río."
- },
- {
-  "expediente": "79320",
-  "nombre": "Wilfredo Sanchez Medina",
-  "domicilio": "Colonia Las Acacias Sector 1 Danli El Paraiso"
- },
- {
-  "expediente": "79324",
-  "nombre": "Jose Nolim Avilez Cabrera",
-  "domicilio": "Comayagua Co. Valentin Suarez."
- },
- {
-  "expediente": "79334",
-  "nombre": "Lilia Yamileth Buezo Zuniga",
-  "domicilio": "Comayagua Esquías Aldea Peladeritos. 984066"
- },
- {
-  "expediente": "79364",
-  "nombre": "Anival Gael Banegas Guerra",
-  "domicilio": "Aldea La Union Cedral Danli El Paraiso Ultima casa de la union"
- },
- {
-  "expediente": "79417",
-  "nombre": "Vianney Benitez Hernandez",
-  "domicilio": "La Paz Marcala Aldea Montaña Verde."
- },
- {
-  "expediente": "79432",
-  "nombre": "Nicolas Hernandez Ramos",
-  "domicilio": "Colonia Julio Cesar Pinto Comayagua frente la iglesia Dios es Amor"
- },
- {
-  "expediente": "79443",
-  "nombre": "Juana Gonzales",
-  "domicilio": "Comayagua Aldea Cerro blanco. ."
- },
- {
-  "expediente": "79445",
-  "nombre": "Rosa Amilta Enamorado Urbina",
-  "domicilio": "Aldea La Fe Peña Blanca Santa Cruz de Yojoa Cortés"
- },
- {
-  "expediente": "79449",
-  "nombre": "Oliver Abdiel Nuñez Velasquez",
-  "domicilio": ""
- },
- {
-  "expediente": "79461",
-  "nombre": "Rosa Candida Medina Gonzales",
-  "domicilio": "Aldea Jaitique Taulabe Comayagua Cerca de la iglesia catolica"
- },
- {
-  "expediente": "79481",
-  "nombre": "Jahziel Eliu Sierra Escobar",
-  "domicilio": "Comayagua barrio suyapa. Cuadra y media pulperia mireya."
- },
- {
-  "expediente": "79487",
-  "nombre": "Jose Isidro Bardales",
-  "domicilio": "Colonia 25 de Octubre Comayagua Comayagua"
- },
- {
-  "expediente": "79502",
-  "nombre": "Dania Marisol Ponce Romero",
-  "domicilio": "Comayagua Ojo de agua col santafe"
- },
- {
-  "expediente": "79507",
-  "nombre": "Eda Georgina Rubio Banegas",
-  "domicilio": "Aldea Flores Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "79510",
-  "nombre": "Bairon Leonel Sanchez Palacios",
-  "domicilio": "Comayagua El Rosario Lomas Verdes."
- },
- {
-  "expediente": "79511",
-  "nombre": "Josue Adan Martinez Peña",
-  "domicilio": "San Nicolas Comayagua Comayagua"
- },
- {
-  "expediente": "79512",
-  "nombre": "Arnulfo Rivera Suazo",
-  "domicilio": "Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "79512",
-  "nombre": "Ramiro Buezo Ramirez",
-  "domicilio": "Agua Fría Meambar Comayagua"
- },
- {
-  "expediente": "79514",
-  "nombre": "Esgardo Rodriguez Sanchez",
-  "domicilio": "El Rodeo Villa de San Antonio Comayagua"
- },
- {
-  "expediente": "79518",
-  "nombre": "Doris Macaria Padilla Salazar",
-  "domicilio": "Caserío Las Cubas Pespire Choluteca"
- },
- {
-  "expediente": "79518",
-  "nombre": "Paulina Cabrera Aguilar",
-  "domicilio": "Alde Hornitos Santiago de Puringla La Paz"
- },
- {
-  "expediente": "79519",
-  "nombre": "Maria Elena Lopes Zuniga",
-  "domicilio": "Comayagua Esquias."
- },
- {
-  "expediente": "79524",
-  "nombre": "Miguel Angel Ramos Funes",
-  "domicilio": "Colonia Mara Siguatepeque Comyagua"
- },
- {
-  "expediente": "79526",
-  "nombre": "Javier Alexander Gomez Dubon",
-  "domicilio": "Comayagua Aldea el porvenir."
- },
- {
-  "expediente": "79527",
-  "nombre": "Edix Nereyda Martinez Rivera",
-  "domicilio": "Aldea Nueva Suyapa Meambar Comayagua"
- },
- {
-  "expediente": "79529",
-  "nombre": "Danna Estrella Caceres Giron",
-  "domicilio": "Comayagua San Jerónimo Aldea Las Dantas."
- },
- {
-  "expediente": "79531",
-  "nombre": "Marlen Carolina Maradiaga Martinez",
-  "domicilio": "Comayagua Villa San Antonio Flores."
- },
- {
-  "expediente": "79534",
-  "nombre": "Cristobal Lazo Lazo",
-  "domicilio": "Florida Marcala La Paz"
- },
- {
-  "expediente": "79537",
-  "nombre": "Mirna Silvas Calderon",
-  "domicilio": "Comayagua Barrio Arriba."
- },
- {
-  "expediente": "79539",
-  "nombre": "Eslin Anan Bautista Gutierrez",
-  "domicilio": "San Antonio de la Libertad Comayagua Comayagua"
- },
- {
-  "expediente": "79540",
-  "nombre": "Iris Suyapa Martinez Ramos",
-  "domicilio": "La Pista La Libertad Comayagua"
- },
- {
-  "expediente": "79543",
-  "nombre": "Francisco López",
-  "domicilio": "La Paz San pedro de tutule"
- },
- {
-  "expediente": "79544",
-  "nombre": "Ariana Francely Flores  Buezo",
-  "domicilio": "Comayagua Comayagua Col piedras bonitas"
- },
- {
-  "expediente": "79545",
-  "nombre": "Aida Margarita Mejia Maldonado",
-  "domicilio": "Comayagua Aldea El Sauce."
- },
- {
-  "expediente": "79547",
-  "nombre": "Kevin Samir Gamez Santos",
-  "domicilio": "Tutule La Paz"
- },
- {
-  "expediente": "79559",
-  "nombre": "Maria Isabel Zelaya Hernandez",
-  "domicilio": "Comayagua Comayagua Aldea Carboneras El Peñon."
- },
- {
-  "expediente": "79562",
-  "nombre": "Paula Reyes Hernandez",
-  "domicilio": "Comayagua Comayagua Aldea Piedras Azules."
- },
- {
-  "expediente": "79566",
-  "nombre": "Jose Edgardo Rivera Panchame",
-  "domicilio": "Comayagua El Roblito"
- },
- {
-  "expediente": "79570",
-  "nombre": "Santos Ignacio Hernandez",
-  "domicilio": "Aldea el Bailadero Cabañas La Paz"
- },
- {
-  "expediente": "79589",
-  "nombre": "Nelly Herrera Alvarado",
-  "domicilio": "Nicaragua Matagalpa Rancho Grande."
- },
- {
-  "expediente": "79590",
-  "nombre": "Edda Regina Madrid Romero",
-  "domicilio": "Comayagua La libertad."
- },
- {
-  "expediente": "79592",
-  "nombre": "Deysi Carolina Ortiz Isidro",
-  "domicilio": "Cortes peña blanca. Aldea buenos aires."
- },
- {
-  "expediente": "79594",
-  "nombre": "Maria Esperanza Lopez Mendez",
-  "domicilio": "Francisco Morazán MDC San Matías."
- },
- {
-  "expediente": "79602",
-  "nombre": "Pedro Montes Armijo",
-  "domicilio": "Puerto Cortes barrio cieneguita"
- },
- {
-  "expediente": "79625",
-  "nombre": "Kevin Ernesto Lopez Andara",
-  "domicilio": "San jeronimo Comayagua."
- },
- {
-  "expediente": "79641",
-  "nombre": "Jose Donaldo Castillo Díaz",
-  "domicilio": "Comayagua Ajuterique Barrio Los Angeles."
- },
- {
-  "expediente": "79642",
-  "nombre": "Asly Valentina Chavarria Garcia",
-  "domicilio": "Comayagua Comayagua Col. El Rosario."
- },
- {
-  "expediente": "79643",
-  "nombre": "Santos Evaristo Garcia Martinez",
-  "domicilio": "La Paz Opatoro Aldea San Jose."
- },
- {
-  "expediente": "79656",
-  "nombre": "Lucia Castillo Martinez",
-  "domicilio": "Barrio el Centro Siguatepeque Comayagua"
- },
- {
-  "expediente": "79661",
-  "nombre": "Jarely Migdalia Ventura Rodriguez",
-  "domicilio": "Barrio Arriba Comayagua Comayagua"
- },
- {
-  "expediente": "79662",
-  "nombre": "Juana Gonzales Calix",
-  "domicilio": "Aldea El Llano Grande San José La Paz"
- },
- {
-  "expediente": "79664",
-  "nombre": "Juan Miguel Cruz Lavaire",
-  "domicilio": "Colonia Lomas del Rio Comayagua Comayagua"
- },
- {
-  "expediente": "79665",
-  "nombre": "Jose Cruz Melendez",
-  "domicilio": "Comayagua Comayagua Barrio La Sabana"
- },
- {
-  "expediente": "79666",
-  "nombre": "Ramon Medina Herrera",
-  "domicilio": "San Francisco de soroguara"
- },
- {
-  "expediente": "79687",
-  "nombre": "Jafet Benjamin Amdor Torres",
-  "domicilio": "Comayagua Comayagua Barrio la sabana. ."
- },
- {
-  "expediente": "79707",
-  "nombre": "Anñy Yanily Corea Mendoza",
-  "domicilio": "La Paz guajiquiro Aldea Las Delicias."
- },
- {
-  "expediente": "79708",
-  "nombre": "Rosa Isabel Chavarria",
-  "domicilio": "Comayagua Comayagua Aldea Agua Salada."
- },
- {
-  "expediente": "79709",
-  "nombre": "Paula Cruz Andino",
-  "domicilio": "Francisco Morazán San Miguelito Malalaja."
- },
- {
-  "expediente": "79712",
-  "nombre": "Porfirio Hernandez",
-  "domicilio": "FM Comayaguela Col. 14 de enero."
- },
- {
-  "expediente": "79730",
-  "nombre": "Riccy Mauriela Gutierrez Sorto",
-  "domicilio": "Comayagua Comayagua Aldea La Escalera."
- },
- {
-  "expediente": "79732",
-  "nombre": "Jose Nicolas Suazo Jimenez",
-  "domicilio": "Marcala La Paz."
- },
- {
-  "expediente": "79736",
-  "nombre": "Clementina Aviles Villalta",
-  "domicilio": "Nueva Capital Tegucigalpa MDC Francisco Morazán"
- },
- {
-  "expediente": "79736",
-  "nombre": "Julio Ramos Lopez",
-  "domicilio": "Aldea la Virtud San Francisco de Yojoa Cortés"
- },
- {
-  "expediente": "79737",
-  "nombre": "Maria Aracely Jimenez Morales",
-  "domicilio": "Aldea El Rinco Siguatepeque Comayagua"
- },
- {
-  "expediente": "79741",
-  "nombre": "Jose Humberto Moncada Maradiaga",
-  "domicilio": "Comayagua villa de san antonio"
- },
- {
-  "expediente": "79743",
-  "nombre": "Maria Concepción Gomez Medina",
-  "domicilio": "Aguanjeterique la Paz"
- },
- {
-  "expediente": "79744",
-  "nombre": "Reyna Lorena Baquedano Canales",
-  "domicilio": "Colonia Nueva Capital Tegucigalpa MDC Francisco Morazan"
- },
- {
-  "expediente": "79749",
-  "nombre": "Blanca Ercilia Orellana Castro",
-  "domicilio": "Comayagua Comayagua Barrio La Escoto."
- },
- {
-  "expediente": "79786",
-  "nombre": "Maria Senovia Casaña Rivera",
-  "domicilio": "Cortés SPS Colonia Cofradía."
- },
- {
-  "expediente": "79790",
-  "nombre": "Saul Moises Carcamo Rodriguez",
-  "domicilio": "Comayagua El rosario"
- },
- {
-  "expediente": "79793",
-  "nombre": "Henry Noe Orellana Ulloa",
-  "domicilio": "Barrio El Porvenir Las Lajas Comayagua"
- },
- {
-  "expediente": "79806",
-  "nombre": "Marcelino Jimenez",
-  "domicilio": "Aldea Jacintillos San Jerónimo Comayagua."
- },
- {
-  "expediente": "79806",
-  "nombre": "Bruno Martinez",
-  "domicilio": "Yarumela La Paz"
- },
- {
-  "expediente": "79815",
-  "nombre": "Jixon Noe Soto Buezo",
-  "domicilio": "Comayagua Esquías Aldea El Junco"
+  "expediente": "78977",
+  "identidad": "0306-1957-00001",
+  "nombre": "Mario",
+  "apellido": "Garcia Lopez",
+  "domicilio": "Barrio San Francisco Siguatepeque Comayagua"
  },
  {
   "expediente": "79817",
-  "nombre": "Aldasy Nohelia Medina Cruz",
+  "identidad": "0318-2006-02349",
+  "nombre": "Aldasy Nohelia",
+  "apellido": "Medina Cruz",
   "domicilio": "Comayagua Siguatepeque Barrio Suyapita."
  },
  {
-  "expediente": "79818",
-  "nombre": "Lilian Ismenia Lazo Cruz",
-  "domicilio": "Comayagua Comayagua Col. Valentin Suarez."
- },
- {
-  "expediente": "79820",
-  "nombre": "Jonathan Noel Recarte Ruiz",
-  "domicilio": "Comayagua Comayagua Colonia fuerzas armadas"
- },
- {
-  "expediente": "79821",
-  "nombre": "Sandra Leticia Martinez Castro",
-  "domicilio": "La Paz La Paz Barrio La Merced."
- },
- {
-  "expediente": "79824",
-  "nombre": "Maria del Carmen Cruz Flores",
-  "domicilio": "La Paz La Paz Aldea La Granja."
- },
- {
-  "expediente": "79842",
-  "nombre": "Suyapa Yaneth Cruz",
-  "domicilio": "Colonia Carrizal 1 Comayaguela Francisco Morazan"
- },
- {
-  "expediente": "79843",
-  "nombre": "Nubia Consuelo Jimenez Isidro",
-  "domicilio": "Comayagua Comayagua Aldea El Porvenir."
- },
- {
-  "expediente": "79844",
-  "nombre": "Maura Vasquez Vasquez",
-  "domicilio": "Comayagua Barrio suyapa calle al sitio ultima casa."
- },
- {
-  "expediente": "79848",
-  "nombre": "Concepción Cruz",
-  "domicilio": "Comayagua Taulabe Aldea Oconan."
- },
- {
-  "expediente": "79866",
-  "nombre": "Sandra Patricia Martinez Gonzales",
-  "domicilio": "Comayagua Taulabe Aldea El Cerrón."
- },
- {
-  "expediente": "79870",
-  "nombre": "Maria Ramona Ferrera Batres",
-  "domicilio": "Cortes Santa Cruz de Yojoa Col. La Paz."
- },
- {
-  "expediente": "79872",
-  "nombre": "Maria Magdalena Mejia Andres",
-  "domicilio": "Aldea Santa Rosita Guiajiquiro La Paz"
- },
- {
-  "expediente": "79873",
-  "nombre": "Dilcia Yojana Redondo Guillén",
-  "domicilio": "Agua Blanca Ojo de Agua Comayagua"
- },
- {
-  "expediente": "79889",
-  "nombre": "Daicy Rebeca Larios Mejia",
-  "domicilio": "El Mochito Las Vegas Santa Bárbara"
- },
- {
-  "expediente": "79889",
-  "nombre": "Lucila Guitierrez",
-  "domicilio": "Aldea Santa Rosa de Buenas Noches Ajuterique Comayagua."
- },
- {
-  "expediente": "79895",
-  "nombre": "Yeni Sarai Vasquez Arguijo",
-  "domicilio": "Comayagua La Libertad Aldea Loma Alta."
- },
- {
-  "expediente": "79897",
-  "nombre": "Ana Cecilia Moreno Morales",
-  "domicilio": "Comayagua Comayagua Barrio Abajo."
- },
- {
-  "expediente": "79912",
-  "nombre": "Rafael Enrique Nuñez Santos",
-  "domicilio": "Barrio San Miguel Siguatepeque Comayagua -"
- },
- {
-  "expediente": "79914",
-  "nombre": "Cristopher Fabian Melendez Bustillo",
-  "domicilio": "Barrio la Guama Comayagua Comayagua"
- },
- {
-  "expediente": "79916",
-  "nombre": "Rosa Elida Portillo Mendoza",
-  "domicilio": "San Buena Ventura Cortes."
- },
- {
-  "expediente": "79917",
-  "nombre": "Maria Celenea Turcios Ulloa",
-  "domicilio": "Comayagua Comayagua Col escoto."
- },
- {
-  "expediente": "79918",
-  "nombre": "Candida Rosa Padilla Chavez",
-  "domicilio": "Agua azul sierra santa cruz de yojoa"
- },
- {
-  "expediente": "79920",
-  "nombre": "Mayra Joselin Manzanares Garay",
-  "domicilio": "Colonia Los Pumas Siguatepeque Comayagua"
- },
- {
-  "expediente": "79923",
-  "nombre": "Maria Betiz Alvarez Espinal",
-  "domicilio": "Colonia Lomas del Tizatillo Tegucigalpa MDC Francisco Morazan"
- },
- {
-  "expediente": "79928",
-  "nombre": "Maria del rosario Carrillo Hernandez",
-  "domicilio": "San José de Pane Comayagua."
- },
- {
-  "expediente": "79929",
-  "nombre": "Vilma Esperanza Caseres Chirinos",
-  "domicilio": "Comayagua Lamaní Aldea Tablazón."
- },
- {
-  "expediente": "79931",
-  "nombre": "Maria Filomena Martinez",
-  "domicilio": "Aldea San Francisco Santa Maria La Paz"
- },
- {
-  "expediente": "79943",
-  "nombre": "Belkis Lili Castellanos Martinez",
-  "domicilio": "Aldea el Quebracho Comayagua Comayagua"
- },
- {
-  "expediente": "79943",
-  "nombre": "Blanca Emelda Moreno Vasquez",
-  "domicilio": "Colonia 3 de Octubre Comayagua Comayagua"
- },
- {
-  "expediente": "79943",
-  "nombre": "Norma Elisa Gutierrez Recarte",
-  "domicilio": "Aldea La Flor Comayagua Comayagua"
- },
- {
-  "expediente": "79946",
-  "nombre": "Carla Patricia Turcios Flores",
-  "domicilio": "Amarateca guallabillas"
- },
- {
-  "expediente": "79948",
-  "nombre": "Maria Aurora Reconco Silva",
-  "domicilio": "Aldea Soroguara M.D.C. Francisco Morazán"
- },
- {
-  "expediente": "79948",
-  "nombre": "Kendy Esperanza Rivera Sabillon",
-  "domicilio": "Colonia 22 de Febrero Comayagua Comayagua"
- },
- {
-  "expediente": "79956",
-  "nombre": "Julia Delcid Castillo",
-  "domicilio": "Comayagua Taulabe Aldea Piedras de Afilar."
- },
- {
-  "expediente": "79957",
-  "nombre": "Ludis Jael Sandoval Vilchez",
-  "domicilio": "Villa de san antonio Palo blanco"
- },
- {
-  "expediente": "79960",
-  "nombre": "Luis Beltran Vasquez",
-  "domicilio": "La paz las crucitas Santa Maria."
- },
- {
-  "expediente": "79968",
-  "nombre": "Julia Jimenez Manzanares",
-  "domicilio": "Lamaní comayagua."
- },
- {
-  "expediente": "79969",
-  "nombre": "Digna Betzabe Flores Espinal",
-  "domicilio": "Amarateca aldea Bonita"
- },
- {
-  "expediente": "79971",
-  "nombre": "Yeni Jicela Vasquez Vasquez",
-  "domicilio": "La Paz San Jose Barrio Cabañas."
- },
- {
-  "expediente": "79973",
-  "nombre": "Gerardo Chavarria Padilla",
-  "domicilio": "Aldea El Rodeo El Rosario Comayagua"
- },
- {
-  "expediente": "79987",
-  "nombre": "Lucy Nohema Anariba Anariba",
-  "domicilio": "Comayagua Barrio La Sabana."
- },
- {
-  "expediente": "79991",
-  "nombre": "Francisco Vargas Bonilla",
-  "domicilio": "Comayagua Comayagua Col. Escoto. ."
- },
- {
-  "expediente": "79999",
-  "nombre": "Eulofia Garcia Hernandez",
-  "domicilio": "El Naranjo Santa Maria la paz."
- },
- {
-  "expediente": "80000",
-  "nombre": "Lucila Ortiz Lopez",
-  "domicilio": "La Paz La Paz Barrio Villa Luisa."
- },
- {
-  "expediente": "80001",
-  "nombre": "Bernanda Martinez Machado",
-  "domicilio": "Comayagua Comayagua Col 21 abril"
- },
- {
-  "expediente": "80003",
-  "nombre": "Ethan Aaron Izaguirre Zepeda",
-  "domicilio": "Colonia Suazo Cordova San Pedro Sula Cortes"
- },
- {
-  "expediente": "80006",
-  "nombre": "Claudy Jisela Dias Ordoñez",
-  "domicilio": "La Paz Aguanqueterique Aldeas Las Mesas."
- },
- {
-  "expediente": "80027",
-  "nombre": "Diana Gissela Chavarria Marroquin",
-  "domicilio": "Aldea el Carrizal San Sebastian Comayagua"
- },
- {
-  "expediente": "80031",
-  "nombre": "Martha Estela Palada Hernandez",
-  "domicilio": "Amarateca frente a la iglesia pentecostal"
- },
- {
-  "expediente": "80032",
-  "nombre": "Antonio Santos",
-  "domicilio": "Santa Maria La Paz"
- },
- {
-  "expediente": "80042",
-  "nombre": "Angel Jesus Macias Montes",
-  "domicilio": "Colonia Lomas del Rio 1era etapa Comayagua"
- },
- {
-  "expediente": "80049",
-  "nombre": "Karen Josselin Maldonado Orellana",
-  "domicilio": "Siguatepeque Comayagua"
- },
- {
-  "expediente": "80050",
-  "nombre": "Jeny Leticia Alvarez Rodriguez",
-  "domicilio": "Aldea Colmenas EL Rosario Comayagua"
- },
- {
-  "expediente": "80052",
-  "nombre": "Joseph Moises Orellana Guerrero",
-  "domicilio": "Comayagua Centro Marista Horizontes al Futuro."
- },
- {
-  "expediente": "80066",
-  "nombre": "Ilsa Bernarda Machado Bueso",
-  "domicilio": "Potrerillos San Pedro Sula Cortés"
- },
- {
   "expediente": "80068",
-  "nombre": "Adalicia Caceres Amaya",
+  "identidad": "0510-1987-00945",
+  "nombre": "Adalicia",
+  "apellido": "Caceres Amaya",
   "domicilio": "Santa Cruz de Yojoa aldea agua azul rancho. ."
  },
  {
-  "expediente": "80069",
-  "nombre": "Gustavo Adolfo Urquia Bautista",
-  "domicilio": "Barrio San Juan Marcala La Paz"
+  "expediente": "78226",
+  "identidad": "0309 1991 00010",
+  "nombre": "Ana Maritza",
+  "apellido": "Ambrocio Chavez",
+  "domicilio": "El Astillero La Paz"
  },
  {
-  "expediente": "80072",
-  "nombre": "Felix Santos Herrera Montes",
-  "domicilio": "El Pacayal Siguatepeque Comayagua"
+  "expediente": "77491",
+  "identidad": "0303 1996 00390",
+  "nombre": "Ana Rosa",
+  "apellido": "Castañeda Mejía",
+  "domicilio": "Aldea San Jose de las Pavas El Rosario Comaygua ( )"
  },
  {
-  "expediente": "80076",
-  "nombre": "Fernando Euceda Aguirre",
-  "domicilio": "Aldea Lo de Reina Ajuterique Comayagua Comayagua"
+  "expediente": "79155",
+  "identidad": "0301-1962-00172",
+  "nombre": "Bernarda",
+  "apellido": "Hernandez R.",
+  "domicilio": "Aldea el Carbonal Ajuterique Comayagua."
  },
  {
-  "expediente": "80077",
-  "nombre": "Karla Maricela Portillo",
-  "domicilio": "Lo de Reina Comayagua Comayagua"
- },
- {
-  "expediente": "80088",
-  "nombre": "Queydu Jiceth Lopez Martinez",
-  "domicilio": "Aldea Florida Opatoro La Paz"
- },
- {
-  "expediente": "80089",
-  "nombre": "Ana Virginia Hernandez",
-  "domicilio": "Cortez Santa Cruz de Yojoa Aldea Las Flores."
- },
- {
-  "expediente": "80090",
-  "nombre": "Leonidas Baquedano Canales",
-  "domicilio": "Barrio el Centro La Libertad Comayagua"
- },
- {
-  "expediente": "80108",
-  "nombre": "Miriam Licet Velasquez Serrano",
-  "domicilio": "colonia Gracias a Dios Villanueva Cortes"
- },
- {
-  "expediente": "80122",
-  "nombre": "Gladis Maribel Rueda Rivera",
-  "domicilio": "Barrio La Merced La Paz La Paz"
- },
- {
-  "expediente": "80124",
-  "nombre": "Guadalupe Mejia Umanzor",
-  "domicilio": "Comayagua Comayagua Col. Milagro de Dios."
- },
- {
-  "expediente": "80128",
-  "nombre": "Jose Miguel Ortega Medrano",
-  "domicilio": "Aldea la Malcotosa La Libertad Comayagua"
- },
- {
-  "expediente": "80129",
-  "nombre": "Marcio Antonio Suazo Rivera",
-  "domicilio": "Comayagua Villa de San Antonio Aldea Palo Blanco."
- },
- {
-  "expediente": "80134",
-  "nombre": "Keily Jackeline Morel Marroquin",
-  "domicilio": "San pedro Sula cofradia."
- },
- {
-  "expediente": "80137",
-  "nombre": "Wilma Yamileth Euceda Bustillo",
-  "domicilio": "Barrio Santa Lucía Comayagua Comayagua"
- },
- {
-  "expediente": "80141",
-  "nombre": "Tomas Cantarero Diaz",
-  "domicilio": "Aldea San Lucas Camasta Intibucá"
- },
- {
-  "expediente": "80143",
-  "nombre": "Nora Lizzeth Carranza Izaguirre",
-  "domicilio": "Comayagua Aldea Lomas del Cordero."
- },
- {
-  "expediente": "80154",
-  "nombre": "Aracely Consuelo Montoya Ponce",
-  "domicilio": "Aldea Cuesta de Danta Yuscaran El Paraiso"
- },
- {
-  "expediente": "80165",
-  "nombre": "Leticia Maria Gomez Diaz",
-  "domicilio": "FM Tegucigalpa Col. Peña Porbajo."
- },
- {
-  "expediente": "80166",
-  "nombre": "Leonardo Alcerro Amador",
-  "domicilio": "Tuliapita Vallecillo Francisco Morazan"
- },
- {
-  "expediente": "80167",
-  "nombre": "Guadalupe Mejia Castellanos",
-  "domicilio": "Comayagua Col. 1ero de mayo."
- },
- {
-  "expediente": "80181",
-  "nombre": "Maria de Jesus Ramos Hernandez",
-  "domicilio": "Aldea Nueva Esperanza Santa Cruz de Yojoa Cortés"
- },
- {
-  "expediente": "80185",
-  "nombre": "Corina Fernandez Migueles",
-  "domicilio": "Villa de San antonio."
- },
- {
-  "expediente": "80187",
-  "nombre": "Martha Elena Rodriguez Velasquez",
-  "domicilio": "Tatumbla Francisco Morazan"
- },
- {
-  "expediente": "80187",
-  "nombre": "Sandra Daybeli Mata Mencia",
-  "domicilio": "Aldea Agua Dulce Siguatepeque Comayagua"
- },
- {
-  "expediente": "80199",
-  "nombre": "Crescencio Bonilla Bustillo",
-  "domicilio": "Comayagua San Jerónimo La Cuesta."
- },
- {
-  "expediente": "80232",
-  "nombre": "Karla Patricia Reyes Teruel",
-  "domicilio": "Barrio el Carmen Siguatepeque Comayagua"
- },
- {
-  "expediente": "80235",
-  "nombre": "Jose Eduardo Corea Montoya",
-  "domicilio": "Comayagua Siguatepeque Barrio Elpura."
- },
- {
-  "expediente": "80260",
-  "nombre": "Adrian Manzanares Arguijo",
-  "domicilio": "Comayagua La Libertad Caserío los Derramaderos."
- },
- {
-  "expediente": "80263",
-  "nombre": "Rosa Morales",
-  "domicilio": "Aldea Lomas del Cordero Comayagua Comayagua"
- },
- {
-  "expediente": "80288",
-  "nombre": "Eiby Anabely Rivera Gamez",
-  "domicilio": "Barrio San Juan Comayagua Comayagua"
- },
- {
-  "expediente": "80290",
-  "nombre": "Maria Santos Diaz Mendoza",
-  "domicilio": "Colonia Altamira Siguatepeque Comayagua"
+  "expediente": "78735",
+  "identidad": "0301 1971 00040",
+  "nombre": "Brenda Argentina",
+  "apellido": "Mancias Martinez",
+  "domicilio": "Comayagua Siguatepeque Ba las Colinas ( )"
  },
  {
   "expediente": "80351",
-  "nombre": "Camilo Hernandez Martinez",
+  "identidad": "1206-1943-00091",
+  "nombre": "Camilo",
+  "apellido": "Hernandez Martinez",
   "domicilio": "Colonia Fuerzas Armadas Comayagua"
+ },
+ {
+  "expediente": "42286",
+  "identidad": "0301-1994-01172",
+  "nombre": "Carmen Esperanza",
+  "apellido": "Palacios Nuñez",
+  "domicilio": "Comayagua Aldea Valle de angeles"
+ },
+ {
+  "expediente": "54952",
+  "identidad": "1303 1985 00190",
+  "nombre": "Carmen Maria",
+  "apellido": "Delcid Flores",
+  "domicilio": "Comayagua San Jose de Comayagua ( )"
+ },
+ {
+  "expediente": "79033",
+  "identidad": "0318 1997 00719",
+  "nombre": "Cleymer Yariela",
+  "apellido": "Martinez Delcid",
+  "domicilio": "Comayagua Siguatepeque alde tres pasos ( )"
+ },
+ {
+  "expediente": "79889",
+  "identidad": "0505-1991-00265",
+  "nombre": "Daicy Rebeca",
+  "apellido": "Larios Mejia",
+  "domicilio": "El Mochito Las Vegas Santa Bárbara"
+ },
+ {
+  "expediente": "54178",
+  "identidad": "0303 1999 00464",
+  "nombre": "Delmin Zulema",
+  "apellido": "Carranza Flores",
+  "domicilio": "Aldea Colmenas EL Rosario Comayagua"
+ },
+ {
+  "expediente": "80027",
+  "identidad": "1503 1982 00344",
+  "nombre": "Diana Gissela",
+  "apellido": "Chavarria Marroquin",
+  "domicilio": "Aldea el Carrizal San Sebastian Comayagua"
+ },
+ {
+  "expediente": "79873",
+  "identidad": "0312-1990-00197",
+  "nombre": "Dilcia Yojana",
+  "apellido": "Redondo Guillén",
+  "domicilio": "Agua Blanca Ojo de Agua Comayagua"
+ },
+ {
+  "expediente": "79518",
+  "identidad": "0611 1984 00172",
+  "nombre": "Doris Macaria",
+  "apellido": "Padilla Salazar",
+  "domicilio": "Caserío Las Cubas Pespire Choluteca"
+ },
+ {
+  "expediente": "79502",
+  "identidad": "0312-1996-00094",
+  "nombre": "Dania Marisol",
+  "apellido": "Ponce Romero",
+  "domicilio": "Comayagua Ojo de agua col santafe"
+ },
+ {
+  "expediente": "35868",
+  "identidad": "1207-1989-00081",
+  "nombre": "Delmis Patricia",
+  "apellido": "Hernandez Hernandez",
+  "domicilio": "Via de San Antonio colonia sinai."
+ },
+ {
+  "expediente": "79592",
+  "identidad": "0614-1986-00109",
+  "nombre": "Deysi Carolina",
+  "apellido": "Ortiz Isidro",
+  "domicilio": "Cortes peña blanca. Aldea buenos aires."
+ },
+ {
+  "expediente": "79969",
+  "identidad": "0801-1992-03415",
+  "nombre": "Digna Betzabe",
+  "apellido": "Flores Espinal",
+  "domicilio": "Amarateca aldea Bonita"
+ },
+ {
+  "expediente": "79527",
+  "identidad": "0310 2002 00273",
+  "nombre": "Edix Nereyda",
+  "apellido": "Martinez Rivera",
+  "domicilio": "Aldea Nueva Suyapa Meambar Comayagua"
+ },
+ {
+  "expediente": "78227",
+  "identidad": "1201 1979 00583",
+  "nombre": "Emilia",
+  "apellido": "Mejía Mejía",
+  "domicilio": "Barrio Jacaranda La Esperanza Intibucá"
+ },
+ {
+  "expediente": "79999",
+  "identidad": "1212-1985-00012",
+  "nombre": "Eulofia",
+  "apellido": "Garcia Hernandez",
+  "domicilio": "El Naranjo Santa Maria la paz."
+ },
+ {
+  "expediente": "80076",
+  "identidad": "0302 1970 00091",
+  "nombre": "Fernando",
+  "apellido": "Euceda Aguirre",
+  "domicilio": "Aldea Lo de Reina Ajuterique Comayagua Comayagua"
+ },
+ {
+  "expediente": "79991",
+  "identidad": "0317-1946-00021",
+  "nombre": "Francisco",
+  "apellido": "Vargas Bonilla",
+  "domicilio": "Comayagua Comayagua Col. Escoto. ."
+ },
+ {
+  "expediente": "80124",
+  "identidad": "0311-1968-00234",
+  "nombre": "Guadalupe",
+  "apellido": "Mejia Umanzor",
+  "domicilio": "Comayagua Comayagua Col. Milagro de Dios."
+ },
+ {
+  "expediente": "78633",
+  "identidad": "0301 1970 01339",
+  "nombre": "Griselda Guadalupe",
+  "apellido": "Perez Mendez",
+  "domicilio": "Barrio los Lirios Comayagua"
+ },
+ {
+  "expediente": "78972",
+  "identidad": "0510 2005 00085",
+  "nombre": "Heidy Melissa",
+  "apellido": "Ulloa Velasquez",
+  "domicilio": "Santa Cruz de Yojoa Cortés"
+ },
+ {
+  "expediente": "79793",
+  "identidad": "0320-1993-00490",
+  "nombre": "Henry Noe",
+  "apellido": "Orellana Ulloa",
+  "domicilio": "Barrio El Porvenir Las Lajas Comayagua"
+ },
+ {
+  "expediente": "80050",
+  "identidad": "0301 1975 01182",
+  "nombre": "Jeny Leticia",
+  "apellido": "Alvarez Rodriguez",
+  "domicilio": "Aldea Colmenas EL Rosario Comayagua"
+ },
+ {
+  "expediente": "79018",
+  "identidad": "1612-1996-00219",
+  "nombre": "Julia Marilu",
+  "apellido": "Corea Sanchez",
+  "domicilio": "San Francisco de Yojoa Cortes"
+ },
+ {
+  "expediente": "47635",
+  "identidad": "0304 1971 00152",
+  "nombre": "Juana María",
+  "apellido": "Melendez Mejía",
+  "domicilio": "Km 86 Villanueva Cortés"
+ },
+ {
+  "expediente": "80049",
+  "identidad": "0318 1993 00406",
+  "nombre": "Karen Josselin",
+  "apellido": "Maldonado Orellana",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "80077",
+  "identidad": "0301 1985 02770",
+  "nombre": "Karla Maricela",
+  "apellido": "Portillo",
+  "domicilio": "Lo de Reina Comayagua Comayagua"
+ },
+ {
+  "expediente": "80232",
+  "identidad": "0318 1983 00374",
+  "nombre": "Karla Patricia",
+  "apellido": "Reyes Teruel",
+  "domicilio": "Barrio el Carmen Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "80134",
+  "identidad": "0501-1999-11494",
+  "nombre": "Keily Jackeline",
+  "apellido": "Morel Marroquin",
+  "domicilio": "San pedro Sula cofradia."
+ },
+ {
+  "expediente": "77127",
+  "identidad": "0301 1992 01591",
+  "nombre": "Karla Maryori",
+  "apellido": "Mejia Rivera",
+  "domicilio": "Aldea El roblito Comayagua"
+ },
+ {
+  "expediente": "77449",
+  "identidad": "0321 1994 00349",
+  "nombre": "Karla Lourdes",
+  "apellido": "Matute",
+  "domicilio": "Barrio Las Flores Taulabe"
+ },
+ {
+  "expediente": "80166",
+  "identidad": "0803 1957 00642",
+  "nombre": "Leonardo",
+  "apellido": "Alcerro Amador",
+  "domicilio": "Tuliapita Vallecillo Francisco Morazan"
+ },
+ {
+  "expediente": "79656",
+  "identidad": "0319 1971 01427",
+  "nombre": "Lucia",
+  "apellido": "Castillo Martinez",
+  "domicilio": "Barrio el Centro Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "79889",
+  "identidad": "1218-1988-00357",
+  "nombre": "Lucila",
+  "apellido": "Guitierrez",
+  "domicilio": "Aldea Santa Rosa de Buenas Noches Ajuterique Comayagua."
+ },
+ {
+  "expediente": "80000",
+  "identidad": "0301-1978-01987",
+  "nombre": "Lucila",
+  "apellido": "Ortiz Lopez",
+  "domicilio": "La Paz La Paz Barrio Villa Luisa."
+ },
+ {
+  "expediente": "80181",
+  "identidad": "0510 1959 00055",
+  "nombre": "Maria de Jesus",
+  "apellido": "Ramos Hernandez",
+  "domicilio": "Aldea Nueva Esperanza Santa Cruz de Yojoa Cortés"
+ },
+ {
+  "expediente": "65942",
+  "identidad": "0301 2003 01626",
+  "nombre": "Maria Isabel",
+  "apellido": "Chavarria Delcid",
+  "domicilio": "Barrio Suyapa Comayagua Comayagua"
+ },
+ {
+  "expediente": "79870",
+  "identidad": "0508-1955-00108",
+  "nombre": "Maria Ramona",
+  "apellido": "Ferrera Batres",
+  "domicilio": "Cortes Santa Cruz de Yojoa Col. La Paz."
+ },
+ {
+  "expediente": "80290",
+  "identidad": "1004 1976 00110",
+  "nombre": "Maria Santos",
+  "apellido": "Diaz Mendoza",
+  "domicilio": "Colonia Altamira Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "80187",
+  "identidad": "0825 1993 00032",
+  "nombre": "Martha Elena",
+  "apellido": "Rodriguez Velasquez",
+  "domicilio": "Tatumbla Francisco Morazan"
+ },
+ {
+  "expediente": "79920",
+  "identidad": "0301 1994 01650",
+  "nombre": "Mayra Joselin",
+  "apellido": "Manzanares Garay",
+  "domicilio": "Colonia Los Pumas Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "79559",
+  "identidad": "0301-1989-00363",
+  "nombre": "Maria Isabel",
+  "apellido": "Zelaya Hernandez",
+  "domicilio": "Comayagua Comayagua Aldea Carboneras El Peñon."
+ },
+ {
+  "expediente": "19932",
+  "identidad": "0306-1971-00155",
+  "nombre": "Maria Albertina",
+  "apellido": "Zavala Romero",
+  "domicilio": "Comayagua La Libertad Aldea La Soledad."
+ },
+ {
+  "expediente": "79594",
+  "identidad": "0801-1970-00671",
+  "nombre": "Maria Esperanza",
+  "apellido": "Lopez Mendez",
+  "domicilio": "Francisco Morazán MDC San Matías."
+ },
+ {
+  "expediente": "79872",
+  "identidad": "1206-1981-00157",
+  "nombre": "Maria Magdalena",
+  "apellido": "Mejia Andres",
+  "domicilio": "Aldea Santa Rosita Guiajiquiro La Paz"
+ },
+ {
+  "expediente": "8867",
+  "identidad": "0306-1997-00861",
+  "nombre": "Maria del Roario",
+  "apellido": "Joya",
+  "domicilio": "Comayagua Meambar Aldea Concepción."
+ },
+ {
+  "expediente": "78775",
+  "identidad": "0318 1982 01376",
+  "nombre": "Marua Elizabeth",
+  "apellido": "Zepeda Dominguez",
+  "domicilio": "Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "79531",
+  "identidad": "0319-1995-00169",
+  "nombre": "Marlen Carolina",
+  "apellido": "Maradiaga Martinez",
+  "domicilio": "Comayagua Villa San Antonio Flores."
+ },
+ {
+  "expediente": "78766",
+  "identidad": "501199207054",
+  "nombre": "Mercy Petronila",
+  "apellido": "Lazo Cruz",
+  "domicilio": "Cortes San Pedro Sula Cofadria ( )"
+ },
+ {
+  "expediente": "79537",
+  "identidad": "0301-1977-00134",
+  "nombre": "Mirna",
+  "apellido": "Silvas Calderon",
+  "domicilio": "Comayagua Barrio Arriba."
+ },
+ {
+  "expediente": "78768",
+  "identidad": "1211-1969-00009",
+  "nombre": "Nora Elizabeth",
+  "apellido": "Palacios Mejia",
+  "domicilio": "Agua Dulce Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "79589",
+  "identidad": "453-070866-0001N",
+  "nombre": "Nelly",
+  "apellido": "Herrera Alvarado",
+  "domicilio": "Nicaragua Matagalpa Rancho Grande."
+ },
+ {
+  "expediente": "79237",
+  "identidad": "301200602144",
+  "nombre": "Odalys Yamileth",
+  "apellido": "Maldonado Maldonado",
+  "domicilio": "Barrio La Independencia Comayagua Comayagua"
+ },
+ {
+  "expediente": "78508",
+  "identidad": "0801 1975 05355",
+  "nombre": "Patricia Yaquelin",
+  "apellido": "Escobar Paguada",
+  "domicilio": "Colonia Venezuela Comayagüela Francisco Morazán"
+ },
+ {
+  "expediente": "79518",
+  "identidad": "1218 1981 00267",
+  "nombre": "Paulina",
+  "apellido": "Cabrera Aguilar",
+  "domicilio": "Alde Hornitos Santiago de Puringla La Paz"
+ },
+ {
+  "expediente": "79084",
+  "identidad": "1208-1952-00065",
+  "nombre": "Oscar",
+  "apellido": "Urquia Aguilar",
+  "domicilio": "Barrio La Golondrina Marcala La Paz"
+ },
+ {
+  "expediente": "79084",
+  "identidad": "1208-1952-00065",
+  "nombre": "Oscar",
+  "apellido": "Urquia Aguilar",
+  "domicilio": "Barrio La Golondrina Marcala La Paz"
+ },
+ {
+  "expediente": "80088",
+  "identidad": "1210 1994 00224",
+  "nombre": "Queydu Jiceth",
+  "apellido": "Lopez Martinez",
+  "domicilio": "Aldea Florida Opatoro La Paz"
+ },
+ {
+  "expediente": "79912",
+  "identidad": "0501-1949-02777",
+  "nombre": "Rafael Enrique",
+  "apellido": "Nuñez Santos",
+  "domicilio": "Barrio San Miguel Siguatepeque Comayagua -"
+ },
+ {
+  "expediente": "79730",
+  "identidad": "0301-2010-02407",
+  "nombre": "Riccy Mauriela",
+  "apellido": "Gutierrez Sorto",
+  "domicilio": "Comayagua Comayagua Aldea La Escalera."
+ },
+ {
+  "expediente": "80263",
+  "identidad": "1213 1968 00052",
+  "nombre": "Rosa",
+  "apellido": "Morales",
+  "domicilio": "Aldea Lomas del Cordero Comayagua Comayagua"
+ },
+ {
+  "expediente": "23407",
+  "identidad": "1201 1979 01995",
+  "nombre": "Rosa",
+  "apellido": "Alvarado",
+  "domicilio": "Aldea San Rafael La Paz La Paz."
+ },
+ {
+  "expediente": "79461",
+  "identidad": "0318-1979-01821",
+  "nombre": "Rosa Candida",
+  "apellido": "Medina Gonzales",
+  "domicilio": "Aldea Jaitique Taulabe Comayagua Cerca de la iglesia catolica"
+ },
+ {
+  "expediente": "80187",
+  "identidad": "0318 1991 00264",
+  "nombre": "Sandra Daybeli",
+  "apellido": "Mata Mencia",
+  "domicilio": "Aldea Agua Dulce Siguatepeque Comayagua"
+ },
+ {
+  "expediente": "74418",
+  "identidad": "0303-1998-00053",
+  "nombre": "Sayra Isabel",
+  "apellido": "Benites Rodriguez",
+  "domicilio": "Aldea San Isidro Barrio El Rosario Comayagua"
+ },
+ {
+  "expediente": "78558",
+  "identidad": "0508 1989 00038",
+  "nombre": "Zuniga Valle",
+  "apellido": "",
+  "domicilio": "San Francisco de Yojoa Cortes"
+ },
+ {
+  "expediente": "80137",
+  "identidad": "1701 1984 04947",
+  "nombre": "Wilma Yamileth",
+  "apellido": "Euceda Bustillo",
+  "domicilio": "Barrio Santa Lucía Comayagua Comayagua"
+ },
+ {
+  "expediente": "78551",
+  "identidad": "1201 2003 00750",
+  "nombre": "Yennifer Hisela",
+  "apellido": "Tejeda Rivera",
+  "domicilio": "Barrio la Granja La Paz"
+ },
+ {
+  "expediente": "78795",
+  "identidad": "0510 1997 00404",
+  "nombre": "Yeny Lizeth",
+  "apellido": "Nuñez Machuca",
+  "domicilio": "Cortes santa Cruz De Yojoa Nueva Esperanza ( )"
+ },
+ {
+  "expediente": "80089",
+  "identidad": "1322-1981-00025",
+  "nombre": "Ana Virginia",
+  "apellido": "Hernandez",
+  "domicilio": "Cortez Santa Cruz de Yojoa Aldea Las Flores."
+ },
+ {
+  "expediente": "79016",
+  "identidad": "0508 1981 00183",
+  "nombre": "Angelica",
+  "apellido": "Garcia Santos",
+  "domicilio": "San Francisco de Yojoa Cortes"
+ },
+ {
+  "expediente": "78701",
+  "identidad": "1206 1988 00371",
+  "nombre": "Argelia Eledina",
+  "apellido": "Hernandez Gomez",
+  "domicilio": "Guajiquiro La Paz"
+ },
+ {
+  "expediente": "78737",
+  "identidad": "0301-1978-01971",
+  "nombre": "Dany Gerardo",
+  "apellido": "Valladares Castellanos",
+  "domicilio": "Comayagua barrio arriba"
+ },
+ {
+  "expediente": "46679",
+  "identidad": "0301 1964 01000",
+  "nombre": "Gloria Petrona",
+  "apellido": "Molina Suazo",
+  "domicilio": "Barrio La Joya Comayagua"
+ },
+ {
+  "expediente": "78809",
+  "identidad": "0313 1996 00190",
+  "nombre": "Iris Dinora",
+  "apellido": "Orellana",
+  "domicilio": "Comayagua El Rosario Aldea Sabanalarga ( )"
+ },
+ {
+  "expediente": "80165",
+  "identidad": "0801-1982-06512",
+  "nombre": "Leticia Maria",
+  "apellido": "Gomez Diaz",
+  "domicilio": "FM Tegucigalpa Col. Peña Porbajo."
+ },
+ {
+  "expediente": "79204",
+  "identidad": "0716 1957 00078",
+  "nombre": "Manuel Santos",
+  "apellido": "Sanchez Flores",
+  "domicilio": "Los encuentros El paraiso"
+ },
+ {
+  "expediente": "79015",
+  "identidad": "1201 1981 00293",
+  "nombre": "Maria Elbia",
+  "apellido": "Herrera",
+  "domicilio": "Col. Municipal La Paz"
+ },
+ {
+  "expediente": "78968",
+  "identidad": "1212 1999 00100",
+  "nombre": "Mirna Lizzeth",
+  "apellido": "Garcia Delcid",
+  "domicilio": "Rio Lindo Cortes"
+ },
+ {
+  "expediente": "78973",
+  "identidad": "0703 1965 00579",
+  "nombre": "Rosario Beatriz",
+  "apellido": "Blandon Galo",
+  "domicilio": "Buenos Aires Danli"
+ },
+ {
+  "expediente": "78671",
+  "identidad": "1612 1988 00135",
+  "nombre": "Suyapa Jakelyn",
+  "apellido": "Gomez Cortes",
+  "domicilio": "San Francisco de Yojoa"
+ },
+ {
+  "expediente": "79196",
+  "identidad": "0501 2002 15504",
+  "nombre": "Suyapa Vanessa",
+  "apellido": "Nuñez Urquia",
+  "domicilio": "Aldea El porvenir"
  }
 ]
