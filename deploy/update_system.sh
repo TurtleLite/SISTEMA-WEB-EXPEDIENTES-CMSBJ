@@ -107,6 +107,16 @@ if [ -f "$BACKEND_DIR/marcar_en_espera.sql" ]; then
   fi
 fi
 
+# --- Aplica script de domicilios (idempotente, corre en cada deploy) ---
+if [ -f "$BACKEND_DIR/actualizar_domicilios.py" ]; then
+  echo "==> Aplicando actualizar_domicilios.py (agrega domicilio a expedientes SIN OPERAR)..."
+  DB_URL=$(grep -E '^[[:space:]]*DATABASE_URL=' "$BACKEND_DIR/.env" 2>/dev/null | head -1 | sed 's/^[[:space:]]*DATABASE_URL=//')
+  ( cd "$BACKEND_DIR" && \
+    DATABASE_URL="${DB_URL:-postgresql://gestion_user:gestion_pass@localhost:5432/gestion_db}" \
+    ./venv/bin/python actualizar_domicilios.py --apply ) \
+    || echo "  (aviso: no se pudo ejecutar actualizar_domicilios.py)"
+fi
+
 # --- FRONTEND (lo que sirve el funnel) ---
 if echo "$CHANGED" | grep -qE '^frontend/'; then
   echo "==> Frontend cambió: reconstruyendo SPA (se refleja en el funnel sin reiniciar backend)"
