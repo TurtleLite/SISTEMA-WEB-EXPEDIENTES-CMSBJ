@@ -32,42 +32,27 @@ def norm(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
-def key_of(exp, nombre):
-    b = base_exp(exp)
-    if not b:
-        return None
-    n = norm(nombre)
-    if not n:
-        return None
-    return (b, n)
+def full_name(data):
+    # El sistema guarda nombre (pila) + apellido por separado;重建 nombre completo.
+    return norm(f"{data.get('nombre', '')} {data.get('apellido', '')}") or norm(data.get("nombre", ""))
 
 
-def load_map_csv(path):
-    out, warnings = {}, []
-    with open(path, newline="", encoding="utf-8", errors="replace") as f:
-        for row in csv.DictReader(f):
-            k = key_of(row.get("expediente"), row.get("nombre"))
-            if not k:
+def load_maps(path, is_csv):
+    by_key, by_base, warnings = {}, {}, []
+    opener = open(path, newline="", encoding="utf-8", errors="replace") if is_csv else open(path, encoding="utf-8")
+    with opener:
+        rows = csv.DictReader(opener) if is_csv else json.load(opener)
+        for row in rows:
+            exp = row.get("expediente", "")
+            nom = row.get("nombre", "")
+            dom = clean_domicilio(row.get("domicilio")) if is_csv else row.get("domicilio", "")
+            b = base_exp(exp)
+            n = norm(nom)
+            if not b or not n:
                 continue
-            if k in out:
-                warnings.append(f"clave duplicada en CSV: {k[0]} {row.get('nombre')}")
-                continue
-            out[k] = clean_domicilio(row.get("domicilio"))
-    return out, warnings
-
-
-def load_map_json(path):
-    out, warnings = {}, []
-    with open(path, encoding="utf-8") as f:
-        for r in json.load(f):
-            k = key_of(r.get("expediente"), r.get("nombre"))
-            if not k:
-                continue
-            if k in out:
-                warnings.append(f"clave duplicada en JSON: {k[0]} {r.get('nombre')}")
-                continue
-            out[k] = r.get("domicilio", "")
-    return out, warnings
+            by_key.setdefault((b, n), dom)
+            by_base.setdefault(b, []).append((n, dom))
+    return by_key, by_base, warnings
 
 
 def main():
@@ -76,13 +61,9 @@ def main():
     ap.add_argument("--apply", action="store_true", help="Escribe en la BD (si no, solo diagnostica)")
     args = ap.parse_args()
 
-    if args.csv:
-        dmap, warns = load_map_csv(args.csv)
-        src = args.csv
-    else:
-        dmap, warns = load_map_json(JSON_PATH)
-        src = JSON_PATH
-    print(f"Pares (expediente+nombre) con domicilio en {src}: {len(dmap)}")
+    is_csv = bool(args.csv)
+    by_key, by_base, warns = load_maps(args.csv if is_csv else JSON_PATH, is_csv)
+    print(f"Domicilios en fuente: {len(by_key)} (por nombre) / {len(by_base)} (por expediente)")
     for w in warns:
         print("  !", w)
 
@@ -94,39 +75,50 @@ def main():
     db = SessionLocal()
     try:
         recs = db.query(ListRecord).filter(ListRecord.deleted_at.is_(None)).all()
-        by_base = {}
+        by_base_rec = {}
         for r in recs:
             d = r.data or {}
             b = base_exp(d.get("expediente"))
             if not b:
                 continue
-            full = norm(f"{d.get('nombre', '')} {d.get('apellido', '')}") or norm(d.get("nombre", ""))
-            by_base.setdefault(b, []).append((r, full))
+            by_base_rec.setdefault(b, []).append(r)
 
-        matched_name = matched_exp = ambiguous = notfound = would_update = skipped_has = 0
-        for (b, n), dom in dmap.items():
-            recs_b = by_base.get(b, [])
-            exact = [r for r, nm in recs_b if nm == n]
-            if exact:
-                target = exact[0]
-                matched_name += 1
-            elif len(recs_b) == 1:
-                target = recs_b[0][0]
-                matched_exp += 1
-            else:
-                if recs_b:
-                    ambiguous += 1
-                else:
-                    notfound += 1
+        matched = overwrite = only_fill_empty = notfound = ambiguous = 0
+        for b, recs_b in by_base_rec.items():
+            entries = by_base.get(b)
+            if not entries:
                 continue
+            # 1) coincide nombre completo
+            target = None
+            for r in recs_b:
+                if full_name(r.data or {}) in {n for n, _ in entries}:
+                    target = r
+                    break
+            if target is None and len(recs_b) == 1:
+                target = recs_b[0]  # solo 1 registro con ese expediente -> seguro
+            if target is None and len(recs_b) > 1:
+                # duplicado: solo rellenar los que NO tienen domicilio, sin pisar los demas
+                for r in recs_b:
+                    cur = (r.data or {}).get("domicilio")
+                    if not (cur and str(cur).strip()):
+                        dom = entries[0][1]
+                        if args.apply:
+                            r.data = dict(r.data or {})
+                            r.data["domicilio"] = dom
+                        only_fill_empty += 1
+                ambiguous += 1
+                continue
+            if target is None:
+                notfound += 1
+                continue
+            dom = entries[0][1]
             cur = (target.data or {}).get("domicilio")
+            if args.apply:
+                target.data = dict(target.data or {})
+                target.data["domicilio"] = dom
+            matched += 1
             if cur and str(cur).strip():
-                skipped_has += 1
-            else:
-                would_update += 1
-                if args.apply:
-                    target.data = dict(target.data or {})
-                    target.data["domicilio"] = dom
+                overwrite += 1
 
         if args.apply:
             db.commit()
@@ -134,12 +126,10 @@ def main():
         else:
             print(">>> DRY-RUN (no se escribió nada).")
         print(
-            f"Coincidencia por nombre completo : {matched_name}\n"
-            f"Coincidencia solo por expediente : {matched_exp}\n"
-            f"Expediente duplicado/ambíguo      : {ambiguous}\n"
-            f"Expediente no encontrado en BD    : {notfound}\n"
-            f"Se actualizarían (sin domicilio)  : {would_update}\n"
-            f"Ya tenían domicilio (omitidos)    : {skipped_has}"
+            f"Registros actualizados             : {matched}\n"
+            f"  de ellos sobreescribieron previo : {overwrite}\n"
+            f"Duplicados: rellenados solo vacíos : {only_fill_empty} (expedientes: {ambiguous})\n"
+            f"Expediente no encontrado en BD     : {notfound}"
         )
     finally:
         db.close()
