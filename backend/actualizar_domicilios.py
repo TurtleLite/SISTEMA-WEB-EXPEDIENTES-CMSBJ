@@ -36,35 +36,35 @@ def key_of(exp, nombre):
     b = base_exp(exp)
     if not b:
         return None
-    return (b, norm(nombre))
+    n = norm(nombre)
+    if not n:
+        return None
+    return (b, n)
 
 
 def load_map_csv(path):
-    out = {}
-    warnings = []
+    out, warnings = {}, []
     with open(path, newline="", encoding="utf-8", errors="replace") as f:
         for row in csv.DictReader(f):
             k = key_of(row.get("expediente"), row.get("nombre"))
             if not k:
                 continue
-            dom = clean_domicilio(row.get("domicilio"))
             if k in out:
-                warnings.append(f"clave duplicada en CSV: expediente={k[0]} nombre={row.get('nombre')}")
+                warnings.append(f"clave duplicada en CSV: {k[0]} {row.get('nombre')}")
                 continue
-            out[k] = dom
+            out[k] = clean_domicilio(row.get("domicilio"))
     return out, warnings
 
 
 def load_map_json(path):
-    out = {}
-    warnings = []
+    out, warnings = {}, []
     with open(path, encoding="utf-8") as f:
         for r in json.load(f):
             k = key_of(r.get("expediente"), r.get("nombre"))
             if not k:
                 continue
             if k in out:
-                warnings.append(f"clave duplicada en JSON: expediente={k[0]} nombre={r.get('nombre')}")
+                warnings.append(f"clave duplicada en JSON: {k[0]} {r.get('nombre')}")
                 continue
             out[k] = r.get("domicilio", "")
     return out, warnings
@@ -73,7 +73,7 @@ def load_map_json(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--csv", help="Usa este CSV en lugar del JSON embebido")
-    ap.add_argument("--apply", action="store_true", help="Escribe en la BD (si no, solo muestra plan)")
+    ap.add_argument("--apply", action="store_true", help="Escribe en la BD (si no, solo diagnostica)")
     args = ap.parse_args()
 
     if args.csv:
@@ -86,12 +86,6 @@ def main():
     for w in warns:
         print("  !", w)
 
-    if not args.apply:
-        for k, d in list(dmap.items())[:8]:
-            print(f"  {k[0]} | {k[1]!r}: {d!r}")
-        print("\nMODO DRY-RUN: no se toca la BD. Agrega --apply para escribir.")
-        return
-
     os.environ.setdefault("SECRET_KEY", "x")
     os.environ.setdefault("JWT_SECRET_KEY", "x")
     from app.core.database import SessionLocal
@@ -100,23 +94,53 @@ def main():
     db = SessionLocal()
     try:
         recs = db.query(ListRecord).filter(ListRecord.deleted_at.is_(None)).all()
-        updated = skipped_has = notfound = nomatch = 0
+        by_base = {}
         for r in recs:
             d = r.data or {}
-            k = key_of(d.get("expediente"), d.get("nombre"))
-            if not k or k not in dmap:
-                nomatch += 1
+            b = base_exp(d.get("expediente"))
+            if not b:
                 continue
-            cur = d.get("domicilio")
+            full = norm(f"{d.get('nombre', '')} {d.get('apellido', '')}") or norm(d.get("nombre", ""))
+            by_base.setdefault(b, []).append((r, full))
+
+        matched_name = matched_exp = ambiguous = notfound = would_update = skipped_has = 0
+        for (b, n), dom in dmap.items():
+            recs_b = by_base.get(b, [])
+            exact = [r for r, nm in recs_b if nm == n]
+            if exact:
+                target = exact[0]
+                matched_name += 1
+            elif len(recs_b) == 1:
+                target = recs_b[0][0]
+                matched_exp += 1
+            else:
+                if recs_b:
+                    ambiguous += 1
+                else:
+                    notfound += 1
+                continue
+            cur = (target.data or {}).get("domicilio")
             if cur and str(cur).strip():
                 skipped_has += 1
-                continue
-            r.data = dict(d)
-            r.data["domicilio"] = dmap[k]
-            updated += 1
-        db.commit()
-        print(f"Actualizados: {updated} | Ya tenian domicilio (omitidos): {skipped_has} | "
-              f"Sin coincidencia en CSV: {nomatch}")
+            else:
+                would_update += 1
+                if args.apply:
+                    target.data = dict(target.data or {})
+                    target.data["domicilio"] = dom
+
+        if args.apply:
+            db.commit()
+            print(">>> Cambios aplicados a la BD.")
+        else:
+            print(">>> DRY-RUN (no se escribió nada).")
+        print(
+            f"Coincidencia por nombre completo : {matched_name}\n"
+            f"Coincidencia solo por expediente : {matched_exp}\n"
+            f"Expediente duplicado/ambíguo      : {ambiguous}\n"
+            f"Expediente no encontrado en BD    : {notfound}\n"
+            f"Se actualizarían (sin domicilio)  : {would_update}\n"
+            f"Ya tenían domicilio (omitidos)    : {skipped_has}"
+        )
     finally:
         db.close()
 
