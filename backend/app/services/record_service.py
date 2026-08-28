@@ -353,6 +353,9 @@ def delete_record(db: Session, record_id: int, user_id: int = None, user_role: s
         raise HTTPException(status_code=404, detail="Registro no encontrado")
     if user_role in ("direccion", "direccion_medica"):
         pass
+    elif user_role == "carga_px":
+        if record.created_by != user_id:
+            raise HTTPException(status_code=403, detail="Carga Px solo puede eliminar sus propios expedientes")
     else:
         role_name = {"admin": "Administrador", "direccion": "Dirección", "direccion_medica": "Dirección Médica", "medico": "Médico", "carga_px": "Carga Px"}
         raise HTTPException(status_code=403, detail=f"{role_name.get(user_role, 'Usuario')} no puede eliminar este registro")
