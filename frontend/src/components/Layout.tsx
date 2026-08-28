@@ -42,9 +42,9 @@ const navSections: NavSection[] = [
   {
     title: 'Estadísticas',
     items: [
-      { label: 'Listados', path: '/listado-diario', icon: <ClipboardList size={18} />, roles: ['direccion', 'direccion_medica'] },
-      { label: 'Estatus', path: '/estado-cirugia', icon: <Activity size={18} />, roles: ['direccion', 'direccion_medica'] },
-      { label: 'Reportes', path: '/reports', icon: <FileText size={18} />, roles: ['direccion', 'direccion_medica'] },
+      { label: 'Listados', path: '/listado-diario', icon: <ClipboardList size={18} />, roles: ['admin', 'direccion', 'direccion_medica'] },
+      { label: 'Estatus', path: '/estado-cirugia', icon: <Activity size={18} />, roles: ['admin', 'direccion', 'direccion_medica'] },
+      { label: 'Reportes', path: '/reports', icon: <FileText size={18} />, roles: ['admin', 'direccion', 'direccion_medica'] },
     ],
   },
   {

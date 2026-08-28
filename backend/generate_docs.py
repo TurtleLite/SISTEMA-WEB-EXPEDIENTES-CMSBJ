@@ -206,7 +206,7 @@ class DocBuilder:
 # ---------------------------------------------------------------------------
 ROLE_TABLE = [
     ["Rol", "Descripción", "Alcance general"],
-    ["Administrador", "Gestiona usuarios, sesiones, auditoría, especialidades y localidades. Consulta expedientes, pero no los crea, edita, elimina ni exporta.", "Usuarios, sesiones, auditoría, especialidades y localidades."],
+    ["Administrador", "Gestiona usuarios, sesiones, auditoría, especialidades y localidades. Consulta expedientes y las secciones de estadísticas (reportes, listados diarios y estatus de cirugía); no crea, edita, elimina ni exporta expedientes.", "Usuarios, sesiones, auditoría, especialidades, localidades y estadísticas (consulta)."],
     ["Dirección", "Consulta y gestiona expedientes (crear, editar, eliminar), reportes, listados diarios y estatus de cirugía.", "Expedientes, reportes, listados y estatus."],
     ["Dirección Médica", "Gestiona expedientes, reportes, listados diarios y estatus de cirugía.", "Expedientes, reportes, listados y estatus."],
     ["Médico", "Crea y edita sus propios expedientes y exporta expedientes a Excel. No los elimina.", "Expedientes propios y exportación."],
@@ -222,9 +222,9 @@ PERMISSION_MATRIX = [
     ["Eliminar expedientes", "No", "Sí", "Sí", "No", "No"],
     ["Exportar expedientes a Excel", "Sí", "Sí", "Sí", "Sí", "No"],
     ["Vista previa del expediente", "Sí", "Sí", "Sí", "Sí", "Sí"],
-    ["Reportes (crear, generar, descargar, eliminar)", "No", "Sí", "Sí", "No", "No"],
-    ["Listado diario de cirugías (armar y guardar)", "No", "Sí", "Sí", "No", "No"],
-    ["Estatus de cirugía (asignar y cambiar)", "No", "Sí", "Sí", "No", "No"],
+    ["Reportes (crear, generar, descargar, eliminar)", "Sí", "Sí", "Sí", "No", "No"],
+    ["Listado diario de cirugías (armar y guardar)", "Sí", "Sí", "Sí", "No", "No"],
+    ["Estatus de cirugía (consultar)", "Sí (consulta)", "Sí", "Sí", "No", "No"],
     ["Usuarios (crear, editar, eliminar, desbloquear, restablecer)", "Sí", "No", "No", "No", "No"],
     ["Sesiones (ver y cerrar)", "Sí", "No", "No", "No", "No"],
     ["Auditoría (historial de actividades)", "Sí", "No", "No", "No", "No"],
