@@ -72,26 +72,29 @@ def create_locality(
     return {"message": f"Localidad '{name}' creada correctamente", "id": item.id}
 
 
+def _norm(s: str) -> str:
+    from app.services.record_service import _strip_accents
+    return _strip_accents(str(s or "")).lower()
+
+
 @router.put("/rename")
 def rename_locality(
     data: dict,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
+    from app.models.list_definition import ListRecord
+    from app.services.record_service import _compose_domicilio
     old = (data.get("old") or "").strip()
     new = (data.get("new") or "").strip()
     if not old or not new:
         raise HTTPException(status_code=400, detail="La localidad original y la nueva son obligatorias")
     if old == new:
         return {"message": "Sin cambios", "updated": 0}
-    from app.models.list_definition import ListRecord
-    from app.services.record_service import _compose_domicilio
-    rows = (
-        db.query(ListRecord)
-        .filter(ListRecord.data.op("->>")("localidad") == old)
-        .all()
-    )
-    for record in rows:
+    target = _norm(old)
+    rows = db.query(ListRecord).filter(ListRecord.data.op("->>")("localidad").isnot(None)).all()
+    matched = [r for r in rows if _norm(r.data.get("localidad", "")) == target]
+    for record in matched:
         d = dict(record.data)
         d["localidad"] = new
         record.data = _compose_domicilio(d)
@@ -102,7 +105,7 @@ def rename_locality(
     if catalog:
         catalog.name = new
     db.commit()
-    return {"message": f"Localidad renombrada en {len(rows)} expediente(s)", "updated": len(rows)}
+    return {"message": f"Localidad renombrada en {len(matched)} expediente(s)", "updated": len(matched)}
 
 
 @router.delete("/")
@@ -112,27 +115,24 @@ def delete_locality(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
+    from app.models.list_definition import ListRecord
+    from app.services.record_service import _compose_domicilio
     name = name.strip()
     replacement = replacement.strip()
     if not name:
         raise HTTPException(status_code=400, detail="Nombre de localidad inválido")
     if replacement == name:
         raise HTTPException(status_code=400, detail="El reemplazo no puede ser la misma localidad")
-    from app.models.list_definition import ListRecord
-    from app.services.record_service import _compose_domicilio
+    target = _norm(name)
+    rows = db.query(ListRecord).filter(ListRecord.data.op("->>")("localidad").isnot(None)).all()
+    matched = [r for r in rows if _norm(r.data.get("localidad", "")) == target]
     if replacement:
-        # Toma el tipo de localidad del reemplazo si existe en el catálogo.
         rep = db.query(CatalogItem).filter(
             CatalogItem.item_type == "localidad",
             CatalogItem.name == replacement,
         ).first()
         tipo = rep.locality_type or "" if rep else ""
-        rows = (
-            db.query(ListRecord)
-            .filter(ListRecord.data.op("->>")("localidad") == name)
-            .all()
-        )
-        for record in rows:
+        for record in matched:
             d = dict(record.data)
             d["localidad"] = replacement
             if tipo:
@@ -140,23 +140,17 @@ def delete_locality(
             elif "tipo_localidad" in d:
                 del d["tipo_localidad"]
             record.data = _compose_domicilio(d)
-        db.commit()
-        message = f"Localidad reasignada a '{replacement}' en {len(rows)} expediente(s)"
-        updated = len(rows)
+        message = f"Localidad reasignada a '{replacement}' en {len(matched)} expediente(s)"
     else:
-        res = db.execute(
-            text(
-                "UPDATE list_records "
-                "SET data = (data - 'localidad') - 'tipo_localidad', updated_at = now() "
-                "WHERE data->>'localidad' = :name"
-            ),
-            {"name": name},
-        )
-        message = f"Localidad eliminada de {res.rowcount} expediente(s)"
-        updated = res.rowcount
+        for record in matched:
+            d = dict(record.data)
+            d.pop("localidad", None)
+            d.pop("tipo_localidad", None)
+            record.data = _compose_domicilio(d)
+        message = f"Localidad eliminada de {len(matched)} expediente(s)"
     db.query(CatalogItem).filter(
         CatalogItem.item_type == "localidad",
         CatalogItem.name == name,
     ).delete()
     db.commit()
-    return {"message": message, "updated": updated}
+    return {"message": message, "updated": len(matched)}

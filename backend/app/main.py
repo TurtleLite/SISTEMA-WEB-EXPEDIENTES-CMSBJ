@@ -203,6 +203,19 @@ async def lifespan(app: FastAPI):
                         target += timedelta(days=1)
                     await asyncio.sleep((target - now).total_seconds())
                     ensure_todays_auto_backup()
+                    # Purga periódica de la papelera (respeta TRASH_RETENTION_DAYS)
+                    try:
+                        from app.core.database import SessionLocal
+                        from app.services.record_service import purge_trash
+                        db = SessionLocal()
+                        try:
+                            n = purge_trash(db)
+                            if n:
+                                logger.info(f"Papelera: purgados {n} registro(s)/lista(s) vencidos")
+                        finally:
+                            db.close()
+                    except Exception as e:
+                        logger.warning(f"No se pudo purgar la papelera: {e}")
                 except asyncio.CancelledError:
                     break
                 except Exception:

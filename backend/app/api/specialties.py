@@ -54,26 +54,31 @@ def create_specialty(
     return {"message": f"Especialidad '{name}' creada correctamente", "id": item.id}
 
 
+def _norm(s: str) -> str:
+    from app.services.record_service import _strip_accents
+    return _strip_accents(str(s or "")).lower()
+
+
 @router.put("/rename")
 def rename_specialty(
     data: dict,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
+    from app.models.list_definition import ListRecord
     old = (data.get("old") or "").strip()
     new = (data.get("new") or "").strip()
     if not old or not new:
         raise HTTPException(status_code=400, detail="La especialidad original y la nueva son obligatorias")
     if old == new:
         return {"message": "Sin cambios", "updated": 0}
-    res = db.execute(
-        text(
-            "UPDATE list_records "
-            "SET data = jsonb_set(data, '{especialidad}', CAST(:new AS JSONB)), updated_at = now() "
-            "WHERE data->>'especialidad' = :old"
-        ),
-        {"old": old, "new": json.dumps(new)},
-    )
+    target = _norm(old)
+    rows = db.query(ListRecord).filter(ListRecord.data.op("->>")("especialidad").isnot(None)).all()
+    matched = [r for r in rows if _norm(r.data.get("especialidad", "")) == target]
+    for r in matched:
+        d = dict(r.data)
+        d["especialidad"] = new
+        r.data = d
     catalog = db.query(CatalogItem).filter(
         CatalogItem.item_type == "especialidad",
         CatalogItem.name == old,
@@ -81,7 +86,7 @@ def rename_specialty(
     if catalog:
         catalog.name = new
     db.commit()
-    return {"message": f"Especialidad renombrada en {res.rowcount} expediente(s)", "updated": res.rowcount}
+    return {"message": f"Especialidad renombrada en {len(matched)} expediente(s)", "updated": len(matched)}
 
 
 @router.delete("/")
@@ -91,35 +96,31 @@ def delete_specialty(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
+    from app.models.list_definition import ListRecord
     name = name.strip()
     replacement = replacement.strip()
     if not name:
         raise HTTPException(status_code=400, detail="Nombre de especialidad inválido")
     if replacement == name:
         raise HTTPException(status_code=400, detail="El reemplazo no puede ser la misma especialidad")
+    target = _norm(name)
+    rows = db.query(ListRecord).filter(ListRecord.data.op("->>")("especialidad").isnot(None)).all()
+    matched = [r for r in rows if _norm(r.data.get("especialidad", "")) == target]
     if replacement:
-        res = db.execute(
-            text(
-                "UPDATE list_records "
-                "SET data = jsonb_set(data, '{especialidad}', CAST(:new AS JSONB)), updated_at = now() "
-                "WHERE data->>'especialidad' = :name"
-            ),
-            {"name": name, "new": json.dumps(replacement)},
-        )
-        message = f"Especialidad reasignada a '{replacement}' en {res.rowcount} expediente(s)"
+        for r in matched:
+            d = dict(r.data)
+            d["especialidad"] = replacement
+            r.data = d
+        message = f"Especialidad reasignada a '{replacement}' en {len(matched)} expediente(s)"
     else:
-        res = db.execute(
-            text(
-                "UPDATE list_records "
-                "SET data = data - 'especialidad', updated_at = now() "
-                "WHERE data->>'especialidad' = :name"
-            ),
-            {"name": name},
-        )
-        message = f"Especialidad eliminada de {res.rowcount} expediente(s)"
+        for r in matched:
+            d = dict(r.data)
+            d.pop("especialidad", None)
+            r.data = d
+        message = f"Especialidad eliminada de {len(matched)} expediente(s)"
     db.query(CatalogItem).filter(
         CatalogItem.item_type == "especialidad",
         CatalogItem.name == name,
     ).delete()
     db.commit()
-    return {"message": message, "updated": res.rowcount}
+    return {"message": message, "updated": len(matched)}
