@@ -899,7 +899,7 @@ export function ListDetail() {
                       title={String(col.key === 'domicilio' ? domicilioPreview(record.data) : (record.data[col.key] ?? ''))}
                       className={`px-3 py-4 text-sm text-[#2B3A45] truncate ${COLUMN_WIDTHS[col.key] || ''}`}
                     >
-                      {col.key === 'telefono'
+{col.key === 'telefono'
                         ? [record.data.telefono, record.data.telefono2, record.data.telefono3]
                             .filter(Boolean)
                             .join(' / ') || <span className="text-[#8E9AA6]">-</span>
@@ -907,8 +907,10 @@ export function ListDetail() {
                           ? domicilioPreview(record.data) || <span className="text-[#8E9AA6]">-</span>
                           : col.key === 'nombre_medico'
                             ? shortName(record.data.nombre_medico) || <span className="text-[#8E9AA6]">-</span>
-                            : record.data[col.key] || <span className="text-[#8E9AA6]">-</span>
-                      }
+                            : col.key === 'nombre'
+                              ? [record.data.nombre, record.data.apellido].filter(Boolean).join(' ') || <span className="text-[#8E9AA6]">-</span>
+                              : record.data[col.key] || <span className="text-[#8E9AA6]">-</span>
+                        }
                     </td>
                   ))}
                 </tr>
