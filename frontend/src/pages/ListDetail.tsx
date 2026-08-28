@@ -79,6 +79,11 @@ export function ListDetail() {
       return JSON.parse(localStorage.getItem('sbj_loc_similar_dismissed') || '[]')
     } catch { return [] }
   })
+  const [dismissedEspGroups, setDismissedEspGroups] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('sbj_esp_similar_dismissed') || '[]')
+    } catch { return [] }
+  })
   const [creatingEsp, setCreatingEsp] = useState(false)
   const [creatingLoc, setCreatingLoc] = useState(false)
   const [newLocTipo, setNewLocTipo] = useState('')
@@ -504,7 +509,28 @@ export function ListDetail() {
     }
   }
 
+  const groupKey = (names: string[]): string => [...names].sort((a, b) => a.localeCompare(b, 'es')).join('|')
+
   const similarLocalities = (items: { name: string; tipo: string; count: number; municipio: string; departamento: string }[] = localities): { names: string[] }[] => {
+    const groups: { names: string[] }[] = []
+    const used = new Set<number>()
+    for (let i = 0; i < items.length; i++) {
+      if (used.has(i)) continue
+      const group = [items[i]]
+      used.add(i)
+      for (let j = i + 1; j < items.length; j++) {
+        if (used.has(j)) continue
+        if (areSimilarNames(items[i].name, items[j].name)) {
+          group.push(items[j])
+          used.add(j)
+        }
+      }
+      if (group.length > 1) groups.push({ names: group.map((g) => g.name) })
+    }
+    return groups
+  }
+
+  const similarSpecialties = (items: Specialty[] = specialties): { names: string[] }[] => {
     const groups: { names: string[] }[] = []
     const used = new Set<number>()
     for (let i = 0; i < items.length; i++) {
@@ -1112,6 +1138,44 @@ export function ListDetail() {
                       className="w-full pl-9 pr-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
                     />
                   </div>
+                  {(() => {
+                    const groups = similarSpecialties(filteredSpecialties).filter((g) => !dismissedEspGroups.includes(groupKey(g.names)))
+                    if (groups.length === 0) return null
+                    const markAsRead = () => {
+                      const keys = similarSpecialties(filteredSpecialties).map((g) => groupKey(g.names))
+                      const merged = Array.from(new Set([...dismissedEspGroups, ...keys]))
+                      setDismissedEspGroups(merged)
+                      localStorage.setItem('sbj_esp_similar_dismissed', JSON.stringify(merged))
+                      toast('Advertencia marcada como leída', 'success')
+                    }
+                    return (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs font-semibold text-amber-800 uppercase tracking-wider">Advertencia</p>
+                        <button
+                          onClick={markAsRead}
+                          className="flex items-center gap-1 text-[0.6875rem] font-semibold text-amber-700 hover:text-amber-900 transition-colors duration-200 shrink-0"
+                        >
+                          <Check size={12} />
+                          Marcar como leída
+                        </button>
+                      </div>
+                      <p className="text-xs text-amber-700 mt-1">
+                        Se detectaron {groups.length} grupo(s) de especialidades con nombres similares:
+                      </p>
+                      <ul className="mt-2 space-y-1">
+                        {groups.map((g, gi) => (
+                          <li key={gi} className="text-xs text-amber-800">
+                            • {g.names.join('  /  ')}
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="text-xs text-amber-600 mt-2">
+                        Considere unificarlas renombrando para evitar duplicados. Si ya las revisó, márquelas como leídas para ocultar esta advertencia.
+                      </p>
+                    </div>
+                    )
+                  })()}
                   {filteredSpecialties.map((s) => (
                     <div key={s.name} className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F7F8FA] border border-[#E4E8EE] rounded-xl">
                       <div className="min-w-0">
@@ -1215,10 +1279,10 @@ export function ListDetail() {
                 )
               )}
               {(() => {
-                const groups = similarLocalities(filteredLocalities).filter((g) => !dismissedLocGroups.includes(g.names.join('|')))
+                const groups = similarLocalities(filteredLocalities).filter((g) => !dismissedLocGroups.includes(groupKey(g.names)))
                 if (groups.length === 0) return null
                 const markAsRead = () => {
-                  const keys = similarLocalities(filteredLocalities).map((g) => g.names.join('|'))
+                  const keys = similarLocalities(filteredLocalities).map((g) => groupKey(g.names))
                   const merged = Array.from(new Set([...dismissedLocGroups, ...keys]))
                   setDismissedLocGroups(merged)
                   localStorage.setItem('sbj_loc_similar_dismissed', JSON.stringify(merged))
