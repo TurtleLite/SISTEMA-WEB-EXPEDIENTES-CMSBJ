@@ -24,6 +24,9 @@ const COLUMN_WIDTHS: Record<string, string> = {
   albergue: 'w-[9%]',
   nombre_medico: 'w-[13%]',
 }
+const COLUMN_LABEL_OVERRIDES: Record<string, string> = {
+  nombre: 'Nombre completo',
+}
 const PAGE_SIZE = 50
 
 interface Specialty {
@@ -878,7 +881,7 @@ export function ListDetail() {
                 )}
                 {list?.columns_config.filter(c => RECORD_COLUMNS.includes(c.key)).map((col) => (
                   <th key={col.key} className={`text-left px-3 py-4 text-xs font-bold text-[#7A8694] uppercase tracking-wider ${COLUMN_WIDTHS[col.key] || ''}`}>
-                    {col.label}
+                    {COLUMN_LABEL_OVERRIDES[col.key] || col.label}
                   </th>
                 ))}
               </tr>
