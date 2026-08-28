@@ -302,6 +302,10 @@ def export_list_excel(
     import os
     ld = get_list_definition(db, list_id)
     columns = [c["label"] for c in ld.columns_config]
+    # Los registros (r.data) están keyados por campo; export_to_excel busca por la
+    # etiqueta de columna. Mapeamos a etiquetas para que las celdas se llenen y la
+    # altura automática (wrap) funcione correctamente.
+    key_to_label = {c["key"]: c["label"] for c in ld.columns_config}
     total = count_records(db, list_id)
     os.makedirs(settings.EXPORTS_DIR, exist_ok=True)
     filepath = os.path.join(settings.EXPORTS_DIR, f"export_lista_{list_id}.xlsx")
@@ -312,11 +316,11 @@ def export_list_excel(
             for skip in range(0, total, BATCH_SIZE):
                 batch = get_records(db, list_id, skip, BATCH_SIZE)
                 for r in batch:
-                    yield r.data
+                    yield {key_to_label.get(k, k): v for k, v in (r.data or {}).items()}
         export_to_excel_stream(gen_rows(), columns, filepath, title=ld.name, count=total)
     else:
         records = get_records(db, list_id, 0, total)
-        data = [r.data for r in records]
+        data = [{key_to_label.get(k, k): v for k, v in (r.data or {}).items()} for r in records]
         export_to_excel(data, columns, filepath, title=ld.name, count=total)
     log_audit(db, current_user, "list_export_excel", entity_type="list", entity_id=list_id,
               detail=f"exportó la lista {ld.name} a Excel", ip_address=client_ip(request))

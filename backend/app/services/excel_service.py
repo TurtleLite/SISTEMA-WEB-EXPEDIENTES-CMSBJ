@@ -69,7 +69,7 @@ def _wrapped_row_height(
     record: Dict,
     columns: List[str],
     widths: List[float],
-    line_height: float = 12.75,
+    line_height: float = 14.25,
 ) -> float:
     """Calcula la altura que necesita la fila para que el texto envuelto (wrap) quepa
     dentro de la celda, evitando que Excel corte el contenido al imprimir."""

@@ -142,6 +142,23 @@ def _user_counts(db: Session, records: list[ListRecord] = None, list_id: int = N
     return result
 
 
+def _origin_for(d: dict) -> str:
+    """Compone la columna 'Origin' únicamente con localidad, municipio y departamento,
+    sin el texto libre ni los teléfonos que pueda traer el campo 'domicilio'."""
+    loc = str(d.get("localidad", "") or "").strip()
+    tipo = str(d.get("tipo_localidad", "") or "").strip()
+    mun = str(d.get("municipio", "") or "").strip()
+    dept = str(d.get("departamento", "") or "").strip()
+    parts = []
+    if loc:
+        parts.append(f"{loc} ({tipo})" if tipo else loc)
+    if mun:
+        parts.append(mun)
+    if dept:
+        parts.append(dept)
+    return ", ".join(parts)
+
+
 def _report_rows(records: list[ListRecord], filt: dict | None = None) -> list[dict]:
     filt = filt or {}
     rows = []
@@ -163,7 +180,7 @@ def _report_rows(records: list[ListRecord], filt: dict | None = None) -> list[di
             "Age": d.get("edad", ""),
             "Diagnostic/Procedure": d.get("diagnostico", ""),
             "Pf": d.get("perfil", ""),
-            "Origin": d.get("domicilio", ""),
+            "Origin": _origin_for(d),
             "Phone NO.": telefono,
             "Housing": d.get("albergue", ""),
             "Chart": d.get("expediente", ""),
