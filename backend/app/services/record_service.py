@@ -150,16 +150,26 @@ def _apply_search(query, search: Optional[str], search_field: Optional[str]):
         return query
     pattern = f"%{_strip_accents(search)}%"
     fields = [search_field] if search_field else _SEARCH_FIELDS
-    # Las tablas de acentos van como literales para que coincidan con los índices
-    # trigram creados sobre la misma expresión (db_indexes).
-    clauses = [
-        func.translate(
+    from_chars = literal_column(f"'{_ACCENT_FROM}'")
+    to_chars = literal_column(f"'{_ACCENT_TO}'")
+
+    def _field_expr(field: str):
+        return func.translate(
             ListRecord.data.op("->>")(field),
-            literal_column(f"'{_ACCENT_FROM}'"),
-            literal_column(f"'{_ACCENT_TO}'"),
-        ).ilike(pattern)
-        for field in fields
-    ]
+            from_chars,
+            to_chars,
+        )
+
+    clauses = [_field_expr(field).ilike(pattern) for field in fields]
+    # Búsqueda de nombre completo: al escribir "nombre apellidos" juntos debe
+    # encontrar aunque estén en campos separados. Solo aplica a campos de nombre.
+    if search_field is None or search_field in ("nombre", "apellido"):
+        full_name = func.concat(
+            func.coalesce(_field_expr("nombre"), literal_column("''")),
+            literal_column("' '"),
+            func.coalesce(_field_expr("apellido"), literal_column("''")),
+        )
+        clauses.append(full_name.ilike(pattern))
     return query.filter(or_(*clauses))
 
 
