@@ -88,11 +88,24 @@ if echo "$CHANGED" | grep -qE '^backend/'; then
       echo "    Backend listo (intento $i)."
       break
     fi
-    sleep 1
-  done
-else
-  echo "==> Backend sin cambios: no se reinicia."
-fi
+     sleep 1
+   done
+
+   # --- Aplica script de mantenimiento de estatus (idempotente) ---
+   if [ -f "$BACKEND_DIR/marcar_en_espera.sql" ]; then
+     echo "==> Aplicando marcar_en_espera.sql (estatus 'En espera' para los expedientes de cargapx)..."
+     DB_URL=$(grep -E '^[[:space:]]*DATABASE_URL=' "$BACKEND_DIR/.env" 2>/dev/null | head -1 | sed 's/^[[:space:]]*DATABASE_URL=//')
+     if [ -n "$DB_URL" ]; then
+       sudo -u postgres psql "$DB_URL" -f "$BACKEND_DIR/marcar_en_espera.sql" \
+         || echo "  (aviso: no se pudo aplicar marcar_en_espera.sql)"
+     else
+       sudo -u postgres psql -d gestion_db -f "$BACKEND_DIR/marcar_en_espera.sql" \
+         || echo "  (aviso: no se pudo aplicar marcar_en_espera.sql)"
+     fi
+   fi
+ else
+   echo "==> Backend sin cambios: no se reinicia."
+ fi
 
 # --- FRONTEND (lo que sirve el funnel) ---
 if echo "$CHANGED" | grep -qE '^frontend/'; then
