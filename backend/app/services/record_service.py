@@ -194,7 +194,9 @@ def add_record(db: Session, list_id: int, data: dict, user_id: int = None) -> Li
             from fastapi import HTTPException
             raise HTTPException(status_code=400, detail="El número de expediente es obligatorio: regístrelo manualmente")
         data["expediente"] = numero_expediente_final(db, numero)
-        data.setdefault("estatus_cirugia", "En espera")
+        # Estatus por defecto "En espera" si está ausente o vacío (no solo si falta la clave)
+        if not str(data.get("estatus_cirugia", "") or "").strip():
+            data["estatus_cirugia"] = "En espera"
     record = ListRecord(list_definition_id=list_id, data=data, created_by=user_id, updated_by=user_id)
     db.add(record)
     db.commit()

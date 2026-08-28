@@ -233,7 +233,7 @@ def export_expediente_selected(
     from fastapi import HTTPException
     import re
     import os
-    ids = data.get("ids", [])
+    ids = payload.get("ids", [])
     if len(ids) > settings.EXPORT_MAX_RECORDS:
         raise HTTPException(
             status_code=400,
