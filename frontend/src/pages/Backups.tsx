@@ -20,6 +20,21 @@ const fmt = (iso: string | null) => {
   })
 }
 
+function extractError(err: any): string {
+  const detail = err?.response?.data?.detail
+  if (detail == null) return err?.message || 'Error desconocido'
+  if (typeof detail === 'string') return detail
+  if (Array.isArray(detail)) {
+    return detail
+      .map((d: any) =>
+        d && d.msg ? `${Array.isArray(d.loc) ? d.loc.join('.') : ''}: ${d.msg}` : JSON.stringify(d)
+      )
+      .join(' | ')
+  }
+  if (typeof detail === 'object') return (detail as any).msg || (detail as any).message || JSON.stringify(detail)
+  return String(detail)
+}
+
 export function Backups({ embedded = false }: { embedded?: boolean }) {
   const [items, setItems] = useState<BackupItem[]>([])
   const [generating, setGenerating] = useState(false)
@@ -49,7 +64,7 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
       toast(res.data?.message || 'Respaldo Excel generado correctamente', 'success')
       await load()
     } catch (err: any) {
-      toast(err.response?.data?.detail || 'No se pudo generar el respaldo', 'error')
+      toast(extractError(err) || 'No se pudo generar el respaldo', 'error')
     } finally {
       setGenerating(false)
     }
@@ -85,7 +100,7 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
       toast(res.data?.message || 'Respaldo importado correctamente', 'success')
       await load()
     } catch (err: any) {
-      toast(err.response?.data?.detail || 'No se pudo importar el respaldo', 'error')
+      toast(extractError(err) || 'No se pudo importar el respaldo', 'error')
     } finally {
       setRestoring(false)
       if (fileRef.current) fileRef.current.value = ''

@@ -12,7 +12,7 @@ interface ConfirmState {
 }
 
 interface NotificationContextType {
-  toast: (message: string, type?: Toast['type']) => void
+  toast: (message: unknown, type?: Toast['type']) => void
   confirm: (message: string) => Promise<boolean>
 }
 
@@ -20,13 +20,23 @@ const NotificationContext = createContext<NotificationContextType>({} as Notific
 
 let nextId = 0
 
+function normalizeMessage(message: unknown): string {
+  if (typeof message === 'string') return message
+  if (message == null) return ''
+  try {
+    return JSON.stringify(message)
+  } catch {
+    return String(message)
+  }
+}
+
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
   const [confirmState, setConfirmState] = useState<ConfirmState | null>(null)
 
-  const toast = useCallback((message: string, type: Toast['type'] = 'info') => {
+  const toast = useCallback((message: unknown, type: Toast['type'] = 'info') => {
     const id = nextId++
-    setToasts((prev) => [...prev, { id, type, message }])
+    setToasts((prev) => [...prev, { id, type, message: normalizeMessage(message) }])
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id))
     }, 4000)
