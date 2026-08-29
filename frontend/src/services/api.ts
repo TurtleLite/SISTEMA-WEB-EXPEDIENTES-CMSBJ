@@ -227,6 +227,7 @@ export const backupsApi = {
     const fd = new FormData()
     fd.append('file', file)
     return api.post('/backups/restore', fd, {
+      headers: { 'Content-Type': undefined },
       timeout: 300000,
     })
   },
