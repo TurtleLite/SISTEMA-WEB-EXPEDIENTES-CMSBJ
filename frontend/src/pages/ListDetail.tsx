@@ -775,7 +775,7 @@ export function ListDetail() {
                   <div ref={diagRef} className="relative">
                     <div className={`flex items-center pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-colors duration-150 ${
                       diagnosticoFilter
-                        ? 'bg-white border-[#0F766E] shadow-sm'
+                        ? 'bg-[#0F766E] text-white border-[#0F766E]'
                         : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
                     }`}>
                       <input
@@ -784,35 +784,56 @@ export function ListDetail() {
                         onChange={(e) => { setDiagnosticoFilter(e.target.value); setSelectedIds(new Set()) }}
                         onFocus={() => setDiagOpen(true)}
                         placeholder="Diagnóstico"
-                        className="w-36 text-sm bg-transparent outline-none placeholder:text-[#8E9AA6] text-[#3F4D58]"
+                        className={`w-36 text-sm bg-transparent outline-none ${diagnosticoFilter ? 'placeholder:text-white/60 text-white' : 'placeholder:text-[#8E9AA6] text-[#3F4D58]'}`}
                       />
                       {diagnosticoFilter ? (
                         <span
                           onClick={(e) => { e.stopPropagation(); setDiagnosticoFilter(''); setSelectedIds(new Set()); setDiagOpen(false) }}
-                          className="hover:bg-[#EEF1F5] rounded p-0.5 leading-none text-[#7A8694]"
+                          className="hover:bg-white/20 rounded p-0.5 leading-none"
                           title="Quitar filtro"
                         >
                           <X size={13} />
                         </span>
                       ) : (
-                        <ChevronDown size={14} className="text-[#8E9AA6]" />
+                        <ChevronDown size={14} className={`text-[#8E9AA6] transition-transform duration-200 ${diagOpen ? 'rotate-180' : ''}`} />
                       )}
                     </div>
                     {diagOpen && diagnosticos.length > 0 && (
                       <div className="absolute left-0 top-full mt-1.5 z-50 w-80 max-h-72 overflow-y-auto bg-white border border-[#E4E8EE] rounded-xl shadow-xl py-1.5">
+                        <button
+                          onClick={() => { setDiagnosticoFilter(''); setSelectedIds(new Set()); setDiagOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                            diagnosticoFilter === '' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                          }`}
+                        >
+                          Todos los diagnósticos
+                          {diagnosticoFilter === '' && <Check size={14} />}
+                        </button>
+                        <div className="mx-3 my-1 border-t border-[#E4E8EE]" />
                         {diagnosticos
                           .filter((d) => !diagnosticoFilter || normalizeText(d).includes(normalizeText(diagnosticoFilter)))
                           .slice(0, 200)
-                          .map((d) => (
-                            <button
-                              key={d}
-                              onClick={() => { setDiagnosticoFilter(d); setSelectedIds(new Set()); setDiagOpen(false) }}
-                              className="w-full text-left px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#F7F8FA] truncate"
-                              title={d}
-                            >
-                              {d}
-                            </button>
-                          ))}
+                          .map((d) => {
+                            const active = diagnosticoFilter !== '' && normalizeText(d) === normalizeText(diagnosticoFilter)
+                            return (
+                              <button
+                                key={d}
+                                onClick={() => { setDiagnosticoFilter(d === diagnosticoFilter ? '' : d); setSelectedIds(new Set()); setDiagOpen(false) }}
+                                className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                                  active ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                                }`}
+                                title={d}
+                              >
+                                <span className="truncate">{d}</span>
+                                {active && <Check size={14} />}
+                              </button>
+                            )
+                          })}
+                        {diagnosticos.filter((d) => !diagnosticoFilter || normalizeText(d).includes(normalizeText(diagnosticoFilter))).length === 0 && (
+                          <div className="px-4 py-3 text-xs text-[#8E9AA6] text-center">
+                            Ningún diagnóstico coincide; se buscará por coincidencia parcial.
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
