@@ -230,13 +230,16 @@ def paginate_records(db: Session, list_id: int, search: Optional[str] = None,
                      page_size: int = 50, exclude_statuses: Optional[list] = None,
                      waiting_only: bool = False,
                      estatus_cirugia: Optional[str] = None,
-                     compensado: Optional[str] = None) -> tuple[list[ListRecord], int]:
+                     compensado: Optional[str] = None,
+                     diagnostico: Optional[str] = None) -> tuple[list[ListRecord], int]:
     query = _not_deleted(db.query(ListRecord).filter(ListRecord.list_definition_id == list_id))
     query = _apply_search(query, search, search_field)
     if estatus_cirugia:
         query = query.filter(ListRecord.data.op("->>")("estatus_cirugia") == estatus_cirugia)
     if compensado:
         query = query.filter(ListRecord.data.op("->>")("compensado") == compensado)
+    if diagnostico:
+        query = query.filter(ListRecord.data.op("->>")("diagnostico").ilike(f"%{diagnostico}%"))
     if exclude_statuses:
         statuses = [s for s in exclude_statuses if s]
         if statuses:

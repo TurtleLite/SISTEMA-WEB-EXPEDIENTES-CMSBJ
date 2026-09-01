@@ -52,6 +52,10 @@ export function ListDetail() {
   const [especialidadFilter, setEspecialidadFilter] = useState('')
   const [catalogOpen, setCatalogOpen] = useState(false)
   const catalogRef = useRef<HTMLDivElement>(null)
+  const [diagnosticos, setDiagnosticos] = useState<string[]>([])
+  const [diagnosticoFilter, setDiagnosticoFilter] = useState('')
+  const [diagOpen, setDiagOpen] = useState(false)
+  const diagRef = useRef<HTMLDivElement>(null)
   const [compOpen, setCompOpen] = useState(false)
   const compRef = useRef<HTMLDivElement>(null)
   const [compensadoFilter, setCompensadoFilter] = useState('')
@@ -117,6 +121,13 @@ export function ListDetail() {
     } catch { /* ignore */ }
   }
 
+  const loadDiagnosticos = async () => {
+    try {
+      const res = await listsApi.getFieldValues(id, 'diagnostico')
+      setDiagnosticos(res.data || [])
+    } catch { /* ignore */ }
+  }
+
   const loadCompStats = async () => {
     try {
       const res = await listsApi.compensadoStats(id)
@@ -167,6 +178,7 @@ export function ListDetail() {
         if (searchField) params.search_field = searchField
       }
       if (compensadoFilter) params.compensado = compensadoFilter
+      if (diagnosticoFilter) params.diagnostico = diagnosticoFilter
       const res = await listsApi.getRecords(id, params)
       const data = res.data
       setPage(data.page)
@@ -179,7 +191,7 @@ export function ListDetail() {
       }
     } catch (err) { console.error(err) }
     finally { setLoadingMore(false) }
-  }, [id, page, search, searchField, especialidadFilter, compensadoFilter])
+  }, [id, page, search, searchField, especialidadFilter, compensadoFilter, diagnosticoFilter])
 
   const handleScroll = () => {
     const el = scrollRef.current
@@ -197,10 +209,11 @@ export function ListDetail() {
     if (!id) return
     const t = setTimeout(() => loadRecords(true), 300)
     return () => clearTimeout(t)
-  }, [id, search, searchField, especialidadFilter, compensadoFilter])
+  }, [id, search, searchField, especialidadFilter, compensadoFilter, diagnosticoFilter])
 
   useEffect(() => {
     if (id && list?.is_system) loadEspecialidades()
+    if (id && list?.is_system) loadDiagnosticos()
     if (id) loadCompStats()
   }, [id, list?.is_system])
 
@@ -208,6 +221,7 @@ export function ListDetail() {
     const handler = (e: MouseEvent) => {
       if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) setCatalogOpen(false)
       if (compRef.current && !compRef.current.contains(e.target as Node)) setCompOpen(false)
+      if (diagRef.current && !diagRef.current.contains(e.target as Node)) setDiagOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -758,6 +772,51 @@ export function ListDetail() {
                     )}
                   </div>
 
+                  <div ref={diagRef} className="relative">
+                    <div className={`flex items-center pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-colors duration-150 ${
+                      diagnosticoFilter
+                        ? 'bg-white border-[#0F766E] shadow-sm'
+                        : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
+                    }`}>
+                      <input
+                        type="text"
+                        value={diagnosticoFilter}
+                        onChange={(e) => { setDiagnosticoFilter(e.target.value); setSelectedIds(new Set()) }}
+                        onFocus={() => setDiagOpen(true)}
+                        placeholder="Diagnóstico"
+                        className="w-36 text-sm bg-transparent outline-none placeholder:text-[#8E9AA6] text-[#3F4D58]"
+                      />
+                      {diagnosticoFilter ? (
+                        <span
+                          onClick={(e) => { e.stopPropagation(); setDiagnosticoFilter(''); setSelectedIds(new Set()); setDiagOpen(false) }}
+                          className="hover:bg-[#EEF1F5] rounded p-0.5 leading-none text-[#7A8694]"
+                          title="Quitar filtro"
+                        >
+                          <X size={13} />
+                        </span>
+                      ) : (
+                        <ChevronDown size={14} className="text-[#8E9AA6]" />
+                      )}
+                    </div>
+                    {diagOpen && diagnosticos.length > 0 && (
+                      <div className="absolute left-0 top-full mt-1.5 z-50 w-80 max-h-72 overflow-y-auto bg-white border border-[#E4E8EE] rounded-xl shadow-xl py-1.5">
+                        {diagnosticos
+                          .filter((d) => !diagnosticoFilter || normalizeText(d).includes(normalizeText(diagnosticoFilter)))
+                          .slice(0, 200)
+                          .map((d) => (
+                            <button
+                              key={d}
+                              onClick={() => { setDiagnosticoFilter(d); setSelectedIds(new Set()); setDiagOpen(false) }}
+                              className="w-full text-left px-4 py-2 text-sm text-[#3F4D58] hover:bg-[#F7F8FA] truncate"
+                              title={d}
+                            >
+                              {d}
+                            </button>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+
                   <div ref={compRef} className="relative">
                     <button
                       onClick={() => setCompOpen((v) => !v)}
@@ -921,7 +980,7 @@ export function ListDetail() {
               {records.length === 0 && (
                 <tr>
                   <td colSpan={100} className="px-4 py-12 text-center text-[#7A8694] text-sm">
-                    {search || especialidadFilter ? 'No encontramos expedientes con ese criterio. Prueba con otro nombre, número o diagnóstico.' : 'Aún no hay expedientes registrados. Crea el primero con el botón «Nuevo».'}
+                    {search || especialidadFilter || diagnosticoFilter ? 'No encontramos expedientes con ese criterio. Prueba con otro nombre, número o diagnóstico.' : 'Aún no hay expedientes registrados. Crea el primero con el botón «Nuevo».'}
                   </td>
                 </tr>
               )}

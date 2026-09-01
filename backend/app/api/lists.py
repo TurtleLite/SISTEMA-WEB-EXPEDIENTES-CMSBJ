@@ -521,6 +521,7 @@ def list_records(
     waiting_only: bool = False,
     estatus_cirugia: str = None,
     compensado: str = None,
+    diagnostico: str = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -533,6 +534,7 @@ def list_records(
             exclude_statuses=excluded or None, waiting_only=waiting_only,
             estatus_cirugia=estatus_cirugia or None,
             compensado=compensado or None,
+            diagnostico=diagnostico or None,
         )
 
         def ser(r):
