@@ -73,6 +73,11 @@ def _records_for_report(db: Session, report: Report):
         conds.append("data->>'estatus_cirugia' = :estat")
         params["estat"] = estatus
 
+    diagnostico = filt.get("diagnostico")
+    if diagnostico:
+        conds.append("data->>'diagnostico' ILIKE :diag")
+        params["diag"] = f"%{diagnostico}%"
+
     if not conds:
         records = db.query(ListRecord).filter(
             ListRecord.list_definition_id == ld.id, ListRecord.deleted_at.is_(None)
@@ -233,7 +238,7 @@ def list_reports(
     result = []
     for r in reports:
         filt = r.filters or {}
-        has_filters = any(filt.get(k) for k in ("especialidad", "perfil", "criticidad", "estatus_cirugia", "fecha_desde", "fecha_hasta"))
+        has_filters = any(filt.get(k) for k in ("especialidad", "perfil", "criticidad", "compensado", "estatus_cirugia", "diagnostico", "fecha_desde", "fecha_hasta"))
         if has_filters:
             records = _records_for_report(db, r)
             record_count = len(records)

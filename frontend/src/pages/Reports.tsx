@@ -28,6 +28,7 @@ interface ReportForm {
   criticidad: string
   compensado: string
   estatus_cirugia: string
+  diagnostico: string
   fecha_desde: string
   fecha_hasta: string
   columns_selected: string[]
@@ -35,11 +36,11 @@ interface ReportForm {
 
 const EMPTY_FORM: ReportForm = {
   name: '', description: '', list_definition_id: '', especialidad: '', perfil: '',
-  criticidad: '', compensado: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '', columns_selected: [],
+  criticidad: '', compensado: '', estatus_cirugia: '', diagnostico: '', fecha_desde: '', fecha_hasta: '', columns_selected: [],
 }
 
 const anyFilter = (f: ReportForm): boolean =>
-  !!(f.especialidad || f.perfil || f.criticidad || f.compensado || f.estatus_cirugia || f.fecha_desde || f.fecha_hasta)
+  !!(f.especialidad || f.perfil || f.criticidad || f.compensado || f.estatus_cirugia || f.diagnostico || f.fecha_desde || f.fecha_hasta)
 
 const fmtFecha = (iso: string) => {
   const d = new Date(iso + 'T00:00:00')
@@ -62,6 +63,7 @@ const buildAutoName = (f: ReportForm): string => {
   if (f.criticidad) parts.push(`Crítica ${criticidadLabel(f.criticidad).toLowerCase()}`)
   if (f.compensado) parts.push(f.compensado === 'Sí' ? 'Compensados' : 'Descompensados')
   if (f.estatus_cirugia) parts.push(f.estatus_cirugia)
+  if (f.diagnostico) parts.push(`Diagnóstico: ${f.diagnostico.trim()}`)
   if (parts.length === 1) return 'Expedientes completos'
   return parts.join(' · ')
 }
@@ -85,6 +87,7 @@ export function Reports() {
   const [especialidades, setEspecialidades] = useState<string[]>([])
   const [perfiles, setPerfiles] = useState<string[]>([])
   const [criticidades, setCriticidades] = useState<string[]>([])
+  const [diagnosticos, setDiagnosticos] = useState<string[]>([])
   const [showModal, setShowModal] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const [preview, setPreview] = useState<PreviewData | null>(null)
@@ -114,7 +117,7 @@ export function Reports() {
 
   const clearFilters = () => {
     setForm((prev) => {
-      const next = { ...prev, especialidad: '', perfil: '', criticidad: '', compensado: '', estatus_cirugia: '', fecha_desde: '', fecha_hasta: '' }
+      const next = { ...prev, especialidad: '', perfil: '', criticidad: '', compensado: '', estatus_cirugia: '', diagnostico: '', fecha_desde: '', fecha_hasta: '' }
       if (!nameTouched.current) next.name = buildAutoName(next)
       return next
     })
@@ -151,6 +154,13 @@ export function Reports() {
     } catch { setCriticidades([]) }
   }
 
+  const loadDiagnosticos = async (listId: string) => {
+    try {
+      const res = await listsApi.getFieldValues(listId, 'diagnostico')
+      setDiagnosticos(res.data || [])
+    } catch { setDiagnosticos([]) }
+  }
+
   const loadReports = async () => {
     try {
       const res = await reportsApi.list()
@@ -168,6 +178,7 @@ export function Reports() {
         loadEspecialidades(systemList.id)
         loadPerfiles(systemList.id)
         loadCriticidades(systemList.id)
+        loadDiagnosticos(systemList.id)
       }
     } catch (err) { console.error(err) }
   }
@@ -193,6 +204,7 @@ export function Reports() {
           criticidad: form.criticidad || undefined,
           compensado: form.compensado || undefined,
           estatus_cirugia: form.estatus_cirugia || undefined,
+          diagnostico: form.diagnostico.trim() || undefined,
           fecha_desde: form.fecha_desde || undefined,
           fecha_hasta: form.fecha_hasta || undefined,
         },
@@ -203,6 +215,7 @@ export function Reports() {
       setEspecialidades([])
       setPerfiles([])
       setCriticidades([])
+      setDiagnosticos([])
       loadReports()
     } catch (err: any) {
       toast(err.response?.data?.detail || 'Error al crear reporte', 'error')
@@ -316,6 +329,7 @@ export function Reports() {
     if (filters?.criticidad) items.push({ label: 'Criticidad', value: criticidadLabel(filters.criticidad), cls: 'bg-rose-50 text-rose-700 border-rose-200' })
     if (filters?.compensado) items.push({ label: 'Compensado', value: filters.compensado, cls: 'bg-teal-50 text-teal-700 border-teal-200' })
     if (filters?.estatus_cirugia) items.push({ label: 'Estatus', value: filters.estatus_cirugia, cls: 'bg-violet-50 text-violet-700 border-violet-200' })
+    if (filters?.diagnostico) items.push({ label: 'Diagnóstico', value: filters.diagnostico, cls: 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200' })
     if (filters?.fecha_desde) items.push({ label: 'Desde', value: filters.fecha_desde, cls: 'bg-amber-50 text-amber-700 border-amber-200' })
     if (filters?.fecha_hasta) items.push({ label: 'Hasta', value: filters.fecha_hasta, cls: 'bg-amber-50 text-amber-700 border-amber-200' })
     return items
@@ -555,6 +569,22 @@ export function Reports() {
                         <option key={s} value={s}>{s}</option>
                       ))}
                     </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Diagnóstico (busca parte del texto)</label>
+                    <input
+                      type="text"
+                      value={form.diagnostico}
+                      onChange={(e) => setFilter({ diagnostico: e.target.value })}
+                      placeholder="Ej. hernia, cistocele, mioma..."
+                      list="diagnostico-options"
+                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                    />
+                    <datalist id="diagnostico-options">
+                      {diagnosticos.slice(0, 200).map((d) => (
+                        <option key={d} value={d} />
+                      ))}
+                    </datalist>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Perfil</label>
