@@ -3,7 +3,8 @@ import { reportsApi, listsApi } from '../services/api'
 import { Report, ListDefinition } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
-import { Plus, FileSpreadsheet, Download, Trash2, Eye, X, RefreshCw } from 'lucide-react'
+import { Plus, FileSpreadsheet, Download, Trash2, Eye, X, RefreshCw, Check, ChevronDown } from 'lucide-react'
+import { normalizeText } from '../utils/format'
 import ScrollSelect from '../components/ScrollSelect'
 
 const STATUS_OPTIONS = ['En espera', 'Reprogramar', 'Cancelado', 'Fuera de perfil San Benito', 'Operado', 'No apto para cirugía', 'No se presentó']
@@ -88,6 +89,8 @@ export function Reports() {
   const [perfiles, setPerfiles] = useState<string[]>([])
   const [criticidades, setCriticidades] = useState<string[]>([])
   const [diagnosticos, setDiagnosticos] = useState<string[]>([])
+  const [diagOpen, setDiagOpen] = useState(false)
+  const diagRef = useRef<HTMLDivElement>(null)
   const [showModal, setShowModal] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
   const [preview, setPreview] = useState<PreviewData | null>(null)
@@ -184,6 +187,14 @@ export function Reports() {
   }
 
   useEffect(() => { loadReports(); loadLists() }, [])
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (diagRef.current && !diagRef.current.contains(e.target as Node)) setDiagOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   const handleCreate = async () => {
     if (!form.name.trim()) {
@@ -572,19 +583,71 @@ export function Reports() {
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Diagnóstico (busca parte del texto)</label>
-                    <input
-                      type="text"
-                      value={form.diagnostico}
-                      onChange={(e) => setFilter({ diagnostico: e.target.value })}
-                      placeholder="Ej. hernia, cistocele, mioma..."
-                      list="diagnostico-options"
-                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
-                    />
-                    <datalist id="diagnostico-options">
-                      {diagnosticos.slice(0, 200).map((d) => (
-                        <option key={d} value={d} />
-                      ))}
-                    </datalist>
+                    <div ref={diagRef} className="relative">
+                      <div className={`flex items-center pl-3 pr-2.5 py-2.5 text-sm rounded-xl border transition-colors duration-150 ${
+                        form.diagnostico
+                          ? 'bg-[#0F766E] text-white border-[#0F766E]'
+                          : 'bg-white text-[#7A8694] border-[#E4E8EE] focus-within:ring-2 focus-within:ring-[#8E9AA6] focus-within:border-[#5F6C79]'
+                      }`}>
+                        <input
+                          type="text"
+                          value={form.diagnostico}
+                          onChange={(e) => setFilter({ diagnostico: e.target.value })}
+                          onFocus={() => setDiagOpen(true)}
+                          placeholder={form.diagnostico ? '' : 'Ej. hernia, cistocele, mioma...'}
+                          className={`w-full text-sm bg-transparent outline-none ${form.diagnostico ? 'placeholder:text-white/60 text-white' : 'placeholder:text-[#8E9AA6] text-[#3F4D58]'}`}
+                        />
+                        {form.diagnostico ? (
+                          <span
+                            onClick={(e) => { e.stopPropagation(); setFilter({ diagnostico: '' }); setDiagOpen(false) }}
+                            className="hover:bg-white/20 rounded p-0.5 leading-none shrink-0"
+                            title="Quitar filtro"
+                          >
+                            <X size={14} />
+                          </span>
+                        ) : (
+                          <ChevronDown size={16} className="text-[#8E9AA6] shrink-0" />
+                        )}
+                      </div>
+                      {diagOpen && diagnosticos.length > 0 && (
+                        <div className="absolute left-0 top-full mt-1.5 z-50 w-80 max-h-72 overflow-y-auto bg-white border border-[#E4E8EE] rounded-xl shadow-xl py-1.5">
+                          <button
+                            onClick={() => { setFilter({ diagnostico: '' }); setDiagOpen(false) }}
+                            className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                              form.diagnostico === '' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                            }`}
+                          >
+                            Todos los diagnósticos
+                            {form.diagnostico === '' && <Check size={14} />}
+                          </button>
+                          <div className="mx-3 my-1 border-t border-[#E4E8EE]" />
+                          {diagnosticos
+                            .filter((d) => !form.diagnostico || normalizeText(d).includes(normalizeText(form.diagnostico)))
+                            .slice(0, 200)
+                            .map((d) => {
+                              const active = form.diagnostico !== '' && normalizeText(d) === normalizeText(form.diagnostico)
+                              return (
+                                <button
+                                  key={d}
+                                  onClick={() => { setFilter({ diagnostico: d === form.diagnostico ? '' : d }); setDiagOpen(false) }}
+                                  className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                                    active ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                                  }`}
+                                  title={d}
+                                >
+                                  <span className="truncate">{d}</span>
+                                  {active && <Check size={14} />}
+                                </button>
+                              )
+                            })}
+                          {diagnosticos.filter((d) => !form.diagnostico || normalizeText(d).includes(normalizeText(form.diagnostico))).length === 0 && (
+                            <div className="px-4 py-3 text-xs text-[#8E9AA6] text-center">
+                              Ningún diagnóstico coincide; se buscará por coincidencia parcial.
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Perfil</label>

@@ -54,6 +54,7 @@ export function ListDetail() {
   const catalogRef = useRef<HTMLDivElement>(null)
   const [diagnosticos, setDiagnosticos] = useState<string[]>([])
   const [diagnosticoFilter, setDiagnosticoFilter] = useState('')
+  const [diagOpen, setDiagOpen] = useState(false)
   const diagRef = useRef<HTMLDivElement>(null)
   const [compOpen, setCompOpen] = useState(false)
   const compRef = useRef<HTMLDivElement>(null)
@@ -220,6 +221,7 @@ export function ListDetail() {
     const handler = (e: MouseEvent) => {
       if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) setCatalogOpen(false)
       if (compRef.current && !compRef.current.contains(e.target as Node)) setCompOpen(false)
+      if (diagRef.current && !diagRef.current.contains(e.target as Node)) setDiagOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -771,20 +773,69 @@ export function ListDetail() {
                   </div>
 
                   <div ref={diagRef} className="relative">
-                    <input
-                      type="text"
-                      value={diagnosticoFilter}
-                      onChange={(e) => { setDiagnosticoFilter(e.target.value); setSelectedIds(new Set()) }}
-                      placeholder="Diagnóstico (busca parte del texto)"
-                      list="diagnostico-options-list"
-                      title="Busca por parte del texto del diagnóstico"
-                      className="w-52 px-3 py-2 border border-[#E4E8EE] rounded-xl text-sm bg-white placeholder:text-[#8E9AA6] text-[#3F4D58] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
-                    />
-                    <datalist id="diagnostico-options-list">
-                      {diagnosticos.slice(0, 200).map((d) => (
-                        <option key={d} value={d} />
-                      ))}
-                    </datalist>
+                    <div className={`flex items-center pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-colors duration-150 ${
+                      diagnosticoFilter
+                        ? 'bg-[#0F766E] text-white border-[#0F766E]'
+                        : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
+                    }`}>
+                      <input
+                        type="text"
+                        value={diagnosticoFilter}
+                        onChange={(e) => { setDiagnosticoFilter(e.target.value); setSelectedIds(new Set()) }}
+                        onFocus={() => setDiagOpen(true)}
+                        placeholder="Diagnóstico"
+                        className={`w-36 text-sm bg-transparent outline-none ${diagnosticoFilter ? 'placeholder:text-white/60 text-white' : 'placeholder:text-[#8E9AA6] text-[#3F4D58]'}`}
+                      />
+                      {diagnosticoFilter ? (
+                        <span
+                          onClick={(e) => { e.stopPropagation(); setDiagnosticoFilter(''); setSelectedIds(new Set()); setDiagOpen(false) }}
+                          className="hover:bg-white/20 rounded p-0.5 leading-none"
+                          title="Quitar filtro"
+                        >
+                          <X size={13} />
+                        </span>
+                      ) : (
+                        <ChevronDown size={14} className={`text-[#8E9AA6] transition-transform duration-200 ${diagOpen ? 'rotate-180' : ''}`} />
+                      )}
+                    </div>
+                    {diagOpen && diagnosticos.length > 0 && (
+                      <div className="absolute left-0 top-full mt-1.5 z-50 w-80 max-h-72 overflow-y-auto bg-white border border-[#E4E8EE] rounded-xl shadow-xl py-1.5">
+                        <button
+                          onClick={() => { setDiagnosticoFilter(''); setSelectedIds(new Set()); setDiagOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                            diagnosticoFilter === '' ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                          }`}
+                        >
+                          Todos los diagnósticos
+                          {diagnosticoFilter === '' && <Check size={14} />}
+                        </button>
+                        <div className="mx-3 my-1 border-t border-[#E4E8EE]" />
+                        {diagnosticos
+                          .filter((d) => !diagnosticoFilter || normalizeText(d).includes(normalizeText(diagnosticoFilter)))
+                          .slice(0, 200)
+                          .map((d) => {
+                            const active = diagnosticoFilter !== '' && normalizeText(d) === normalizeText(diagnosticoFilter)
+                            return (
+                              <button
+                                key={d}
+                                onClick={() => { setDiagnosticoFilter(d === diagnosticoFilter ? '' : d); setSelectedIds(new Set()); setDiagOpen(false) }}
+                                className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors duration-150 ${
+                                  active ? 'text-[#0F766E] font-medium bg-[#EEF1F5]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                                }`}
+                                title={d}
+                              >
+                                <span className="truncate">{d}</span>
+                                {active && <Check size={14} />}
+                              </button>
+                            )
+                          })}
+                        {diagnosticos.filter((d) => !diagnosticoFilter || normalizeText(d).includes(normalizeText(diagnosticoFilter))).length === 0 && (
+                          <div className="px-4 py-3 text-xs text-[#8E9AA6] text-center">
+                            Ningún diagnóstico coincide; se buscará por coincidencia parcial.
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div ref={compRef} className="relative">
