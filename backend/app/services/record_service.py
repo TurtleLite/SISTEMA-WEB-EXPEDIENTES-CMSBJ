@@ -65,9 +65,10 @@ def _is_expediente_list(db: Session, list_id: int) -> bool:
     return bool(ld and ld.name == _EXPEDIENTE_LIST_NAME)
 
 
-def copias_de_numero(db: Session, numero: str) -> int:
+def copias_de_numero(db: Session, numero: str, exclude_record_id: int = None) -> int:
     """Cuenta expedientes con el mismo número base usando índices (igualdad + prefijo),
-    sin cargar toda la lista en memoria."""
+    sin cargar toda la lista en memoria. Si se indica exclude_record_id, no cuenta ese registro
+    (útil al editar el propio expediente)."""
     numero = str(numero or "").strip()
     if not numero:
         return 0
@@ -76,24 +77,23 @@ def copias_de_numero(db: Session, numero: str) -> int:
         return 0
     escaped = numero.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
     field = ListRecord.data.op("->>")("expediente")
-    return (
-        db.query(func.count(ListRecord.id))
-        .filter(
-            ListRecord.list_definition_id == ld.id,
-            ListRecord.deleted_at.is_(None),
-            or_(field == numero, field.like(f"{escaped} (%)", escape="\\")),
-        )
-        .scalar()
-        or 0
+    query = db.query(func.count(ListRecord.id)).filter(
+        ListRecord.list_definition_id == ld.id,
+        ListRecord.deleted_at.is_(None),
+        or_(field == numero, field.like(f"{escaped} (%)", escape="\\")),
     )
+    if exclude_record_id:
+        query = query.filter(ListRecord.id != exclude_record_id)
+    return query.scalar() or 0
 
 
-def numero_expediente_final(db: Session, numero: str) -> str:
-    """Devuelve el número tal como se guarda: base si es el primero, base (n) si ya existe."""
+def numero_expediente_final(db: Session, numero: str, exclude_record_id: int = None) -> str:
+    """Devuelve el número tal como se guarda: base si es el primero, base (n) si ya existe.
+    Al editar (exclude_record_id) el propio registro no cuenta para evitar auto-renumerarse."""
     numero = str(numero or "").strip()
     if not numero:
         return ""
-    count = copias_de_numero(db, numero)
+    count = copias_de_numero(db, numero, exclude_record_id=exclude_record_id)
     return f"{numero} ({count})" if count else numero
 
 
@@ -332,7 +332,19 @@ def update_record(db: Session, record_id: int, data: dict, user_id: int = None, 
         _validate_dates(data)
         _validate_compensado(data)
         data = _compose_domicilio(data)
-        data["expediente"] = record.data.get("expediente")
+        # Permitir editar el número de expediente con la misma lógica de duplicados
+        # que al crearlo, excluyendo el registro actual para no auto-renumerarse.
+        actual = str(record.data.get("expediente", "") or "").strip()
+        base_digits_actual = re.sub(r"\D", "", actual)
+        nuevo_numero = str(data.get("expediente", "") or "").strip()
+        numero = re.sub(r"\D", "", nuevo_numero)
+        if not numero:
+            from fastapi import HTTPException
+            raise HTTPException(status_code=400, detail="El número de expediente es obligatorio: regístrelo manualmente")
+        if numero == base_digits_actual:
+            data["expediente"] = actual
+        else:
+            data["expediente"] = numero_expediente_final(db, numero, exclude_record_id=record.id)
     record.data = data
     record.updated_by = user_id
     db.commit()

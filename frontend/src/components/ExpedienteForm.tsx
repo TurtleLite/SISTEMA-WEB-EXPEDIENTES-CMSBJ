@@ -50,6 +50,7 @@ fields: [
       { key: 'municipio', label: 'Municipio', type: 'text' },
       { key: 'tipo_localidad', label: 'Tipo de Localidad', type: 'text' },
       { key: 'localidad', label: 'Localidad', type: 'text' },
+      { key: 'domicilio', label: 'Dirección completa', type: 'text' },
     ],
   },
   {
