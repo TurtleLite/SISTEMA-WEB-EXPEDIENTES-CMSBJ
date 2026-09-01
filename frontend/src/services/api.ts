@@ -81,8 +81,18 @@ api.interceptors.response.use(
 )
 
 export const authApi = {
-  login: (username: string, password: string) =>
-    api.post('/auth/login', { username, password }, { timeout: 90000 }),
+  login: async (username: string, password: string) => {
+    const attempt = () => api.post('/auth/login', { username, password }, { timeout: 90000 })
+    try {
+      return await attempt()
+    } catch (err: any) {
+      if (!err.response || err.code === 'ECONNABORTED') {
+        await new Promise((r) => setTimeout(r, 8000))
+        return attempt()
+      }
+      throw err
+    }
+  },
   logout: () => api.post('/auth/logout'),
   sessions: (params?: any) => api.get('/auth/sessions', { params }),
   revokeSession: (id: string | number) => api.delete(`/auth/sessions/${id}`),
