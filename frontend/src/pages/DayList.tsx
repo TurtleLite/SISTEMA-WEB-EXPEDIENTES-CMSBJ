@@ -267,12 +267,6 @@ export function DayList() {
     }
   }
 
-  const shift = (n: number) => {
-    const d = new Date(date + 'T00:00:00')
-    d.setDate(d.getDate() + n)
-    setDate(isoDate(d))
-  }
-
   const dayLabel = new Date(date + 'T00:00:00').toLocaleDateString('es-HN', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   })
@@ -327,21 +321,6 @@ export function DayList() {
       <div className="flex flex-wrap items-center justify-between gap-3 shrink-0">
         <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Listado Diario de Cirugías</h1>
         <div className="flex items-center gap-2">
-          <label className="text-sm text-[#5F6C79] hidden sm:block">Fecha del listado:</label>
-          <div className="flex items-center gap-1 bg-white border border-[#E4E8EE] rounded-xl px-1.5 py-1 shadow-sm">
-            <button onClick={() => shift(-1)} className="p-1 text-[#7A8694] hover:text-[#1E2A32] rounded-lg hover:bg-[#F7F8FA] transition-colors">
-              <ChevronLeft size={16} />
-            </button>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="text-sm text-[#2B3A45] bg-transparent focus:outline-none"
-            />
-            <button onClick={() => shift(1)} className="p-1 text-[#7A8694] hover:text-[#1E2A32] rounded-lg hover:bg-[#F7F8FA] transition-colors">
-              <ChevronRight size={16} />
-            </button>
-          </div>
           <button
             onClick={() => setDate(isoDate(new Date()))}
             className="px-2.5 py-1.5 text-xs font-medium text-[#115E59] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-colors"
