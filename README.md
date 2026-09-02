@@ -38,8 +38,8 @@ Ventajas de esta arquitectura: los datos clínicos quedan en el equipo local (pr
 - **Búsqueda en tiempo real, sin distinción de mayúsculas ni tildes**, sobre nombre, apellido, identidad, número de expediente, diagnóstico, especialidad y perfil (y sobre cualquier campo al buscar por campo específico). Utiliza **índices trigram (GIN + `pg_trgm`)** sobre `data->>'campo'` y un **índice GIN sobre el JSONB `data`**, por lo que escala a cientos de miles de expedientes sin degradarse. Al elegir el campo en el desplegable **o** al escribir en la barra, la tabla se filtra al instante (el cliente aplica un *debounce* de 300 ms para no disparar una petición por tecla). El desplegable de búsqueda excluye los campos `cirujano`, `fecha_cirugia` y `estatus_cirugia`.
 - **Reportes** en Excel (`REPORTE_<nombre>.xlsx`) con filtros por especialidad, perfil, criticidad y estatus, vista previa con reordenamiento de filas por arrastre (la columna No se renumera según el orden) y la columna "Observación" solo en reportes.
 - **Listado Diario de Cirugías:** armado por fecha, filtro por estatus, reordenamiento por arrastre dentro de cada especialidad y exportación a Excel (`LISTADO_fecha.xlsx`).
-- **Estatus quirúrgico** con 7 estados (En espera, Reprogramar, Cancelado, Fuera de perfil San Benito, Operado, No apto para cirugía, No se presentó) y observaciones que quedan en el expediente.
-- **Administración:** gestión de usuarios, sesiones activas (cerrar remotamente), auditoría de actividades y catálogos de especialidades y localidades (solo Administrador).
+- **Estatus quirúrgico** con 8 estados (En lista, En espera, Reprogramar, Cancelado, Fuera de perfil San Benito, Operado, No apto para cirugía, No se presentó) y observaciones que quedan en el expediente. Los estatus son un **catálogo administrable** (solo Administrador) desde **Estatus de Cirugía → Gestionar estatus**, con el mismo patrón que las especialidades: crear, renombrar (actualiza todos los expedientes), eliminar con reemplazo opcional y control de nombres similares.
+- **Administración:** gestión de usuarios, sesiones activas (cerrar remotamente), auditoría de actividades y catálogos de especialidades, localidades y estatus de cirugía (solo Administrador).
 - **Menú uniforme para todos los usuarios:** las secciones se ven igual para todos y el sistema valida el permiso por rol al seleccionarlas (mensaje "No tienes acceso").
 
 ## Roles y Permisos
@@ -61,7 +61,7 @@ Cinco roles: **Administrador**, **Dirección**, **Dirección Médica**, **Médic
 | Usuarios (crear, editar, eliminar, desbloquear, restablecer) | Sí | No | No | No | No |
 | Sesiones (ver y cerrar) | Sí | No | No | No | No |
 | Auditoría (historial de actividades) | Sí | No | No | No | No |
-| Especialidades y localidades (crear, editar, eliminar) | Sí | No | No | No | No |
+| Especialidades, localidades y estatus de cirugía (crear, editar, eliminar) | Sí | No | No | No | No |
 | Mi Perfil (datos y contraseña) | Sí | Sí | Sí | Sí | Sí |
 
 El Administrador **no crea, edita ni elimina expedientes**, pero **sí los exporta a Excel**; además consulta y administra la seguridad del sistema. El Médico crea expedientes y **solo edita los que él mismo creó** (no puede eliminarlos ni cambiar el estatus de cirugía). La eliminación de expedientes queda reservada a los roles **Dirección** y **Dirección Médica**. El rol **Carga Px** es de captura de datos: crea expedientes y escribe el **Nombre del Médico a mano** (campo libre, sin autocompletar con el usuario), pero solo edita los expedientes que él mismo creó y no puede eliminar, exportar ni cambiar el estatus de cirugía.

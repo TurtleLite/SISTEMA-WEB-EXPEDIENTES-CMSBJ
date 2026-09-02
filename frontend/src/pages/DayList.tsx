@@ -19,7 +19,7 @@ function patientName(r: ListRecord): string {
   return [d.nombre, d.apellido].filter(Boolean).join(' ').trim() || 'Sin nombre'
 }
 
-const EXCLUDED_STATUSES = ['Operado', 'Fuera de perfil San Benito', 'No apto para cirugía']
+const EXCLUDED_STATUSES = ['Operado', 'Fuera de perfil San Benito', 'No apto para cirugía', 'En lista']
 const PAGE_SIZE = 50
 
 export function DayList() {
@@ -65,10 +65,11 @@ export function DayList() {
     const reqId = ++reqRef.current
     setLoadingMore(true)
     try {
+      const excluded = EXCLUDED_STATUSES.filter((s) => s !== statusFilter)
       const params: Record<string, any> = {
         page: next,
         page_size: PAGE_SIZE,
-        exclude_statuses: EXCLUDED_STATUSES.join(','),
+        exclude_statuses: excluded.join(','),
       }
       if (statusFilter === 'En espera') params.waiting_only = true
       else if (statusFilter !== 'all') params.estatus_cirugia = statusFilter
@@ -323,6 +324,7 @@ export function DayList() {
                 className="px-2.5 py-2 border border-[#E4E8EE] rounded-xl text-xs text-[#3F4D58] bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
               >
                 <option value="En espera">En espera</option>
+                <option value="En lista">En lista</option>
                 <option value="Reprogramar">Reprogramar</option>
                 <option value="Cancelado">Cancelado</option>
                 <option value="No se presentó">No se presentó</option>
@@ -497,6 +499,7 @@ export function DayList() {
 
 function StatusBadge({ status }: { status?: string }) {
   const styles: Record<string, string> = {
+    'En lista': 'bg-blue-100 text-blue-600 border-blue-200',
     'Operado': 'bg-emerald-100 text-emerald-600 border-emerald-200',
     'En espera': 'bg-yellow-100 text-yellow-600 border-yellow-200',
     'Reprogramar': 'bg-orange-100 text-orange-600 border-orange-200',

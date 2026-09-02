@@ -31,7 +31,7 @@ RESPONSABLES_F = ["Sr. José Martínez", "Sr. Francisco Cruz", "Sr. Daniel Aguil
 MEDICOS = ["Dra. Danelia Hernandez", "Dr. Carlos Mejía", "Dra. Ana Sofía Zelaya", "Dr. Marco Tulio Barahona",
            "Dra. Rebeca Villeda", "Dr. Jorge Maldonado", "Dra. Karla Suazo"]
 PERFILES_CODIGO = ["1", "2", "3", "4"]
-ESTATUS_CIRUGIA = ["En espera", "Reprogramar", "Cancelado", "Fuera de perfil San Benito", "Operado"]
+ESTATUS_CIRUGIA = ["En lista", "En espera", "Reprogramar", "Cancelado", "Fuera de perfil San Benito", "Operado", "No apto para cirugía", "No se presentó"]
 
 ESPECIALIDADES = {
     "Cirugía General": {

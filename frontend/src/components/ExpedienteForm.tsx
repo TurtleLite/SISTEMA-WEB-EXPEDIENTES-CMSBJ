@@ -894,12 +894,14 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
                           >
                             <option value="">Seleccione...</option>
+                            <option value="En lista">En lista</option>
                             <option value="En espera">En espera</option>
                             <option value="Reprogramar">Reprogramar</option>
                             <option value="Cancelado">Cancelado</option>
                             <option value="Fuera de perfil San Benito">Fuera de perfil San Benito</option>
                             <option value="Operado">Operado</option>
                             <option value="No apto para cirugía">No apto para cirugía</option>
+                            <option value="No se presentó">No se presentó</option>
                           </select>
                         ) : field.key === 'expediente' ? (
                           <div>

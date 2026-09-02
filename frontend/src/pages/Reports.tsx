@@ -7,7 +7,7 @@ import { Plus, FileSpreadsheet, Download, Trash2, Eye, X, RefreshCw, Check, Chev
 import { normalizeText } from '../utils/format'
 import ScrollSelect from '../components/ScrollSelect'
 
-const STATUS_OPTIONS = ['En espera', 'Reprogramar', 'Cancelado', 'Fuera de perfil San Benito', 'Operado', 'No apto para cirugía', 'No se presentó']
+const STATUS_OPTIONS = ['En lista', 'En espera', 'Reprogramar', 'Cancelado', 'Fuera de perfil San Benito', 'Operado', 'No apto para cirugía', 'No se presentó']
 
 const CRITICIDAD_LABELS: Record<string, string> = {
   baja: 'Baja',

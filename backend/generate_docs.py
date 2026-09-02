@@ -368,7 +368,7 @@ def manual_direccion(out_dir, version="1.0"):
     b.body("Permite armar el listado de cirugías de cada fecha, que luego se exporta a Excel.")
     b.numbered("1. Vaya a <b>Listados</b> en el menú.")
     b.numbered("2. Elija la fecha con el selector de fecha o las flechas (el botón \"Hoy\" vuelve al día actual).")
-    b.numbered("3. En el panel izquierdo (disponibles), busque al paciente y agréguelo con el botón \"+\". Puede filtrar por estatus de cirugía (\"En espera\" por defecto, Reprogramar, Cancelado, No se presentó o todos).")
+    b.numbered("3. En el panel izquierdo (disponibles), busque al paciente y agréguelo con el botón \"+\". Puede filtrar por estatus de cirugía (\"En espera\" por defecto, En lista, Reprogramar, Cancelado, No se presentó o todos).")
     b.numbered("4. Arrastre a cada paciente para reordenarlo dentro de su especialidad.")
     b.numbered("5. Presione <b>Guardar</b> para guardar el listado y <b>Excel</b> para descargarlo. Use <b>Vaciar</b> para eliminar el listado de esa fecha.")
 
@@ -379,7 +379,7 @@ def manual_direccion(out_dir, version="1.0"):
     b.numbered("2. Use el filtro de estatus si desea ver solo un grupo (ej.: \"En espera\").")
     b.h2("Cambiar el estatus de una cirugía")
     b.numbered("1. Localice el expediente en la tabla.")
-    b.numbered("2. En la columna de estatus, seleccione el nuevo estado: En espera, Reprogramar, Cancelado, Fuera de perfil San Benito, Operado, No apto para cirugía o No se presentó.")
+    b.numbered("2. En la columna de estatus, seleccione el nuevo estado: En lista, En espera, Reprogramar, Cancelado, Fuera de perfil San Benito, Operado, No apto para cirugía o No se presentó.")
     b.numbered("3. Puede escribir una observación que quedará registrada en el expediente.")
     b.numbered("4. Presione <b>Guardar</b>. El cambio queda registrado en el expediente.")
 
@@ -462,7 +462,7 @@ def manual_direccion_medica(out_dir, version="1.0"):
     b.body("Permite armar el listado de cirugías de cada fecha, que luego se exporta a Excel.")
     b.numbered("1. Vaya a <b>Listados</b> en el menú.")
     b.numbered("2. Elija la fecha con el selector de fecha o las flechas (el botón \"Hoy\" vuelve al día actual).")
-    b.numbered("3. En el panel izquierdo (disponibles), busque al paciente; el filtro de estatus muestra \"En espera\" por defecto, o puede elegir Reprogramar, Cancelado, No se presentó o todos.")
+    b.numbered("3. En el panel izquierdo (disponibles), busque al paciente; el filtro de estatus muestra \"En espera\" por defecto, o puede elegir En lista, Reprogramar, Cancelado, No se presentó o todos.")
     b.numbered("4. Agregue el paciente con el botón \"+\". Se ubica en la sección de su especialidad.")
     b.numbered("5. Arrastre a cada paciente con la manija (ícono de agarre) para reordenarlo dentro de su especialidad.")
     b.numbered("6. <b>Guardar:</b> guarda el listado de la fecha. <b>Excel:</b> descarga LISTADO_fecha.xlsx. <b>Vaciar:</b> elimina el listado de esa fecha.")

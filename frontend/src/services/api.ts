@@ -197,6 +197,14 @@ export const localitiesApi = {
     api.delete('/localities/', { params: { name, replacement: replacement || '' } }),
 }
 
+export const surgeryStatusApi = {
+  list: () => api.get('/surgery-status/'),
+  create: (name: string) => api.post('/surgery-status/', { name }),
+  rename: (oldName: string, newName: string) => api.put('/surgery-status/rename', { old: oldName, new: newName }),
+  remove: (name: string, replacement?: string) =>
+    api.delete('/surgery-status/', { params: { name, replacement: replacement || '' } }),
+}
+
 export const reportsApi = {
   create: (data: any) => api.post('/reports/', data),
   list: () => api.get('/reports/'),
