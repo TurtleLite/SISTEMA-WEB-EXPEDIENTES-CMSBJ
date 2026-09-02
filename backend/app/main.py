@@ -162,6 +162,15 @@ async def lifespan(app: FastAPI):
         db = SessionLocal()
         from app.services.list_service import ensure_system_lists
         ensure_system_lists(db)
+        from app.models.catalog_item import CatalogItem
+        from app.api.surgery_status import DEFAULT_SURGERY_STATUSES
+        existing_statuses = {
+            row[0] for row in db.query(CatalogItem.name).filter(CatalogItem.item_type == "estatus_cirugia").all()
+        }
+        for status_name in DEFAULT_SURGERY_STATUSES:
+            if status_name not in existing_statuses:
+                db.add(CatalogItem(item_type="estatus_cirugia", name=status_name))
+        db.commit()
         from app.services.record_service import purge_trash
         purged = purge_trash(db)
         if purged:

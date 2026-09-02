@@ -11,6 +11,17 @@ from app.services.auth_service import require_role
 
 router = APIRouter(prefix="/surgery-status", tags=["Estatus de Cirugía"])
 
+DEFAULT_SURGERY_STATUSES = [
+    "En lista",
+    "En espera",
+    "Reprogramar",
+    "Cancelado",
+    "Fuera de perfil San Benito",
+    "Operado",
+    "No apto para cirugía",
+    "No se presentó",
+]
+
 
 @router.get("/")
 def list_surgery_status(
@@ -27,6 +38,8 @@ def list_surgery_status(
     catalog_names = {i.name for i in db.query(CatalogItem).filter(CatalogItem.item_type == "estatus_cirugia")}
     merged = {name: counts.get(name, 0) for name in counts}
     for name in catalog_names:
+        merged.setdefault(name, 0)
+    for name in DEFAULT_SURGERY_STATUSES:
         merged.setdefault(name, 0)
     return [{"name": name, "count": merged[name]} for name in sorted(merged)]
 
