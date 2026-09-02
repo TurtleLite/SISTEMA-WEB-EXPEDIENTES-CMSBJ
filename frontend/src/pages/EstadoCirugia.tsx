@@ -269,7 +269,7 @@ export function EstadoCirugia() {
             title="Administrar estatus de cirugía"
           >
             <Settings2 size={15} />
-            Gestionar estatus
+            Estatus
           </button>
         )}
       </div>
