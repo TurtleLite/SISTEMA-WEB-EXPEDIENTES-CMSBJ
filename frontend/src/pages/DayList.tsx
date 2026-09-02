@@ -70,7 +70,8 @@ export function DayList() {
     try {
       const res = await dayListsApi.list()
       const map: Record<string, number> = {}
-      (res.data || []).forEach((dl: any) => {
+      const list: any[] = Array.isArray(res.data) ? res.data : []
+      list.forEach((dl: any) => {
         if (dl?.date && dl?.count != null) map[dl.date] = dl.count
       })
       setSavedLists(map)
