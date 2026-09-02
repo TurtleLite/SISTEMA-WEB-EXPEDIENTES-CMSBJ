@@ -4,7 +4,7 @@ import { ListRecord, ListDefinition } from '../types'
 import { useNotification } from '../contexts/NotificationContext'
 import {
   Search, Plus, Trash2, Save, GripVertical,
-  ChevronLeft, ChevronRight, X, ClipboardList, FileSpreadsheet,
+  ChevronLeft, ChevronRight, X, ClipboardList, FileSpreadsheet, CalendarDays,
 } from 'lucide-react'
 
 function isoDate(d: Date): string {
@@ -39,6 +39,13 @@ export function DayList() {
   const [saved, setSaved] = useState(false)
   const availableScrollRef = useRef<HTMLDivElement>(null)
   const reqRef = useRef(0)
+  const [savedLists, setSavedLists] = useState<Record<string, number>>({})
+  const [showCalendar, setShowCalendar] = useState(false)
+  const [calendarMonth, setCalendarMonth] = useState<Date>(() => {
+    const d = new Date()
+    return new Date(d.getFullYear(), d.getMonth(), 1)
+  })
+  const calendarRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -58,6 +65,34 @@ export function DayList() {
     load()
     return () => { cancelled = true }
   }, [])
+
+  const loadSavedLists = useCallback(async () => {
+    try {
+      const res = await dayListsApi.list()
+      const map: Record<string, number> = {}
+      (res.data || []).forEach((dl: any) => {
+        if (dl?.date && dl?.count != null) map[dl.date] = dl.count
+      })
+      setSavedLists(map)
+    } catch {
+      setSavedLists({})
+    }
+  }, [])
+
+  useEffect(() => {
+    loadSavedLists()
+  }, [loadSavedLists])
+
+  useEffect(() => {
+    if (!showCalendar) return
+    const handler = (e: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
+        setShowCalendar(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [showCalendar])
 
   const loadAvailable = useCallback(async (reset = false) => {
     if (!listId) return false
@@ -190,6 +225,7 @@ export function DayList() {
     try {
       await dayListsApi.save(date, cart.map((r) => r.id))
       setSaved(true)
+      loadSavedLists()
       toast('Listado guardado', 'success')
     } catch {
       toast('Error al guardar el listado', 'error')
@@ -201,6 +237,7 @@ export function DayList() {
       await dayListsApi.delete(date)
       setCart([])
       setSaved(true)
+      loadSavedLists()
       toast('Listado del día vaciado', 'success')
     } catch {
       setCart([])
@@ -238,6 +275,27 @@ export function DayList() {
   const dayLabel = new Date(date + 'T00:00:00').toLocaleDateString('es-HN', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   })
+
+  const calendarCells = useMemo(() => {
+    const year = calendarMonth.getFullYear()
+    const month = calendarMonth.getMonth()
+    const firstDay = new Date(year, month, 1)
+    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    const startWeekday = firstDay.getDay()
+    const cells: (string | null)[] = []
+    for (let i = 0; i < startWeekday; i++) cells.push(null)
+    for (let d = 1; d <= daysInMonth; d++) cells.push(isoDate(new Date(year, month, d)))
+    return cells
+  }, [calendarMonth])
+
+  const calendarTitle = calendarMonth.toLocaleDateString('es-HN', {
+    month: 'long', year: 'numeric',
+  })
+
+  const hasSavedListInMonth = useMemo(() => {
+    const prefix = isoDate(calendarMonth).slice(0, 7)
+    return Object.keys(savedLists).some((d) => d.startsWith(prefix))
+  }, [savedLists, calendarMonth])
   const countByEspecialidad = useMemo(() => {
     const m: Record<string, number> = {}
     cart.forEach((r) => {
@@ -295,6 +353,79 @@ export function DayList() {
           >
             Mañana
           </button>
+          <div className="relative" ref={calendarRef}>
+            <button
+              onClick={() => setShowCalendar((v) => !v)}
+              title="Calendario de listados"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[#115E59] bg-white border border-[#E4E8EE] rounded-xl hover:bg-[#F7F8FA] transition-colors"
+            >
+              <CalendarDays size={14} />
+              <span className="hidden sm:inline">Calendario</span>
+              {Object.keys(savedLists).length > 0 && (
+                <span className="w-2 h-2 rounded-full bg-[#0F766E]" />
+              )}
+            </button>
+            {showCalendar && (
+              <div className="absolute right-0 top-full mt-2 z-50 bg-white rounded-2xl shadow-xl border border-[#E4E8EE] p-3 w-72">
+                <div className="flex items-center justify-between mb-2">
+                  <button
+                    onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))}
+                    className="p-1 text-[#7A8694] hover:text-[#1E2A32] rounded-lg hover:bg-[#F7F8FA] transition-colors"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <span className="text-sm font-semibold text-[#1E2A32] capitalize">{calendarTitle}</span>
+                  <button
+                    onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))}
+                    className="p-1 text-[#7A8694] hover:text-[#1E2A32] rounded-lg hover:bg-[#F7F8FA] transition-colors"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+                <div className="grid grid-cols-7 gap-1 mb-1">
+                  {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((wd, i) => (
+                    <span key={i} className="text-center text-[0.625rem] font-semibold text-[#7A8694] uppercase">{wd}</span>
+                  ))}
+                </div>
+                <div className="grid grid-cols-7 gap-1">
+                  {calendarCells.map((cell, i) => {
+                    if (!cell) return <span key={i} />
+                    const count = savedLists[cell]
+                    const isSelected = cell === date
+                    const isToday = cell === isoDate(new Date())
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => { setDate(cell); setShowCalendar(false) }}
+                        title={count != null ? `Listado: ${count} paciente(s)` : 'Sin listado'}
+                        className={`relative flex flex-col items-center justify-center rounded-lg py-1 text-xs transition-colors ${
+                          isSelected
+                            ? 'bg-[#0F766E] text-white font-semibold'
+                            : count != null
+                              ? 'bg-[#EEF7F5] text-[#0F766E] font-semibold hover:bg-[#D8EFEA]'
+                              : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
+                        }`}
+                      >
+                        <span>{Number(cell.slice(8))}</span>
+                        {count != null && (
+                          <span className={`text-[0.5625rem] leading-none ${isSelected ? 'text-white/80' : 'text-[#0F766E]'}`}>
+                            {count}
+                          </span>
+                        )}
+                        {isToday && count == null && <span className="text-[0.5625rem] leading-none text-[#8E9AA6]">hoy</span>}
+                      </button>
+                    )
+                  })}
+                </div>
+                {hasSavedListInMonth && (
+                  <div className="mt-2 pt-2 border-t border-[#E4E8EE] flex items-center gap-2 text-[0.6875rem] text-[#5F6C79]">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#0F766E]" />
+                    Días con listado guardado (número = pacientes)
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
