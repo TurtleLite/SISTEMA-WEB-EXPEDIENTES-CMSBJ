@@ -5,9 +5,15 @@ from app.schemas.user import UserCreate, UserUpdate, UserResponse
 from app.services.user_service import get_users, get_user, create_user, update_user, delete_user
 from app.services.auth_service import get_current_user, require_role
 from app.services.audit_service import log_audit, client_ip
-from app.models.user import User
+from app.models.user import User, UserRole
+from fastapi import Depends
 
 router = APIRouter(prefix="/users", tags=["Usuarios"])
+
+
+@router.get("/roles")
+def list_roles():
+    return [{"value": r.value, "name": r.name} for r in UserRole]
 
 
 @router.get("/", response_model=list[UserResponse])
