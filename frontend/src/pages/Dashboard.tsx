@@ -13,6 +13,7 @@ const roleLabels: Record<string, string> = {
   direccion_medica: 'Dirección Médica',
   medico: 'Médico',
   carga_px: 'Carga Px',
+  ofthalmologia: 'Oftalmología',
 }
 
 export function Dashboard() {
@@ -37,9 +38,11 @@ export function Dashboard() {
   }, [denied])
 
   const role = user?.role || 'medico'
-  const canReports = role === 'direccion' || role === 'direccion_medica'
+  const canEstatus = role === 'direccion' || role === 'direccion_medica'
+  const canReports = role === 'direccion' || role === 'direccion_medica' || role === 'oftalmologia'
   const canLists = role === 'direccion' || role === 'direccion_medica'
   const canSecurity = role === 'admin'
+  const canExpedientes = role !== 'oftalmologia'
 
   const goExpedientes = () => {
     if (systemListId) {
@@ -66,7 +69,7 @@ export function Dashboard() {
       label: 'Expedientes',
       icon: <FolderOpen size={22} />,
       color: 'bg-violet-500',
-      allowed: true,
+      allowed: canExpedientes,
       onClick: goExpedientes,
     },
     {
@@ -80,7 +83,7 @@ export function Dashboard() {
       label: 'Estatus',
       icon: <Activity size={22} />,
       color: 'bg-rose-500',
-      allowed: canReports,
+      allowed: canEstatus,
       onClick: () => navigate('/estado-cirugia'),
     },
     {
