@@ -22,7 +22,7 @@ class User(Base):
     telefono = Column(String(50), unique=True, nullable=False)
     full_name = Column(String(150), nullable=False)
     hashed_password = Column(String(255), nullable=False)
-    role = Column(String(20), nullable=False, default=UserRole.MEDICO.value)
+    role = Column(String(30), nullable=False, default=UserRole.MEDICO.value)
     is_active = Column(Boolean, default=True)
     failed_attempts = Column(Integer, default=0, nullable=False)
     locked_until = Column(DateTime(timezone=True), nullable=True)
