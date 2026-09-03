@@ -16,6 +16,18 @@ import os
 router = APIRouter(prefix="/reports", tags=["Reportes"])
 
 
+def _is_reportes_oftalmologia(user: User) -> bool:
+    return user.role == "reportes_oftalmologia"
+
+
+def _ensure_own_report(current_user: User, report: Report | None) -> Report:
+    if report is None:
+        raise HTTPException(status_code=404, detail="Reporte no encontrado")
+    if _is_reportes_oftalmologia(current_user) and report.created_by != current_user.id:
+        raise HTTPException(status_code=403, detail="No puedes acceder a este reporte")
+    return report
+
+
 def _list_for_report(db: Session, report: Report):
     from app.models.list_definition import ListDefinition
     if report.list_definition_id:
@@ -200,7 +212,7 @@ def create_report(
     data: dict,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
     list_id = data.get("list_definition_id")
     if not list_id and (data.get("filters") or {}):
@@ -227,9 +239,12 @@ def create_report(
 @router.get("/")
 def list_reports(
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
-    reports = db.query(Report).order_by(Report.created_at.desc()).all()
+    query = db.query(Report)
+    if _is_reportes_oftalmologia(current_user):
+        query = query.filter(Report.created_by == current_user.id)
+    reports = query.order_by(Report.created_at.desc()).all()
     counts = dict(
         db.query(ListRecord.list_definition_id, func.count(ListRecord.id))
         .filter(ListRecord.deleted_at.is_(None))
@@ -267,9 +282,10 @@ def list_reports(
 def get_report(
     report_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
+    report = _ensure_own_report(current_user, report)
     if not report:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
     return {
@@ -290,7 +306,7 @@ def save_report_order(
     report_id: int,
     data: dict,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
     if not report:
@@ -308,9 +324,10 @@ def generate_excel_report(
     report_id: int,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
+    report = _ensure_own_report(current_user, report)
     if not report:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
     ld = _list_for_report(db, report)
@@ -355,9 +372,10 @@ def generate_excel_report(
 def preview_report(
     report_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
+    report = _ensure_own_report(current_user, report)
     if not report:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
     ld = _list_for_report(db, report)
@@ -402,9 +420,10 @@ def download_report(
     report_id: int,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
+    report = _ensure_own_report(current_user, report)
     if not report:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
     file_path = report.file_path_excel
@@ -421,9 +440,10 @@ def delete_report(
     report_id: int,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
+    report = _ensure_own_report(current_user, report)
     if not report:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
     if report.file_path_excel and os.path.exists(report.file_path_excel):

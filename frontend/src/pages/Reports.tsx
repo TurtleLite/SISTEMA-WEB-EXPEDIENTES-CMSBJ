@@ -40,35 +40,6 @@ const EMPTY_FORM: ReportForm = {
   criticidad: '', compensado: '', estatus_cirugia: '', diagnostico: '', fecha_desde: '', fecha_hasta: '', columns_selected: [],
 }
 
-const anyFilter = (f: ReportForm): boolean =>
-  !!(f.especialidad || f.perfil || f.criticidad || f.compensado || f.estatus_cirugia || f.diagnostico || f.fecha_desde || f.fecha_hasta)
-
-const fmtFecha = (iso: string) => {
-  const d = new Date(iso + 'T00:00:00')
-  if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('es-HN')
-}
-
-const buildAutoName = (f: ReportForm): string => {
-  const parts: string[] = []
-  const hasDates = !!(f.fecha_desde || f.fecha_hasta)
-  parts.push(hasDates ? 'Expedientes creados' : 'Expedientes')
-  if (hasDates) {
-    const range = []
-    if (f.fecha_desde) range.push(fmtFecha(f.fecha_desde))
-    if (f.fecha_hasta) range.push(fmtFecha(f.fecha_hasta))
-    if (range.length) parts.push(range.join(' – '))
-  }
-  if (f.especialidad) parts.push(f.especialidad)
-  if (f.perfil) parts.push(`Perfil ${f.perfil}`)
-  if (f.criticidad) parts.push(`Crítica ${criticidadLabel(f.criticidad).toLowerCase()}`)
-  if (f.compensado) parts.push(f.compensado === 'Sí' ? 'Compensados' : 'Descompensados')
-  if (f.estatus_cirugia) parts.push(f.estatus_cirugia)
-  if (f.diagnostico) parts.push(`Diagnóstico: ${f.diagnostico.trim()}`)
-  if (parts.length === 1) return 'Expedientes completos'
-  return parts.join(' · ')
-}
-
 interface PreviewData {
   name: string
   filters?: Record<string, any>
@@ -83,6 +54,50 @@ const isDateReport = (p: PreviewData | null): boolean =>
   !!(p?.filters?.fecha_desde || p?.filters?.fecha_hasta)
 
 export function Reports() {
+  const { user } = useAuth()
+  const { toast } = useNotification()
+
+  const isReportesOftalmologia = (): boolean =>
+    user?.role === 'reportes_oftalmologia'
+
+  const hasReportsAccess = (): boolean =>
+    user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica' || user?.role === 'reportes_oftalmologia'
+
+  const canReorder = (): boolean =>
+    user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica'
+
+  const criticidadLabel = (v: string) => CRITICIDAD_LABELS[v] || v
+
+  const fmtFecha = (iso: string) => {
+    const d = new Date(iso + 'T00:00:00')
+    if (isNaN(d.getTime())) return iso
+    return d.toLocaleDateString('es-HN')
+  }
+
+  const anyFilter = (f: ReportForm): boolean =>
+    !!(f.perfil || f.criticidad || f.compensado || f.estatus_cirugia || f.diagnostico || f.fecha_desde || f.fecha_hasta)
+
+  const buildAutoName = (f: ReportForm): string => {
+    const parts: string[] = []
+    const hasDates = !!(f.fecha_desde || f.fecha_hasta)
+    parts.push(hasDates ? 'Expedientes creados' : 'Expedientes')
+    if (hasDates) {
+      const range = []
+      if (f.fecha_desde) range.push(fmtFecha(f.fecha_desde))
+      if (f.fecha_hasta) range.push(fmtFecha(f.fecha_hasta))
+      if (range.length) parts.push(range.join(' – '))
+    }
+    // Para el rol reportes_oftalmologia, la especialidad siempre es oftalmologia y no es un filtro seleccionable
+    if (f.especialidad && !isReportesOftalmologia()) parts.push(f.especialidad)
+    if (f.perfil) parts.push(`Perfil ${f.perfil}`)
+    if (f.criticidad) parts.push(`Crítica ${criticidadLabel(f.criticidad).toLowerCase()}`)
+    if (f.compensado) parts.push(f.compensado === 'Sí' ? 'Compensados' : 'Descompensados')
+    if (f.estatus_cirugia) parts.push(f.estatus_cirugia)
+    if (f.diagnostico) parts.push(`Diagnóstico: ${f.diagnostico.trim()}`)
+    if (parts.length === 1) return 'Expedientes completos'
+    return parts.join(' · ')
+  }
+
   const [reports, setReports] = useState<Report[]>([])
   const [systemListId, setSystemListId] = useState<string>('')
   const [especialidades, setEspecialidades] = useState<string[]>([])
@@ -102,8 +117,6 @@ export function Reports() {
   const [orderSaved, setOrderSaved] = useState(false)
   const [form, setForm] = useState<ReportForm>(EMPTY_FORM)
   const nameTouched = useRef(false)
-  const { user } = useAuth()
-  const { toast } = useNotification()
 
   const setFilter = (patch: Partial<ReportForm>) => {
     setForm((prev) => {
@@ -120,7 +133,10 @@ export function Reports() {
 
   const clearFilters = () => {
     setForm((prev) => {
-      const next = { ...prev, especialidad: '', perfil: '', criticidad: '', compensado: '', estatus_cirugia: '', diagnostico: '', fecha_desde: '', fecha_hasta: '' }
+      const next = { ...prev, perfil: '', criticidad: '', compensado: '', estatus_cirugia: '', diagnostico: '', fecha_desde: '', fecha_hasta: '' }
+      if (!isReportesOftalmologia()) {
+        next.especialidad = ''
+      }
       if (!nameTouched.current) next.name = buildAutoName(next)
       return next
     })
@@ -177,7 +193,11 @@ export function Reports() {
       const systemList = res.data.find((l: ListDefinition) => l.is_system)
       if (systemList) {
         setSystemListId(systemList.id)
-        setForm((f) => ({ ...f, list_definition_id: systemList.id }))
+        const initialForm = { ...EMPTY_FORM, list_definition_id: systemList.id }
+        if (isReportesOftalmologia()) {
+          initialForm.especialidad = 'oftalmologia'
+        }
+        setForm(initialForm)
         loadEspecialidades(systemList.id)
         loadPerfiles(systemList.id)
         loadCriticidades(systemList.id)
@@ -222,7 +242,11 @@ export function Reports() {
       })
       setShowModal(false)
       nameTouched.current = false
-      setForm({ ...EMPTY_FORM, list_definition_id: systemListId })
+      const resetForm = { ...EMPTY_FORM, list_definition_id: systemListId }
+      if (isReportesOftalmologia()) {
+        resetForm.especialidad = 'oftalmologia'
+      }
+      setForm(resetForm)
       setEspecialidades([])
       setPerfiles([])
       setCriticidades([])
@@ -246,9 +270,6 @@ export function Reports() {
       setLoadingPreview(false)
     }
   }
-
-  const canReorder = (): boolean =>
-    user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica'
 
   const handleDragStart = (e: React.DragEvent, idx: number) => {
     setDragIdx(idx)
@@ -352,7 +373,7 @@ export function Reports() {
         <div>
           <h1 className="font-serif text-2xl font-bold text-[#1E2A32]">Reportes</h1>
         </div>
-        {(user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica') && (
+        {(hasReportsAccess()) && (
           <button
             onClick={() => setShowModal(true)}
             className="flex items-center gap-1.5 bg-[#0F766E] text-white px-4 py-2 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
@@ -437,7 +458,7 @@ export function Reports() {
               <span className="text-[0.6875rem] text-[#7A8694]">
                 Creado el {new Date(report.created_at).toLocaleDateString('es-ES')}
               </span>
-        {(user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica') && (
+        {(hasReportsAccess()) && (
                 deleteConfirm === report.id ? (
                   <div className="flex items-center gap-2 text-xs">
                     <span className="text-[#5F6C79]">¿Eliminar?</span>
@@ -555,19 +576,24 @@ export function Reports() {
                     </p>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Especialidad</label>
-                    <ScrollSelect
-                      value={form.especialidad}
-                      onChange={(v) => setFilter({ especialidad: v })}
-                      allowEmpty
-                      disabled={!form.list_definition_id}
-                      options={especialidades.map((esp) => ({ value: esp, label: esp }))}
-                      placeholder="Todas"
-                      buttonClassName="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm"
-                      panelClassName="rounded-xl"
-                    />
-                  </div>
+<div>
+                      <label className="block text-xs font-medium text-[#3F4D58] mb-1">Especialidad</label>
+                      <ScrollSelect
+                        value={form.especialidad}
+                        onChange={(v) => setFilter({ especialidad: v })}
+                        allowEmpty
+                        disabled={!form.list_definition_id || isReportesOftalmologia()}
+                        options={especialidades.map((esp) => ({ value: esp, label: esp }))}
+                        placeholder="Todas"
+                        buttonClassName="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm"
+                        panelClassName="rounded-xl"
+                      />
+                      {isReportesOftalmologia() && (
+                        <p className="text-[0.6875rem] text-[#7A8694] mt-1">
+                          Especialidad fijada a Oftalmología para este rol.
+                        </p>
+                      )}
+                    </div>
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Estatus de cirugía</label>
                     <select

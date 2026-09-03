@@ -57,7 +57,7 @@ function App() {
           <Route path="/users" element={<RoleRoute roles={['admin']} section="Usuarios"><Users /></RoleRoute>} />
           <Route path="/lists" element={<ProtectedRoute><Lists /></ProtectedRoute>} />
           <Route path="/lists/:id" element={<ProtectedRoute><ListDetail /></ProtectedRoute>} />
-          <Route path="/reports" element={<RoleRoute roles={['admin', 'direccion', 'direccion_medica']} section="Reportes"><Reports /></RoleRoute>} />
+          <Route path="/reports" element={<RoleRoute roles={['admin', 'direccion', 'direccion_medica', 'reportes_oftalmologia']} section="Reportes"><Reports /></RoleRoute>} />
           <Route path="/listado-diario" element={<RoleRoute roles={['admin', 'direccion', 'direccion_medica']} section="Listados Diarios"><DayList /></RoleRoute>} />
           <Route path="/estado-cirugia" element={<RoleRoute roles={['admin', 'direccion', 'direccion_medica']} section="Estatus Cirugia"><EstadoCirugia /></RoleRoute>} />
           <Route path="/seguridad" element={<RoleRoute roles={['admin']} section="Sesiones"><Sessions /></RoleRoute>} />
