@@ -152,9 +152,13 @@ async def lifespan(app: FastAPI):
             columns = [c["name"] for c in inspector.get_columns("notifications")]
             if "target_role" not in columns:
                 with engine.connect() as conn:
-                    conn.execute(text("ALTER TABLE notifications ADD COLUMN target_role VARCHAR(20)"))
+                    conn.execute(text("ALTER TABLE notifications ADD COLUMN target_role VARCHAR(30)"))
                     conn.commit()
                 logger.info("Added target_role column to notifications")
+            with engine.connect() as conn:
+                conn.execute(text("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(30)"))
+                conn.commit()
+            logger.info("Ensured users.role column is VARCHAR(30)")
     except Exception as e:
         logger.warning(f"Could not add column: {e}")
 
