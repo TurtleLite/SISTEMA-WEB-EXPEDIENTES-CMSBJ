@@ -6,7 +6,6 @@ from app.services.user_service import get_users, get_user, create_user, update_u
 from app.services.auth_service import get_current_user, require_role
 from app.services.audit_service import log_audit, client_ip
 from app.models.user import User, UserRole
-from fastapi import Depends
 
 router = APIRouter(prefix="/users", tags=["Usuarios"])
 
