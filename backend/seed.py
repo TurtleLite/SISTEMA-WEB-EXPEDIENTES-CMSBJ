@@ -63,15 +63,15 @@ def seed():
         )
         db.add(carga_px)
 
-        reportes_oftalmologia = User(
-            username="reportesoftalmologia",
+        oftalmologia = User(
+            username="oftalmologia",
             telefono="2201-1105",
-            full_name="Reportes Oftalmología",
-            hashed_password=hash_password("reportes123"),
-            role="reportes_oftalmologia",
+            full_name="Oftalmología",
+            hashed_password=hash_password("oftalmologia123"),
+            role="oftalmologia",
             is_active=True,
         )
-        db.add(reportes_oftalmologia)
+        db.add(oftalmologia)
 
         db.commit()
         print("Usuarios creados correctamente:")
@@ -80,7 +80,7 @@ def seed():
         print("  direccionmedica / direccionmedica123")
         print("  medico / medico123")
         print("  cargapx / cargapx123")
-        print("  reportesoftalmologia / reportes123")
+        print("  ofthalmologia / ofthalmologia123")
     except Exception as e:
         print(f"Error: {e}")
         db.rollback()

@@ -57,11 +57,11 @@ export function Reports() {
   const { user } = useAuth()
   const { toast } = useNotification()
 
-  const isReportesOftalmologia = (): boolean =>
-    user?.role === 'reportes_oftalmologia'
+  const isOftalmologia = (): boolean =>
+    user?.role === 'oftalmologia'
 
   const hasReportsAccess = (): boolean =>
-    user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica' || user?.role === 'reportes_oftalmologia'
+    user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica' || user?.role === 'oftalmologia'
 
   const canReorder = (): boolean =>
     user?.role === 'admin' || user?.role === 'direccion' || user?.role === 'direccion_medica'
@@ -87,8 +87,8 @@ export function Reports() {
       if (f.fecha_hasta) range.push(fmtFecha(f.fecha_hasta))
       if (range.length) parts.push(range.join(' – '))
     }
-    // Para el rol reportes_oftalmologia, la especialidad siempre es oftalmologia y no es un filtro seleccionable
-    if (f.especialidad && !isReportesOftalmologia()) parts.push(f.especialidad)
+    // Para el rol oftalmologia, la especialidad siempre es oftalmologia y no es un filtro seleccionable
+    if (f.especialidad && !isOftalmologia()) parts.push(f.especialidad)
     if (f.perfil) parts.push(`Perfil ${f.perfil}`)
     if (f.criticidad) parts.push(`Crítica ${criticidadLabel(f.criticidad).toLowerCase()}`)
     if (f.compensado) parts.push(f.compensado === 'Sí' ? 'Compensados' : 'Descompensados')
@@ -134,7 +134,7 @@ export function Reports() {
   const clearFilters = () => {
     setForm((prev) => {
       const next = { ...prev, perfil: '', criticidad: '', compensado: '', estatus_cirugia: '', diagnostico: '', fecha_desde: '', fecha_hasta: '' }
-      if (!isReportesOftalmologia()) {
+      if (!isOftalmologia()) {
         next.especialidad = ''
       }
       if (!nameTouched.current) next.name = buildAutoName(next)
@@ -194,7 +194,7 @@ export function Reports() {
       if (systemList) {
         setSystemListId(systemList.id)
         const initialForm = { ...EMPTY_FORM, list_definition_id: systemList.id }
-        if (isReportesOftalmologia()) {
+        if (isOftalmologia()) {
           initialForm.especialidad = 'oftalmologia'
         }
         setForm(initialForm)
@@ -243,7 +243,7 @@ export function Reports() {
       setShowModal(false)
       nameTouched.current = false
       const resetForm = { ...EMPTY_FORM, list_definition_id: systemListId }
-      if (isReportesOftalmologia()) {
+      if (isOftalmologia()) {
         resetForm.especialidad = 'oftalmologia'
       }
       setForm(resetForm)
@@ -582,13 +582,13 @@ export function Reports() {
                         value={form.especialidad}
                         onChange={(v) => setFilter({ especialidad: v })}
                         allowEmpty
-                        disabled={!form.list_definition_id || isReportesOftalmologia()}
+                        disabled={!form.list_definition_id || isOftalmologia()}
                         options={especialidades.map((esp) => ({ value: esp, label: esp }))}
                         placeholder="Todas"
                         buttonClassName="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm"
                         panelClassName="rounded-xl"
                       />
-                      {isReportesOftalmologia() && (
+                      {isOftalmologia() && (
                         <p className="text-[0.6875rem] text-[#7A8694] mt-1">
                           Especialidad fijada a Oftalmología para este rol.
                         </p>

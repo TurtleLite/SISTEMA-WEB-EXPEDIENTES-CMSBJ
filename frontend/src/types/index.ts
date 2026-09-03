@@ -3,7 +3,7 @@ export interface User {
   username: string
   telefono: string
   full_name: string
-  role: 'admin' | 'direccion' | 'direccion_medica' | 'medico' | 'carga_px' | 'reportes_oftalmologia'
+  role: 'admin' | 'direccion' | 'direccion_medica' | 'medico' | 'carga_px' | 'oftalmologia'
   is_active: boolean
   locked_until?: string | null
   created_at: string

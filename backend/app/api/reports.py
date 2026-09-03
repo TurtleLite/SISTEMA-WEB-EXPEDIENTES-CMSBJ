@@ -16,14 +16,14 @@ import os
 router = APIRouter(prefix="/reports", tags=["Reportes"])
 
 
-def _is_reportes_oftalmologia(user: User) -> bool:
-    return user.role == "reportes_oftalmologia"
+def _is_ofthalmologia(user: User) -> bool:
+    return user.role == "oftalmologia"
 
 
 def _ensure_own_report(current_user: User, report: Report | None) -> Report:
     if report is None:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
-    if _is_reportes_oftalmologia(current_user) and report.created_by != current_user.id:
+    if _is_ofthalmologia(current_user) and report.created_by != current_user.id:
         raise HTTPException(status_code=403, detail="No puedes acceder a este reporte")
     return report
 
@@ -212,7 +212,7 @@ def create_report(
     data: dict,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     list_id = data.get("list_definition_id")
     if not list_id and (data.get("filters") or {}):
@@ -239,10 +239,10 @@ def create_report(
 @router.get("/")
 def list_reports(
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     query = db.query(Report)
-    if _is_reportes_oftalmologia(current_user):
+    if _is_ofthalmologia(current_user):
         query = query.filter(Report.created_by == current_user.id)
     reports = query.order_by(Report.created_at.desc()).all()
     counts = dict(
@@ -282,7 +282,7 @@ def list_reports(
 def get_report(
     report_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
     report = _ensure_own_report(current_user, report)
@@ -306,7 +306,7 @@ def save_report_order(
     report_id: int,
     data: dict,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
     if not report:
@@ -324,7 +324,7 @@ def generate_excel_report(
     report_id: int,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
     report = _ensure_own_report(current_user, report)
@@ -372,7 +372,7 @@ def generate_excel_report(
 def preview_report(
     report_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
     report = _ensure_own_report(current_user, report)
@@ -420,7 +420,7 @@ def download_report(
     report_id: int,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
     report = _ensure_own_report(current_user, report)
@@ -440,7 +440,7 @@ def delete_report(
     report_id: int,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "reportes_oftalmologia")),
+    current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
     report = _ensure_own_report(current_user, report)
