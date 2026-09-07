@@ -8,6 +8,8 @@ from app.core.database import get_db
 from app.models.catalog_item import CatalogItem
 from app.models.user import User
 from app.services.auth_service import require_role
+from app.services.audit_service import log_audit, client_ip
+from fastapi import Request
 
 router = APIRouter(prefix="/specialties", tags=["Especialidades"])
 
@@ -34,6 +36,7 @@ def list_specialties(
 @router.post("/")
 def create_specialty(
     data: dict,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
@@ -51,6 +54,8 @@ def create_specialty(
     item = CatalogItem(item_type="especialidad", name=name)
     db.add(item)
     db.commit()
+    log_audit(db, current_user, "specialty_create", entity_type="catalog", entity_id=item.id,
+              detail=f"creó especialidad '{name}'", ip_address=client_ip(request))
     return {"message": f"Especialidad '{name}' creada correctamente", "id": item.id}
 
 
@@ -62,6 +67,7 @@ def _norm(s: str) -> str:
 @router.put("/rename")
 def rename_specialty(
     data: dict,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
@@ -86,11 +92,13 @@ def rename_specialty(
     if catalog:
         catalog.name = new
     db.commit()
+    log_audit(db, current_user, "specialty_rename", entity_type="catalog", detail=f"renombró especialidad '{old}' → '{new}' ({len(matched)} expediente(s) actualizados)", ip_address=client_ip(request))
     return {"message": f"Especialidad renombrada en {len(matched)} expediente(s)", "updated": len(matched)}
 
 
 @router.delete("/")
 def delete_specialty(
+    request: Request,
     name: str,
     replacement: str = "",
     db: Session = Depends(get_db),
@@ -123,4 +131,6 @@ def delete_specialty(
         CatalogItem.name == name,
     ).delete()
     db.commit()
+    detail = f"eliminó especialidad '{name}'" + (f" → reasignó a '{replacement}'" if replacement else " (quitada de expedientes)") + f" ({len(matched)} expediente(s))"
+    log_audit(db, current_user, "specialty_delete", entity_type="catalog", detail=detail, ip_address=client_ip(request))
     return {"message": message, "updated": len(matched)}

@@ -8,6 +8,8 @@ from app.core.database import get_db
 from app.models.catalog_item import CatalogItem
 from app.models.user import User
 from app.services.auth_service import require_role
+from app.services.audit_service import log_audit, client_ip
+from fastapi import Request
 
 router = APIRouter(prefix="/surgery-status", tags=["Estatus de Cirugía"])
 
@@ -47,6 +49,7 @@ def list_surgery_status(
 @router.post("/")
 def create_surgery_status(
     data: dict,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
@@ -64,6 +67,8 @@ def create_surgery_status(
     item = CatalogItem(item_type="estatus_cirugia", name=name)
     db.add(item)
     db.commit()
+    log_audit(db, current_user, "status_create", entity_type="catalog", entity_id=item.id,
+              detail=f"creó estatus de cirugía '{name}'", ip_address=client_ip(request))
     return {"message": f"Estatus '{name}' creado correctamente", "id": item.id}
 
 
@@ -75,6 +80,7 @@ def _norm(s: str) -> str:
 @router.put("/rename")
 def rename_surgery_status(
     data: dict,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
 ):
@@ -99,11 +105,13 @@ def rename_surgery_status(
     if catalog:
         catalog.name = new
     db.commit()
+    log_audit(db, current_user, "status_rename", entity_type="catalog", detail=f"renombró estatus '{old}' → '{new}' ({len(matched)} expediente(s) actualizados)", ip_address=client_ip(request))
     return {"message": f"Estatus renombrado en {len(matched)} expediente(s)", "updated": len(matched)}
 
 
 @router.delete("/")
 def delete_surgery_status(
+    request: Request,
     name: str,
     replacement: str = "",
     db: Session = Depends(get_db),
@@ -136,4 +144,6 @@ def delete_surgery_status(
         CatalogItem.name == name,
     ).delete()
     db.commit()
+    detail = f"eliminó estatus '{name}'" + (f" → reasignó a '{replacement}'" if replacement else " (quitado de expedientes)") + f" ({len(matched)} expediente(s))"
+    log_audit(db, current_user, "status_delete", entity_type="catalog", detail=detail, ip_address=client_ip(request))
     return {"message": message, "updated": len(matched)}

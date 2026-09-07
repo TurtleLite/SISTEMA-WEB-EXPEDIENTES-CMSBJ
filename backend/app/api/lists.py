@@ -387,6 +387,9 @@ def update_record_compensado(
         raise HTTPException(status_code=404, detail="Registro no encontrado")
 
     data = dict(record.data or {})
+    exp = (data.get("expediente") or "").strip()
+    nombre = " ".join(x for x in [data.get("nombre",""), data.get("apellido","")] if x).strip()
+    ident = f"{exp} — {nombre}".strip(" —") if (exp or nombre) else f"#{record_id}"
     if valor is None:
         data.pop("compensado", None)
     else:
@@ -397,7 +400,7 @@ def update_record_compensado(
     flag_modified(record, "data")
     db.commit()
     log_audit(db, current_user, "record_compensado", entity_type="record", entity_id=record_id,
-              detail=f"cambió el estado de compensación a {valor or 'sin definir'}", ip_address=client_ip(request))
+              detail=f"compensación de {ident} → {valor or 'sin definir'}" + (f" ({str(obs).strip()[:80]})" if obs and valor=="No" else ""), ip_address=client_ip(request))
     return {"message": "Estado de compensación actualizado", "compensado": valor}
 
 
@@ -477,9 +480,13 @@ def restore_record_endpoint(
     current_user: User = Depends(require_role("direccion", "direccion_medica")),
 ):
     from app.services.record_service import restore_record
-    restore_record(db, record_id, user_id=current_user.id, user_role=current_user.role)
+    rec = restore_record(db, record_id, user_id=current_user.id, user_role=current_user.role)
+    d = rec.data if isinstance(rec.data, dict) else {} if hasattr(rec, 'data') else {}
+    exp = (d.get("expediente") or "").strip() if isinstance(d, dict) else ""
+    nombre = " ".join(x for x in [d.get("nombre",""), d.get("apellido","")] if x).strip() if isinstance(d, dict) else ""
+    ident = f"{exp} — {nombre}".strip(" —") if (exp or nombre) else f"#{record_id}"
     log_audit(db, current_user, "record_restore", entity_type="record", entity_id=record_id,
-              detail="restauró un expediente desde la papelera", ip_address=client_ip(request))
+              detail=f"restauró expediente {ident} desde la papelera", ip_address=client_ip(request))
     return {"message": "Expediente restaurado correctamente"}
 
 
@@ -602,10 +609,15 @@ def update_record_endpoint(
     if current_user.role not in ("direccion", "direccion_medica", "medico", "carga_px"):
         from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="No tienes permisos para esta acción")
+    # detalle específico antes de actualizar
+    rec = db.query(ListRecord).filter(ListRecord.id == record_id).first()
+    exp = (rec.data.get("expediente") or "").strip() if rec and isinstance(rec.data, dict) else ""
+    nombre = " ".join(x for x in [rec.data.get("nombre",""), rec.data.get("apellido","")] if x).strip() if rec and isinstance(rec.data, dict) else ""
+    ident = f"{exp} — {nombre}".strip(" —") if (exp or nombre) else f"#{record_id}"
     update_record(db, record_id, data.get("data", data), user_id=current_user.id, user_role=current_user.role,
                   expected_updated_at=data.get("expected_updated_at"))
     log_audit(db, current_user, "record_update", entity_type="record", entity_id=record_id,
-              ip_address=client_ip(request))
+              detail=f"actualizó expediente {ident}", ip_address=client_ip(request))
     return {"message": "Registro actualizado correctamente"}
 
 
@@ -618,9 +630,13 @@ def delete_record_endpoint(
     current_user: User = Depends(get_current_user),
 ):
     from app.services.record_service import delete_record
+    rec = db.query(ListRecord).filter(ListRecord.id == record_id).first()
+    exp = (rec.data.get("expediente") or "").strip() if rec and isinstance(rec.data, dict) else ""
+    nombre = " ".join(x for x in [rec.data.get("nombre",""), rec.data.get("apellido","")] if x).strip() if rec and isinstance(rec.data, dict) else ""
+    ident = f"{exp} — {nombre}".strip(" —") if (exp or nombre) else f"#{record_id}"
     delete_record(db, record_id, user_id=current_user.id, user_role=current_user.role)
     log_audit(db, current_user, "record_delete", entity_type="record", entity_id=record_id,
-              ip_address=client_ip(request))
+              detail=f"eliminó expediente {ident} (papelera)", ip_address=client_ip(request))
     return {"message": "Registro eliminado correctamente"}
 
 
@@ -671,8 +687,15 @@ def bulk_delete_records_endpoint(
                 errors.append({"id": record_id, "detail": "Error de base de datos al eliminar"})
                 break
     if deleted:
+        # detalle con muestra de expedientes eliminados (máx 5)
+        try:
+            sample_recs = db.query(ListRecord).filter(ListRecord.id.in_(ids[:5])).all()
+            sample = ", ".join((r.data.get("expediente") or f"#{r.id}") for r in sample_recs if isinstance(r.data, dict))[:120]
+            extra = f" — {sample}" + ("…" if deleted>5 else "") if sample else ""
+        except Exception:
+            extra = ""
         log_audit(db, current_user, "record_delete_bulk", entity_type="record",
-                  detail=f"eliminó {deleted} expediente(s)", ip_address=client_ip(request))
+                  detail=f"eliminó {deleted} expediente(s){extra} (papelera)", ip_address=client_ip(request))
     message = f"{deleted} registro(s) eliminado(s)"
     if errors:
         message += f", {len(errors)} no eliminado(s)"

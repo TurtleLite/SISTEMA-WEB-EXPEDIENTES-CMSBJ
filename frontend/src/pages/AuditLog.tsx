@@ -373,8 +373,8 @@ export function AuditLog() {
                     </span>
                   </td>
                   <td className="px-6 py-3.5 text-sm text-[#3F4D58] min-w-0">
-                    <span className="block truncate" title={e.detail || ''}>
-                      {genericDetail(e.action, e.detail)}
+                    <span className="block truncate" title={e.detail || genericDetail(e.action, e.detail)}>
+                      {e.detail || genericDetail(e.action, e.detail)}
                     </span>
                   </td>
                 </tr>

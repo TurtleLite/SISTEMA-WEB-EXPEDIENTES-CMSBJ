@@ -76,7 +76,7 @@ def authenticate_user(db: Session, username: str, password: str, ip_address: str
                   detail="usuario inexistente", ip_address=ip_address)
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
     if _as_utc(user.locked_until) and _as_utc(user.locked_until) > _now():
-        log_audit(db, user, "login_locked", entity_type="auth", ip_address=ip_address)
+        log_audit(db, user, "login_locked", entity_type="auth", detail=f"cuenta bloqueada hasta {user.locked_until.strftime('%H:%M')} — {user.failed_attempts} intentos fallidos", ip_address=ip_address)
         raise HTTPException(status_code=423, detail="Cuenta temporalmente bloqueada por intentos fallidos. Intente más tarde.")
     if not verify_password(password, user.hashed_password):
         user.failed_attempts = (user.failed_attempts or 0) + 1
@@ -161,7 +161,7 @@ def login(db: Session, username: str, password: str, request=None) -> dict:
     token, jti, expires_at = create_access_token({"sub": str(user.id), "role": user.role})
     refresh_token, refresh_hash, refresh_expires_at = create_refresh_token()
     _create_session(db, user, jti, expires_at, refresh_hash, refresh_expires_at, ip, request, device_id=device_id)
-    log_audit(db, user, "login", entity_type="auth", ip_address=ip)
+    log_audit(db, user, "login", entity_type="auth", detail=f"inició sesión — {user.role} ({user.full_name or user.username}) equipo {device_id or ip}", ip_address=ip)
     device_info = None
     if reg:
         from app.services.device_service import _users_of
@@ -214,7 +214,7 @@ def logout_current(db: Session, credentials: HTTPAuthorizationCredentials = None
     except Exception:
         jti = None
     if user:
-        log_audit(db, user, "logout", entity_type="auth", ip_address=ip)
+        log_audit(db, user, "logout", entity_type="auth", detail=f"cerró sesión — {user.username}", ip_address=ip)
     if jti:
         session = db.query(UserSession).filter(UserSession.jti == jti).first()
         if session and not session.revoked_at:
