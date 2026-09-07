@@ -561,14 +561,14 @@ export function Reports() {
                         value={form.fecha_desde}
                         max={form.fecha_hasta || undefined}
                         onChange={(e) => setFilter({ fecha_desde: e.target.value })}
-                        className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                        className={`w-full px-3 py-2.5 border rounded-xl text-sm transition-all duration-200 ${form.fecha_desde ? 'bg-[#0F766E] text-white border-[#0F766E] [color-scheme:dark]' : 'bg-white border-[#E4E8EE] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]'}`}
                       />
                       <input
                         type="date"
                         value={form.fecha_hasta}
                         min={form.fecha_desde || undefined}
                         onChange={(e) => setFilter({ fecha_hasta: e.target.value })}
-                        className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                        className={`w-full px-3 py-2.5 border rounded-xl text-sm transition-all duration-200 ${form.fecha_hasta ? 'bg-[#0F766E] text-white border-[#0F766E] [color-scheme:dark]' : 'bg-white border-[#E4E8EE] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]'}`}
                       />
                     </div>
                     <p className="text-[0.6875rem] text-[#7A8694] mt-1">
@@ -578,23 +578,29 @@ export function Reports() {
 
 <div>
                       <label className="block text-xs font-medium text-[#3F4D58] mb-1">Especialidad</label>
-                      <ScrollSelect
-                        value={form.especialidad}
-                        onChange={(v) => setFilter({ especialidad: v })}
-                        allowEmpty
-                        disabled={!form.list_definition_id || isOftalmologia()}
-                        options={especialidades.map((esp) => ({ value: esp, label: esp }))}
-                        placeholder="Todas"
-                        buttonClassName="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm"
-                        panelClassName="rounded-xl"
-                      />
+                      {isOftalmologia() ? (
+                        <div className="w-full px-3 py-2.5 border border-violet-200 bg-violet-50 text-violet-700 rounded-xl text-sm cursor-default">
+                          Oftalmología
+                        </div>
+                      ) : (
+                        <ScrollSelect
+                          value={form.especialidad}
+                          onChange={(v) => setFilter({ especialidad: v })}
+                          allowEmpty
+                          disabled={!form.list_definition_id}
+                          options={especialidades.map((esp) => ({ value: esp, label: esp }))}
+                          placeholder="Todas"
+                          buttonClassName={`w-full px-3 py-2.5 border rounded-xl text-sm transition-all duration-200 ${form.especialidad ? 'bg-[#0F766E] text-white border-[#0F766E]' : 'bg-white border-[#E4E8EE]'}`}
+                          panelClassName="rounded-xl"
+                        />
+                      )}
                     </div>
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Estatus de cirugía</label>
                     <select
                       value={form.estatus_cirugia}
                       onChange={(e) => setFilter({ estatus_cirugia: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                      className={`w-full px-3 py-2.5 border rounded-xl text-sm transition-all duration-200 ${form.estatus_cirugia ? 'bg-[#0F766E] text-white border-[#0F766E]' : 'bg-white border-[#E4E8EE] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]'}`}
                     >
                       <option value="">Todos</option>
                       {STATUS_OPTIONS.map((s) => (
@@ -603,7 +609,7 @@ export function Reports() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Diagnóstico (busca parte del texto)</label>
+                    <label className="block text-xs font-medium text-[#3F4D58] mb-1">Diagnóstico</label>
                     <div ref={diagRef} className="relative">
                       <div className={`flex items-center pl-3 pr-2.5 py-2.5 text-sm rounded-xl border transition-colors duration-150 ${
                         form.diagnostico
@@ -615,7 +621,7 @@ export function Reports() {
                           value={form.diagnostico}
                           onChange={(e) => setFilter({ diagnostico: e.target.value })}
                           onFocus={() => setDiagOpen(true)}
-                          placeholder={form.diagnostico ? '' : 'Ej. hernia, cistocele, mioma...'}
+                          placeholder=""
                           className={`w-full text-sm bg-transparent outline-none ${form.diagnostico ? 'placeholder:text-white/60 text-white' : 'placeholder:text-[#8E9AA6] text-[#3F4D58]'}`}
                         />
                         {form.diagnostico ? (
@@ -676,7 +682,7 @@ export function Reports() {
                       value={form.perfil}
                       onChange={(e) => setFilter({ perfil: e.target.value })}
                       disabled={!form.list_definition_id}
-                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
+                      className={`w-full px-3 py-2.5 border rounded-xl text-sm transition-all duration-200 disabled:opacity-50 ${form.perfil ? 'bg-[#0F766E] text-white border-[#0F766E]' : 'bg-white border-[#E4E8EE] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]'}`}
                     >
                       <option value="">Todos</option>
                       {perfiles.map((p) => (
@@ -690,7 +696,7 @@ export function Reports() {
                       value={form.criticidad}
                       onChange={(e) => setFilter({ criticidad: e.target.value })}
                       disabled={!form.list_definition_id}
-                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200 disabled:opacity-50"
+                      className={`w-full px-3 py-2.5 border rounded-xl text-sm transition-all duration-200 disabled:opacity-50 ${form.criticidad ? 'bg-[#0F766E] text-white border-[#0F766E]' : 'bg-white border-[#E4E8EE] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]'}`}
                     >
                       <option value="">Todas</option>
                       {criticidades.map((c) => (
@@ -703,7 +709,7 @@ export function Reports() {
                     <select
                       value={form.compensado}
                       onChange={(e) => setFilter({ compensado: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] transition-all duration-200"
+                      className={`w-full px-3 py-2.5 border rounded-xl text-sm transition-all duration-200 ${form.compensado ? 'bg-[#0F766E] text-white border-[#0F766E]' : 'bg-white border-[#E4E8EE] focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]'}`}
                     >
                       <option value="">Todos</option>
                       <option value="Sí">Sí</option>
