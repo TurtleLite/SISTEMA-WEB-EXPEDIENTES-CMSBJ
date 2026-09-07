@@ -13,15 +13,14 @@ import { ConfirmDangerModal } from '../components/ConfirmDangerModal'
 import { TrashModal } from '../components/TrashModal'
 import ScrollSelect from '../components/ScrollSelect'
 
-const RECORD_COLUMNS = ['nombre', 'edad', 'diagnostico', 'perfil', 'domicilio', 'telefono', 'albergue', 'nombre_medico']
+const RECORD_COLUMNS = ['nombre', 'edad', 'diagnostico', 'perfil', 'domicilio', 'telefono', 'nombre_medico']
 const COLUMN_WIDTHS: Record<string, string> = {
-  nombre: 'w-[16%]',
+  nombre: 'w-[25%]',
   edad: 'w-[7%]',
   diagnostico: 'w-[19%]',
   perfil: 'w-[8%]',
   domicilio: 'w-[17%]',
   telefono: 'w-[11%]',
-  albergue: 'w-[9%]',
   nombre_medico: 'w-[13%]',
 }
 const COLUMN_LABEL_OVERRIDES: Record<string, string> = {
