@@ -532,6 +532,10 @@ def list_records(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    # Oftalmología solo ve expedientes de su especialidad
+    if current_user.role == "oftalmologia":
+        search = "oftalmologia"
+        search_field = "especialidad"
     if page_size is not None:
         from app.services.record_service import paginate_records, _updated_at_iso
         page = page or 1

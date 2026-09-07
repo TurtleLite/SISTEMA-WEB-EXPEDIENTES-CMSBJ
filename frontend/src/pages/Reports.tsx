@@ -588,11 +588,6 @@ export function Reports() {
                         buttonClassName="w-full px-3 py-2.5 border border-[#E4E8EE] rounded-xl text-sm"
                         panelClassName="rounded-xl"
                       />
-                      {isOftalmologia() && (
-                        <p className="text-[0.6875rem] text-[#7A8694] mt-1">
-                          Especialidad fijada a Oftalmología para este rol.
-                        </p>
-                      )}
                     </div>
                   <div>
                     <label className="block text-xs font-medium text-[#3F4D58] mb-1">Estatus de cirugía</label>

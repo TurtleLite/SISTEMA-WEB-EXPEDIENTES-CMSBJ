@@ -72,7 +72,7 @@ export const TIPO_LOCALIDAD_OPTIONS = ['Aldea', 'Barrio', 'Colonia', 'Caserío']
 export const PERMISSIONS = {
   inicio: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px', 'oftalmologia'],
   perfil: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px', 'oftalmologia'],
-  expedientes: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px'],
+  expedientes: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px', 'oftalmologia'],
   listados: ['admin', 'direccion', 'direccion_medica'],
   estatus: ['admin', 'direccion', 'direccion_medica'],
   reportes: ['admin', 'direccion', 'direccion_medica', 'oftalmologia'],

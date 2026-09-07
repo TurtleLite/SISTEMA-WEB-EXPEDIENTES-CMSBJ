@@ -220,11 +220,15 @@ def create_report(
         system_list = db.query(ListDefinition).filter(ListDefinition.is_system == True).first()
         if system_list:
             list_id = system_list.id
+    filters = data.get("filters") or {}
+    # Oftalmología solo puede reportar su especialidad
+    if current_user.role == "oftalmologia":
+        filters["especialidad"] = "oftalmologia"
     report = Report(
         name=data["name"],
         description=data.get("description"),
         list_definition_id=list_id,
-        filters=data.get("filters"),
+        filters=filters,
         columns_selected=data.get("columns_selected"),
         created_by=current_user.id,
     )

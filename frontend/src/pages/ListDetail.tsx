@@ -37,6 +37,7 @@ export function ListDetail() {
   const { id } = useParams() as { id: string }
   const navigate = useNavigate()
   const { user } = useAuth()
+  const isOftalmologia = user?.role === 'oftalmologia'
   const { toast, confirm } = useNotification()
   const [list, setList] = useState<ListDefinition | null>(null)
   const [records, setRecords] = useState<ListRecord[]>([])
@@ -49,6 +50,12 @@ export function ListDetail() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [especialidades, setEspecialidades] = useState<string[]>([])
   const [especialidadFilter, setEspecialidadFilter] = useState('')
+  // Oftalmología: especialidad fija y vista solo de sus expedientes
+  useEffect(() => {
+    if (isOftalmologia && especialidadFilter !== 'oftalmologia') {
+      setEspecialidadFilter('oftalmologia')
+    }
+  }, [isOftalmologia])
   const [catalogOpen, setCatalogOpen] = useState(false)
   const catalogRef = useRef<HTMLDivElement>(null)
   const [diagnosticos, setDiagnosticos] = useState<string[]>([])
@@ -169,8 +176,9 @@ export function ListDetail() {
     setLoadingMore(true)
     try {
       const params: any = { page: next, page_size: PAGE_SIZE }
-      if (especialidadFilter) {
-        params.search = especialidadFilter
+      const effectiveEspecialidad = isOftalmologia ? 'oftalmologia' : especialidadFilter
+      if (effectiveEspecialidad) {
+        params.search = effectiveEspecialidad
         params.search_field = 'especialidad'
       } else if (search || searchField) {
         if (search) params.search = search
@@ -190,7 +198,7 @@ export function ListDetail() {
       }
     } catch (err) { console.error(err) }
     finally { setLoadingMore(false) }
-  }, [id, page, search, searchField, especialidadFilter, compensadoFilter, diagnosticoFilter])
+  }, [id, page, search, searchField, especialidadFilter, compensadoFilter, diagnosticoFilter, isOftalmologia])
 
   const handleScroll = () => {
     const el = scrollRef.current
@@ -648,7 +656,7 @@ export function ListDetail() {
             </>
           )}
           {list?.is_system ? (
-            user?.role !== 'admin' && (
+            user?.role !== 'admin' && !isOftalmologia && (
             <button
               onClick={() => { setEditingRecord(null); setShowExpedienteForm(true) }}
               className="flex items-center gap-1.5 bg-[#0F766E] text-white px-5 py-2.5 rounded-xl hover:bg-[#115E59] shadow-sm hover:shadow-md transition-all duration-200  text-sm font-medium"
@@ -721,17 +729,20 @@ export function ListDetail() {
                 <div className="flex items-center gap-2">
                   <div ref={catalogRef} className="relative">
                     <button
-                      onClick={() => setCatalogOpen((v) => !v)}
+                      onClick={() => { if (isOftalmologia) return; setCatalogOpen((v) => !v)}}
+                      disabled={isOftalmologia}
                       className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-colors duration-150 ${
-                        especialidadFilter
+                        isOftalmologia
+                          ? 'bg-violet-50 text-violet-700 border-violet-200 cursor-default'
+                          : especialidadFilter
                           ? 'bg-[#0F766E] text-white border-[#0F766E]'
                           : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
                       }`}
                     >
                       <span className="max-w-[180px] truncate">
-                        {especialidadFilter || 'Especialidad'}
+                        {isOftalmologia ? 'Oftalmología' : (especialidadFilter || 'Especialidad')}
                       </span>
-                      {especialidadFilter ? (
+                      {isOftalmologia ? null : especialidadFilter ? (
                         <span
                           onClick={(e) => { e.stopPropagation(); setEspecialidadFilter(''); setSelectedIds(new Set()); setCatalogOpen(false) }}
                           className="hover:bg-white/20 rounded p-0.5 leading-none"
@@ -743,7 +754,7 @@ export function ListDetail() {
                         <ChevronDown size={14} className={`text-[#8E9AA6] transition-transform duration-200 ${catalogOpen ? 'rotate-180' : ''}`} />
                       )}
                     </button>
-                    {catalogOpen && (
+                    {catalogOpen && !isOftalmologia && (
                       <div className="absolute left-0 top-full mt-1.5 z-50 w-64 max-h-72 overflow-y-auto bg-white border border-[#E4E8EE] rounded-xl shadow-xl py-1.5">
                         <button
                           onClick={() => { setEspecialidadFilter(''); setSelectedIds(new Set()); setCatalogOpen(false) }}
