@@ -79,6 +79,11 @@ export function Layout({ children }: { children: ReactNode }) {
   })()
 
   const visibleSections = navSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => item.roles.includes(user?.role || '')),
+    }))
+    .filter((section) => section.items.length > 0)
 
   useEffect(() => {
     if (!denied) return
