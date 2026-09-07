@@ -182,13 +182,10 @@ async def lifespan(app: FastAPI):
         from app.services.user_service import reset_default_users
         reset_default_users(db, only_if_empty=True)
         if settings.AUDIT_RETENTION_DAYS > 0:
-            from app.models.audit_log import AuditLog
-            from datetime import datetime, timedelta, timezone
-            cutoff = datetime.now(timezone.utc) - timedelta(days=settings.AUDIT_RETENTION_DAYS)
-            purged = db.query(AuditLog).filter(AuditLog.created_at < cutoff).delete(synchronize_session=False)
-            db.commit()
+            from app.services.audit_service import purge_expired_audit_logs
+            purged = purge_expired_audit_logs(db)
             if purged:
-                logger.info(f"Auditoría: purgados {purged} registros anteriores a {cutoff.date()} "
+                logger.info(f"Auditoría: purgados {purged} registros anteriores a {settings.AUDIT_RETENTION_DAYS} días "
                             f"(AUDIT_RETENTION_DAYS={settings.AUDIT_RETENTION_DAYS})")
         db.close()
         logger.info("Usuarios por defecto asegurados (solo si la tabla está vacía)")
@@ -229,6 +226,19 @@ async def lifespan(app: FastAPI):
                             db.close()
                     except Exception as e:
                         logger.warning(f"No se pudo purgar la papelera: {e}")
+                    # Purga periódica de auditoría (respeta AUDIT_RETENTION_DAYS)
+                    try:
+                        from app.core.database import SessionLocal
+                        from app.services.audit_service import purge_expired_audit_logs
+                        db = SessionLocal()
+                        try:
+                            n = purge_expired_audit_logs(db)
+                            if n:
+                                logger.info(f"Auditoría: purga diaria — {n} registro(s) >{settings.AUDIT_RETENTION_DAYS} días eliminados")
+                        finally:
+                            db.close()
+                    except Exception as e:
+                        logger.warning(f"No se pudo purgar la auditoría: {e}")
                 except asyncio.CancelledError:
                     break
                 except Exception:

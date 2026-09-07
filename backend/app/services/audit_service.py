@@ -1,5 +1,7 @@
+from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
 from app.models.audit_log import AuditLog
+from app.core.config import settings
 import ipaddress
 
 
@@ -81,6 +83,10 @@ def list_logs(
 ) -> tuple[list[AuditLog], int]:
     from datetime import datetime, timedelta
     query = db.query(AuditLog)
+    # Retención: ocultar registros mayores a AUDIT_RETENTION_DAYS incluso antes de la purga física
+    if settings.AUDIT_RETENTION_DAYS > 0:
+        retention_cutoff = datetime.now(timezone.utc) - timedelta(days=settings.AUDIT_RETENTION_DAYS)
+        query = query.filter(AuditLog.created_at >= retention_cutoff)
     if action:
         query = query.filter(AuditLog.action == action)
     if entity_type:
@@ -117,3 +123,16 @@ def serialize_log(entry: AuditLog) -> dict:
         "ip_address": entry.ip_address,
         "created_at": str(entry.created_at),
     }
+
+
+def purge_expired_audit_logs(db: Session) -> int:
+    """Elimina registros de auditoría anteriores a AUDIT_RETENTION_DAYS días.
+
+    Retorna cantidad purgada. 0 si AUDIT_RETENTION_DAYS == 0 (conservar todo).
+    """
+    if settings.AUDIT_RETENTION_DAYS <= 0:
+        return 0
+    cutoff = datetime.now(timezone.utc) - timedelta(days=settings.AUDIT_RETENTION_DAYS)
+    purged = db.query(AuditLog).filter(AuditLog.created_at < cutoff).delete(synchronize_session=False)
+    db.commit()
+    return purged
