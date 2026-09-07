@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Users, FolderOpen, FileText, LogOut, Activity, UserCircle2, Lock, ClipboardList,
   ShieldCheck, ScrollText, Bell, X,
 } from 'lucide-react'
-import { ROLE_META } from '../constants'
+import { ROLE_META, PERMISSIONS } from '../constants'
 import { RoleAvatar } from './RoleAvatar'
 
 const roleLabels: Record<string, string> = {
@@ -35,25 +35,25 @@ const navSections: NavSection[] = [
   {
     title: 'Principal',
     items: [
-      { label: 'Inicio', path: '/dashboard', icon: <LayoutDashboard size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px', 'oftalmologia'] },
-      { label: 'Mi Perfil', path: '/perfil', icon: <UserCircle2 size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px', 'oftalmologia'] },
-      { label: 'Expedientes', path: '/lists', icon: <FolderOpen size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px'] },
+      { label: 'Inicio', path: '/dashboard', icon: <LayoutDashboard size={18} />, roles: [...PERMISSIONS.inicio] },
+      { label: 'Mi Perfil', path: '/perfil', icon: <UserCircle2 size={18} />, roles: [...PERMISSIONS.perfil] },
+      { label: 'Expedientes', path: '/lists', icon: <FolderOpen size={18} />, roles: [...PERMISSIONS.expedientes] },
     ],
   },
   {
     title: 'Estadísticas',
     items: [
-      { label: 'Listados', path: '/listado-diario', icon: <ClipboardList size={18} />, roles: ['admin', 'direccion', 'direccion_medica'] },
-      { label: 'Estatus', path: '/estado-cirugia', icon: <Activity size={18} />, roles: ['admin', 'direccion', 'direccion_medica'] },
-      { label: 'Reportes', path: '/reports', icon: <FileText size={18} />, roles: ['admin', 'direccion', 'direccion_medica', 'oftalmologia'] },
+      { label: 'Listados', path: '/listado-diario', icon: <ClipboardList size={18} />, roles: [...PERMISSIONS.listados] },
+      { label: 'Estatus', path: '/estado-cirugia', icon: <Activity size={18} />, roles: [...PERMISSIONS.estatus] },
+      { label: 'Reportes', path: '/reports', icon: <FileText size={18} />, roles: [...PERMISSIONS.reportes] },
     ],
   },
   {
     title: 'Seguridad',
     items: [
-      { label: 'Usuarios', path: '/users', icon: <Users size={18} />, roles: ['admin'] },
-      { label: 'Sesiones', path: '/seguridad', icon: <ShieldCheck size={18} />, roles: ['admin'] },
-      { label: 'Auditoría', path: '/auditoria', icon: <ScrollText size={18} />, roles: ['admin'] },
+      { label: 'Usuarios', path: '/users', icon: <Users size={18} />, roles: [...PERMISSIONS.usuarios] },
+      { label: 'Sesiones', path: '/seguridad', icon: <ShieldCheck size={18} />, roles: [...PERMISSIONS.sesiones] },
+      { label: 'Auditoría', path: '/auditoria', icon: <ScrollText size={18} />, roles: [...PERMISSIONS.auditoria] },
     ],
   },
 ]

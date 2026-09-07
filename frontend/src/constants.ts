@@ -69,6 +69,21 @@ export const roleLabel = (role?: string) => ROLE_META[role || '']?.label || 'Usu
 
 export const TIPO_LOCALIDAD_OPTIONS = ['Aldea', 'Barrio', 'Colonia', 'Caserío']
 
+export const PERMISSIONS = {
+  inicio: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px', 'oftalmologia'],
+  perfil: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px', 'oftalmologia'],
+  expedientes: ['admin', 'direccion', 'direccion_medica', 'medico', 'carga_px'],
+  listados: ['admin', 'direccion', 'direccion_medica'],
+  estatus: ['admin', 'direccion', 'direccion_medica'],
+  reportes: ['admin', 'direccion', 'direccion_medica', 'oftalmologia'],
+  usuarios: ['admin'],
+  sesiones: ['admin'],
+  auditoria: ['admin'],
+} as const
+
+export const can = (role: string | undefined, perm: keyof typeof PERMISSIONS) =>
+  PERMISSIONS[perm].includes((role || '') as any)
+
 export const HONDURAS_DEPARTAMENTOS: Record<string, string[]> = {
   'Atlántida': ['La Ceiba', 'El Porvenir', 'Tela', 'Jutiapa', 'La Masica', 'San Francisco', 'Arizona', 'Esparta'],
   'Choluteca': ['Choluteca', 'Apacilagua', 'Concepción de María', 'Duyure', 'El Corpus', 'El Triunfo', 'Marcovia', 'Morolica', 'Namasigüe', 'Orocuina', 'Pespire', 'San Antonio de Flores', 'San Isidro', 'San José', 'San Marcos de Colón', 'Santa Ana de Yusguare'],

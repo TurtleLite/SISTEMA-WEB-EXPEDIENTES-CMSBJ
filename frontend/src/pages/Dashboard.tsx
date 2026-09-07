@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { listsApi } from '../services/api'
+import { can } from '../constants'
 import {
   Users, FileText, FolderOpen, Lock,
   UserCircle2, Activity, ClipboardList, ShieldCheck, ScrollText,
@@ -38,11 +39,11 @@ export function Dashboard() {
   }, [denied])
 
   const role = user?.role || 'medico'
-  const canEstatus = role === 'direccion' || role === 'direccion_medica'
-  const canReports = role === 'direccion' || role === 'direccion_medica' || role === 'oftalmologia'
-  const canLists = role === 'direccion' || role === 'direccion_medica'
-  const canSecurity = role === 'admin'
-  const canExpedientes = role !== 'oftalmologia'
+  const canEstatus = can(role, 'estatus')
+  const canReports = can(role, 'reportes')
+  const canLists = can(role, 'listados')
+  const canSecurity = can(role, 'auditoria')
+  const canExpedientes = can(role, 'expedientes')
 
   const goExpedientes = () => {
     if (systemListId) {
