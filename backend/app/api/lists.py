@@ -215,6 +215,16 @@ def list_field_values(
     current_user: User = Depends(get_current_user),
 ):
     from app.services.record_service import get_distinct_field_values
+    # Oftalmología solo ve diagnósticos (y demás campos) de su especialidad
+    if current_user.role == "oftalmologia":
+        from sqlalchemy import text
+        import re
+        if not re.match(r'^[a-zA-Z0-9_]+$', field):
+            from fastapi import HTTPException
+            raise HTTPException(status_code=400, detail="Nombre de campo inválido")
+        sql = text(f"SELECT DISTINCT data->>'{field}' AS val FROM list_records WHERE list_definition_id = :lid AND data->>'{field}' IS NOT NULL AND data->>'{field}' != '' AND lower(data->>'especialidad') LIKE '%oftalmol%' ORDER BY val")
+        result = db.execute(sql, {"lid": list_id})
+        return [row[0] for row in result]
     return get_distinct_field_values(db, list_id, field)
 
 
