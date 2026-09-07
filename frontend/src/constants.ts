@@ -55,7 +55,7 @@ export const ROLE_META: Record<string, RoleMeta> = {
       'Nombre del médico a mano (libre)',
     ],
   },
-  ofthalmologia: {
+  oftalmologia: {
     label: 'Oftalmología',
     badge: 'bg-violet-100 text-violet-800 border-violet-200',
     gradient: 'from-violet-500 to-violet-700',

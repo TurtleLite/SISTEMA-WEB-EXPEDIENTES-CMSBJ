@@ -7,7 +7,7 @@ const ROLE_ICONS: Record<string, React.ReactNode> = {
   direccion_medica: <Stethoscope />,
   medico: <HeartPulse />,
   carga_px: <ClipboardList />,
-  ofthalmologia: <Eye />,
+  oftalmologia: <Eye />,
 }
 
 const ROLE_COLORS: Record<string, string> = {
@@ -16,7 +16,7 @@ const ROLE_COLORS: Record<string, string> = {
   direccion_medica: 'from-sky-600 to-sky-800',
   medico: 'from-emerald-600 to-emerald-800',
   carga_px: 'from-amber-500 to-amber-700',
-  ofthalmologia: 'from-violet-500 to-violet-700',
+  oftalmologia: 'from-violet-500 to-violet-700',
 }
 
 const SIZES = {

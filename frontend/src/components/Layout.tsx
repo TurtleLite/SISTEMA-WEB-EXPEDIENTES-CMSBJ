@@ -16,7 +16,7 @@ const roleLabels: Record<string, string> = {
   direccion_medica: 'Dirección Médica',
   medico: 'Médico',
   carga_px: 'Carga Px',
-  ofthalmologia: 'Oftalmología',
+  oftalmologia: 'Oftalmología',
 }
 
 interface NavItem {
