@@ -7,6 +7,7 @@ from app.models.catalog_item import CatalogItem
 from app.models.user import User
 from app.services.auth_service import require_role
 from app.services.audit_service import log_audit, client_ip
+from app.services.cache import cachear_localidades, invalidate_localidades
 from fastapi import Request
 
 TIPO_LOCALIDAD_OPTIONS = ["Aldea", "Barrio", "Colonia", "Caserío"]
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/localities", tags=["Localidades"])
 
 
 @router.get("/")
+@cachear_localidades
 def list_localities(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
@@ -72,6 +74,7 @@ def create_locality(
     item = CatalogItem(item_type="localidad", name=name, locality_type=tipo or None)
     db.add(item)
     db.commit()
+    invalidate_localidades()
     log_audit(db, current_user, "locality_create", entity_type="catalog", entity_id=item.id,
               detail=f"creó localidad '{name}'" + (f" ({tipo})" if tipo else ""), ip_address=client_ip(request))
     return {"message": f"Localidad '{name}' creada correctamente", "id": item.id}
@@ -111,6 +114,7 @@ def rename_locality(
     if catalog:
         catalog.name = new
     db.commit()
+    invalidate_localidades()
     log_audit(db, current_user, "locality_rename", entity_type="catalog", detail=f"renombró localidad '{old}' → '{new}' ({len(matched)} expediente(s) actualizados)", ip_address=client_ip(request))
     return {"message": f"Localidad renombrada en {len(matched)} expediente(s)", "updated": len(matched)}
 
@@ -161,6 +165,7 @@ def delete_locality(
         CatalogItem.name == name,
     ).delete()
     db.commit()
+    invalidate_localidades()
     detail = f"eliminó localidad '{name}'" + (f" → reasignó a '{replacement}'" if replacement else " (quitada de expedientes)") + f" ({len(matched)} expediente(s))"
     log_audit(db, current_user, "locality_delete", entity_type="catalog", detail=detail, ip_address=client_ip(request))
     return {"message": message, "updated": len(matched)}

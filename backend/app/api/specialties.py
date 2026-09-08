@@ -9,12 +9,17 @@ from app.models.catalog_item import CatalogItem
 from app.models.user import User
 from app.services.auth_service import require_role
 from app.services.audit_service import log_audit, client_ip
+from app.services.cache import (
+    cachear_especialidades,
+    invalidate_especialidades,
+)
 from fastapi import Request
 
 router = APIRouter(prefix="/specialties", tags=["Especialidades"])
 
 
 @router.get("/")
+@cachear_especialidades
 def list_specialties(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
@@ -54,6 +59,7 @@ def create_specialty(
     item = CatalogItem(item_type="especialidad", name=name)
     db.add(item)
     db.commit()
+    invalidate_especialidades()
     log_audit(db, current_user, "specialty_create", entity_type="catalog", entity_id=item.id,
               detail=f"creó especialidad '{name}'", ip_address=client_ip(request))
     return {"message": f"Especialidad '{name}' creada correctamente", "id": item.id}
@@ -92,6 +98,7 @@ def rename_specialty(
     if catalog:
         catalog.name = new
     db.commit()
+    invalidate_especialidades()
     log_audit(db, current_user, "specialty_rename", entity_type="catalog", detail=f"renombró especialidad '{old}' → '{new}' ({len(matched)} expediente(s) actualizados)", ip_address=client_ip(request))
     return {"message": f"Especialidad renombrada en {len(matched)} expediente(s)", "updated": len(matched)}
 
