@@ -7,7 +7,7 @@ Wants=postgresql.service
 Type=simple
 WorkingDirectory=/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend
 EnvironmentFile=/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend/.env
-ExecStart=/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+ExecStart=/opt/expedientes/SISTEMA-WEB-EXPEDIENTES-CMSBJ/backend/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 6
 Restart=always
 RestartSec=5
 # Reintentos de arranque: espera a PostgreSQL si aún está levantando
