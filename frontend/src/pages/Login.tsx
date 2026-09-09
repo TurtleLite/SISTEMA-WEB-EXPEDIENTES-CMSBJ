@@ -20,10 +20,20 @@ export function Login() {
       await login(username, password)
       navigate('/dashboard')
     } catch (err: any) {
-      if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
-        setError('El servidor tardó demasiado en responder (puede estar arrancando). Espere unos segundos e intente de nuevo.')
+      if (!navigator.onLine) {
+        setError('Sin conexión a internet. Verifique su red e intente de nuevo.')
+      } else if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+        setError('El servidor tardó demasiado en responder. El sistema está procesando muchas peticiones, espere 5 segundos e intente de nuevo.')
+      } else if ((err as any).isOffline) {
+        setError('Sin conexión al servidor. Verifique que tenga internet y que el servidor esté encendido.')
       } else if (!err.response) {
-        setError('No se pudo conectar con el servidor. Verifique su conexión a internet e intente de nuevo.')
+        // Error de red: el funnel de Tailscale o el backend no responde
+        const apiUrl = (import.meta as any).env?.VITE_API_URL || ''
+        if (apiUrl.includes('tail')) {
+          setError('No se pudo conectar con el servidor (Tailscale). Verifique su conexión a internet. Si persiste, avise al administrador que revise la mini PC.')
+        } else {
+          setError('No se pudo conectar con el servidor. Verifique su conexión a internet e intente de nuevo.')
+        }
       } else {
         setError(err.response?.data?.detail || 'Error al iniciar sesión')
       }

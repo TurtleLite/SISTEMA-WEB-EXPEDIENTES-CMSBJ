@@ -1,12 +1,13 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { getDeviceId } from '../utils/deviceId'
+import { requestCache, TTL_CATALOGO } from '../utils/requestCache'
 
 const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 const api = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 60000,
+  timeout: 15000,
 })
 
 const TOKEN_KEY = 'token'
@@ -50,15 +51,26 @@ api.interceptors.request.use((config) => {
 })
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Guardar en cache los GET de catálogos si vinieron bien
+    const cfg: any = (response as any).config
+    if (cfg?.method?.toLowerCase() === 'get') {
+      const url: string = cfg.url || ''
+      if (url.includes('/specialties') || url.includes('/localities') || url.includes('/surgery-status')) {
+        const key = `get:${url}`
+        requestCache.set(key, response, TTL_CATALOGO)
+      }
+    }
+    return response
+  },
   async (error: AxiosError) => {
     const url: string = error.config?.url || ''
     const isAuthEndpoint = url.includes('/auth/login') || url.includes('/auth/refresh')
     const status = error.response?.status
-    const config = error.config
+    const config: any = error.config
 
-    if (status === 401 && !isAuthEndpoint && config && !(config as any)._retried) {
-      (config as any)._retried = true
+    if (status === 401 && !isAuthEndpoint && config && !config._retried) {
+      config._retried = true
       if (!refreshPromise) {
         refreshPromise = refreshAccessToken().finally(() => { refreshPromise = null })
       }
@@ -71,10 +83,17 @@ api.interceptors.response.use(
       window.location.hash = '#/login'
     }
 
-    if (config && (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) &&
-        config.method?.toLowerCase() === 'get' && !(config as any)._retried) {
-      (config as any)._retried = true
+    // Reintento con backoff para GETs que fallaron por timeout/red (no 4xx)
+    const isNetworkError = !error.response && (error.code === 'ECONNABORTED' || error.message?.includes('timeout') || error.message?.includes('Network Error'))
+    if (config && isNetworkError && config.method?.toLowerCase() === 'get' && !config._retried) {
+      config._retried = true
+      // si tenemos cache aunque esté expirado, devolvámoslo como fallback al reintentar
+      await new Promise((r) => setTimeout(r, 800))
       return api.request(config)
+    }
+    // Mensaje más útil cuando el navegador está offline
+    if (!navigator.onLine && !error.response) {
+      (error as any).isOffline = true
     }
     return Promise.reject(error)
   }
@@ -182,27 +201,42 @@ export const listsApi = {
 }
 
 export const specialtiesApi = {
-  list: () => api.get('/specialties/'),
-  create: (name: string) => api.post('/specialties/', { name }),
-  rename: (oldName: string, newName: string) => api.put('/specialties/rename', { old: oldName, new: newName }),
-  remove: (name: string, replacement?: string) =>
-    api.delete('/specialties/', { params: { name, replacement: replacement || '' } }),
+  list: (): Promise<AxiosResponse> => {
+    const key = 'get:/specialties/'
+    const cached = requestCache.get<AxiosResponse>(key)
+    if (cached) return Promise.resolve(cached)
+    return requestCache.dedupe(key, () => api.get('/specialties/').then((r) => { requestCache.set(key, r, TTL_CATALOGO); return r }))
+  },
+  create: (name: string): Promise<AxiosResponse> => api.post('/specialties/', { name }).then((r) => { requestCache.invalidate('get:/specialties/'); return r }),
+  rename: (oldName: string, newName: string): Promise<AxiosResponse> => api.put('/specialties/rename', { old: oldName, new: newName }).then((r) => { requestCache.invalidate('get:/specialties/'); return r }),
+  remove: (name: string, replacement?: string): Promise<AxiosResponse> =>
+    api.delete('/specialties/', { params: { name, replacement: replacement || '' } }).then((r) => { requestCache.invalidate('get:/specialties/'); return r }),
 }
 
 export const localitiesApi = {
-  list: () => api.get('/localities/'),
-  create: (name: string, tipo?: string) => api.post('/localities/', { name, tipo: tipo || '' }),
-  rename: (oldName: string, newName: string) => api.put('/localities/rename', { old: oldName, new: newName }),
-  remove: (name: string, replacement?: string) =>
-    api.delete('/localities/', { params: { name, replacement: replacement || '' } }),
+  list: (): Promise<AxiosResponse> => {
+    const key = 'get:/localities/'
+    const cached = requestCache.get<AxiosResponse>(key)
+    if (cached) return Promise.resolve(cached)
+    return requestCache.dedupe(key, () => api.get('/localities/').then((r) => { requestCache.set(key, r, TTL_CATALOGO); return r }))
+  },
+  create: (name: string, tipo?: string): Promise<AxiosResponse> => api.post('/localities/', { name, tipo: tipo || '' }).then((r) => { requestCache.invalidate('get:/localities/'); return r }),
+  rename: (oldName: string, newName: string): Promise<AxiosResponse> => api.put('/localities/rename', { old: oldName, new: newName }).then((r) => { requestCache.invalidate('get:/localities/'); return r }),
+  remove: (name: string, replacement?: string): Promise<AxiosResponse> =>
+    api.delete('/localities/', { params: { name, replacement: replacement || '' } }).then((r) => { requestCache.invalidate('get:/localities/'); return r }),
 }
 
 export const surgeryStatusApi = {
-  list: () => api.get('/surgery-status/'),
-  create: (name: string) => api.post('/surgery-status/', { name }),
-  rename: (oldName: string, newName: string) => api.put('/surgery-status/rename', { old: oldName, new: newName }),
-  remove: (name: string, replacement?: string) =>
-    api.delete('/surgery-status/', { params: { name, replacement: replacement || '' } }),
+  list: (): Promise<AxiosResponse> => {
+    const key = 'get:/surgery-status/'
+    const cached = requestCache.get<AxiosResponse>(key)
+    if (cached) return Promise.resolve(cached)
+    return requestCache.dedupe(key, () => api.get('/surgery-status/').then((r) => { requestCache.set(key, r, TTL_CATALOGO); return r }))
+  },
+  create: (name: string): Promise<AxiosResponse> => api.post('/surgery-status/', { name }).then((r) => { requestCache.invalidate('get:/surgery-status/'); return r }),
+  rename: (oldName: string, newName: string): Promise<AxiosResponse> => api.put('/surgery-status/rename', { old: oldName, new: newName }).then((r) => { requestCache.invalidate('get:/surgery-status/'); return r }),
+  remove: (name: string, replacement?: string): Promise<AxiosResponse> =>
+    api.delete('/surgery-status/', { params: { name, replacement: replacement || '' } }).then((r) => { requestCache.invalidate('get:/surgery-status/'); return r }),
 }
 
 export const reportsApi = {
