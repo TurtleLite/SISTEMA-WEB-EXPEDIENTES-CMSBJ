@@ -579,7 +579,7 @@ export function Reports() {
 <div>
                       <label className="block text-xs font-medium text-[#3F4D58] mb-1">Especialidad</label>
                       {isOftalmologia() ? (
-                        <div className="w-full px-3 py-2.5 border border-violet-200 bg-violet-50 text-violet-700 rounded-xl text-sm cursor-default">
+                        <div className="w-full px-3 py-2.5 border border-[#0F766E] bg-[#0F766E] text-white rounded-xl text-sm cursor-not-allowed">
                           Oftalmología
                         </div>
                       ) : (

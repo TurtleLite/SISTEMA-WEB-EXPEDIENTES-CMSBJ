@@ -733,7 +733,7 @@ export function ListDetail() {
                       disabled={isOftalmologia}
                       className={`flex items-center gap-2 pl-3 pr-2.5 py-2 text-sm rounded-xl border transition-colors duration-150 ${
                         isOftalmologia
-                          ? 'bg-violet-50 text-violet-700 border-violet-200 cursor-default'
+                          ? 'bg-[#0F766E] text-white border-[#0F766E] cursor-not-allowed'
                           : especialidadFilter
                           ? 'bg-[#0F766E] text-white border-[#0F766E]'
                           : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
