@@ -40,7 +40,6 @@ fields: [
       { key: 'telefono3', label: 'Teléfono 3', type: 'text' },
       { key: 'persona_responsable', label: 'Persona Responsable', type: 'text' },
       { key: 'albergue', label: 'Albergue', type: 'text' },
-      { key: 'albergue_next', label: '', type: 'button' },
     ],
   },
   {
@@ -888,18 +887,6 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             <option value="Si">Si</option>
                             <option value="No">No</option>
                           </select>
-                        ) : field.key === 'albergue_next' ? (
-                          section.title === 'Datos Personales' ? (
-                            <div className="flex items-end h-full">
-                              <button
-                                type="button"
-                                onClick={() => goToSection(sIdx + 1)}
-                                className="w-full px-5 py-3 text-sm font-medium text-white bg-[#0F766E] hover:bg-[#115E59] rounded-lg transition-colors shadow-sm"
-                              >
-                                Siguiente →
-                              </button>
-                            </div>
-                          ) : null
                         ) : field.key === 'estatus_cirugia' ? (
                           <select
                             value={data[field.key] || ''}
