@@ -50,7 +50,6 @@ fields: [
       { key: 'municipio', label: 'Municipio', type: 'text' },
       { key: 'tipo_localidad', label: 'Tipo de Localidad', type: 'text' },
       { key: 'localidad', label: 'Localidad', type: 'text' },
-      { key: 'domicilio', label: 'Dirección completa', type: 'text' },
     ],
   },
   {
@@ -1151,7 +1150,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           />
                         ) : (
                           <textarea
-                            rows={field.key === 'domicilio' || field.key === 'historia_enfermedad' || field.key === 'examen_fisico' || field.key === 'diagnostico' ? 3 : 1}
+                            rows={field.key === 'historia_enfermedad' || field.key === 'examen_fisico' || field.key === 'diagnostico' ? 3 : 1}
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, CAPITALIZE_FIRST_KEYS.has(field.key) ? capitalizeFirst(e.target.value) : e.target.value)}
                             className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none"
