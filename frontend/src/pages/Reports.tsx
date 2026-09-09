@@ -3,7 +3,7 @@ import { reportsApi, listsApi } from '../services/api'
 import { Report, ListDefinition } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNotification } from '../contexts/NotificationContext'
-import { Plus, FileSpreadsheet, Download, Trash2, Eye, X, RefreshCw, Check, ChevronDown } from 'lucide-react'
+import { Plus, FileSpreadsheet, Download, Trash2, Eye, X, RefreshCw, Check, ChevronDown, Search } from 'lucide-react'
 import { normalizeText } from '../utils/format'
 import ScrollSelect from '../components/ScrollSelect'
 
@@ -616,12 +616,13 @@ export function Reports() {
                           ? 'bg-[#0F766E] text-white border-[#0F766E]'
                           : 'bg-white text-[#7A8694] border-[#E4E8EE] focus-within:ring-2 focus-within:ring-[#8E9AA6] focus-within:border-[#5F6C79]'
                       }`}>
+                        <Search size={14} className={`shrink-0 mr-1.5 ${form.diagnostico ? 'text-white/80' : 'text-[#8E9AA6]'}`} />
                         <input
                           type="text"
                           value={form.diagnostico}
                           onChange={(e) => setFilter({ diagnostico: e.target.value })}
                           onFocus={() => setDiagOpen(true)}
-                          placeholder=""
+                          placeholder="Buscar diagnóstico..."
                           className={`w-full text-sm bg-transparent outline-none ${form.diagnostico ? 'placeholder:text-white/60 text-white' : 'placeholder:text-[#8E9AA6] text-[#3F4D58]'}`}
                         />
                         {form.diagnostico ? (

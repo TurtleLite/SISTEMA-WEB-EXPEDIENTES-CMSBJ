@@ -788,6 +788,7 @@ export function ListDetail() {
                         ? 'bg-[#0F766E] text-white border-[#0F766E]'
                         : 'bg-white text-[#7A8694] border-[#E4E8EE] hover:border-[#8E9AA6] hover:text-[#3F4D58]'
                     }`}>
+                      <Search size={14} className={`shrink-0 mr-1.5 ${diagnosticoFilter ? 'text-white/80' : 'text-[#8E9AA6]'}`} />
                       <input
                         type="text"
                         value={diagnosticoFilter}
