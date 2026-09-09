@@ -595,7 +595,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const pct = total > 0 ? Math.round((filled / total) * 100) : 0
 
   return (
-    <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex flex-col items-center justify-center z-50 overflow-y-auto p-4">
+    <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex flex-col items-center justify-center z-50 p-4">
       <div className="bg-[#F7F8FA] w-full h-full max-w-full flex flex-col overflow-hidden rounded-xl shadow-xl my-4">
         <div className="px-6 py-4 border-b border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
           <div className="flex items-center gap-4 min-w-0">
