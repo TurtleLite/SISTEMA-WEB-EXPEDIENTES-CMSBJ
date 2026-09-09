@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.config import settings
 from app.services.audit_service import list_logs, serialize_log, log_audit, client_ip
-from app.services.device_service import get_device_status_map
 from app.services.auth_service import require_role
 from app.models.user import User
 import os
@@ -22,11 +21,6 @@ ACTION_LABELS = {
     "user_update": "Usuario actualizado",
     "user_delete": "Usuario eliminado",
     "user_unlock": "Usuario desbloqueado",
-    "device_registered": "Equipo registrado",
-    "device_approved": "Equipo aprobado",
-    "device_blocked": "Equipo bloqueado",
-    "device_note": "Nota de equipo",
-    "login_blocked": "Equipo bloqueado rechazado",
     "list_create": "Lista creada",
     "list_update": "Lista actualizada",
     "list_delete": "Lista eliminada",
@@ -57,7 +51,6 @@ ENTITY_LABELS = {
     "report": "Reporte",
     "daylist": "Listado del día",
     "session": "Sesión",
-    "device": "Equipo",
     "notification": "Mensaje",
 }
 
@@ -95,14 +88,7 @@ def list_audit_logs(
         fecha_desde=fecha_desde,
         fecha_hasta=fecha_hasta,
     )
-    status_map = get_device_status_map(db)
-    serialized = []
-    for item in items:
-        entry = serialize_log(item)
-        info = status_map.get(entry.get("ip_address") or "")
-        entry["device_status"] = info["status"] if info else None
-        entry["device_shared"] = bool(info and info["shared"])
-        serialized.append(entry)
+    serialized = [serialize_log(item) for item in items]
     return {
         "items": serialized,
         "total": total,

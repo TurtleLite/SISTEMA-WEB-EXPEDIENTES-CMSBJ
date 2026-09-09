@@ -26,11 +26,6 @@ const ACTION_LABELS: Record<string, string> = {
   user_update: 'Usuario actualizado',
   user_delete: 'Usuario eliminado',
   user_unlock: 'Usuario desbloqueado',
-  device_registered: 'Equipo registrado',
-  device_approved: 'Equipo aprobado',
-  device_blocked: 'Equipo bloqueado',
-  device_note: 'Nota de equipo',
-  login_blocked: 'Equipo bloqueado rechazado',
   list_create: 'Lista creada',
   list_update: 'Lista actualizada',
   list_delete: 'Lista eliminada',
@@ -60,7 +55,6 @@ const ENTITY_LABELS: Record<string, string> = {
   report: 'Reporte',
   daylist: 'Listado del día',
   session: 'Sesión',
-  device: 'Equipo',
 }
 
 const GENERIC_DETAIL: Record<string, string> = {
@@ -73,11 +67,6 @@ const GENERIC_DETAIL: Record<string, string> = {
   user_update: 'actualizó usuario',
   user_delete: 'eliminó usuario',
   user_unlock: 'desbloqueó usuario',
-  device_registered: 'registró equipo',
-  device_approved: 'aprobó equipo',
-  device_blocked: 'bloqueó equipo',
-  device_note: 'anotó equipo',
-  login_blocked: 'equipo bloqueado rechazado',
   list_create: 'creó lista',
   list_update: 'actualizó lista',
   list_delete: 'eliminó lista',

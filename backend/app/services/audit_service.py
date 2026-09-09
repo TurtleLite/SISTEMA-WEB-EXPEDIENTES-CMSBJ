@@ -87,6 +87,9 @@ def list_logs(
     if settings.AUDIT_RETENTION_DAYS > 0:
         retention_cutoff = datetime.now(timezone.utc) - timedelta(days=settings.AUDIT_RETENTION_DAYS)
         query = query.filter(AuditLog.created_at >= retention_cutoff)
+    # Excluir por completo los eventos del antiguo módulo de Equipos (ya no existe)
+    query = query.filter(AuditLog.entity_type != "device")
+    query = query.filter(~AuditLog.action.in_(["device_registered", "device_approved", "device_blocked", "device_note", "login_blocked"]))
     if action:
         query = query.filter(AuditLog.action == action)
     if entity_type:
