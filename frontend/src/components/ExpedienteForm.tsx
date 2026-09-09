@@ -596,7 +596,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
 
   return (
     <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto p-4">
-      <div className="bg-[#F7F8FA] w-full h-full max-h-[94vh] flex flex-col overflow-visible max-w-full rounded-xl shadow-xl my-4">
+      <div className="bg-[#F7F8FA] w-full max-w-full flex flex-col overflow-hidden rounded-xl shadow-xl my-4">
         <div className="px-6 py-4 border-b border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
           <div className="flex items-center gap-4 min-w-0">
             <div className="w-9 h-9 rounded-lg bg-[#0F766E] text-white flex items-center justify-center shrink-0">
@@ -662,7 +662,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 px-6 md:px-8 py-4 bg-[#F5F7FA] flex justify-center overflow-visible"><div className="w-full flex flex-col gap-2 overflow-visible">
+        <div className="flex-1 min-h-0 px-6 md:px-8 py-4 bg-[#F5F7FA] flex justify-center overflow-y-auto overflow-x-hidden"><div className="w-full flex flex-col gap-2">
           {sections.map((section, sIdx) => {
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
