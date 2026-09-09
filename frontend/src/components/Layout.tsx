@@ -119,11 +119,6 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="h-screen bg-[#F7F8FA] flex overflow-hidden">
-      {sessionStorage.getItem('offline') === '1' && (
-        <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-white text-center text-xs font-semibold py-1">
-          Modo offline — sin conexión al servidor. Los datos mostrados pueden no estar actualizados.
-        </div>
-      )}
       {denied && (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex items-center gap-2.5 bg-rose-50 border-2 border-rose-200 text-rose-700 px-5 py-4 rounded-xl shadow-xl animate-pulse">
           <Lock size={16} className="shrink-0" />
