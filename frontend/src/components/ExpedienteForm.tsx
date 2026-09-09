@@ -595,8 +595,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const pct = total > 0 ? Math.round((filled / total) * 100) : 0
 
   return (
-    <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden p-4">
-      <div className="bg-[#F7F8FA] w-full h-full max-h-[94vh] flex flex-col overflow-visible max-w-full rounded-xl shadow-xl">
+    <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-50 overflow-y-auto p-4">
+      <div className="bg-[#F7F8FA] w-full h-full max-h-[94vh] flex flex-col overflow-visible max-w-full rounded-xl shadow-xl my-4">
         <div className="px-6 py-4 border-b border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
           <div className="flex items-center gap-4 min-w-0">
             <div className="w-9 h-9 rounded-lg bg-[#0F766E] text-white flex items-center justify-center shrink-0">
@@ -662,14 +662,14 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 h-0 px-6 md:px-8 py-4 bg-[#F5F7FA] flex justify-center overflow-y-auto overflow-x-hidden"><div className="w-full flex flex-col gap-2 overflow-visible">
+        <div className="flex-1 min-h-0 px-6 md:px-8 py-4 bg-[#F5F7FA] flex justify-center overflow-visible"><div className="w-full flex flex-col gap-2 overflow-visible">
           {sections.map((section, sIdx) => {
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
             const stageLabel = STAGE_LABELS[section.title]
             return (
               <Fragment key={section.title}>
-                <div id={`form-section-${sIdx}`} className={`${isOpen ? 'block' : 'hidden'} bg-white border border-[#D5DBE3] rounded-lg overflow-visible flex flex-col ${section.title === 'Datos Personales' ? 'max-h-[70vh] mb-1' : 'max-h-[60vh] mb-1'}`}>
+                <div id={`form-section-${sIdx}`} className={`${isOpen ? 'block' : 'hidden'} bg-white border border-[#D5DBE3] rounded-lg overflow-visible flex flex-col ${section.title === 'Datos Personales' ? 'max-h-none' : 'max-h-none'} mb-1`}>
                   <div
                     className={`w-full flex items-center gap-3 px-6 py-4 text-left rounded-t-lg min-h-[52px] ${isOpen ? 'bg-white border-b border-[#EEF1F5]' : 'bg-transparent'}`}
                   >
@@ -693,7 +693,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                 </div>
                 {isOpen && (
                   <Fragment>
-                  <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-6 md:px-8 py-5 md:py-6 grid gap-x-6 md:gap-x-8 gap-y-4 content-start flex-1 overflow-visible ${section.title === 'Domicilio' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-white' : section.compact ? 'grid-cols-2 md:grid-cols-4 bg-white' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white'} rounded-b-lg`}>
+                  <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-6 md:px-8 py-5 md:py-6 grid gap-x-6 md:gap-x-8 gap-y-4 content-start flex-none overflow-visible ${section.title === 'Domicilio' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-white' : section.compact ? 'grid-cols-2 md:grid-cols-4 bg-white' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white'} rounded-b-lg`}>
                     {section.fields.map((field) => {
                       if (field.key === 'telefono2' || field.key === 'telefono3') return null
                       if (field.key === OBS_COMPENSADO_KEY) return null
