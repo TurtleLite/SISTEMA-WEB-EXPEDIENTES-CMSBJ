@@ -669,7 +669,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
             const stageLabel = STAGE_LABELS[section.title]
             return (
               <Fragment key={section.title}>
-                <div id={`form-section-${sIdx}`} className={`${isOpen ? 'block' : 'hidden'} bg-white border border-[#D5DBE3] rounded-lg overflow-hidden flex flex-col max-h-[60vh] mb-4`}>
+                <div id={`form-section-${sIdx}`} className={`${isOpen ? 'block' : 'hidden'} bg-white border border-[#D5DBE3] rounded-lg overflow-hidden flex flex-col ${section.title === 'Datos Personales' ? 'max-h-[72vh]' : 'max-h-[60vh]'} mb-4`}>
                   <div
                     className={`w-full flex items-center gap-3 px-6 py-4 text-left rounded-t-lg min-h-[52px] ${isOpen ? 'bg-white border-b border-[#EEF1F5]' : 'bg-transparent'}`}
                   >
