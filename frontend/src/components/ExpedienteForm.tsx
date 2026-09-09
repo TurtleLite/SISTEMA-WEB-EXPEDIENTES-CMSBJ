@@ -878,15 +878,28 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             <option value="4">4</option>
                           </select>
                         ) : field.key === 'albergue' ? (
-                          <select
-                            value={data[field.key] || ''}
-                            onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
-                          >
-                            <option value="">Seleccione...</option>
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
-                          </select>
+                          <div className="flex gap-3 items-end">
+                            <div className="flex-1">
+                              <select
+                                value={data[field.key] || ''}
+                                onChange={(e) => setValue(field.key, e.target.value)}
+                                className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
+                              >
+                                <option value="">Seleccione...</option>
+                                <option value="Si">Si</option>
+                                <option value="No">No</option>
+                              </select>
+                            </div>
+                            {section.title === 'Datos Personales' && (
+                              <button
+                                type="button"
+                                onClick={() => goToSection(sIdx + 1)}
+                                className="shrink-0 px-5 py-3 text-sm font-medium text-white bg-[#0F766E] hover:bg-[#115E59] rounded-lg transition-colors shadow-sm whitespace-nowrap"
+                              >
+                                Siguiente →
+                              </button>
+                            )}
+                          </div>
                         ) : field.key === 'estatus_cirugia' ? (
                           <select
                             value={data[field.key] || ''}
