@@ -662,14 +662,14 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 h-0 px-6 md:px-8 py-4 bg-[#F5F7FA] flex justify-center overflow-hidden"><div className="w-full flex flex-col gap-4 overflow-hidden pb-2">
+        <div className="flex-1 min-h-0 h-0 px-6 md:px-8 py-6 bg-[#F5F7FA] flex justify-center overflow-hidden"><div className="w-full flex flex-col gap-4 overflow-hidden pb-6">
           {sections.map((section, sIdx) => {
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
             const stageLabel = STAGE_LABELS[section.title]
             return (
               <Fragment key={section.title}>
-                <div id={`form-section-${sIdx}`} className={`${isOpen ? 'block' : 'hidden'} bg-white border border-[#D5DBE3] rounded-lg overflow-hidden flex flex-col max-h-[60vh]`}>
+                <div id={`form-section-${sIdx}`} className={`${isOpen ? 'block' : 'hidden'} bg-white border border-[#D5DBE3] rounded-lg overflow-hidden flex flex-col max-h-[60vh] mb-4`}>
                   <div
                     className={`w-full flex items-center gap-3 px-6 py-4 text-left rounded-t-lg min-h-[52px] ${isOpen ? 'bg-white border-b border-[#EEF1F5]' : 'bg-transparent'}`}
                   >
