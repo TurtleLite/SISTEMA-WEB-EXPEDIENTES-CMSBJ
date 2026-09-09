@@ -9,17 +9,14 @@ from app.models.catalog_item import CatalogItem
 from app.models.user import User
 from app.services.auth_service import require_role
 from app.services.audit_service import log_audit, client_ip
-from app.services.cache import (
-    cachear_especialidades,
-    invalidate_especialidades,
-)
+from app.services.cache import cached, invalidate_especialidades
 from fastapi import Request
 
 router = APIRouter(prefix="/specialties", tags=["Especialidades"])
 
 
 @router.get("/")
-@cachear_especialidades
+@cached("catalogo:especialidades", ttl=300)
 def list_specialties(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),

@@ -7,7 +7,7 @@ from app.models.catalog_item import CatalogItem
 from app.models.user import User
 from app.services.auth_service import require_role
 from app.services.audit_service import log_audit, client_ip
-from app.services.cache import cachear_localidades, invalidate_localidades
+from app.services.cache import cached, invalidate_localidades
 from fastapi import Request
 
 TIPO_LOCALIDAD_OPTIONS = ["Aldea", "Barrio", "Colonia", "Caserío"]
@@ -16,7 +16,7 @@ router = APIRouter(prefix="/localities", tags=["Localidades"])
 
 
 @router.get("/")
-@cachear_localidades
+@cached("catalogo:localidades", ttl=300)
 def list_localities(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),

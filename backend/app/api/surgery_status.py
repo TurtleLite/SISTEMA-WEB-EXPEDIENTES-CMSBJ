@@ -9,7 +9,7 @@ from app.models.catalog_item import CatalogItem
 from app.models.user import User
 from app.services.auth_service import require_role
 from app.services.audit_service import log_audit, client_ip
-from app.services.cache import cachear_surgery_status, invalidate_surgery_status
+from app.services.cache import cached, invalidate_surgery_status
 from fastapi import Request
 
 router = APIRouter(prefix="/surgery-status", tags=["Estatus de Cirugía"])
@@ -27,7 +27,7 @@ DEFAULT_SURGERY_STATUSES = [
 
 
 @router.get("/")
-@cachear_surgery_status
+@cached("catalogo:surgery_status", ttl=300)
 def list_surgery_status(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin")),
