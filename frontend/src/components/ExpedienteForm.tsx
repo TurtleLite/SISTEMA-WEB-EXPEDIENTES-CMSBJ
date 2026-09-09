@@ -487,15 +487,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     if (next) {
       next.focus()
     } else {
-      const i = sections.findIndex((s) => s.title === expanded)
-      if (i !== -1 && i < sections.length - 1) {
-        if (expanded === 'Diagnóstico' && compensadoObsMissing(data)) {
-          toast('Debe escribir la observación porque el paciente no está compensado', 'error')
-          body.querySelector<HTMLElement>('[data-obs-compensado]')?.focus()
-          return
-        }
-        goToSection(i + 1)
-      }
+      return
     }
   }
 
@@ -603,15 +595,15 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const pct = total > 0 ? Math.round((filled / total) * 100) : 0
 
   return (
-    <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-[#F7F8FA] w-full h-full flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-[#0F172A]/30 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden p-4">
+      <div className="bg-[#F7F8FA] w-full h-full max-h-[94vh] flex flex-col overflow-visible max-w-full rounded-xl shadow-xl">
         <div className="px-6 py-4 border-b border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-[#0F766E]/10 text-[#0F766E] flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-4 min-w-0">
+            <div className="w-9 h-9 rounded-lg bg-[#0F766E] text-white flex items-center justify-center shrink-0">
               <Stethoscope size={20} />
             </div>
             <div className="min-w-0">
-              <h2 className="text-lg font-bold text-[#1E2A32] truncate">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
+              <h2 className="text-[17px] font-bold text-[#1E2A32] tracking-tight leading-none truncate">{editingRecord ? 'Editar Expediente Médico' : 'Nuevo Expediente Médico'}</h2>
               <p className="text-xs text-[#5F6C79] mt-0.5 truncate">
                 {editingRecord
                   ? editingRecord.updated_at
@@ -634,9 +626,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           </div>
         </div>
 
-        <div className="px-6 pt-3 pb-3 shrink-0 bg-white border-b border-[#E4E8EE]">
+        <div className="px-8 pt-4 pb-3 shrink-0 bg-white border-b border-[#E4E8EE] space-y-3">
           <div className="flex items-center gap-3">
-            <div className="flex-1 h-1.5 bg-[#EEF1F5] rounded-full overflow-hidden">
+            <div className="flex-1 h-1 bg-[#EEF1F5] rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#0F766E] rounded-full transition-all duration-500"
                 style={{ width: `${pct}%` }}
@@ -645,32 +637,41 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
             <span className="text-xs font-semibold text-[#3F4D58] min-w-[3rem] text-right">
               {pct}%
             </span>
+            <span className="text-[0.625rem] text-[#7A8694] hidden sm:inline">{filled}/{total} campos</span>
           </div>
-          <p className="text-[0.6875rem] text-[#7A8694] mt-1.5">
-            Enter avanza al siguiente campo
-          </p>
+          <div className="flex flex-wrap items-center gap-2 px-8 py-2 border-b border-[#E4E8EE] bg-white">
+            {sections.map((s, i) => {
+              const done = isSectionComplete(s, data)
+              const active = expanded === s.title
+              return (
+                <button
+                  key={s.title}
+                  type="button"
+                  onClick={() => goToSection(i)}
+                  className={`shrink-0 flex items-center gap-1.5 py-3 text-xs font-medium border-b-2 -mb-px tracking-wide transition-colors duration-150 ${active ? 'border-[#0F766E] text-[#0F766E]' : done ? 'border-transparent text-[#5F6C79]' : 'border-transparent text-[#8E9AA6] hover:text-[#1E2A32]'}`}
+                  title={s.title}
+                >
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium leading-none shrink-0 border ${active ? 'bg-[#0F766E] text-white border-[#0F766E]' : done ? 'bg-white text-[#5F6C79] border-[#D5DBE3]' : 'bg-white text-[#8E9AA6] border-[#E4E8EE]'}`}>
+                    {done ? <CheckCircle2 size={11} /> : String(i + 1)}
+                  </span>
+                  <span className="max-w-[110px] truncate hidden sm:inline">{s.title}</span>
+                  <span className="sm:hidden">{String(i + 1)}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto min-h-0 h-0 px-6 py-3 space-y-2.5">
+        <div className="flex-1 min-h-0 h-0 px-6 md:px-8 py-4 bg-[#F5F7FA] flex justify-center overflow-hidden"><div className="w-full flex flex-col gap-4 overflow-hidden pb-2">
           {sections.map((section, sIdx) => {
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
             const stageLabel = STAGE_LABELS[section.title]
             return (
               <Fragment key={section.title}>
-                {stageLabel && (
-                  <div className="flex items-center gap-3 pt-2">
-                    <span className="text-[0.625rem] font-bold uppercase tracking-widest text-[#7A8694] shrink-0">
-                      {stageLabel}
-                    </span>
-                    <span className="flex-1 h-px bg-[#E4E8EE]" />
-                  </div>
-                )}
-                <div id={`form-section-${sIdx}`} className={`bg-white border rounded-xl transition-all duration-200 ${isOpen ? 'shadow-sm border-[#C9D2DB] border-l-[3px] border-l-[#0F766E]' : 'border-[#E4E8EE] border-l-[3px] border-l-transparent hover:border-l-[#0F766E]'}`}>
-                  <button
-                    type="button"
-                    onClick={() => toggleSection(section.title)}
-                    className={`w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors rounded-t-xl ${isOpen ? 'bg-[#F7F8FA] border-b border-[#E4E8EE]' : 'bg-white hover:bg-[#F7F8FA]'}`}
+                <div id={`form-section-${sIdx}`} className={`${isOpen ? 'block' : 'hidden'} bg-white border border-[#D5DBE3] rounded-lg overflow-hidden flex flex-col max-h-[60vh]`}>
+                  <div
+                    className={`w-full flex items-center gap-3 px-6 py-4 text-left rounded-t-lg min-h-[52px] ${isOpen ? 'bg-white border-b border-[#EEF1F5]' : 'bg-transparent'}`}
                   >
                     <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${done ? 'bg-[#0F766E] text-white' : 'bg-[#EEF1F5] text-[#5F6C79]'}`}>
                       {done ? <CheckCircle2 size={15} /> : <span className="text-xs font-bold">{String(sIdx + 1).padStart(2, '0')}</span>}
@@ -688,18 +689,18 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                       return v !== undefined && v !== null && String(v).trim() !== ''
                     }).length}/{section.fields.filter((f) => !f.optional && !clinicalDisabled(f.key, data) && !(f.key === OBS_COMPENSADO_KEY && !compensadoObsRequired(data))).length}
                   </span>
-                  {isOpen ? <ChevronDown size={16} className="text-[#7A8694]" /> : <ChevronRight size={16} className="text-[#7A8694]" />}
-                </button>
+                  {isOpen ? <ChevronDown size={16} className="text-[#7A8694] opacity-30" /> : <ChevronRight size={16} className="text-[#7A8694] opacity-30" />}
+                </div>
                 {isOpen && (
                   <Fragment>
-                  <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-4 py-3 grid gap-x-4 gap-y-3 bg-white ${section.compact ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-2'}`}>
+                  <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-6 md:px-8 py-5 md:py-6 grid gap-x-6 md:gap-x-8 gap-y-4 content-start flex-none ${section.title === 'Domicilio' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-white' : section.compact ? 'grid-cols-2 md:grid-cols-4 bg-white' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white'} rounded-b-lg`}>
                     {section.fields.map((field) => {
                       if (field.key === 'telefono2' || field.key === 'telefono3') return null
                       if (field.key === OBS_COMPENSADO_KEY) return null
                       if (field.key === 'telefono') {
                         const phones = section.fields.filter((f) => f.key.startsWith('telefono'))
                         return (
-                          <div key="telefonos" className={section.compact ? '' : 'lg:col-span-2'}>
+                          <div key="telefonos" className={section.compact ? '' : 'md:col-span-2 lg:col-span-3'}>
                             <div className="grid grid-cols-3 gap-x-4 gap-y-3">
                               {phones.map((p) => (
                                 <div key={p.key}>
@@ -717,7 +718,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                       setValue(p.key, formatted)
                                     }}
                                     placeholder="0000-0000"
-                                    className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                                    className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                                   />
                                 </div>
                               ))}
@@ -726,7 +727,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                         )
                       }
                       return (
-                      <div key={field.key} className={FULL_WIDTH_KEYS.has(field.key) ? 'lg:col-span-2' : ''}>
+                      <div key={field.key} className={FULL_WIDTH_KEYS.has(field.key) ? 'md:col-span-2 lg:col-span-3' : ''}>
                         <label className={`block text-sm font-medium mb-1 ${field.key === 'compensado' && compensadoObsMissing(data) ? 'text-red-700' : 'text-[#2B3A45]'}`}>
                           {field.label}
                         </label>
@@ -741,7 +742,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                   setValue(field.key, cleaned)
                                 }}
                                 placeholder="Escriba la especialidad"
-                                className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                                className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                               />
                               <button
                                 type="button"
@@ -777,7 +778,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             <select
                               value={data[field.key] || ''}
                               onChange={(e) => setValue(field.key, e.target.value)}
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                              className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                             >
                               <option value="">Seleccione...</option>
                               <option value="Baja">Baja</option>
@@ -829,7 +830,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           >
                             <option value="">Seleccione...</option>
                             <option value="M">M</option>
@@ -868,7 +869,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           >
                             <option value="">Seleccione...</option>
                             <option value="1">1</option>
@@ -880,7 +881,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           >
                             <option value="">Seleccione...</option>
                             <option value="Si">Si</option>
@@ -890,7 +891,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           >
                             <option value="">Seleccione...</option>
                             <option value="En lista">En lista</option>
@@ -910,7 +911,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               value={data[field.key] || ''}
                               onChange={(e) => setValue(field.key, e.target.value.replace(/\D/g, '').slice(0, 10))}
                               placeholder="Solo números"
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                              className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                             />
                           </div>
                         ) : field.key === 'identidad' ? (
@@ -926,7 +927,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               setValue(field.key, formatted)
                             }}
                             placeholder="0000-0000-00000"
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           />
                         ) : field.key.startsWith('telefono') ? (
                           <input
@@ -940,7 +941,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               setValue(field.key, formatted)
                             }}
                             placeholder="0000-0000"
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           />
                         ) : field.key === 'presion_arterial' ? (
                           <input
@@ -956,7 +957,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               setValue(field.key, formatted)
                             }}
                             placeholder="000/000"
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           />
                         ) : field.key === 'peso' ? (
                           <div className="relative">
@@ -1014,7 +1015,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               const titleCased = titleCase(val)
                               setValue(field.key, titleCased)
                             }}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none"
+                            className={`w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none ${(field.key as string) === 'examen_fisico' || (field.key as string) === 'diagnostico' || (field.key as string) === 'historia_enfermedad' ? 'min-h-[160px]' : ['enfermedades_previas','cirugias_previas','alergias','otros_antecedentes'].includes(field.key as string) ? 'min-h-[110px]' : ''}`}
                           />
                         ) : field.key === 'departamento' ? (
                           <ScrollSelect
@@ -1048,7 +1049,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           <select
                             value={data[field.key] || ''}
                             onChange={(e) => setValue('tipo_localidad', e.target.value)}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           >
                             <option value="">Seleccione el tipo...</option>
                             {TIPO_LOCALIDAD_OPTIONS.map((t) => (
@@ -1139,21 +1140,21 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             type="date"
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           />
                         ) : field.type === 'number' ? (
                           <input
                             type="number"
                             value={data[field.key] ?? ''}
                             onChange={(e) => setValue(field.key, e.target.value === '' ? '' : Number(e.target.value))}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
                           />
                         ) : (
                           <textarea
-                            rows={field.key === 'historia_enfermedad' || field.key === 'examen_fisico' || field.key === 'diagnostico' ? 3 : 1}
+                            rows={field.key === 'examen_fisico' || field.key === 'diagnostico' || field.key === 'historia_enfermedad' ? 5 : ['enfermedades_previas','cirugias_previas','alergias','otros_antecedentes'].includes(field.key as string) ? 3 : 1}
                             value={data[field.key] || ''}
                             onChange={(e) => setValue(field.key, CAPITALIZE_FIRST_KEYS.has(field.key) ? capitalizeFirst(e.target.value) : e.target.value)}
-                            className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none"
+                            className={`w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none ${(field.key as string) === 'examen_fisico' || (field.key as string) === 'diagnostico' || (field.key as string) === 'historia_enfermedad' ? 'min-h-[160px]' : ['enfermedades_previas','cirugias_previas','alergias','otros_antecedentes'].includes(field.key as string) ? 'min-h-[110px]' : ''}`}
                           />
                         )}
                       </div>
@@ -1197,7 +1198,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
               </div>
             </Fragment>
           )})}
-        </div>
+        </div></div>
 
         <div className="px-6 py-3.5 border-t border-[#E4E8EE] flex items-center justify-between shrink-0 bg-white">
           <button
