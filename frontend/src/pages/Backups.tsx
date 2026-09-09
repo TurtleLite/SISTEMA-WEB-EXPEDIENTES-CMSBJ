@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { backupsApi } from '../services/api'
 import { useNotification } from '../contexts/NotificationContext'
-import { RefreshCw, Download, Trash2, CheckCircle2, Upload, FileSpreadsheet } from 'lucide-react'
+import { RefreshCw, Download, Trash2, Upload, FileSpreadsheet } from 'lucide-react'
 
 interface BackupItem {
   name: string
@@ -154,11 +154,6 @@ export function Backups({ embedded = false }: { embedded?: boolean }) {
             <FileSpreadsheet size={14} /> {generating ? 'Generando...' : 'Generar respaldo Excel'}
           </button>
         </div>
-      </div>
-
-      <div className="shrink-0 flex items-center gap-2 text-[0.6875rem] text-[#7A8694] bg-[#EEF1F5] rounded-lg px-3 py-2">
-        <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
-        Respaldos en Excel (.xlsx) — tabla general con todos los expedientes. Se generan automáticamente a las 12:00 a. m. Honduras y se conservan los últimos 20.
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-[#E4E8EE] flex flex-col min-h-0 flex-1">
