@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL || '/api'
 const api = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 15000,
+  timeout: 30000,
 })
 
 const TOKEN_KEY = 'token'
@@ -83,13 +83,16 @@ api.interceptors.response.use(
       window.location.hash = '#/login'
     }
 
-    // Reintento con backoff para GETs que fallaron por timeout/red (no 4xx)
+    // Reintento con backoff para GETs que fallaron por timeout/red (no 4xx) - hasta 3 intentos
     const isNetworkError = !error.response && (error.code === 'ECONNABORTED' || error.message?.includes('timeout') || error.message?.includes('Network Error'))
-    if (config && isNetworkError && config.method?.toLowerCase() === 'get' && !config._retried) {
-      config._retried = true
-      // si tenemos cache aunque esté expirado, devolvámoslo como fallback al reintentar
-      await new Promise((r) => setTimeout(r, 800))
-      return api.request(config)
+    if (config && isNetworkError && config.method?.toLowerCase() === 'get') {
+      const retries = (config as any)._retries || 0
+      if (retries < 2) {
+        ;(config as any)._retries = retries + 1
+        const backoff = 800 * Math.pow(2, retries) // 800ms, 1600ms
+        await new Promise((r) => setTimeout(r, backoff))
+        return api.request(config)
+      }
     }
     // Mensaje más útil cuando el navegador está offline
     if (!navigator.onLine && !error.response) {
@@ -101,16 +104,24 @@ api.interceptors.response.use(
 
 export const authApi = {
   login: async (username: string, password: string) => {
-    const attempt = () => api.post('/auth/login', { username, password }, { timeout: 90000 })
-    try {
-      return await attempt()
-    } catch (err: any) {
-      if (!err.response || err.code === 'ECONNABORTED') {
-        await new Promise((r) => setTimeout(r, 8000))
-        return attempt()
+    const attempt = (ms: number) => api.post('/auth/login', { username, password }, { timeout: ms })
+    // 3 intentos: 30s, luego 45s, luego 90s - con backoff entre intentos
+    let lastErr: any
+    for (let i = 0; i < 3; i++) {
+      try {
+        const tm = i === 0 ? 30000 : i === 1 ? 45000 : 90000
+        return await attempt(tm)
+      } catch (err: any) {
+        lastErr = err
+        const isNet = !err.response || err.code === 'ECONNABORTED' || err.message?.includes('timeout') || err.message?.includes('Network Error')
+        if (isNet && i < 2) {
+          await new Promise((r) => setTimeout(r, 1500 * (i + 1))) // 1.5s, 3s
+          continue
+        }
+        throw err
       }
-      throw err
     }
+    throw lastErr
   },
   logout: () => api.post('/auth/logout'),
   sessions: (params?: any) => api.get('/auth/sessions', { params }),
