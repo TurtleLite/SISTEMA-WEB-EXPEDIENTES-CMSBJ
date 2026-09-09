@@ -662,7 +662,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 h-0 px-6 md:px-8 py-6 bg-[#F5F7FA] flex justify-center overflow-y-auto overflow-x-hidden"><div className="w-full flex flex-col gap-2">
+        <div className="flex-1 min-h-0 h-0 px-6 md:px-8 py-4 bg-[#F5F7FA] flex justify-center overflow-hidden"><div className="w-full flex flex-col gap-2 overflow-hidden">
           {sections.map((section, sIdx) => {
             const done = isSectionComplete(section, data)
             const isOpen = expanded === section.title
@@ -693,7 +693,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                 </div>
                 {isOpen && (
                   <Fragment>
-                  <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-6 md:px-8 py-5 md:py-6 grid gap-x-6 md:gap-x-8 gap-y-4 content-start flex-none ${section.title === 'Domicilio' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-white' : section.compact ? 'grid-cols-2 md:grid-cols-4 bg-white' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white'} rounded-b-lg`}>
+                  <div data-section-body onKeyDown={onSectionBodyKeyDown} className={`px-6 md:px-8 py-5 md:py-6 grid gap-x-6 md:gap-x-8 gap-y-4 content-start flex-1 overflow-y-auto overflow-x-hidden ${section.title === 'Domicilio' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-white' : section.compact ? 'grid-cols-2 md:grid-cols-4 bg-white' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-white'} rounded-b-lg`}>
                     {section.fields.map((field) => {
                       if (field.key === 'telefono2' || field.key === 'telefono3') return null
                       if (field.key === OBS_COMPENSADO_KEY) return null
