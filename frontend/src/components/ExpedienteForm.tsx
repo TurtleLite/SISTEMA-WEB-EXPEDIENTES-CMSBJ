@@ -40,6 +40,7 @@ fields: [
       { key: 'telefono3', label: 'Teléfono 3', type: 'text' },
       { key: 'persona_responsable', label: 'Persona Responsable', type: 'text' },
       { key: 'albergue', label: 'Albergue', type: 'text' },
+      { key: 'albergue_next', label: '', type: 'button' },
     ],
   },
   {
@@ -878,28 +879,27 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             <option value="4">4</option>
                           </select>
                         ) : field.key === 'albergue' ? (
-                          <div className="flex gap-3 items-end">
-                            <div className="flex-1">
-                              <select
-                                value={data[field.key] || ''}
-                                onChange={(e) => setValue(field.key, e.target.value)}
-                                className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
-                              >
-                                <option value="">Seleccione...</option>
-                                <option value="Si">Si</option>
-                                <option value="No">No</option>
-                              </select>
-                            </div>
-                            {section.title === 'Datos Personales' && (
+                          <select
+                            value={data[field.key] || ''}
+                            onChange={(e) => setValue(field.key, e.target.value)}
+                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
+                          >
+                            <option value="">Seleccione...</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                          </select>
+                        ) : field.key === 'albergue_next' ? (
+                          section.title === 'Datos Personales' ? (
+                            <div className="flex items-end h-full">
                               <button
                                 type="button"
                                 onClick={() => goToSection(sIdx + 1)}
-                                className="shrink-0 px-5 py-3 text-sm font-medium text-white bg-[#0F766E] hover:bg-[#115E59] rounded-lg transition-colors shadow-sm whitespace-nowrap"
+                                className="w-full px-5 py-3 text-sm font-medium text-white bg-[#0F766E] hover:bg-[#115E59] rounded-lg transition-colors shadow-sm"
                               >
                                 Siguiente →
                               </button>
-                            )}
-                          </div>
+                            </div>
+                          ) : null
                         ) : field.key === 'estatus_cirugia' ? (
                           <select
                             value={data[field.key] || ''}
