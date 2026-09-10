@@ -869,7 +869,8 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             ))}
                           </div>
                         ) : field.key === 'edad' ? (() => {
-                          const edadStr = data.edad || ''
+                          const edadCalculada = calcularEdadDesdeFechaNacimiento(data.fecha_nacimiento)
+                          const edadStr = edadCalculada || data.edad || ''
                           const edadParts = typeof edadStr === 'string' ? edadStr.match(/^(\d+)\s*([am])$/) : null
                           const edadNum = edadParts ? edadParts[1] : (typeof edadStr === 'string' ? edadStr : '')
                           const edadUnit = edadParts ? edadParts[2] : 'a'
