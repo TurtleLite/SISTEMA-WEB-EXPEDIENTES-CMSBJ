@@ -31,8 +31,9 @@ fields: [
       { key: 'apellido', label: 'Apellido / Last Name', type: 'text' },
       { key: 'expediente', label: 'Nº Expediente', type: 'text' },
       { key: 'identidad', label: 'Nº Identidad', type: 'text' },
-      { key: 'sexo', label: 'Sexo / Sex', type: 'text' },
       { key: 'edad', label: 'Age / Edad', type: 'number' },
+      { key: 'fecha_nacimiento', label: 'Fecha de Nacimiento', type: 'date' },
+      { key: 'sexo', label: 'Sexo', type: 'text' },
       { key: 'especialidad', label: 'Especialidad', type: 'text' },
       { key: 'perfil', label: 'Perfil', type: 'text' },
       { key: 'telefono', label: 'Teléfono', type: 'text' },
@@ -827,15 +828,18 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             </div>
                           )
                         ) : field.key === 'sexo' ? (
-                          <select
-                            value={data[field.key] || ''}
-                            onChange={(e) => setValue(field.key, e.target.value)}
-                            className="w-full px-4 py-3 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-colors"
-                          >
-                            <option value="">Seleccione...</option>
-                            <option value="M">M</option>
-                            <option value="F">F</option>
-                          </select>
+                          <div className="flex gap-2">
+                            {(['M', 'F'] as const).map((v) => (
+                              <button
+                                key={v}
+                                type="button"
+                                onClick={() => setValue(field.key, data[field.key] === v ? '' : v)}
+                                className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${data[field.key] === v ? 'bg-[#0F766E] text-white border-[#0F766E]' : 'bg-white text-[#2B3A45] border-[#D5DBE3] hover:border-[#0F766E] hover:text-[#0F766E]'}`}
+                              >
+                                {v}
+                              </button>
+                            ))}
+                          </div>
                         ) : field.key === 'edad' ? (() => {
                           const edadStr = data.edad || ''
                           const edadParts = typeof edadStr === 'string' ? edadStr.match(/^(\d+)\s*([am])$/) : null
@@ -1210,11 +1214,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
           <button
             onClick={handleSubmit}
             disabled={!allComplete || saving}
-            className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              allComplete && !saving
+            className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all ${allComplete && !saving
                 ? 'bg-[#0F766E] text-white hover:bg-[#115E59] shadow-sm'
-                : 'bg-[#EEF1F5] text-[#8E9AA6] cursor-not-allowed'
-            }`}
+                : 'bg-[#EEF1F5] text-[#8E9AA6] cursor-not-allowed'}`}
           >
             {saving ? 'Guardando...' : allComplete ? (editingRecord ? 'Guardar Cambios' : 'Crear Expediente') : `Complete todas las secciones`}
           </button>
