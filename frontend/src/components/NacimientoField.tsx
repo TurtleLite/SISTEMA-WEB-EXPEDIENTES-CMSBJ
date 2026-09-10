@@ -43,22 +43,24 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
     setInputValue(value ? formatMdp(value) : '')
   }, [value])
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, '')
+    const digits = raw.slice(0, 8)
+    const formatted = formatMask(digits)
+
+    setInputValue(formatted)
+
+    // Always notify parent with the current formatted value so age can be calculated incrementally
+    // This allows real-time age calculation as user types
+    onChange(formatted)
+  }
+
   return (
     <input
       type="text"
       inputMode="numeric"
       value={inputValue}
-      onChange={(e) => {
-        const formatted = formatMask(e.target.value)
-        setInputValue(formatted)
-        const iso = maskToIso(formatted)
-        if (iso) {
-          onChange(iso)
-        } else if (formatted === '') {
-          onChange('')
-        }
-        // si está incompleto no actualizamos value, edad se mantiene hasta completar
-      }}
+      onChange={handleChange}
       placeholder="MM/DD/AAAA"
       maxLength={10}
       className="w-full px-3 py-2 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] text-center font-mono tracking-wide"

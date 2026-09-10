@@ -124,8 +124,37 @@ const MIN_TEXT_LENGTH = 5
 
 const calcularEdadDesdeFechaNacimiento = (fechaNacimiento: string | null | undefined): string => {
   if (!fechaNacimiento) return ''
+  // Handle both ISO format (YYYY-MM-DD) and Honduran format (MM/DD/AAAA)
+  let iso = fechaNacimiento
+  const hasSlash = fechaNacimiento.includes('/')
+  
+  if (hasSlash) {
+    // Convert MM/DD/AAAA to ISO, but handle partial formats
+    const parts = fechaNacimiento.split('/')
+    if (parts.length === 3) {
+      // Complete date: MM/DD/AAAA
+      const mm = parts[0].padStart(2, '0')
+      const dd = parts[1].padStart(2, '0')
+      const yyyy = parts[2]
+      iso = `${yyyy}-${mm}-${dd}`
+    } else if (parts.length === 2) {
+      // Partial: MM/DD or M/D - we have month and day, no year
+      // Calculate age assuming current year, but mark as partial
+      const mm = (parts[0] || '').padStart(2, '0')
+      const dd = (parts[1] || '').padStart(2, '0')
+      if (mm && dd && parseInt(mm, 10) > 0 && parseInt(dd, 10) > 0) {
+        // Use current year for calculation, show age with note it's partial
+        iso = `${new Date().getFullYear()}-${mm}-${dd}`
+      } else {
+        return '' // Invalid partial
+      }
+    } else {
+      return ''
+    }
+  }
+  
   const hoy = new Date(todayHonduras() + 'T00:00:00')
-  const nac = new Date(fechaNacimiento + 'T00:00:00')
+  const nac = new Date(iso + 'T00:00:00')
   if (isNaN(nac.getTime())) return ''
   const years = hoy.getFullYear() - nac.getFullYear()
   const months = hoy.getMonth() - nac.getMonth()
