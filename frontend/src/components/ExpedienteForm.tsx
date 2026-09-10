@@ -6,7 +6,8 @@ import { HONDURAS_DEPARTAMENTOS, TIPO_LOCALIDAD_OPTIONS } from '../constants'
 import ScrollSelect from './ScrollSelect'
 import LocalidadInput from './LocalidadInput'
 import { normalizeText, titleCase } from '../utils/format'
-import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle } from 'lucide-react'
+import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle, CalendarDays } from 'lucide-react'
+import NacimientoCalendar from './NacimientoCalendar'
 
 interface ColumnDef {
   key: string
@@ -31,8 +32,8 @@ fields: [
       { key: 'apellido', label: 'Apellido / Last Name', type: 'text' },
       { key: 'expediente', label: 'Nº Expediente', type: 'text' },
       { key: 'identidad', label: 'Nº Identidad', type: 'text' },
-      { key: 'edad', label: 'Age / Edad', type: 'number' },
       { key: 'fecha_nacimiento', label: 'Fecha de Nacimiento', type: 'date' },
+      { key: 'edad', label: 'Age / Edad', type: 'number' },
       { key: 'sexo', label: 'Sexo', type: 'text' },
       { key: 'especialidad', label: 'Especialidad', type: 'text' },
       { key: 'perfil', label: 'Perfil', type: 'text' },
@@ -120,6 +121,20 @@ const FIELD_UNITS: Record<string, string> = {
 }
 
 const MIN_TEXT_LENGTH = 5
+
+const calcularEdadDesdeFechaNacimiento = (fechaNacimiento: string | null | undefined): string => {
+  if (!fechaNacimiento) return ''
+  const hoy = new Date(todayHonduras() + 'T00:00:00')
+  const nac = new Date(fechaNacimiento + 'T00:00:00')
+  if (isNaN(nac.getTime())) return ''
+  const years = hoy.getFullYear() - nac.getFullYear()
+  const months = hoy.getMonth() - nac.getMonth()
+  const days = hoy.getDate() - nac.getDate()
+  let totalMonths = years * 12 + months + (days < 0 ? -1 : 0)
+  if (totalMonths < 0) return ''
+  if (totalMonths < 12) return `${totalMonths} meses`
+  return `${years} años`
+}
 
 const CAPITALIZE_FIRST_KEYS = new Set(['historia_enfermedad', 'examen_fisico', 'enfermedades_previas', 'cirugias_previas', 'alergias', 'otros_antecedentes'])
 
@@ -349,6 +364,13 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
       if (Array.isArray(res.data)) setLocalidades(res.data)
     }).catch(() => {})
   }, [listId])
+
+  useEffect(() => {
+    if (data.fecha_nacimiento) {
+      const edad = calcularEdadDesdeFechaNacimiento(data.fecha_nacimiento)
+      if (edad) setValue('edad', edad)
+    }
+  }, [data.fecha_nacimiento])
 
   useEffect(() => {
     if (editingRecord && (data.peso || data.talla)) {
@@ -1139,6 +1161,12 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               {FIELD_UNITS[field.key]}
                             </span>
                           </div>
+                        ) : field.key === 'fecha_nacimiento' ? (
+                          <NacimientoCalendar
+                            value={data.fecha_nacimiento || ''}
+                            onChange={(v) => setValue('fecha_nacimiento', v)}
+                            className="w-full"
+                          />
                         ) : field.type === 'date' ? (
                           <input
                             type="date"
