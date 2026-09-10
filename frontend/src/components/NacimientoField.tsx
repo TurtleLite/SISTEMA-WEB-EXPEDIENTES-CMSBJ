@@ -1,27 +1,38 @@
 import { useState, useEffect } from 'react'
 
-function parseMdp(raw: string): string | null {
-  if (!raw) return null
-  const m = raw.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-  if (!m) return null
-  const mm = String(m[1]).padStart(2, '0')
-  const dd = String(m[2]).padStart(2, '0')
-  const yyyy = m[3]
-  const iso = `${yyyy}-${mm}-${dd}`
-  const d = new Date(iso + 'T00:00:00')
-  if (isNaN(d.getTime())) return null
-  return iso
-}
-
 function formatMdp(iso: string): string {
   if (!iso) return ''
-  if (iso.includes('-')) {
-    const d = new Date(iso + 'T00:00:00')
-    if (isNaN(d.getTime())) return ''
-    const mm = String(d.getMonth() + 1).padStart(2, '0')
-    const dd = String(d.getDate()).padStart(2, '0')
-    return `${mm}/${dd}/${d.getFullYear()}`
-  }
+  const d = new Date(iso + 'T00:00:00')
+  if (isNaN(d.getTime())) return ''
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  return `${mm}/${dd}/${d.getFullYear()}`
+}
+
+function formatMask(digits: string): string {
+  const d = digits.replace(/\D/g, '').slice(0, 8)
+  if (d.length <= 2) return d
+  if (d.length <= 4) return `${d.slice(0, 2)}/${d.slice(2)}`
+  return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`
+}
+
+function maskToIso(masked: string): string | null {
+  const d = masked.replace(/\D/g, '')
+  if (d.length !== 8) return null
+  const mm = d.slice(0, 2)
+  const dd = d.slice(2, 4)
+  const yyyy = d.slice(4, 8)
+  const m = parseInt(mm, 10)
+  const day = parseInt(dd, 10)
+  const y = parseInt(yyyy, 10)
+  if (m < 1 || m > 12) return null
+  if (day < 1 || day > 31) return null
+  if (y < 1900 || y > 2100) return null
+  const iso = `${yyyy}-${mm}-${dd}`
+  const date = new Date(iso + 'T00:00:00')
+  if (isNaN(date.getTime())) return null
+  // validar que no haya overflow (ej 02/31)
+  if (date.getMonth() + 1 !== m || date.getDate() !== day) return null
   return iso
 }
 
@@ -35,16 +46,22 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
   return (
     <input
       type="text"
+      inputMode="numeric"
       value={inputValue}
       onChange={(e) => {
-        const raw = e.target.value
-        setInputValue(raw)
-        const parsed = parseMdp(raw)
-        if (parsed) onChange(parsed)
+        const formatted = formatMask(e.target.value)
+        setInputValue(formatted)
+        const iso = maskToIso(formatted)
+        if (iso) {
+          onChange(iso)
+        } else if (formatted === '') {
+          onChange('')
+        }
+        // si está incompleto no actualizamos value, edad se mantiene hasta completar
       }}
-      onFocus={() => setInputValue(value ? formatMdp(value) : '')}
       placeholder="MM/DD/AAAA"
-      className="flex-1 px-3 py-2 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] text-center font-mono tracking-wide"
+      maxLength={10}
+      className="w-full px-3 py-2 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] text-center font-mono tracking-wide"
     />
   )
 }

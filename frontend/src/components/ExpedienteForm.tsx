@@ -368,7 +368,10 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   useEffect(() => {
     if (data.fecha_nacimiento) {
       const edad = calcularEdadDesdeFechaNacimiento(data.fecha_nacimiento)
-      if (edad) setValue('edad', edad)
+      if (edad && edad !== data.edad) setValue('edad', edad)
+      else if (!edad && data.edad) setValue('edad', '')
+    } else {
+      if (data.edad) setValue('edad', '')
     }
   }, [data.fecha_nacimiento])
 
