@@ -27,6 +27,8 @@ if not settings.SECRET_KEY or len(settings.SECRET_KEY) < 32 or settings.SECRET_K
 
 ALLOWED_ORIGINS = [
     "https://sistema-web-expedientes-cmsbj.onrender.com",
+    "https://srv-d9nqs47lk1mc738ldgng.onrender.com",
+    "https://*.onrender.com",
     "http://localhost:5173",
     "http://localhost:8000",
 ]
