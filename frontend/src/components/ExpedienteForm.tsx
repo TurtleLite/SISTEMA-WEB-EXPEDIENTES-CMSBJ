@@ -868,27 +868,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                           const edadNum = edadParts ? edadParts[1] : (typeof edadStr === 'string' ? edadStr : '')
                           const edadUnit = edadParts ? edadParts[2] : 'a'
                           return (
-                            <div className="flex gap-2">
-                              <input
-                                type="number"
-                                value={edadNum}
-                                onChange={(e) => {
-                                  const n = e.target.value
-                                  setValue('edad', n === '' ? '' : `${n} ${edadUnit}`)
-                                }}
-                                className="flex-1 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                              />
-                              <select
-                                value={edadUnit}
-                                onChange={(e) => {
-                                  const u = e.target.value
-                                  setValue('edad', edadNum === '' ? '' : `${edadNum} ${u}`)
-                                }}
-                                className="w-28 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                              >
-                                <option value="a">Años</option>
-                                <option value="m">Meses</option>
-                              </select>
+                            <div className="flex items-center gap-2 px-3 py-2 bg-[#F7F8FA] border border-[#E4E8EE] rounded-lg">
+                              <span className="text-sm font-medium text-[#2B3A45]">{edadNum || '—'}</span>
+                              <span className="text-xs text-[#7A8694]">({edadUnit === 'm' ? 'meses' : 'años'})</span>
                             </div>
                           )
                         })() : field.key === 'perfil' ? (

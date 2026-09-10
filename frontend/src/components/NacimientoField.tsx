@@ -39,6 +39,15 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
 
   const today = isoDate(new Date())
 
+  const yearRange = [
+    { label: '-10 años', delta: -10 },
+    { label: '-5 años', delta: -5 },
+    { label: '-1 año', delta: -1 },
+    { label: '+1 año', delta: 1 },
+    { label: '+5 años', delta: 5 },
+    { label: '+10 años', delta: 10 },
+  ]
+
   const daysInMonth = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate()
   const firstWeekday = new Date(view.getFullYear(), view.getMonth(), 1).getDay()
   const monthLabel = view.toLocaleDateString('es-HN', { month: 'long', year: 'numeric' })
@@ -52,6 +61,10 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
     const y = view.getFullYear() + (m < 0 ? -1 : m > 11 ? 1 : 0)
     const mm = ((m % 12) + 12) % 12
     setView(new Date(y, mm, 1))
+  }
+
+  const goYear = (delta: number) => {
+    setView(new Date(view.getFullYear() + delta, view.getMonth(), 1))
   }
 
   useEffect(() => {
@@ -132,6 +145,18 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
                 </button>
               )
             })}
+          </div>
+          <div className="flex items-center justify-center gap-1.5 mb-2 flex-wrap">
+            {yearRange.map((y) => (
+              <button
+                key={y.label}
+                type="button"
+                onClick={() => goYear(y.delta)}
+                className="px-2 py-1 text-[0.6875rem] font-medium text-[#115E59] bg-[#EEF7F5] border border-[#D8EFEA] rounded-md hover:bg-[#D8EFEA] transition-colors"
+              >
+                {y.label}
+              </button>
+            ))}
           </div>
           <div className="mt-2 flex items-center justify-between text-[0.6875rem] text-[#7A8694]">
             <button
