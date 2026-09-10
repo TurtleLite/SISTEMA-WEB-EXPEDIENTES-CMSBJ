@@ -8,14 +8,35 @@ function isoDate(d: Date): string {
   return `${y}-${m}-${day}`
 }
 
-function formattedDate(iso: string): string {
+function formatMdp(iso: string): string {
   if (!iso) return ''
   const d = new Date(iso + 'T00:00:00')
   if (isNaN(d.getTime())) return ''
-  return d.toLocaleDateString('es-HN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  const yyyy = d.getFullYear()
+  return `${mm}/${dd}/${yyyy}`
+}
+
+function parseMdp(raw: string): string | null {
+  if (!raw) return null
+  if (raw.includes('-')) {
+    const d = new Date(raw + 'T00:00:00')
+    return isNaN(d.getTime()) ? null : raw
+  }
+  const m = raw.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  if (!m) return null
+  const mm = String(m[1]).padStart(2, '0')
+  const dd = String(m[2]).padStart(2, '0')
+  const yyyy = m[3]
+  const iso = `${yyyy}-${mm}-${dd}`
+  const d = new Date(iso + 'T00:00:00')
+  if (isNaN(d.getTime())) return null
+  return iso
 }
 
 export function NacimientoField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [inputValue, setInputValue] = useState(value ? formatMdp(value) : '')
   const [show, setShow] = useState(false)
   const [view, setView] = useState<Date>(() => {
     if (value) {
@@ -26,6 +47,10 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
     return new Date(h.getFullYear(), h.getMonth(), 1)
   })
   const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setInputValue(value ? formatMdp(value) : '')
+  }, [value])
 
   useEffect(() => {
     function onMouseDown(e: MouseEvent) {
@@ -80,10 +105,16 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
       <div className="flex gap-2">
         <input
           type="text"
-          readOnly
-          value={value ? formattedDate(value) : ''}
-          placeholder="DD/MM/AAAA"
-          className="flex-1 px-3 py-2 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
+          value={inputValue}
+          onChange={(e) => {
+            const raw = e.target.value
+            setInputValue(raw)
+            const parsed = parseMdp(raw)
+            if (parsed) onChange(parsed)
+          }}
+          onFocus={() => setShow(false)}
+          placeholder="MM/DD/AAAA"
+          className="flex-1 px-3 py-2 border border-[#D5DBE3] rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] text-center font-mono tracking-wide"
         />
         <button
           type="button"
@@ -130,13 +161,7 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
                   type="button"
                   onClick={() => { onChange(cell); setShow(false) }}
                   title={isToday ? 'Hoy' : ''}
-                  className={`relative flex flex-col items-center justify-center rounded-lg py-1.5 text-xs font-medium transition-colors ${
-                    isSelected
-                      ? 'bg-[#0F766E] text-white font-semibold shadow-sm'
-                      : isToday
-                        ? 'bg-[#EEF7F5] text-[#0F766E] font-semibold hover:bg-[#D8EFEA]'
-                        : 'text-[#3F4D58] hover:bg-[#F7F8FA]'
-                  }`}
+                  className={`relative flex flex-col items-center justify-center rounded-lg py-1.5 text-xs font-medium transition-colors ${isSelected ? 'bg-[#0F766E] text-white font-semibold shadow-sm' : isToday ? 'bg-[#EEF7F5] text-[#0F766E] font-semibold hover:bg-[#D8EFEA]' : 'text-[#3F4D58] hover:bg-[#F7F8FA]'}`}
                 >
                   <span>{dayNum}</span>
                   {isToday && !isSelected && (
