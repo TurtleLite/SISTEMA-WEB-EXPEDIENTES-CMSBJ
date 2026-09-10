@@ -199,7 +199,7 @@ function isSectionComplete(section: Section, data: Record<string, any>): boolean
 }
 
 function totalFieldsFrom(sections: Section[], data: Record<string, any>): number {
-  return sections.reduce((acc, s) => acc + s.fields.filter((f) => !f.optional && !(f.key === OBS_COMPENSADO_KEY && !compensadoObsRequired(data))).length, 0)
+  return sections.reduce((acc, s) => acc + s.fields.filter((f) => !f.optional && !clinicalDisabled(f.key, data) && !(f.key === OBS_COMPENSADO_KEY && !compensadoObsRequired(data))).length, 0)
 }
 
 function filledFields(sections: Section[], data: Record<string, any>): number {
@@ -475,6 +475,9 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     setData((prev) => {
       const next = { ...prev, [key]: value }
       if (key === 'perfil') next['estatus'] = value
+      if (key === 'fecha_nacimiento') {
+        next['edad'] = calcularEdadDesdeFechaNacimiento(value)
+      }
       return next
     })
   }
