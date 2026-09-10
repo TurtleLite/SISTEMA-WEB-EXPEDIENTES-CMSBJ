@@ -6,8 +6,8 @@ import { HONDURAS_DEPARTAMENTOS, TIPO_LOCALIDAD_OPTIONS } from '../constants'
 import ScrollSelect from './ScrollSelect'
 import LocalidadInput from './LocalidadInput'
 import { normalizeText, titleCase } from '../utils/format'
-import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle, CalendarDays } from 'lucide-react'
-import NacimientoCalendar from './NacimientoCalendar'
+import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle } from 'lucide-react'
+import { NacimientoField } from './NacimientoField'
 
 interface ColumnDef {
   key: string
@@ -132,8 +132,8 @@ const calcularEdadDesdeFechaNacimiento = (fechaNacimiento: string | null | undef
   const days = hoy.getDate() - nac.getDate()
   let totalMonths = years * 12 + months + (days < 0 ? -1 : 0)
   if (totalMonths < 0) return ''
-  if (totalMonths < 12) return `${totalMonths} meses`
-  return `${years} años`
+  if (totalMonths < 12) return `${totalMonths} m`
+  return `${years} a`
 }
 
 const CAPITALIZE_FIRST_KEYS = new Set(['historia_enfermedad', 'examen_fisico', 'enfermedades_previas', 'cirugias_previas', 'alergias', 'otros_antecedentes'])
@@ -1162,11 +1162,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             </span>
                           </div>
                         ) : field.key === 'fecha_nacimiento' ? (
-                          <NacimientoCalendar
-                            value={data.fecha_nacimiento || ''}
-                            onChange={(v) => setValue('fecha_nacimiento', v)}
-                            className="w-full"
-                          />
+                          <NacimientoField value={data.fecha_nacimiento || ''} onChange={(v: string) => setValue('fecha_nacimiento', v)} />
                         ) : field.type === 'date' ? (
                           <input
                             type="date"
