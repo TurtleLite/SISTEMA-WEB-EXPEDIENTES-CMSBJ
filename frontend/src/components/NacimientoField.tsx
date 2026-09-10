@@ -31,28 +31,38 @@ function maskToIso(masked: string): string | null {
   const iso = `${yyyy}-${mm}-${dd}`
   const date = new Date(iso + 'T00:00:00')
   if (isNaN(date.getTime())) return null
-  // validar que no haya overflow (ej 02/31)
   if (date.getMonth() + 1 !== m || date.getDate() !== day) return null
   return iso
 }
 
+function formatDisplay(value: string): string {
+  if (!value) return ''
+  if (value.includes('/')) return value
+  if (/^\d{1,8}$/.test(value)) return formatMask(value)
+  return formatMdp(value)
+}
+
 export function NacimientoField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const [inputValue, setInputValue] = useState(value ? formatMdp(value) : '')
+  const [inputValue, setInputValue] = useState(() => formatDisplay(value))
 
   useEffect(() => {
-    setInputValue(value ? formatMdp(value) : '')
+    setInputValue(formatDisplay(value))
   }, [value])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, '')
-    const digits = raw.slice(0, 8)
-    const formatted = formatMask(digits)
-
+    const raw = e.target.value.replace(/\D/g, '').slice(0, 8)
+    const formatted = formatMask(raw)
     setInputValue(formatted)
-
-    // Always notify parent with the current formatted value so age can be calculated incrementally
-    // This allows real-time age calculation as user types
-    onChange(formatted)
+    if (formatted === '') {
+      onChange('')
+      return
+    }
+    const iso = maskToIso(formatted)
+    if (iso) {
+      onChange(iso)
+    } else {
+      onChange(formatted)
+    }
   }
 
   return (
@@ -67,3 +77,5 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
     />
   )
 }
+
+export { maskToIso }

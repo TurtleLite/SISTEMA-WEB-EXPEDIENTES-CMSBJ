@@ -124,35 +124,16 @@ const MIN_TEXT_LENGTH = 5
 
 const calcularEdadDesdeFechaNacimiento = (fechaNacimiento: string | null | undefined): string => {
   if (!fechaNacimiento) return ''
-  // Handle both ISO format (YYYY-MM-DD) and Honduran format (MM/DD/AAAA)
   let iso = fechaNacimiento
-  const hasSlash = fechaNacimiento.includes('/')
-  
-  if (hasSlash) {
-    // Convert MM/DD/AAAA to ISO, but handle partial formats
+  if (fechaNacimiento.includes('/')) {
     const parts = fechaNacimiento.split('/')
-    if (parts.length === 3) {
-      // Complete date: MM/DD/AAAA
-      const mm = parts[0].padStart(2, '0')
-      const dd = parts[1].padStart(2, '0')
-      const yyyy = parts[2]
-      iso = `${yyyy}-${mm}-${dd}`
-    } else if (parts.length === 2) {
-      // Partial: MM/DD or M/D - we have month and day, no year
-      // Calculate age assuming current year, but mark as partial
-      const mm = (parts[0] || '').padStart(2, '0')
-      const dd = (parts[1] || '').padStart(2, '0')
-      if (mm && dd && parseInt(mm, 10) > 0 && parseInt(dd, 10) > 0) {
-        // Use current year for calculation, show age with note it's partial
-        iso = `${new Date().getFullYear()}-${mm}-${dd}`
-      } else {
-        return '' // Invalid partial
-      }
-    } else {
-      return ''
-    }
+    if (parts.length !== 3) return ''
+    const mm = parts[0].padStart(2, '0')
+    const dd = parts[1].padStart(2, '0')
+    const yyyy = parts[2]
+    if (yyyy.length !== 4) return ''
+    iso = `${yyyy}-${mm}-${dd}`
   }
-  
   const hoy = new Date(todayHonduras() + 'T00:00:00')
   const nac = new Date(iso + 'T00:00:00')
   if (isNaN(nac.getTime())) return ''
@@ -223,6 +204,22 @@ function isSectionComplete(section: Section, data: Record<string, any>): boolean
     if (clinicalDisabled(f.key, data)) return true
     if (f.key === OBS_COMPENSADO_KEY) return compensadoObsSatisfied(data)
     const val = data[f.key]
+    if (f.key === 'fecha_nacimiento') {
+      const s = String(val || '').trim()
+      if (!s) return false
+      if (s.includes('/')) {
+        const d = s.replace(/\D/g, '')
+        if (d.length !== 8) return false
+        const mm = d.slice(0, 2), dd = d.slice(2, 4), yyyy = d.slice(4, 8)
+        const m = parseInt(mm, 10), day = parseInt(dd, 10), y = parseInt(yyyy, 10)
+        if (m < 1 || m > 12 || day < 1 || day > 31 || y < 1900 || y > 2100) return false
+        const iso = `${yyyy}-${mm}-${dd}`
+        const date = new Date(iso + 'T00:00:00')
+        if (isNaN(date.getTime()) || date.getMonth() + 1 !== m || date.getDate() !== day) return false
+        return true
+      }
+      return /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(new Date(s + 'T00:00:00').getTime())
+    }
     return val !== undefined && val !== null && String(val).trim() !== ''
   })
 }
@@ -241,6 +238,27 @@ function filledFields(sections: Section[], data: Record<string, any>): number {
         continue
       }
       if (clinicalDisabled(f.key, data)) continue
+      if (f.key === 'fecha_nacimiento') {
+        const s = String(data[f.key] || '').trim()
+        if (!s) continue
+        let valid = false
+        if (s.includes('/')) {
+          const d = s.replace(/\D/g, '')
+          if (d.length === 8) {
+            const mm = d.slice(0, 2), dd = d.slice(2, 4), yyyy = d.slice(4, 8)
+            const m = parseInt(mm, 10), day = parseInt(dd, 10), y = parseInt(yyyy, 10)
+            if (m >= 1 && m <= 12 && day >= 1 && day <= 31 && y >= 1900 && y <= 2100) {
+              const iso = `${yyyy}-${mm}-${dd}`
+              const date = new Date(iso + 'T00:00:00')
+              if (!isNaN(date.getTime()) && date.getMonth() + 1 === m && date.getDate() === day) valid = true
+            }
+          }
+        } else {
+          valid = /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(new Date(s + 'T00:00:00').getTime())
+        }
+        if (valid) acc++
+        continue
+      }
       const v = data[f.key]
       if (v !== undefined && v !== null && String(v).trim() !== '') acc++
     }
@@ -618,6 +636,16 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     setSaving(true)
     try {
       const payload = { ...data }
+      if (payload.fecha_nacimiento && String(payload.fecha_nacimiento).includes('/')) {
+        const raw = String(payload.fecha_nacimiento)
+        const d = raw.replace(/\D/g, '')
+        if (d.length === 8) {
+          const mm = d.slice(0, 2)
+          const dd = d.slice(2, 4)
+          const yyyy = d.slice(4, 8)
+          payload.fecha_nacimiento = `${yyyy}-${mm}-${dd}`
+        }
+      }
       if (!editingRecord && !payload.fecha_elaboracion) payload.fecha_elaboracion = todayHonduras()
       if (!payload.nombre_medico && medicoName) payload.nombre_medico = medicoName
       if (editingRecord) {
