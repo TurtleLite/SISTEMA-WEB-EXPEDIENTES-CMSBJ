@@ -11,23 +11,33 @@ function formatMdp(iso: string): string {
 
 function formatMask(digits: string): string {
   const d = digits.replace(/\D/g, '').slice(0, 8)
-  if (d.length <= 2) return d
-  if (d.length <= 4) return `${d.slice(0, 2)}/${d.slice(2)}`
-  return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`
+  // Mostrar lo que el usuario escribe con plecas fijas en posiciones 2 y 5
+  // Si no hay dígitos en una posición, mostrar espacio
+  return (d[0] || ' ') + (d[1] || ' ') + '/' + (d[2] || ' ') + (d[3] || ' ') + '/' + (d[4] || ' ') + (d[5] || ' ') + (d[6] || ' ') + (d[7] || ' ')
 }
 
 function maskToIso(masked: string): string | null {
   const d = masked.replace(/\D/g, '')
   if (d.length !== 8) return null
-  const mm = d.slice(0, 2)
-  const dd = d.slice(2, 4)
+  let mm = d.slice(0, 2)
+  let dd = d.slice(2, 4)
   const yyyy = d.slice(4, 8)
-  const m = parseInt(mm, 10)
-  const day = parseInt(dd, 10)
+  let m = parseInt(mm, 10)
+  let day = parseInt(dd, 10)
   const y = parseInt(yyyy, 10)
+  if (y < 1900 || y > 2100) return null
+
+  // Si mes > 12, asumir formato DD/MM/YYYY e intercambiar
+  if (m > 12) {
+    const temp = mm
+    mm = dd
+    dd = temp
+    m = parseInt(mm, 10)
+    day = parseInt(dd, 10)
+  }
+
   if (m < 1 || m > 12) return null
   if (day < 1 || day > 31) return null
-  if (y < 1900 || y > 2100) return null
   const iso = `${yyyy}-${mm}-${dd}`
   const date = new Date(iso + 'T00:00:00')
   if (isNaN(date.getTime())) return null

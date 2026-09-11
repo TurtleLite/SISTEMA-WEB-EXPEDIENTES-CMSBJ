@@ -128,10 +128,22 @@ const calcularEdadDesdeFechaNacimiento = (fechaNacimiento: string | null | undef
   if (fechaNacimiento.includes('/')) {
     const parts = fechaNacimiento.split('/')
     if (parts.length !== 3) return ''
-    const mm = parts[0].padStart(2, '0')
-    const dd = parts[1].padStart(2, '0')
+    let mm = parts[0].padStart(2, '0')
+    let dd = parts[1].padStart(2, '0')
     const yyyy = parts[2]
     if (yyyy.length !== 4) return ''
+    let m = parseInt(mm, 10)
+    let day = parseInt(dd, 10)
+    // Si mes > 12, asumir formato DD/MM/YYYY e intercambiar
+    if (m > 12) {
+      const temp = mm
+      mm = dd
+      dd = temp
+      m = parseInt(mm, 10)
+      day = parseInt(dd, 10)
+    }
+    if (m < 1 || m > 12) return ''
+    if (day < 1 || day > 31) return ''
     iso = `${yyyy}-${mm}-${dd}`
   }
   const hoy = new Date(todayHonduras() + 'T00:00:00')
