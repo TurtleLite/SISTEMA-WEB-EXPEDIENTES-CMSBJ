@@ -412,14 +412,23 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     }).catch(() => {})
   }, [listId])
 
+  // calcular edad automáticamente cuando la fecha de nacimiento cambia
+  // esto cubre: digitación completa (ISO), cambios de mask a ISO, y limpieza
   useEffect(() => {
-    if (data.fecha_nacimiento) {
-      const edad = calcularEdadDesdeFechaNacimiento(data.fecha_nacimiento)
-      if (edad && edad !== data.edad) setValue('edad', edad)
-      else if (!edad && data.edad) setValue('edad', '')
-    } else {
-      if (data.edad) setValue('edad', '')
+    if (!data.fecha_nacimiento) {
+      setData((prev) => {
+        if (prev.edad) return { ...prev, edad: '' }
+        return prev
+      })
+      return
     }
+    const edad = calcularEdadDesdeFechaNacimiento(data.fecha_nacimiento)
+    setData((prev) => {
+      const currentEdad = prev.edad
+      if (edad && edad !== currentEdad) return { ...prev, edad }
+      if (!edad && currentEdad) return { ...prev, edad: '' }
+      return prev
+    })
   }, [data.fecha_nacimiento])
 
   useEffect(() => {
@@ -430,8 +439,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingRecord])
 
-  const originalRef = useRef<Record<string, any>>(editingRecord?.data ? { ...editingRecord.data } : {})
-  const dataRef = useRef(data)
+  const dataRef = useRef<Record<string, any>>(data)
   dataRef.current = data
   const customEspRef = useRef(customEspecialidad)
   customEspRef.current = customEspecialidad

@@ -60,9 +60,10 @@ export function NacimientoField({ value, onChange }: { value: string; onChange: 
     const iso = maskToIso(formatted)
     if (iso) {
       onChange(iso)
-    } else {
-      onChange(formatted)
     }
+    // Durante la digitación (formato mask incompleto), no enviar al parent
+    // El parent recibirá el valor solo cuando la fecha esté completa (ISO válido)
+    // Esto evita cálculos de edad con valores intermedios inválidos
   }
 
   return (
