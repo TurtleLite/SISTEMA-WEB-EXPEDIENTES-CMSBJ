@@ -11,9 +11,11 @@ function formatMdp(iso: string): string {
 
 function formatMask(digits: string): string {
   const d = digits.replace(/\D/g, '').slice(0, 8)
-  // Mostrar lo que el usuario escribe con plecas fijas en posiciones 2 y 5
-  // Si no hay dígitos en una posición, mostrar espacio
-  return (d[0] || ' ') + (d[1] || ' ') + '/' + (d[2] || ' ') + (d[3] || ' ') + '/' + (d[4] || ' ') + (d[5] || ' ') + (d[6] || ' ') + (d[7] || ' ')
+  // Mostrar solo lo que el usuario escribe, con plecas en posiciones 2 y 4
+  if (d.length === 0) return ''
+  if (d.length <= 2) return d
+  if (d.length <= 4) return d.slice(0, 2) + '/' + d.slice(2)
+  return d.slice(0, 2) + '/' + d.slice(2, 4) + '/' + d.slice(4)
 }
 
 function maskToIso(masked: string): string | null {
