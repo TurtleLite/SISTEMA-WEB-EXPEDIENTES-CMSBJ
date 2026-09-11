@@ -446,7 +446,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const dirtyRef = useRef(false)
 
   const dirty = useMemo(
-    () => JSON.stringify(data) !== JSON.stringify(originalRef.current),
+    () => JSON.stringify(data) !== JSON.stringify(dataRef.current),
     [data]
   )
   dirtyRef.current = dirty
