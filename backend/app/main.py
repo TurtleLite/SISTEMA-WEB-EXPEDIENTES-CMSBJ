@@ -29,6 +29,8 @@ ALLOWED_ORIGINS = [
     "https://sistema-web-expedientes-cmsbj.onrender.com",
     "https://srv-d9nqs47lk1mc738ldgng.onrender.com",
     "https://*.onrender.com",
+    "https://cmsbjserver.tailf34429.ts.net",
+    "https://*.ts.net",
     "http://localhost:5173",
     "http://localhost:8000",
 ]
