@@ -174,10 +174,6 @@ const parseNumber = (val: any): number | null => {
   return Number.isFinite(n) ? n : null
 }
 
-const parseMedico = (raw: string): { title: string; name: string } => {
-  const m = (raw || '').match(/^(Dr\.|Dra\.)\s*(.*)$/)
-  return m ? { title: m[1], name: m[2] } : { title: 'Dr.', name: raw || '' }
-}
 
 const calcularBMI = (peso: any, talla: any): string => {
   const kg = parseNumber(peso)
@@ -1168,53 +1164,21 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                               </div>
                             )}
                           </div>
-                        ) : field.key === 'nombre_medico' ? (
-                          (role === 'medico' || role === 'direccion_medica') ? (
-                            <input
-                              type="text"
-                              value={data[field.key] || medicoName || ''}
-                              readOnly
-                              disabled
-                              title="El nombre del médico se asigna automáticamente según el usuario"
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
-                            />
-                          ) : (role === 'carga_px' || role === 'direccion') ? (
-                            <div className="flex gap-2">
-                              <select
-                                value={parseMedico(data[field.key] || '').title}
-                                onChange={(e) => {
-                                  const name = parseMedico(data[field.key] || '').name
-                                  setValue(field.key, `${e.target.value} ${name}`.trim())
-                                }}
-                                className="w-24 px-2 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] bg-white"
-                              >
-                                <option value="Dr.">Dr.</option>
-                                <option value="Dra.">Dra.</option>
-                              </select>
-                              <input
-                                type="text"
-                                value={parseMedico(data[field.key] || '').name}
-                                onChange={(e) => {
-                                  const title = parseMedico(data[field.key] || '').title
-                                  const raw = e.target.value
-                                  const capped = raw.replace(/\b\w/g, (c) => c.toUpperCase())
-                                  setValue(field.key, `${title} ${capped}`.trim())
-                                }}
-                                placeholder="Nombre del médico"
-                                className="flex-1 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79]"
-                              />
-                            </div>
-                          ) : (
-                            <input
-                              type="text"
-                              value={data[field.key] || ''}
-                              readOnly
-                              disabled
-                              title="Sin permiso para editar el nombre del médico"
-                              className="w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed"
-                            />
-                          )
-                        ) : FIELD_UNITS[field.key] ? (
+                         ) : field.key === 'nombre_medico' ? (
+                           <textarea
+                             rows={1}
+                             value={data[field.key] || ''}
+                             onChange={(e) => {
+                               const val = e.target.value
+                               const capitalized = val.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                               setValue(field.key, capitalized)
+                             }}
+                              readOnly={role === 'admin'}
+                              disabled={role === 'admin'}
+                              title={role === 'admin' ? 'Sin permiso para editar el nombre del médico' : undefined}
+                              className={`w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none ${role === 'admin' ? 'bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed' : 'bg-white'}`}
+                           />
+                         ) : FIELD_UNITS[field.key] ? (
                           <div className="relative">
                             <input
                               type="text"

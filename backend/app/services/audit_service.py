@@ -38,11 +38,10 @@ def client_device_id(request) -> str:
 
 
 def client_ip(request) -> str:
-    """Identidad usada en la auditoría: identifica el equipo por su ID permanente
-    cuando está disponible; si no, usa la dirección IP real."""
-    device = client_device_id(request)
-    if device:
-        return device
+    """Dirección IP real del cliente para la auditoría.
+
+    Ya no se usa el identificador del equipo (X-Device-ID) en auditoría.
+    """
     return client_real_ip(request)
 
 
@@ -123,7 +122,6 @@ def serialize_log(entry: AuditLog) -> dict:
         "entity_type": entry.entity_type,
         "entity_id": str(entry.entity_id) if entry.entity_id else None,
         "detail": entry.detail,
-        "ip_address": entry.ip_address,
         "created_at": str(entry.created_at),
     }
 

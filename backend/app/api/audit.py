@@ -119,7 +119,7 @@ def export_audit_excel(
         fecha_hasta=fecha_hasta,
         ascending=True,
     )
-    columns = ["No", "Fecha y hora", "Usuario", "Acción", "Tipo", "Detalle", "Equipo"]
+    columns = ["No", "Fecha y hora", "Usuario", "Acción", "Tipo", "Detalle"]
     rows = []
     for idx, item in enumerate(items, 1):
         entry = serialize_log(item)
@@ -130,7 +130,6 @@ def export_audit_excel(
             "Acción": ACTION_LABELS.get(entry["action"], entry["action"]),
             "Tipo": ENTITY_LABELS.get(entry.get("entity_type") or "", entry.get("entity_type") or "—"),
             "Detalle": entry.get("detail") or "—",
-            "Equipo": entry.get("ip_address") or "—",
         })
     os.makedirs(settings.REPORTS_DIR, exist_ok=True)
     now = datetime.now(timezone(timedelta(hours=-6)))

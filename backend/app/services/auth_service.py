@@ -141,7 +141,7 @@ def _token_response(user: User, access_token: str, refresh_token: str = None, de
 
 
 def login(db: Session, username: str, password: str, request=None) -> dict:
-    # Las sesiones guardan la IP real; la auditoría usa el identificador del equipo.
+    # Las sesiones guardan la IP real; la auditoría también (sin identificador de equipo).
     ip = client_real_ip(request)
     if _ip_limited(ip):
         raise HTTPException(status_code=429, detail="Demasiados intentos desde esta conexión. Espere unos minutos e intente de nuevo.")
@@ -155,13 +155,13 @@ def login(db: Session, username: str, password: str, request=None) -> dict:
     reg = register_device_use(db, request, user)
     if reg and reg.status == "blocked":
         log_audit(db, user, "login_blocked", entity_type="auth",
-                  detail=f"equipo bloqueado {reg.device_id}", ip_address=ip)
+                  detail="intento de sesión desde equipo bloqueado", ip_address=ip)
         raise HTTPException(status_code=403, detail="Este equipo está bloqueado. Contacte al administrador del sistema.")
     device_id = client_device_id(request)
     token, jti, expires_at = create_access_token({"sub": str(user.id), "role": user.role})
     refresh_token, refresh_hash, refresh_expires_at = create_refresh_token()
     _create_session(db, user, jti, expires_at, refresh_hash, refresh_expires_at, ip, request, device_id=device_id)
-    log_audit(db, user, "login", entity_type="auth", detail=f"inició sesión — {user.role} ({user.full_name or user.username}) equipo {device_id or ip}", ip_address=ip)
+    log_audit(db, user, "login", entity_type="auth", detail=f"inició sesión — {user.role} ({user.full_name or user.username})", ip_address=ip)
     device_info = None
     if reg:
         from app.services.device_service import _users_of

@@ -16,14 +16,10 @@ import os
 router = APIRouter(prefix="/reports", tags=["Reportes"])
 
 
-def _is_ofthalmologia(user: User) -> bool:
-    return user.role == "oftalmologia"
-
-
 def _ensure_own_report(current_user: User, report: Report | None) -> Report:
     if report is None:
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
-    if _is_ofthalmologia(current_user) and report.created_by != current_user.id:
+    if report.created_by != current_user.id:
         raise HTTPException(status_code=403, detail="No puedes acceder a este reporte")
     return report
 
@@ -62,8 +58,11 @@ def _records_for_report(db: Session, report: Report):
 
     especialidad = filt.get("especialidad")
     if especialidad:
-        conds.append("data->>'especialidad' = :esp")
+        from app.services.record_service import _ACCENT_FROM, _ACCENT_TO
+        conds.append("translate(lower(data->>'especialidad'), :acc_from, :acc_to) = translate(lower(:esp), :acc_from, :acc_to)")
         params["esp"] = especialidad
+        params["acc_from"] = _ACCENT_FROM
+        params["acc_to"] = _ACCENT_TO
 
     perfil = filt.get("perfil")
     if perfil:
@@ -245,9 +244,7 @@ def list_reports(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
-    query = db.query(Report)
-    if _is_ofthalmologia(current_user):
-        query = query.filter(Report.created_by == current_user.id)
+    query = db.query(Report).filter(Report.created_by == current_user.id)
     reports = query.order_by(Report.created_at.desc()).all()
     counts = dict(
         db.query(ListRecord.list_definition_id, func.count(ListRecord.id))
@@ -313,8 +310,7 @@ def save_report_order(
     current_user: User = Depends(require_role("admin", "direccion", "direccion_medica", "oftalmologia")),
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
-    if not report:
-        raise HTTPException(status_code=404, detail="Reporte no encontrado")
+    report = _ensure_own_report(current_user, report)
     record_ids = data.get("record_ids") or []
     if not isinstance(record_ids, list):
         raise HTTPException(status_code=400, detail="record_ids debe ser una lista")

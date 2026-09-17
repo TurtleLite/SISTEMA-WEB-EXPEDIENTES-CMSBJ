@@ -332,7 +332,7 @@ def get_backup_blob(name: str):
 
 
 def delete_backup(name: str) -> bool:
-    if not BACKUP_ANY_RE_RE.match(name or ""):
+    if not BACKUP_ANY_RE.match(name or ""):
         return False
     path = BACKUP_DIR / name
     if path.is_file():
