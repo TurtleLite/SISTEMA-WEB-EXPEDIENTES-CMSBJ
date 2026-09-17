@@ -407,6 +407,7 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
   const [confirmCopy, setConfirmCopy] = useState<{ numero: string; propuesta: string } | null>(null)
   const [conflict, setConflict] = useState<{ message: string; who?: string } | null>(null)
   const conflictRef = useRef(false)
+  const medicoRef = useRef<HTMLTextAreaElement | null>(null)
   const { toast, confirm } = useNotification()
 
   useEffect(() => {
@@ -1185,12 +1186,19 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                <option value="Dra.">Dra.</option>
                              </select>
                              <textarea
+                               ref={medicoRef}
                                rows={1}
                                value={splitMedico(data[field.key] || '').name}
                                onChange={(e) => {
+                                 const el = e.target
+                                 const pos = el.selectionStart ?? el.value.length
                                  const title = splitMedico(data[field.key] || '').title
-                                 const raw = e.target.value
-                                 setValue(field.key, raw.trim() ? `${title} ${raw}` : title)
+                                 const raw = el.value
+                                 const capped = raw.replace(/(^|\s)([^\s])/g, (_m, pre: string, ch: string) => pre + ch.toUpperCase())
+                                 setValue(field.key, raw.trim() ? `${title} ${capped}` : title)
+                                 requestAnimationFrame(() => {
+                                   try { medicoRef.current?.setSelectionRange(pos, pos) } catch { /* ignore */ }
+                                 })
                                }}
                                onBlur={(e) => {
                                  const title = splitMedico(data[field.key] || '').title
