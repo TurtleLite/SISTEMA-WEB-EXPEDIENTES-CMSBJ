@@ -24,6 +24,31 @@ def _ensure_own_report(current_user: User, report: Report | None) -> Report:
     return report
 
 
+def _resolve_especialidad(db: Session, wanted: str) -> str | None:
+    """Valor real guardado de la especialidad que coincide sin tildes ni mayúsculas.
+
+    Evita forzar un texto en minúsculas que no coincida con el dato real
+    (p. ej. 'Oftalmología' guardado vs 'oftalmologia' forzado).
+    """
+    from sqlalchemy import text
+    from app.services.record_service import _strip_accents
+    target = _strip_accents(str(wanted or "")).lower().strip()
+    if not target:
+        return None
+    rows = db.execute(text(
+        "SELECT DISTINCT data->>'especialidad' AS esp FROM list_records "
+        "WHERE deleted_at IS NULL AND data->>'especialidad' IS NOT NULL AND data->>'especialidad' != ''"
+    )).all()
+    for (esp,) in rows:
+        if esp and _strip_accents(str(esp)).lower().strip() == target:
+            return esp
+    from app.models.catalog_item import CatalogItem
+    for item in db.query(CatalogItem).filter(CatalogItem.item_type == "especialidad").all():
+        if _strip_accents(item.name).lower().strip() == target:
+            return item.name
+    return None
+
+
 def _list_for_report(db: Session, report: Report):
     from app.models.list_definition import ListDefinition
     if report.list_definition_id:
@@ -220,9 +245,9 @@ def create_report(
         if system_list:
             list_id = system_list.id
     filters = data.get("filters") or {}
-    # Oftalmología solo puede reportar su especialidad
+    # Oftalmología solo puede reportar su especialidad (se guarda el valor real existente)
     if current_user.role == "oftalmologia":
-        filters["especialidad"] = "oftalmologia"
+        filters["especialidad"] = _resolve_especialidad(db, "oftalmologia") or "oftalmologia"
     report = Report(
         name=data["name"],
         description=data.get("description"),
