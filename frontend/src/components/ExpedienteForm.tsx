@@ -163,6 +163,11 @@ const CAPITALIZE_FIRST_KEYS = new Set(['historia_enfermedad', 'examen_fisico', '
 const capitalizeFirst = (val: string): string =>
   val ? val.charAt(0).toUpperCase() + val.slice(1) : val
 
+const splitMedico = (raw: string): { title: string; name: string } => {
+  const m = (raw || '').match(/^(Dr\.|Dra\.)\s*(.*)$/)
+  return m ? { title: m[1], name: m[2] } : { title: 'Dr.', name: raw || '' }
+}
+
 const todayHonduras = (): string =>
   new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Tegucigalpa' }).format(new Date())
 
@@ -1165,19 +1170,35 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             )}
                           </div>
                          ) : field.key === 'nombre_medico' ? (
-                           <textarea
-                             rows={1}
-                             value={data[field.key] || ''}
-                             onChange={(e) => {
-                               const val = e.target.value
-                               const capitalized = val.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-                               setValue(field.key, capitalized)
-                             }}
-                              readOnly={role === 'admin'}
-                              disabled={role === 'admin'}
-                              title={role === 'admin' ? 'Sin permiso para editar el nombre del médico' : undefined}
-                              className={`w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none ${role === 'admin' ? 'bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed' : 'bg-white'}`}
-                           />
+                           <div className="flex gap-2">
+                             <select
+                               value={splitMedico(data[field.key] || '').title}
+                               onChange={(e) => {
+                                 const name = splitMedico(data[field.key] || '').name
+                                 setValue(field.key, `${e.target.value} ${name}`.trim())
+                               }}
+                               disabled={role === 'admin'}
+                               title={role === 'admin' ? 'Sin permiso para editar el nombre del médico' : 'Título del médico'}
+                               className={`w-24 px-2 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] bg-white ${role === 'admin' ? 'bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed' : ''}`}
+                             >
+                               <option value="Dr.">Dr.</option>
+                               <option value="Dra.">Dra.</option>
+                             </select>
+                             <textarea
+                               rows={1}
+                               value={splitMedico(data[field.key] || '').name}
+                               onChange={(e) => {
+                                 const title = splitMedico(data[field.key] || '').title
+                                 const val = e.target.value
+                                 const capitalized = val.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                                 setValue(field.key, `${title} ${capitalized}`.trim())
+                               }}
+                               readOnly={role === 'admin'}
+                               disabled={role === 'admin'}
+                               title={role === 'admin' ? 'Sin permiso para editar el nombre del médico' : undefined}
+                               className={`flex-1 px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none ${role === 'admin' ? 'bg-[#F7F8FA] text-[#3F4D58] disabled:cursor-not-allowed' : 'bg-white'}`}
+                             />
+                           </div>
                          ) : FIELD_UNITS[field.key] ? (
                           <div className="relative">
                             <input
