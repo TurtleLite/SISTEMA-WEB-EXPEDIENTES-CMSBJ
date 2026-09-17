@@ -1189,9 +1189,13 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                                value={splitMedico(data[field.key] || '').name}
                                onChange={(e) => {
                                  const title = splitMedico(data[field.key] || '').title
-                                 const val = e.target.value
-                                 const capitalized = val.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-                                 setValue(field.key, `${title} ${capitalized}`.trim())
+                                 const raw = e.target.value
+                                 setValue(field.key, raw.trim() ? `${title} ${raw}` : title)
+                               }}
+                               onBlur={(e) => {
+                                 const title = splitMedico(data[field.key] || '').title
+                                 const cleaned = e.target.value.split(/\s+/).filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                                 setValue(field.key, cleaned ? `${title} ${cleaned}` : title)
                                }}
                                readOnly={role === 'admin'}
                                disabled={role === 'admin'}
