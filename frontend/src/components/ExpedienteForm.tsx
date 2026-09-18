@@ -4,6 +4,7 @@ import { useNotification } from '../contexts/NotificationContext'
 import { ListRecord } from '../types'
 import { HONDURAS_DEPARTAMENTOS, TIPO_LOCALIDAD_OPTIONS } from '../constants'
 import ScrollSelect from './ScrollSelect'
+import SearchableSelect from './SearchableSelect'
 import LocalidadInput from './LocalidadInput'
 import { normalizeText, titleCase } from '../utils/format'
 import { CheckCircle2, ChevronDown, ChevronRight, Stethoscope, User, Home, FileText, Activity, ClipboardList, FlaskConical, Syringe, UserCircle } from 'lucide-react'
@@ -1112,32 +1113,47 @@ export function ExpedienteForm({ listId, role, medicoName, onClose, onSaved, edi
                             className={`w-full px-3 py-2 border border-[#E4E8EE] rounded-lg text-sm focus:ring-2 focus:ring-[#8E9AA6] focus:border-[#5F6C79] resize-none ${(field.key as string) === 'examen_fisico' || (field.key as string) === 'diagnostico' || (field.key as string) === 'historia_enfermedad' ? 'min-h-[160px]' : ['enfermedades_previas','cirugias_previas','alergias','otros_antecedentes'].includes(field.key as string) ? 'min-h-[110px]' : ''}`}
                           />
                         ) : field.key === 'departamento' ? (
-                          <ScrollSelect
+                          <SearchableSelect
                             value={data[field.key] || ''}
                             onChange={(v) => {
                               setValue('departamento', v)
-                              if (v && !(HONDURAS_DEPARTAMENTOS[v] || []).includes(data.municipio)) {
-                                setValue('municipio', '')
+                              const deptKey = Object.keys(HONDURAS_DEPARTAMENTOS).find(
+                                (d) => normalizeText(d) === normalizeText(v)
+                              )
+                              const municipiosValidos = deptKey ? HONDURAS_DEPARTAMENTOS[deptKey] || [] : []
+                              if (!deptKey || !municipiosValidos.includes(data.municipio)) {
+                                if (data.municipio || data.localidad || data.tipo_localidad) {
+                                  setValue('municipio', '')
+                                  setValue('localidad', '')
+                                  setValue('tipo_localidad', '')
+                                  setLocalidadMatch(null)
+                                }
+                              }
+                            }}
+                            options={Object.keys(HONDURAS_DEPARTAMENTOS)}
+                            placeholder="Escriba para buscar el departamento..."
+                            emptyMessage="Sin coincidencias — escriba para filtrar"
+                          />
+                        ) : field.key === 'municipio' ? (
+                          <SearchableSelect
+                            value={data[field.key] || ''}
+                            onChange={(v) => {
+                              setValue('municipio', v)
+                              if (data.localidad || data.tipo_localidad) {
                                 setValue('localidad', '')
                                 setValue('tipo_localidad', '')
                                 setLocalidadMatch(null)
                               }
                             }}
-                            options={Object.keys(HONDURAS_DEPARTAMENTOS).map((d) => ({ value: d, label: d }))}
-                            placeholder="Seleccione el departamento..."
-                          />
-                        ) : field.key === 'municipio' ? (
-                          <ScrollSelect
-                            value={data[field.key] || ''}
-                            onChange={(v) => {
-                              setValue('municipio', v)
-                              setValue('localidad', '')
-                              setValue('tipo_localidad', '')
-                              setLocalidadMatch(null)
-                            }}
                             disabled={!data.departamento}
-                            options={(HONDURAS_DEPARTAMENTOS[data.departamento] || []).map((m) => ({ value: m, label: m }))}
-                            placeholder={data.departamento ? 'Seleccione el municipio...' : 'Seleccione primero un departamento'}
+                            options={(() => {
+                              const deptKey = Object.keys(HONDURAS_DEPARTAMENTOS).find(
+                                (d) => normalizeText(d) === normalizeText(data.departamento || '')
+                              )
+                              return (deptKey ? HONDURAS_DEPARTAMENTOS[deptKey] : []) || []
+                            })()}
+                            placeholder={data.departamento ? 'Escriba para buscar el municipio...' : 'Seleccione primero un departamento'}
+                            emptyMessage="Sin coincidencias — escriba para filtrar"
                           />
                         ) : field.key === 'tipo_localidad' ? (
                           <select
